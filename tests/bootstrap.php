@@ -1,27 +1,33 @@
 <?php
-if ( ! defined( 'WP_CONTENT_DIR' ) ) {
-    $cwd = explode( 'wp-content', dirname( __FILE__ ) );
-    define( 'WP_CONTENT_DIR', $cwd[0] . '/wp-content' );
-}
+/**
+ * PHPUnit bootstrap file
+ *
+ * @package Civil_Newsroom
+ */
 
-// Load Core's test suite
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
-if ( !$_tests_dir ) {
-    $_tests_dir = '/tmp/wordpress-tests-lib';
+
+if ( ! $_tests_dir ) {
+	$_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
 }
 
+if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
+	echo "Could not find $_tests_dir/includes/functions.php, have you run bin/install-wp-tests.sh ?" . PHP_EOL;
+	exit( 1 );
+}
+
+// Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
 
-
 /**
- * Setup our environment (theme, plugins).
+ * Manually load the plugin being tested.
  */
-function _manually_load_environment() {
-    // Set up plugins.
-    update_option( 'active_plugins', array(
-        'civil-newsroom/civil-newsroom.php'
-    ) );
+function _manually_load_plugin() {
+	require dirname( dirname( __FILE__ ) ) . '/civil-newsroom.php';
 }
-tests_add_filter( 'muplugins_loaded', '_manually_load_environment' );
+tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+
+// Start up the WP testing environment.
+require $_tests_dir . '/includes/bootstrap.php';
 
 require dirname( __FILE__ ) . '/class-base.php';

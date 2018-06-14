@@ -1,6 +1,6 @@
 <?php
 
-class BlockchainPostHashingTest extends BlockchainTestCase {
+class CivilPostHashingTest extends CivilTestCase {
 
 	/**
 	 * Tests for the hashing of post content.

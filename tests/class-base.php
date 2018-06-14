@@ -1,8 +1,12 @@
 <?php
 /**
- * The base Blockchain phpunit test class.
+ * Class CivilTestCase
+ *
+ * The base Civil Newsroom phpunit test class.
+ *
+ * @package Civil_Newsroom
  */
-class BlockchainTestCase extends WP_UnitTestCase {
+class CivilTestCase extends WP_UnitTestCase {
 	/**
 	 * Returns the latest post revision ID.
 	 *

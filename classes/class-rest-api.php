@@ -2,7 +2,7 @@
 /**
  * Hanldes all logic related to the REST API.
  *
- * @package Civil
+ * @package Civil_Newsroom
  */
 
 namespace Civil;

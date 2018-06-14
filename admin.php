@@ -2,7 +2,7 @@
 /**
  * Handles hooks and enqueueing for admin page and Gutenberg plugin scripts
  *
- * @package Civil
+ * @package Civil_Newsroom
  */
 
 namespace Civil;

@@ -2,7 +2,7 @@
 /**
  * Trait file for Singletons.
  *
- * @package Civil
+ * @package Civil_Newsroom
  */
 
 namespace Civil;

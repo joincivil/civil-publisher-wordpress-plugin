@@ -6,7 +6,7 @@
  * Author: Civil
  * Author URI: https://civil.co
  *
- * @package Civil
+ * @package Civil_Newsroom
  */
 
 namespace Civil;

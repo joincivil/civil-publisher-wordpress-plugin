@@ -2,7 +2,7 @@
 /**
  * Handles custom user and site meta
  *
- * @package Civil
+ * @package Civil_Newsroom
  */
 
 namespace Civil;

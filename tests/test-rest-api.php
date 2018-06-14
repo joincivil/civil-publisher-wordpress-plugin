@@ -1,6 +1,6 @@
 <?php
 
-class BlockchainRestApiTest extends BlockchainTestCase {
+class CivilRestApiTest extends CivilTestCase {
 
 	/**
 	 * The revisions REST API expected attributes order.

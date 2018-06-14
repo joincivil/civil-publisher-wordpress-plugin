@@ -2,7 +2,7 @@
 /**
  * Hanldes all logic related to hasing a post.
  *
- * @package Civil
+ * @package Civil_Newsroom
  */
 
 namespace Civil;
@@ -85,7 +85,16 @@ class Post_Hashing {
 
 		// Add authors.
 		$authors   = [];
-		$coauthors = get_coauthors( $post->post_parent );
+		$coauthors = [];
+		if ( function_exists( 'get_coauthors' ) ) {
+			$coauthors = get_coauthors( $post->post_parent );
+		} else {
+			// Support absence of co-authors-plus plugin.
+			$author = get_user_by( 'id', $post->post_author );
+			if ( ! empty( $author ) ) {
+				$coauthors[] = $author;
+			}
+		}
 
 		// TODO Check validity of signatures before using (and if not valid, mark as such in post meta so we don't have to check next time).
 		// $post is a revision, and this meta is stored on post itself, so get from the parent.
