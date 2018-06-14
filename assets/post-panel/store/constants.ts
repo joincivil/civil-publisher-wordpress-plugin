@@ -1,0 +1,17 @@
+export const REDUCER_KEY = "civil/blockchain";
+
+export enum actionTypes {
+  SET_USERNAME = "SET_USERNAME",
+  SET_LOGGED_IN_USER_ADDRESS = "SET_LOGGED_IN_USER_ADDRESS",
+  UPDATE_SIGNATURES = "UPDATE_SIGNATURES",
+  UPDATE_PUBLISHED_STATE = "UPDATE_PUBLISHED_STATE",
+  ADD_OR_UPDATE_REVISION = "ADD_OR_UPDATE_REVISION",
+  SET_CIVIL_CONTENT_ID = "SET_CIVIL_CONTENT_ID",
+  // PUBLISH_CONTENT = "PUBLISH_CONTENT",
+}
+
+export enum postMetaKeys {
+  SIGNATURES = "civil_article_signatures",
+  PUBLISHED_REVISIONS = "civil_published_revisions",
+  CIVIL_CONTENT_ID = "civil_content_id",
+}

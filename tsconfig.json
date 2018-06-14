@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": false,
+    "declaration": true,
+    "sourceMap": true,
+    "pretty": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true, // https://github.com/ReactiveX/rxjs/issues/3031
+
+    "typeRoots": ["./typings/", "../../node_modules/@types/"],
+    "rootDir": "./assets/",
+    "outDir": "./build/",
+    "declarationDir": "./build/",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": false,
+    "lib": ["dom", "es2017"],
+    "moduleResolution": "node"
+  },
+  "include": [
+    "./assets/**/*.ts",
+    "./assets/**/*.tsx",
+    "./typings/**/*.d.ts",
+    "../../node_modules/web3-typescript-typings/index.d.ts",
+    "../../node_modules/types-ethereumjs-util/index.d.ts"
+  ],
+  "exclude": ["node_modules", "build"]
+}
