@@ -114,6 +114,8 @@ function civil_add_user_meta_rest() {
 		)
 	);
 }
+add_action( 'rest_api_init', __NAMESPACE__ . '\civil_add_user_meta_rest' );
+
 /**
  * Actually get custom user meta.
  *
@@ -124,7 +126,6 @@ function civil_add_user_meta_rest() {
 function civil_user_meta_callback( $user, $field_name ) {
 	return get_user_meta( $user['id'], $field_name, true );
 }
-add_action( 'rest_api_init', __NAMESPACE__ . '\civil_add_user_meta_rest' );
 
 
 /**
