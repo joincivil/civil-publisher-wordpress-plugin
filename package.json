@@ -7,11 +7,11 @@
     "dev": "webpack --config ./webpack.config.js --env.watch",
     "dev:vm": "webpack --config ./webpack.config.js --env.watch --env.vm --info-verbosity verbose",
     "build": "webpack --config ./webpack.config.js --env.production",
-    "lint": "tslint --project ././",
+    "lint": "tslint --project ./",
     "prettier": "prettier --config ./.prettierrc.yaml --write --list-different './**/*.{ts,tsx,json,md}'"
   },
   "engines": {
-    "node": "8",
+    "node": "9",
     "npm": "5"
   },
   "dependencies": {
