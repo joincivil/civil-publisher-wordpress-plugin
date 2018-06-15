@@ -99,7 +99,7 @@ class Post_Hashing {
 		// TODO Check validity of signatures before using (and if not valid, mark as such in post meta so we don't have to check next time).
 		// $post is a revision, and this meta is stored on post itself, so get from the parent.
 		$signatures = get_post_meta( $post->post_parent, SIGNATURES_META_KEY, true );
-		$signatures = json_decode( ! empty( $signatures ) ? $signatures : 'null', true );
+		$signatures = ! empty( $signatures ) ? json_decode( $signatures, true ) : null;
 
 		if ( ! empty( $coauthors ) ) {
 			foreach ( $coauthors as $coauthor ) {
@@ -107,7 +107,7 @@ class Post_Hashing {
 					'byline' => $coauthor->display_name,
 				];
 
-				if ( $signatures && isset( $signatures[ $coauthor->user_login ] ) ) {
+				if ( ! empty( $signatures[ $coauthor->user_login ] ) ) {
 					$sig_data = $signatures[ $coauthor->user_login ];
 					$author_data['address'] = $sig_data['authorAddress'];
 					$author_data['signature'] = $sig_data['signature'];

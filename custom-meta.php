@@ -100,7 +100,9 @@ function civil_update_profile_fields( $user_id ) {
 add_action( 'personal_options_update', __NAMESPACE__ . '\civil_update_profile_fields' );
 add_action( 'edit_user_profile_update', __NAMESPACE__ . '\civil_update_profile_fields' );
 
-/** Return custom user meta in REST API (also makes available in Gutenberg). */
+/**
+ * Ensure custom user meta is returned in REST API (also makes available in Gutenberg).
+ */
 function civil_add_user_meta_rest() {
 	register_rest_field(
 		'user',
@@ -125,7 +127,9 @@ function civil_user_meta_callback( $user, $field_name ) {
 add_action( 'rest_api_init', __NAMESPACE__ . '\civil_add_user_meta_rest' );
 
 
-/** Register and add newsroom address field. */
+/**
+ * Register and add newsroom address field.
+ */
 function civil_newsroom_address_init() {
 	civil_newsroom_address_register_setting();
 	add_settings_field(
@@ -135,9 +139,12 @@ function civil_newsroom_address_init() {
 		'general',
 		'default'
 	);
-
 }
-/** Register newsroom address setting. */
+add_action( 'admin_init', __NAMESPACE__ . '\civil_newsroom_address_init' );
+
+/**
+ * Register newsroom address setting.
+ */
 function civil_newsroom_address_register_setting() {
 	register_setting(
 		'general',
@@ -151,7 +158,11 @@ function civil_newsroom_address_register_setting() {
 		)
 	);
 }
-/** Output form for capturing newsroom address. */
+add_action( 'rest_api_init', __NAMESPACE__ . '\civil_newsroom_address_register_setting' );
+
+/**
+ * Output form for capturing newsroom address.
+ */
 function civil_newsroom_address_input() {
 	$value = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
 	?>
@@ -164,6 +175,7 @@ function civil_newsroom_address_input() {
 	/>
 	<?php
 }
+
 /**
  * Validate newsroom address.
  *
@@ -193,10 +205,10 @@ function civil_validate_newsroom_address( $input ) {
 
 	return $addr;
 }
-add_action( 'admin_init', __NAMESPACE__ . '\civil_newsroom_address_init' );
-add_action( 'rest_api_init', __NAMESPACE__ . '\civil_newsroom_address_register_setting' );
 
-/** Make custom post meta visible/editable in REST API and Gutenberg. */
+/**
+ * Ensure custom post meta visible/editable in REST API and Gutenberg.
+ */
 function civil_expose_article_meta() {
 	register_meta(
 		'post', SIGNATURES_META_KEY, array(
