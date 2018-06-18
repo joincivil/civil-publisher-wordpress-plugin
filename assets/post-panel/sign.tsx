@@ -85,7 +85,15 @@ class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelPr
         </PanelRow>
         <PanelRow>
           <i>
-            (Signing as <code>{this.props.userWalletAddress}</code>)
+            {this.props.userWalletAddress ? (
+              <>
+                Signing as <code>{this.props.userWalletAddress}</code>
+              </>
+            ) : (
+              <>
+                Please set your wallet address in your <a href="/wp-admin/profile.php">your profile</a> before signing.
+              </>
+            )}
           </i>
         </PanelRow>
       </div>
@@ -126,6 +134,10 @@ const BlockchainSignPanel = compose([
       };
 
       const isSignButtonDisabled = (): boolean => {
+        if (!getLoggedInUserAddress()) {
+          return true;
+        }
+
         const ownSignature = signatures[username];
         if (ownSignature && isValidSignature!(ownSignature.authorAddress, ownSignature.signature)) {
           // No need to re-sign if signed and valid
