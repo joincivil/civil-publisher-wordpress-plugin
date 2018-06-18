@@ -1,6 +1,6 @@
 import { EthAddress } from "@joincivil/core";
 
-import { postMetaKeys } from "./constants";
+import { postMetaKeys } from "../../constants";
 import { SignatureData } from "./interfaces";
 import { setCivilContentID, updatePublishedState } from "./actions";
 import { revisionJsonSansDate } from "../../util";

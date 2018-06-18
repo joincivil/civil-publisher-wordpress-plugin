@@ -5,7 +5,7 @@ const { compose } = window.wp.element;
 // import { ApprovedRevision } from "@joincivil/core";
 
 import { getNewsroom, revisionJsonSansDate } from "../util";
-import { postMetaKeys } from "./store/constants";
+import { apiNamespace, postMetaKeys } from "../constants";
 import { SignatureData } from "./store/interfaces";
 import { hashContent } from "@joincivil/utils";
 import { TransactionButton, buttonSizes } from "@joincivil/components";
@@ -129,7 +129,7 @@ const BlockchainPublishPanel = compose([
       if (currentPostLastRevisionId) {
         revisionJson = getRevisionJSON(currentPostLastRevisionId);
         revisionJsonHash = hashContent(revisionJson);
-        revisionUrl = `${window.location.origin}/wp-json/civil/newsroom-protocol/v1/revisions/${currentPostLastRevisionId}`;
+        revisionUrl = `${window.location.origin}/wp-json${apiNamespace}revisions/${currentPostLastRevisionId}`;
       }
 
       return {

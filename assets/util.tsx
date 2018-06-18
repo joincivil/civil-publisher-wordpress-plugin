@@ -5,6 +5,8 @@ import * as Web3 from "web3";
 import { bufferToHex } from "ethereumjs-util";
 import { Civil } from "@joincivil/core";
 
+import { apiNamespace, userMetaKeys, siteOptionKeys } from "./constants";
+
 export let web3: any;
 if (typeof window.web3 !== "undefined") {
   web3 = new Web3(window.web3.currentProvider);
@@ -17,7 +19,7 @@ export async function getRevisionJson(): Promise<any> {
   const revisionId = select("core/editor").getCurrentPostLastRevisionId();
 
   try {
-    const response = await apiRequest({ path: "/civil/newsroom-protocol/v1/revisions/" + revisionId });
+    const response = await apiRequest({ path: apiNamespace + "revisions/" + revisionId });
     // console.log("revision JSON response:", response);
     return response;
   } catch (err) {
@@ -81,12 +83,12 @@ export async function getMessageToSign(): Promise<string> {
 /** Returns ETH address associated with logged-in WordPress user (rather than what web3 tells us) */
 export async function getLoggedInUserAddress(): Promise<string> {
   const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
-  return userInfo.civil_eth_wallet_address;
+  return userInfo[userMetaKeys.WALLET_ADDRESS];
 }
 
 export async function getNewsroomAddress(): Promise<string> {
   const siteSettings = await apiRequest({ path: "/wp/v2/settings" });
-  return siteSettings.newsroom_address;
+  return siteSettings[siteOptionKeys.NEWSROOM_ADDRESS];
 }
 
 export async function getNewsroom(): Promise<any> {

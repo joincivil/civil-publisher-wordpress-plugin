@@ -22,9 +22,9 @@ function is_valid_eth_address( $addr ) {
  *
  * @param object $user A WP_User object.
  */
-function civil_show_profile_fields( $user ) {
+function show_profile_fields( $user ) {
 	$wallet_address = get_the_author_meta( USER_ETH_ADDRESS_META_KEY, $user->ID );
-	wp_nonce_field( 'civil_update_wallet_address_action', 'civil_eth_wallet_address_nonce' );
+	wp_nonce_field( 'civil_newsroom_protocol_update_wallet_address_action', 'civil_newsroom_protocol_eth_wallet_address_nonce' );
 	?>
 	<h3><?php esc_html_e( 'Civil Identity', 'civil' ); ?></h3>
 
@@ -45,8 +45,8 @@ function civil_show_profile_fields( $user ) {
 	</table>
 	<?php
 }
-add_action( 'show_user_profile', __NAMESPACE__ . '\civil_show_profile_fields' );
-add_action( 'edit_user_profile', __NAMESPACE__ . '\civil_show_profile_fields' );
+add_action( 'show_user_profile', __NAMESPACE__ . '\show_profile_fields' );
+add_action( 'edit_user_profile', __NAMESPACE__ . '\show_profile_fields' );
 
 /**
  * Print any errors from updating user profile.
@@ -55,10 +55,10 @@ add_action( 'edit_user_profile', __NAMESPACE__ . '\civil_show_profile_fields' );
  * @param bool   $update True if updating an existing user, false if saving a new user.
  * @param object $user User object for user being edited.
  */
-function civil_user_profile_update_errors( $errors, $update, $user ) {
+function user_profile_update_errors( $errors, $update, $user ) {
 	if (
-		isset( $_POST[ USER_ETH_ADDRESS_META_KEY ], $_POST['civil_eth_wallet_address_nonce'] )
-		&& wp_verify_nonce( sanitize_key( $_POST['civil_eth_wallet_address_nonce'] ), 'civil_update_wallet_address_action' )
+		isset( $_POST[ USER_ETH_ADDRESS_META_KEY ], $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] )
+		&& wp_verify_nonce( sanitize_key( $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] ), 'civil_newsroom_protocol_update_wallet_address_action' )
 	) {
 		$addr = sanitize_text_field( wp_unslash( $_POST[ USER_ETH_ADDRESS_META_KEY ] ) );
 		if ( ! is_valid_eth_address( $addr ) ) {
@@ -73,21 +73,21 @@ function civil_user_profile_update_errors( $errors, $update, $user ) {
 		}
 	}
 }
-add_action( 'user_profile_update_errors', __NAMESPACE__ . '\civil_user_profile_update_errors', 10, 3 );
+add_action( 'user_profile_update_errors', __NAMESPACE__ . '\user_profile_update_errors', 10, 3 );
 
 /**
  * Handle update of custom user profile fields.
  *
  * @param int $user_id ID of user.
  */
-function civil_update_profile_fields( $user_id ) {
+function update_profile_fields( $user_id ) {
 	if ( ! current_user_can( 'edit_user', $user_id ) ) {
 		return false;
 	}
 
 	if (
-		isset( $_POST[ USER_ETH_ADDRESS_META_KEY ], $_POST['civil_eth_wallet_address_nonce'] )
-		&& wp_verify_nonce( sanitize_key( $_POST['civil_eth_wallet_address_nonce'] ), 'civil_update_wallet_address_action' )
+		isset( $_POST[ USER_ETH_ADDRESS_META_KEY ], $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] )
+		&& wp_verify_nonce( sanitize_key( $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] ), 'civil_newsroom_protocol_update_wallet_address_action' )
 	) {
 		$addr = sanitize_text_field( wp_unslash( $_POST[ USER_ETH_ADDRESS_META_KEY ] ) );
 		if ( is_valid_eth_address( $addr ) ) {
@@ -97,24 +97,24 @@ function civil_update_profile_fields( $user_id ) {
 		}
 	}
 }
-add_action( 'personal_options_update', __NAMESPACE__ . '\civil_update_profile_fields' );
-add_action( 'edit_user_profile_update', __NAMESPACE__ . '\civil_update_profile_fields' );
+add_action( 'personal_options_update', __NAMESPACE__ . '\update_profile_fields' );
+add_action( 'edit_user_profile_update', __NAMESPACE__ . '\update_profile_fields' );
 
 /**
  * Ensure custom user meta is returned in REST API (also makes available in Gutenberg).
  */
-function civil_add_user_meta_rest() {
+function add_user_meta_rest() {
 	register_rest_field(
 		'user',
 		USER_ETH_ADDRESS_META_KEY,
 		array(
-			'get_callback'      => __NAMESPACE__ . '\civil_user_meta_callback',
+			'get_callback'      => __NAMESPACE__ . '\user_meta_callback',
 			'update_callback'   => null,
 			'schema'            => null,
 		)
 	);
 }
-add_action( 'rest_api_init', __NAMESPACE__ . '\civil_add_user_meta_rest' );
+add_action( 'rest_api_init', __NAMESPACE__ . '\add_user_meta_rest' );
 
 /**
  * Actually get custom user meta.
@@ -123,7 +123,7 @@ add_action( 'rest_api_init', __NAMESPACE__ . '\civil_add_user_meta_rest' );
  * @param string $field_name Name of meta field being retrieved.
  * @return string Contents of meta field.
  */
-function civil_user_meta_callback( $user, $field_name ) {
+function user_meta_callback( $user, $field_name ) {
 	return get_user_meta( $user['id'], $field_name, true );
 }
 
@@ -131,46 +131,44 @@ function civil_user_meta_callback( $user, $field_name ) {
 /**
  * Register and add newsroom address field.
  */
-function civil_newsroom_address_init() {
-	civil_newsroom_address_register_setting();
+function newsroom_address_init() {
+	newsroom_address_register_setting();
 	add_settings_field(
-		'civil_newsroom_address_id',
+		NEWSROOM_ADDRESS_OPTION_KEY,
 		__( 'Newsroom Contract Address', 'civil' ),
-		__NAMESPACE__ . '\civil_newsroom_address_input',
+		__NAMESPACE__ . '\newsroom_address_input',
 		'general',
 		'default'
 	);
 }
-add_action( 'admin_init', __NAMESPACE__ . '\civil_newsroom_address_init' );
+add_action( 'admin_init', __NAMESPACE__ . '\newsroom_address_init' );
 
 /**
  * Register newsroom address setting.
  */
-function civil_newsroom_address_register_setting() {
+function newsroom_address_register_setting() {
 	register_setting(
 		'general',
 		NEWSROOM_ADDRESS_OPTION_KEY,
 		array(
 			'type' => 'string',
-			'show_in_rest' => array(
-				'name' => 'newsroom_address',
-			),
-			'sanitize_callback' => __NAMESPACE__ . '\civil_validate_newsroom_address',
+			'single' => true,
+			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_address',
 		)
 	);
 }
-add_action( 'rest_api_init', __NAMESPACE__ . '\civil_newsroom_address_register_setting' );
+add_action( 'rest_api_init', __NAMESPACE__ . '\newsroom_address_register_setting' );
 
 /**
  * Output form for capturing newsroom address.
  */
-function civil_newsroom_address_input() {
+function newsroom_address_input() {
 	$value = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
 	?>
 	<input type="text"
 		size="42"
-		id="civil_newsroom_address_id"
-		name="civil_newsroom_address"
+		id="<?php echo esc_attr( NEWSROOM_ADDRESS_OPTION_KEY ); ?>"
+		name="<?php echo esc_attr( NEWSROOM_ADDRESS_OPTION_KEY ); ?>"
 		placeholder="0x123abc"
 		value="<?php echo esc_attr( $value ); ?>"
 	/>
@@ -183,7 +181,7 @@ function civil_newsroom_address_input() {
  * @param string $input Newsroom address to validate.
  * @return string Validated/sanitized newsroom address.
  */
-function civil_validate_newsroom_address( $input ) {
+function validate_newsroom_address( $input ) {
 	if ( ! $input ) {
 		return;
 	}
@@ -193,10 +191,10 @@ function civil_validate_newsroom_address( $input ) {
 	if ( ! is_valid_eth_address( $addr ) ) {
 		add_settings_error(
 			NEWSROOM_ADDRESS_OPTION_KEY,
-			'civil_newsroom_address_err',
+			'civil_newsroom_protocol_newsroom_address_err',
 			sprintf(
 				/* translators: %1 is ETH contract address e.g. "0xabc123..." */
-				__( 'Newsroom Contract Address "%1$s" is not a valid ETH address' ),
+				__( 'Newsroom Contract Address "%1$s" is not a valid ETH address', 'civil' ),
 				$addr
 			),
 			'error'
@@ -210,7 +208,7 @@ function civil_validate_newsroom_address( $input ) {
 /**
  * Ensure custom post meta visible/editable in REST API and Gutenberg.
  */
-function civil_expose_article_meta() {
+function expose_article_meta() {
 	register_meta(
 		'post', SIGNATURES_META_KEY, array(
 			'show_in_rest' => true,
@@ -233,5 +231,5 @@ function civil_expose_article_meta() {
 		)
 	);
 }
-add_action( 'admin_init', __NAMESPACE__ . '\civil_expose_article_meta' );
-add_action( 'rest_api_init', __NAMESPACE__ . '\civil_expose_article_meta' );
+add_action( 'admin_init', __NAMESPACE__ . '\expose_article_meta' );
+add_action( 'rest_api_init', __NAMESPACE__ . '\expose_article_meta' );

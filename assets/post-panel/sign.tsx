@@ -5,7 +5,7 @@ import * as React from "react";
 import { EthAddress, Hex } from "@joincivil/core";
 
 import { signMessage, getMessageToSign } from "../util";
-import { postMetaKeys } from "./store/constants";
+import { postMetaKeys } from "../constants";
 import { SignatureData } from "./store/interfaces";
 
 export type signatureStatusType = "unsigned" | "valid" | "invalid";

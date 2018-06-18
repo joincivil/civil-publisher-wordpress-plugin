@@ -12,22 +12,22 @@
 namespace Civil_Newsroom_Protocol;
 
 define( __NAMESPACE__ . '\PATH', dirname( __FILE__ ) );
-define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil/newsroom-protocol/v1' );
+define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil-newsroom-protocol/v1' );
 define( __NAMESPACE__ . '\SCHEMA_VERSION', '1.0.0' );
 define( __NAMESPACE__ . '\ASSETS_VERSION', '0.1.0' );
 
 // Post meta.
-define( __NAMESPACE__ . '\REVISION_HASH_META_KEY', 'civil_revision_hash' );
-define( __NAMESPACE__ . '\REVISION_DATA_META_KEY', 'civil_revision_extra_data' );
-define( __NAMESPACE__ . '\SIGNATURES_META_KEY', 'civil_article_signatures' );
-define( __NAMESPACE__ . '\REVISIONS_META_KEY', 'civil_published_revisions' );
-define( __NAMESPACE__ . '\CONTENT_ID_META_KEY', 'civil_content_id' );
+define( __NAMESPACE__ . '\REVISION_HASH_META_KEY', 'civil_newsroom_protocol_revision_hash' );
+define( __NAMESPACE__ . '\REVISION_DATA_META_KEY', 'civil_newsroom_protocol_revision_extra_data' );
+define( __NAMESPACE__ . '\SIGNATURES_META_KEY', 'civil_newsroom_protocol_article_signatures' );
+define( __NAMESPACE__ . '\REVISIONS_META_KEY', 'civil_newsroom_protocol_published_revisions' );
+define( __NAMESPACE__ . '\CONTENT_ID_META_KEY', 'civil_newsroom_protocol_content_id' );
 
 // User meta.
-define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_eth_wallet_address' );
+define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_newsroom_protocol_eth_wallet_address' );
 
 // Site options.
-define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_address' );
+define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol_newsroom_address' );
 
 /**
  * Gets the blockchain enabled post types.

@@ -6,6 +6,7 @@ import { Civil, EthAddress } from "@joincivil/core";
 import { ManagerState } from "./reducer";
 import { addAddress } from "./actions";
 import { getNewsroomAddress } from "../util";
+import { apiNamespace, siteOptionKeys } from "../constants";
 
 export interface AppProps {
   address?: EthAddress;
@@ -35,16 +36,16 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
       path: "/wp/v2/settings",
       method: "PUT",
       data: {
-        newsroom_address: address,
+        [siteOptionKeys.NEWSROOM_ADDRESS]: address,
       },
     });
-    this.props.dispatch(addAddress(settings.newsroom_address));
+    this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
   };
 
   private getNameForAddress = async (address: EthAddress) => {
     try {
       const user = await apiRequest({
-        path: `/civil/newsroom-protocol/v1/user-by-eth-address/${address}`,
+        path: apiNamespace + `user-by-eth-address/${address}`,
       });
       return user.display_name;
     } catch (e) {

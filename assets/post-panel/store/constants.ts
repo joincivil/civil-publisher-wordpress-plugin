@@ -9,9 +9,3 @@ export enum actionTypes {
   SET_CIVIL_CONTENT_ID = "SET_CIVIL_CONTENT_ID",
   // PUBLISH_CONTENT = "PUBLISH_CONTENT",
 }
-
-export enum postMetaKeys {
-  SIGNATURES = "civil_article_signatures",
-  PUBLISHED_REVISIONS = "civil_published_revisions",
-  CIVIL_CONTENT_ID = "civil_content_id",
-}

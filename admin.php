@@ -12,7 +12,7 @@ namespace Civil_Newsroom_Protocol;
  */
 function enqueue_post_panel() {
 	wp_enqueue_script(
-		'civil-post-panel',
+		'civil-newsroom-protocol-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),
 		array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
@@ -20,7 +20,7 @@ function enqueue_post_panel() {
 	);
 
 	// Prevent conflict between lodash required by civil packages and underscore used in Gutenberg, see https://github.com/WordPress/gutenberg/issues/4043#issuecomment-361049257.
-	wp_add_inline_script( 'civil-post-panel', 'window.lodash = _.noConflict();', 'after' );
+	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', 'window.lodash = _.noConflict();', 'after' );
 }
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
 
@@ -59,13 +59,13 @@ function contract_management_menu_content() {
 function contract_management_script() {
 	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
 	wp_enqueue_script(
-		'civil-blockchain-newsroom-management',
+		'civil-newsroom-protocol-newsroom-management',
 		plugins_url( 'build/newsroom-management.build.js', __FILE__ ),
 		// Need these deps in order to expose React and wp.apiRequest.
 		array( 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
 		true
 	);
-	wp_add_inline_script( 'civil-blockchain-newsroom-management', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'after' );
+	wp_add_inline_script( 'civil-newsroom-protocol-newsroom-management', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'after' );
 }
 add_action( 'admin_print_scripts-tools_page_newsroom-contract-management', __NAMESPACE__ . '\contract_management_script' );
