@@ -14,7 +14,7 @@ export const username = (state: string | null = null, action: any): string | nul
 export const userWalletAddress = (state: string | null = null, action: any): string | null => {
   switch (action.type) {
     case actionTypes.SET_LOGGED_IN_USER_ADDRESS:
-      return action.data;
+      return action.data || null;
     default:
       return state;
   }
