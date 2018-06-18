@@ -6,10 +6,10 @@
  * Author: Civil
  * Author URI: https://civil.co
  *
- * @package Civil_Newsroom
+ * @package Civil_Newsroom_Protocol
  */
 
-namespace Civil;
+namespace Civil_Newsroom_Protocol;
 
 define( __NAMESPACE__ . '\PATH', dirname( __FILE__ ) );
 define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil/v1' );

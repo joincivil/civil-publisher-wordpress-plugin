@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package Civil_Newsroom
+ * @package Civil_Newsroom_Protocol
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );

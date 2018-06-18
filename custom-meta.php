@@ -2,10 +2,10 @@
 /**
  * Handles custom user and site meta
  *
- * @package Civil_Newsroom
+ * @package Civil_Newsroom_Protocol
  */
 
-namespace Civil;
+namespace Civil_Newsroom_Protocol;
 
 /**
  * Check if given string is a valid hex ETH wallet address.

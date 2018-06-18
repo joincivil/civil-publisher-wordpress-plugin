@@ -70,7 +70,7 @@ class CivilRestApiTest extends CivilTestCase {
 		// Get the revisions.
 		$revisions = wp_get_post_revisions( $post_id );
 
-		$request = new WP_REST_Request( 'GET', '/' . \Civil\REST_API_NAMESPACE . '/revisions/' . $this->get_latest_post_revision_id( $post_id ) );
+		$request = new WP_REST_Request( 'GET', '/' . \Civil_Newsroom_Protocol\REST_API_NAMESPACE . '/revisions/' . $this->get_latest_post_revision_id( $post_id ) );
 		$response = $this->server->dispatch( $request );
 
 		// Drafts are allowed to be hashed.
@@ -84,7 +84,7 @@ class CivilRestApiTest extends CivilTestCase {
 			'post_content' => 'revision 2',
 		] );
 
-		$request = new WP_REST_Request( 'GET', '/' . \Civil\REST_API_NAMESPACE . '/revisions/' . $this->get_latest_post_revision_id( $post_id ) );
+		$request = new WP_REST_Request( 'GET', '/' . \Civil_Newsroom_Protocol\REST_API_NAMESPACE . '/revisions/' . $this->get_latest_post_revision_id( $post_id ) );
 		$response = $this->server->dispatch( $request );
 
 		// Check that we have a success status and the hash matches.
@@ -111,7 +111,7 @@ class CivilRestApiTest extends CivilTestCase {
 			'post_content' => 'revision 1',
 		] );
 
-		$request = new WP_REST_Request( 'GET', '/' . \Civil\REST_API_NAMESPACE . '/revisions/' . $this->get_latest_post_revision_id( $post_id ) );
+		$request = new WP_REST_Request( 'GET', '/' . \Civil_Newsroom_Protocol\REST_API_NAMESPACE . '/revisions/' . $this->get_latest_post_revision_id( $post_id ) );
 		$response = $this->server->dispatch( $request );
 
 		// Check status.

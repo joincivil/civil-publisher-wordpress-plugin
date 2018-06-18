@@ -129,7 +129,7 @@ const BlockchainPublishPanel = compose([
       if (currentPostLastRevisionId) {
         revisionJson = getRevisionJSON(currentPostLastRevisionId);
         revisionJsonHash = hashContent(revisionJson);
-        revisionUrl = `${window.location.origin}/wp-json/civil/v1/revisions/${currentPostLastRevisionId}`;
+        revisionUrl = `${window.location.origin}/wp-json/civil/newsroom-protocol/v1/revisions/${currentPostLastRevisionId}`;
       }
 
       return {

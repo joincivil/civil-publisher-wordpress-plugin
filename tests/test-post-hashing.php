@@ -10,7 +10,7 @@ class CivilPostHashingTest extends CivilTestCase {
 		$test_content = rand_str();
 
 		// Get the test content hash.
-		$expected_hash = \Civil\Post_Hashing::instance()->hash( $test_content );
+		$expected_hash = \Civil_Newsroom_Protocol\Post_Hashing::instance()->hash( $test_content );
 
 		// Create a post.
 		$post_id = self::factory()->post->create( [
@@ -23,7 +23,7 @@ class CivilPostHashingTest extends CivilTestCase {
 			'post_content' => $test_content,
 		] );
 
-		$this->assertEquals( $expected_hash, get_metadata( 'post', $this->get_latest_post_revision_id( $post_id ), \Civil\REVISION_HASH_META_KEY, true ) );
+		$this->assertEquals( $expected_hash, get_metadata( 'post', $this->get_latest_post_revision_id( $post_id ), \Civil_Newsroom_Protocol\REVISION_HASH_META_KEY, true ) );
 	}
 
 	/**

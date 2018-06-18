@@ -4,7 +4,7 @@
  *
  * The base Civil Newsroom phpunit test class.
  *
- * @package Civil_Newsroom
+ * @package Civil_Newsroom_Protocol
  */
 class CivilTestCase extends WP_UnitTestCase {
 	/**

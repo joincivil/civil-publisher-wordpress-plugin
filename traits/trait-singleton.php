@@ -2,10 +2,10 @@
 /**
  * Trait file for Singletons.
  *
- * @package Civil_Newsroom
+ * @package Civil_Newsroom_Protocol
  */
 
-namespace Civil;
+namespace Civil_Newsroom_Protocol;
 
 /**
  * Make a class into a singleton.

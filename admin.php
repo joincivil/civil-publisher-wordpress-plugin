@@ -2,10 +2,10 @@
 /**
  * Handles hooks and enqueueing for admin page and Gutenberg plugin scripts
  *
- * @package Civil_Newsroom
+ * @package Civil_Newsroom_Protocol
  */
 
-namespace Civil;
+namespace Civil_Newsroom_Protocol;
 
 /**
  * Enqueue Gutenberg editor plugin script.

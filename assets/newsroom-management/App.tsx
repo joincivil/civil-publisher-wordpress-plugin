@@ -44,7 +44,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
   private getNameForAddress = async (address: EthAddress) => {
     try {
       const user = await apiRequest({
-        path: `/civil/v1/user-by-eth-address/${address}`,
+        path: `/civil/newsroom-protocol/v1/user-by-eth-address/${address}`,
       });
       return user.display_name;
     } catch (e) {

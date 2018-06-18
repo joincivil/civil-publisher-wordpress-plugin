@@ -17,7 +17,7 @@ export async function getRevisionJson(): Promise<any> {
   const revisionId = select("core/editor").getCurrentPostLastRevisionId();
 
   try {
-    const response = await apiRequest({ path: "/civil/v1/revisions/" + revisionId });
+    const response = await apiRequest({ path: "/civil/newsroom-protocol/v1/revisions/" + revisionId });
     // console.log("revision JSON response:", response);
     return response;
   } catch (err) {

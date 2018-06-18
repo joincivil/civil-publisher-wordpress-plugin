@@ -6,7 +6,7 @@ const { apiRequest } = window.wp;
 
 export async function getRevisionJSON(state: any, revisionID: string): Promise<any | void> {
   try {
-    const response = await apiRequest({ path: "/civil/v1/revisions/" + revisionID });
+    const response = await apiRequest({ path: "/civil/newsroom-protocol/v1/revisions/" + revisionID });
     // console.log("revision JSON response:", response);
     return addOrUpdateRevision(revisionID, response);
   } catch (err) {
