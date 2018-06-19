@@ -29,6 +29,9 @@ define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_newsroom_protocol_e
 // Site options.
 define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol_newsroom_address' );
 
+// Menus.
+define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-newsroom-protocol-management' );
+
 /**
  * Gets the blockchain enabled post types.
  *

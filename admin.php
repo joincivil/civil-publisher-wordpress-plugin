@@ -25,21 +25,21 @@ function enqueue_post_panel() {
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
 
 /**
- * Add Tools > Newsroom Contract Management page.
+ * Add Civil Newsroom Management page.
  */
 function contract_management_menu() {
-	add_management_page(
-		__( 'Newsroom Contract Management', 'civil' ),
-		__( 'Newsroom Contract Management', 'civil' ),
+	add_menu_page(
+		__( 'Civil Newsroom Management', 'civil' ),
+		__( 'Civil Newsroom Management', 'civil' ),
 		'manage_options',
-		'newsroom-contract-management',
+		MANAGEMENT_PAGE,
 		__NAMESPACE__ . '\contract_management_menu_content'
 	);
 }
 add_action( 'admin_menu', __NAMESPACE__ . '\contract_management_menu' );
 
 /**
- * Tools > Newsroom Contract Management page content.
+ * Civil Newsroom Management page content.
  */
 function contract_management_menu_content() {
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -47,14 +47,14 @@ function contract_management_menu_content() {
 	}
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Newsroom Contract Management', 'civil' ); ?></h1>
+		<h1><?php esc_html_e( 'Civil Newsroom Management', 'civil' ); ?></h1>
 		<div id="civil-newsroom-management"></div>
 	</div>
 	<?php
 }
 
 /**
- * Enqueue Tools > Newsroom Contract Management script.
+ * Enqueue Civil Newsroom Management script.
  */
 function contract_management_script() {
 	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
@@ -68,4 +68,29 @@ function contract_management_script() {
 	);
 	wp_add_inline_script( 'civil-newsroom-protocol-newsroom-management', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'after' );
 }
-add_action( 'admin_print_scripts-tools_page_newsroom-contract-management', __NAMESPACE__ . '\contract_management_script' );
+add_action( 'admin_print_scripts-toplevel_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
+
+/**
+ * If necessary, alert user that they need to set up newsroom to use plugin.
+ */
+function newsroom_setup_nag() {
+	if ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) ) {
+		?>
+		<div class="error notice">
+			<p>
+			<?php
+				echo sprintf(
+					wp_kses(
+						/* translators: 1: Management page URL */
+						__( 'You need to <a href="%1$s">set up your Civil Newsroom</a> before you can publish to the blockchain.', 'civil' ),
+						[ 'a' => [ 'href' => [] ] ]
+					),
+					esc_url( menu_page_url( MANAGEMENT_PAGE, false ) )
+				);
+			?>
+			</p>
+		</div>
+		<?php
+	}
+}
+add_action( 'admin_notices', __NAMESPACE__ . '\newsroom_setup_nag' );

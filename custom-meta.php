@@ -61,7 +61,7 @@ function user_profile_update_errors( $errors, $update, $user ) {
 		&& wp_verify_nonce( sanitize_key( $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] ), 'civil_newsroom_protocol_update_wallet_address_action' )
 	) {
 		$addr = sanitize_text_field( wp_unslash( $_POST[ USER_ETH_ADDRESS_META_KEY ] ) );
-		if ( ! is_valid_eth_address( $addr ) ) {
+		if ( ! empty( $addr ) && ! is_valid_eth_address( $addr ) ) {
 			$errors->add(
 				'wallet_address_error',
 				sprintf(
@@ -133,13 +133,17 @@ function user_meta_callback( $user, $field_name ) {
  */
 function newsroom_address_init() {
 	newsroom_address_register_setting();
-	add_settings_field(
-		NEWSROOM_ADDRESS_OPTION_KEY,
-		__( 'Newsroom Contract Address', 'civil' ),
-		__NAMESPACE__ . '\newsroom_address_input',
-		'general',
-		'default'
-	);
+
+	// Just for debugging by superadmins - non-superadmins have to go through the dedicated Newsroom Management page.
+	if ( is_super_admin() ) {
+		add_settings_field(
+			NEWSROOM_ADDRESS_OPTION_KEY,
+			__( 'Newsroom Contract Address', 'civil' ),
+			__NAMESPACE__ . '\newsroom_address_input',
+			'general',
+			'default'
+		);
+	}
 }
 add_action( 'admin_init', __NAMESPACE__ . '\newsroom_address_init' );
 
