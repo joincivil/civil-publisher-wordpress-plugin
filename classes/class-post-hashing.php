@@ -81,7 +81,8 @@ class Post_Hashing {
 		}
 
 		// Hash the post content.
-		update_metadata( 'post', $post_id, REVISION_HASH_META_KEY, $this->hash( $post->post_content ) );
+		$revision_hash = $this->hash( $post->post_content );
+		update_metadata( 'post', $post_id, REVISION_HASH_META_KEY, $revision_hash );
 
 		// Add authors.
 		$authors   = [];
@@ -96,7 +97,7 @@ class Post_Hashing {
 			}
 		}
 
-		// TODO Check validity of signatures before using (and if not valid, mark as such in post meta so we don't have to check next time).
+		$newsroom_address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
 		// $post is a revision, and this meta is stored on post itself, so get from the parent.
 		$signatures = get_post_meta( $post->post_parent, SIGNATURES_META_KEY, true );
 		$signatures = ! empty( $signatures ) ? json_decode( $signatures, true ) : null;
@@ -109,8 +110,11 @@ class Post_Hashing {
 
 				if ( ! empty( $signatures[ $coauthor->user_login ] ) ) {
 					$sig_data = $signatures[ $coauthor->user_login ];
-					$author_data['address'] = $sig_data['authorAddress'];
-					$author_data['signature'] = $sig_data['signature'];
+					// Check signature still valid for current state of post before adding to author data.
+					if ( $sig_data['newsroomAddress'] == $newsroom_address && $sig_data['contentHash'] == $revision_hash ) {
+						$author_data['address'] = $sig_data['author'];
+						$author_data['signature'] = $sig_data['signature'];
+					}
 				}
 
 				$authors[] = $author_data;
