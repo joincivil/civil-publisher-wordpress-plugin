@@ -22,7 +22,6 @@ export async function getRevisionJson(): Promise<any> {
 
   try {
     const response = await apiRequest({ path: apiNamespace + "revisions/" + revisionId });
-    // console.log("revision JSON response:", response);
     return response;
   } catch (err) {
     console.error("Failed to fetch revision JSON:", err);
