@@ -42,11 +42,6 @@ export async function getRevisionContentHash(): Promise<string> {
   return revisionJson.revisionContentHash;
 }
 
-export function getContentHashFromSignMessage(message: string): string {
-  const messageArr = message.split(" ");
-  return messageArr[messageArr.length - 1];
-}
-
 export async function createSignatureData(): Promise<ApprovedRevision> {
   const newsroom = await getNewsroom();
   const contentHash = await getRevisionContentHash();

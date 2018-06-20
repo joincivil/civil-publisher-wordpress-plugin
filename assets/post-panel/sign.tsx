@@ -7,7 +7,6 @@ import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage, hashPersonal
 import { bufferToHex } from "ethereumjs-util";
 import {
   getRevisionContentHash,
-  getContentHashFromSignMessage,
   createSignatureData,
   getNewsroom,
   getNewsroomAddress,

@@ -2,9 +2,7 @@ const path = require( "path" );
 
 module.exports = env => {
   return {
-    // mode: env.production ? "production" : "development",
-    // TODO default options that come with "production" mode are causing vagrant VM with 1.5gb RAM to run out of memory, so:
-    mode: "development",
+    mode: env.production ? "production" : "development",
 
     entry: {
       "post-panel": path.join(__dirname, "/assets/post-panel/index.tsx"),
