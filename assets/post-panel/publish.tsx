@@ -25,7 +25,7 @@ export interface BlockchainPublishPanelState {
 export interface BlockchainPublishPanelProps {
   publishStatus?: string;
   publishDisabled?: boolean;
-  civilContentID?: string;
+  civilContentID?: number;
   currentPostLastRevisionId?: number;
   publishedRevisions: any[];
   signatures: SignatureData;
@@ -55,7 +55,7 @@ class BlockchainPublishPanelComponent extends React.Component<
           transaction: async () => {
             const newsroom = await getNewsroom();
             return newsroom.updateRevisionURIAndHash(
-              this.props.civilContentID,
+              this.props.civilContentID!,
               this.props.revisionUrl,
               this.props.revisionJsonHash,
             );
@@ -88,13 +88,6 @@ class BlockchainPublishPanelComponent extends React.Component<
             Publish to Blockchain
           </TransactionButton>
         </PanelRow>
-        {/* <PanelRow>
-          <CheckboxControl
-            label="Archive full text"
-            checked={this.state.archiveChecked}
-            onChange={this.onArchiveChange}
-          />
-        </PanelRow> */}
       </div>
     );
   }

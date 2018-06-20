@@ -1,9 +1,6 @@
-import { EthAddress, Hex } from "@joincivil/core";
+import { EthAddress, Hex, ApprovedRevision } from "@joincivil/core";
 
 /** Maps from author wordpress user to ETH address and signature hex. */
 export interface SignatureData {
-  [authorUsername: string]: {
-    authorAddress: EthAddress;
-    signature: Hex;
-  };
+  [authorUsername: string]: ApprovedRevision;
 }

@@ -3,7 +3,9 @@ const { select } = window.wp.data;
 
 import * as Web3 from "web3";
 import { bufferToHex } from "ethereumjs-util";
-import { Civil } from "@joincivil/core";
+import { Civil, ApprovedRevision } from "@joincivil/core";
+import { Newsroom } from "@joincivil/core/build/src/contracts/newsroom";
+import { prepareNewsroomMessage } from "@joincivil/utils";
 
 import { apiNamespace, userMetaKeys, siteOptionKeys } from "./constants";
 
@@ -41,43 +43,15 @@ export async function getRevisionContentHash(): Promise<string> {
   return revisionJson.revisionContentHash;
 }
 
-export async function signMessage(message: string): Promise<string> {
-  // TODO this doesn't check that wallet is open, also web3 is being deprecated in favor of ethereumProvider
-  const address = web3.eth.accounts[0].toLowerCase();
-
-  const wpLoginAddress = ((await getLoggedInUserAddress()) || "[not set]").toLowerCase();
-  if (address !== wpLoginAddress) {
-    alert(
-      'Your browser wallet says your ETH address is "' +
-        address +
-        '" but your WordPress login is set up with ETH address "' +
-        wpLoginAddress +
-        '" - please make sure you have configured and are using the correct address.',
-    );
-    throw new Error("ETH address mismatch - wallet extension doesn't match WP user meta");
-  }
-  const messageHex = bufferToHex(Buffer.from(message, "utf8") as any);
-
-  return new Promise<string>((resolve, reject) => {
-    web3.personal.sign(messageHex, address, (err: any, result: string) => {
-      if (err) {
-        return reject(err);
-      }
-      return resolve(result);
-    });
-  });
+export function getContentHashFromSignMessage(message: string): string {
+  const messageArr = message.split(" ");
+  return messageArr[messageArr.length - 1];
 }
 
-export async function getMessageToSign(): Promise<string> {
-  const [contentHash, newsroomAddress] = await Promise.all([getRevisionContentHash(), getNewsroomAddress()]);
-  // return [contentHash, newsroomAddress].join(":");
-  return (
-    "I, so-and-so, authorize article with content hash " +
-    contentHash +
-    " on behalf of newsroom " +
-    newsroomAddress +
-    "."
-  );
+export async function createSignatureData(): Promise<ApprovedRevision> {
+  const newsroom = await getNewsroom();
+  const contentHash = await getRevisionContentHash();
+  return newsroom.approveByAuthorPersonalSign(contentHash);
 }
 
 /** Returns ETH address associated with logged-in WordPress user (rather than what web3 tells us) */
@@ -91,7 +65,7 @@ export async function getNewsroomAddress(): Promise<string> {
   return siteSettings[siteOptionKeys.NEWSROOM_ADDRESS];
 }
 
-export async function getNewsroom(): Promise<any> {
+export async function getNewsroom(): Promise<Newsroom> {
   const civil = new Civil();
   const newsroomAddress = await getNewsroomAddress();
   return civil.newsroomAtUntrusted(newsroomAddress);

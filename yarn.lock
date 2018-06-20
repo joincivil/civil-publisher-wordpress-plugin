@@ -9,12 +9,12 @@
     core-js "^2.5.7"
     regenerator-runtime "^0.11.1"
 
-"@joincivil/components@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@joincivil/components/-/components-1.2.0.tgz#a8afc6c1634be6faf69c8a248b4e3da6458bc7ee"
+"@joincivil/components@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@joincivil/components/-/components-1.2.2.tgz#bde249403059ccf6bc863b059c5d8b645091fe3e"
   dependencies:
-    "@joincivil/core" "^4.2.0"
-    "@joincivil/utils" "^1.3.0"
+    "@joincivil/core" "^4.2.2"
+    "@joincivil/utils" "^1.3.1"
     "@material-ui/core" "^1.1.0"
     "@material-ui/icons" "^1.1.0"
     "@types/classnames" "^2.2.3"
@@ -23,11 +23,11 @@
     react-router-dom "^4.2.2"
     styled-components "^3.2.3"
 
-"@joincivil/core@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@joincivil/core/-/core-4.2.0.tgz#2c89378bb594e86db1579279102efe81e51e5b04"
+"@joincivil/core@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@joincivil/core/-/core-4.2.2.tgz#c04989a48dd40fcd658e22b3bbdfdf99958a967c"
   dependencies:
-    "@joincivil/utils" "^1.3.0"
+    "@joincivil/utils" "^1.3.1"
     bignumber.js "~5.0.0"
     debug "^3.1.0"
     ethereumjs-util "^5.2.0"
@@ -37,22 +37,23 @@
     rxjs "^5.5.6"
     web3 "^0.20.3"
 
-"@joincivil/newsroom-manager@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@joincivil/newsroom-manager/-/newsroom-manager-1.2.0.tgz#f554791c00aea15f5a79cbecf18881fadb255c5b"
+"@joincivil/newsroom-manager@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@joincivil/newsroom-manager/-/newsroom-manager-1.2.2.tgz#7e19331bf69cd341b74e462ca67cce73b9e0a685"
   dependencies:
-    "@joincivil/components" "^1.2.0"
-    "@joincivil/core" "^4.2.0"
+    "@joincivil/components" "^1.2.2"
+    "@joincivil/core" "^4.2.2"
 
 "@joincivil/tslint-rules@^2.6.3":
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/@joincivil/tslint-rules/-/tslint-rules-2.6.3.tgz#323f5f9897b709bad2ea306f7d6b78715ca7d6cd"
 
-"@joincivil/utils@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@joincivil/utils/-/utils-1.3.0.tgz#47e90c2f024b1b4363bf30294a5f2ec507caa912"
+"@joincivil/utils@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@joincivil/utils/-/utils-1.3.1.tgz#2182c4b1726f168881cc12c38e35f85b45c60ce3"
   dependencies:
     bignumber.js "~5.0.0"
+    eth-sig-util "^1.4.2"
     ethereumjs-abi "^0.6.5"
     ethereumjs-util "^5.2.0"
     rxjs "^5.5.6"
@@ -2279,12 +2280,26 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
 
+eth-sig-util@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/eth-sig-util/-/eth-sig-util-1.4.2.tgz#8d958202c7edbaae839707fba6f09ff327606210"
+  dependencies:
+    ethereumjs-abi "git+https://github.com/ethereumjs/ethereumjs-abi.git"
+    ethereumjs-util "^5.1.1"
+
 ethereumjs-abi@^0.6.5:
   version "0.6.5"
   resolved "https://registry.yarnpkg.com/ethereumjs-abi/-/ethereumjs-abi-0.6.5.tgz#5a637ef16ab43473fa72a29ad90871405b3f5241"
   dependencies:
     bn.js "^4.10.0"
     ethereumjs-util "^4.3.0"
+
+"ethereumjs-abi@git+https://github.com/ethereumjs/ethereumjs-abi.git":
+  version "0.6.5"
+  resolved "git+https://github.com/ethereumjs/ethereumjs-abi.git#4ea2fdfed09e8f99117d9362d17c6b01b64a2bcf"
+  dependencies:
+    bn.js "^4.10.0"
+    ethereumjs-util "^5.0.0"
 
 ethereumjs-util@^4.3.0:
   version "4.5.0"
@@ -2296,7 +2311,7 @@ ethereumjs-util@^4.3.0:
     rlp "^2.0.0"
     secp256k1 "^3.0.1"
 
-ethereumjs-util@^5.2.0:
+ethereumjs-util@^5.0.0, ethereumjs-util@^5.1.1, ethereumjs-util@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/ethereumjs-util/-/ethereumjs-util-5.2.0.tgz#3e0c0d1741471acf1036052d048623dee54ad642"
   dependencies:

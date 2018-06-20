@@ -2,21 +2,27 @@ const { Button, PanelRow } = window.wp.components;
 const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
 import * as React from "react";
-import { EthAddress, Hex } from "@joincivil/core";
-
-import { signMessage, getMessageToSign } from "../util";
+import { EthAddress, Hex, ApprovedRevision } from "@joincivil/core";
+import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage, hashPersonalMessage } from "@joincivil/utils";
+import { bufferToHex } from "ethereumjs-util";
+import {
+  getRevisionContentHash,
+  getContentHashFromSignMessage,
+  createSignatureData,
+  getNewsroom,
+  getNewsroomAddress,
+} from "../util";
 import { postMetaKeys } from "../constants";
 import { SignatureData } from "./store/interfaces";
 
 export type signatureStatusType = "unsigned" | "valid" | "invalid";
-export interface BlockchainSignPanelState {}
 export interface BlockchainSignPanelProps {
   username: string;
   signatures: SignatureData;
   signDisabled: boolean;
   userWalletAddress?: EthAddress;
   signArticle(): void;
-  isValidSignature(authorAddress: EthAddress, sig: Hex): boolean;
+  isValidSignature(signature: ApprovedRevision): boolean;
 }
 
 const SignButton = withDispatch((dispatch: any, ownProps: any) => {
@@ -50,11 +56,7 @@ function Signature(ownProps: any): JSX.Element {
   );
 }
 
-class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelProps, BlockchainSignPanelState> {
-  constructor(props: BlockchainSignPanelProps) {
-    super(props);
-  }
-
+class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelProps> {
   public componentDidMount(): void {
     this.initSignPanel();
   }
@@ -63,10 +65,10 @@ class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelPr
     const signatures = Object.entries(this.props.signatures).map(([key, val]) => (
       <Signature
         authorUsername={key}
-        authorAddress={val.authorAddress}
+        authorAddress={val.author}
         sig={val.signature}
-        sigStatus={this.props.isValidSignature(val.authorAddress, val.signature) ? "valid" : "invalid"}
-        isYou={val.authorAddress === this.props.userWalletAddress}
+        sigStatus={this.props.isValidSignature(val) ? "valid" : "invalid"}
+        isYou={val.author === this.props.userWalletAddress}
       />
     ));
 
@@ -110,26 +112,37 @@ class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelPr
 const BlockchainSignPanel = compose([
   withSelect(
     (selectStore: any, ownProps: Partial<BlockchainSignPanelProps>): Partial<BlockchainSignPanelProps> => {
-      const { isEditedPostDirty, isCleanNewPost } = selectStore("core/editor");
-      const { getUsername, getLoggedInUserAddress, getSignatures } = selectStore("civil/blockchain");
+      const { isEditedPostDirty, isCleanNewPost, getCurrentPostLastRevisionId } = selectStore("core/editor");
+      const { getUsername, getLoggedInUserAddress, getSignatures, getRevisionJSON } = selectStore("civil/blockchain");
 
       const username = getUsername();
-
-      let signatures = getSignatures();
-      // testing starting off with dummy
-      // if (! Object.keys(signatures).length) {
-      //   signatures = {
-      //     user1: { authorAddress: "0xauthor1", signature: "0xsig1" },
-      //     user2: { authorAddress: "0xauthor2", signature: "0xsig2" },
-      //   };
-      // }
+      const contentID = getCurrentPostLastRevisionId();
+      const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
+      let revisionJson: any;
+      if (contentID) {
+        revisionJson = getRevisionJSON(contentID);
+      }
+      const signatures = getSignatures();
 
       /** Check if given signature is valid given the current post content. */
-      const isValidSignature = (authorAddress: EthAddress, sig: Hex): boolean => {
-        // TODO
-
-        // FYI i have tested and both `select("core/editor").getCurrentPost().content` and `select("core/editor").getEditedPostAttribute("content")` return content that does NOT match content eventually served from server, so... not sure how to do this without first saving post to DB, and then fetching revision hash from server
-
+      const isValidSignature = (signature: ApprovedRevision): boolean => {
+        if (!revisionJson) {
+          return false;
+        }
+        if (revisionJson.revisionContentHash !== signature.contentHash) {
+          return false;
+        }
+        if (revisionJson.newsroomAddress !== newsroomAddress) {
+          return false;
+        }
+        if (
+          recoverSignerPersonal({
+            message: prepareUserFriendlyNewsroomMessage(signature.newsroomAddress, signature.contentHash),
+            signature: signature.signature,
+          }) !== signature.author
+        ) {
+          return false;
+        }
         return true;
       };
 
@@ -139,7 +152,7 @@ const BlockchainSignPanel = compose([
         }
 
         const ownSignature = signatures[username];
-        if (ownSignature && isValidSignature!(ownSignature.authorAddress, ownSignature.signature)) {
+        if (ownSignature && isValidSignature(ownSignature)) {
           // No need to re-sign if signed and valid
           return true;
         } else {
@@ -167,13 +180,8 @@ const BlockchainSignPanel = compose([
       const { username, userWalletAddress, signatures } = ownProps;
 
       const signArticle = async (): Promise<void> => {
-        const messageToSign = await getMessageToSign();
-        const signature = await signMessage(messageToSign);
-        signatures[username] = {
-          authorAddress: userWalletAddress!,
-          signature,
-        };
-
+        const signature = await createSignatureData();
+        signatures[username] = signature;
         editPost({ meta: { [postMetaKeys.SIGNATURES]: JSON.stringify(signatures) } });
         savePost();
         dispatch(updateSignatures(signatures));

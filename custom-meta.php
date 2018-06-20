@@ -157,6 +157,7 @@ function newsroom_address_register_setting() {
 		array(
 			'type' => 'string',
 			'single' => true,
+			'show_in_rest' => true,
 			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_address',
 		)
 	);

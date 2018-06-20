@@ -9,7 +9,7 @@ import { getNewsroomAddress } from "../util";
 import reducers from "./reducer";
 import App from "./App";
 
-async function init(): Promise<void> {
+function init(): void {
   const { newsroomAddress } = window.civilNamespace;
 
   const store = createStore(
