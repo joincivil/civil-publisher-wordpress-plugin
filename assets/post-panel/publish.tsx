@@ -2,8 +2,6 @@ const { Button, PanelRow, CheckboxControl } = window.wp.components;
 import * as React from "react";
 const { select, withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
-// import { ApprovedRevision } from "@joincivil/core";
-
 import { getNewsroom, revisionJsonSansDate } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
 import { SignatureData } from "./store/interfaces";
