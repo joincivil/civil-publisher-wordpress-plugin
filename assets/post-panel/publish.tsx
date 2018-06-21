@@ -30,6 +30,7 @@ export interface BlockchainPublishPanelProps {
   revisionJson: string;
   revisionJsonHash: string;
   revisionUrl: string;
+  isDirty: boolean;
   publishContent?(contentId: number, revisionId: number, revisionJson: any): void;
   updateContent?(revisionId: number, revisionJson: any): void;
 }
@@ -85,6 +86,9 @@ class BlockchainPublishPanelComponent extends React.Component<
           <TransactionButton disabled={this.props.publishDisabled} transactions={transactions} size={buttonSizes.SMALL}>
             Publish to Blockchain
           </TransactionButton>
+          {this.props.isDirty &&
+            <i>Please save this post before publishing.</i>
+          }
         </PanelRow>
       </div>
     );
@@ -98,7 +102,7 @@ class BlockchainPublishPanelComponent extends React.Component<
 const BlockchainPublishPanel = compose([
   withSelect(
     (selectStore: any, ownProps: Partial<BlockchainPublishPanelProps>): Partial<BlockchainPublishPanelProps> => {
-      const { getCurrentPostLastRevisionId } = selectStore("core/editor");
+      const { getCurrentPostLastRevisionId, isEditedPostDirty } = selectStore("core/editor");
       const {
         getCivilContentID,
         getPublishedStatus,
@@ -114,6 +118,7 @@ const BlockchainPublishPanel = compose([
       const publishStatus = getPublishStatusString(publishedRevisions);
       const signatures = getSignatures();
       const civilContentID = getCivilContentID();
+      const isDirty = isEditedPostDirty();
       let revisionJson;
       let revisionJsonHash;
       let revisionUrl;
@@ -133,6 +138,7 @@ const BlockchainPublishPanel = compose([
         revisionJson,
         revisionJsonHash,
         revisionUrl,
+        isDirty,
       };
     },
   ),

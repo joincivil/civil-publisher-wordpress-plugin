@@ -20,6 +20,7 @@ export interface BlockchainSignPanelProps {
   signatures: SignatureData;
   signDisabled: boolean;
   userWalletAddress?: EthAddress;
+  isDirty: boolean;
   signArticle(): void;
   isValidSignature(signature: ApprovedRevision): boolean;
 }
@@ -83,6 +84,9 @@ class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelPr
           <SignButton isPrimary={true} disabled={this.props.signDisabled} signArticle={this.props.signArticle}>
             Sign Article
           </SignButton>
+          {this.props.isDirty &&
+            <i>Please save this post before signing.</i>
+          }
         </PanelRow>
         <PanelRow>
           <i>
@@ -168,6 +172,7 @@ const BlockchainSignPanel = compose([
         signDisabled: isSignButtonDisabled(),
         userWalletAddress: getLoggedInUserAddress(),
         isValidSignature,
+        isDirty: isEditedPostDirty(),
       };
     },
   ),
