@@ -1,99 +1,12 @@
-const { Button, PanelRow, CheckboxControl } = window.wp.components;
 import * as React from "react";
 const { select, withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
 import { getNewsroom, revisionJsonSansDate } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
-import { SignatureData } from "./store/interfaces";
 import { hashContent } from "@joincivil/utils";
 import { TransactionButton, buttonSizes } from "@joincivil/components";
+import { BlockchainPublishPanelComponent, BlockchainPublishPanelProps } from "./components/BlockchainPublishPanel";
 
-const PublishButton = withDispatch((dispatch: any, ownProps: any) => {
-  const { publishContent } = ownProps;
-  return {
-    onClick(): void {
-      publishContent();
-    },
-  };
-})(Button);
-
-export interface BlockchainPublishPanelState {
-  archiveChecked: boolean;
-}
-export interface BlockchainPublishPanelProps {
-  publishStatus?: string;
-  publishDisabled?: boolean;
-  civilContentID?: number;
-  currentPostLastRevisionId?: number;
-  publishedRevisions: any[];
-  signatures: SignatureData;
-  revisionJson: string;
-  revisionJsonHash: string;
-  revisionUrl: string;
-  publishContent?(contentId: number, revisionId: number, revisionJson: any): void;
-  updateContent?(revisionId: number, revisionJson: any): void;
-}
-
-class BlockchainPublishPanelComponent extends React.Component<
-  BlockchainPublishPanelProps,
-  BlockchainPublishPanelState
-> {
-  constructor(props: BlockchainPublishPanelProps) {
-    super(props);
-    this.state = {
-      archiveChecked: false,
-    };
-  }
-
-  public render(): JSX.Element {
-    let transactions;
-    if (this.props.civilContentID) {
-      transactions = [
-        {
-          transaction: async () => {
-            const newsroom = await getNewsroom();
-            return newsroom.updateRevisionURIAndHash(
-              this.props.civilContentID!,
-              this.props.revisionUrl,
-              this.props.revisionJsonHash,
-            );
-          },
-          postTransaction: (result: number) => {
-            this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson);
-          },
-        },
-      ];
-    } else {
-      transactions = [
-        {
-          transaction: async () => {
-            const newsroom = await getNewsroom();
-            return newsroom.publishURIAndHash(this.props.revisionUrl, this.props.revisionJsonHash);
-          },
-          postTransaction: (result: number) => {
-            this.props.publishContent!(result, this.props.currentPostLastRevisionId!, this.props.revisionJson);
-          },
-        },
-      ];
-    }
-    return (
-      <div>
-        <hr />
-        <h2 className="components-panel__body-title">Publish to Blockchain</h2>
-        <PanelRow>Status: {this.props.publishStatus}</PanelRow>
-        <PanelRow>
-          <TransactionButton disabled={this.props.publishDisabled} transactions={transactions} size={buttonSizes.SMALL}>
-            Publish to Blockchain
-          </TransactionButton>
-        </PanelRow>
-      </div>
-    );
-  }
-
-  private onArchiveChange = (checked: boolean): void => {
-    this.setState({ archiveChecked: checked });
-  };
-}
 
 const BlockchainPublishPanel = compose([
   withSelect(
@@ -104,7 +17,6 @@ const BlockchainPublishPanel = compose([
         getPublishedStatus,
         getPublishedRevisions,
         getPublishStatusString,
-        getSignatures,
         isPublishDisabled,
         getRevisionJSON,
       } = selectStore("civil/blockchain");
@@ -112,7 +24,6 @@ const BlockchainPublishPanel = compose([
       const currentPostLastRevisionId = getCurrentPostLastRevisionId();
       const publishedRevisions = getPublishedRevisions();
       const publishStatus = getPublishStatusString(publishedRevisions);
-      const signatures = getSignatures();
       const civilContentID = getCivilContentID();
       let revisionJson;
       let revisionJsonHash;
@@ -129,7 +40,6 @@ const BlockchainPublishPanel = compose([
         civilContentID,
         currentPostLastRevisionId,
         publishedRevisions,
-        signatures,
         revisionJson,
         revisionJsonHash,
         revisionUrl,
@@ -141,7 +51,7 @@ const BlockchainPublishPanel = compose([
     (dispatch: any, ownProps: BlockchainPublishPanelProps): Partial<BlockchainPublishPanelProps> => {
       const { editPost, savePost } = dispatch("core/editor");
       const { publishContent, setCivilContentID, updatePublishedState } = dispatch("civil/blockchain");
-      const { civilContentID, currentPostLastRevisionId, publishedRevisions, signatures } = ownProps;
+      const { civilContentID, currentPostLastRevisionId, publishedRevisions } = ownProps;
 
       const publishArticle = async (contentId: number, revisionId: number, revisionJson: any): Promise<void> => {
         const publishedDate = new Date();

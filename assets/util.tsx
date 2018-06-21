@@ -17,6 +17,11 @@ if (typeof window.web3 !== "undefined") {
   console.error("No web3 provider - try MetaMask!");
 }
 
+export const getCivil = (() => {
+  const civil = new Civil();
+  return () => civil;
+})();
+
 export async function getRevisionJson(): Promise<any> {
   const revisionId = select("core/editor").getCurrentPostLastRevisionId();
 
@@ -60,7 +65,12 @@ export async function getNewsroomAddress(): Promise<string> {
 }
 
 export async function getNewsroom(): Promise<Newsroom> {
-  const civil = new Civil();
+  const civil = getCivil();
   const newsroomAddress = await getNewsroomAddress();
   return civil.newsroomAtUntrusted(newsroomAddress);
+}
+
+export function isCorrectNetwork(): boolean {
+  const civil = getCivil();
+  return civil.networkName === "rinkeby"; // just hard code it for now
 }
