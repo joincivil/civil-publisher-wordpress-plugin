@@ -7,14 +7,7 @@ import "./store";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 
-interface BlockchainPluginState {}
-interface BlockchainPluginProps {}
-
-class BlockchainPlugin extends React.Component<BlockchainPluginProps, BlockchainPluginState> {
-  constructor(props: BlockchainPluginProps) {
-    super(props);
-  }
-
+class BlockchainPlugin extends React.Component {
   public render(): JSX.Element {
     return (
       <PluginPostStatusInfo>

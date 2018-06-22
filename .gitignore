@@ -1,1 +1,2 @@
-build
+build/**/*.ts
+!build/**/*.build.js
