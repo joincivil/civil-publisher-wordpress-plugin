@@ -15,17 +15,14 @@ export interface BlockchainSignPanelProps {
   }
 
 export class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelProps> {
-    public componentDidMount(): void {
-      this.initSignPanel();
-    }
-
     public render(): JSX.Element {
       const signatures = Object.entries(this.props.signatures).map(([key, val]: [string, ApprovedRevision]): JSX.Element => (
         <Signature
           authorUsername={key}
           authorAddress={val.author}
           sig={val.signature}
-          sigStatus={this.props.isValidSignature(val) ? "valid" : "invalid"}
+          isDirty={this.props.isDirty}
+          isValid={this.props.isValidSignature(val)}
           isYou={val.author === this.props.userWalletAddress}
         />
       ));
@@ -61,11 +58,5 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           </PanelRow>
         </div>
       );
-    }
-
-    private initSignPanel(): void {
-      // TODO Hook into gutenberg such that if article content is changed, we can mark signature as invalid, show helper text "article has changed since it was signed" etc.
-      // one shitty option would be to use setInterval to keep checking `select("core/editor").isEditedPostDirty()` and if so, running `this.isValidSignature` or something and setting sig to invalid if necessary, but that would be an expensive option. or we could simply assume sig is invalid if post has changed at all, but we'd need to work around the fact that signing the article itself makes the post dirty, so the sig would immediately become "invalid".
-      // (TODO if user undo's changes, would be nice to show that signature is valid again (we can cache initial article state and check against it?))
     }
 }
