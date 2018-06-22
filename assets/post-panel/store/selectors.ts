@@ -135,3 +135,7 @@ export function getPublishStatusString(state: any): string {
 
   return publishStatus;
 }
+
+export function isCorrectNetwork(state: any): boolean {
+  return state.network.isCorrectNetwork;
+}

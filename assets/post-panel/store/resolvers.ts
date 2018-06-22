@@ -2,6 +2,7 @@ import { EthAddress } from "@joincivil/core";
 
 import { apiNamespace, userMetaKeys } from "../../constants";
 import { setUsername, setLoggedInUserAddress, addOrUpdateRevision } from "./actions";
+import { AnyAction } from "redux";
 
 const { apiRequest } = window.wp;
 
@@ -17,7 +18,7 @@ export async function getRevisionJSON(state: any, revisionID: string): Promise<a
   }
 }
 
-export async function getUsername(state: any): Promise<string> {
+export async function getUsername(state: any): Promise<AnyAction> {
   const userInfo = await apiRequest({ path: "/wp/v2/users/me?context=edit" });
   return setUsername(userInfo.username);
 }

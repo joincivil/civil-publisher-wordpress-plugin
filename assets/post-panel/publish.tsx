@@ -18,6 +18,7 @@ const BlockchainPublishPanel = compose([
         getPublishStatusString,
         isPublishDisabled,
         getRevisionJSON,
+        isCorrectNetwork,
       } = selectStore("civil/blockchain");
       const publishDisabled = isPublishDisabled();
       const currentPostLastRevisionId = getCurrentPostLastRevisionId();
@@ -25,6 +26,7 @@ const BlockchainPublishPanel = compose([
       const publishStatus = getPublishStatusString(publishedRevisions);
       const civilContentID = getCivilContentID();
       const isDirty = isEditedPostDirty();
+      const correctNetwork = isCorrectNetwork();
       let revisionJson;
       let revisionJsonHash;
       let revisionUrl;
@@ -44,6 +46,7 @@ const BlockchainPublishPanel = compose([
         revisionJsonHash,
         revisionUrl,
         isDirty,
+        correctNetwork,
       };
     },
   ),

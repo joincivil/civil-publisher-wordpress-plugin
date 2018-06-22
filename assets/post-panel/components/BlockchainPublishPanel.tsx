@@ -17,6 +17,7 @@ export interface BlockchainPublishPanelProps {
     revisionJsonHash: string;
     revisionUrl: string;
     isDirty: boolean;
+    correctNetwork: boolean;
     publishContent?(contentId: number, revisionId: number, revisionJson: any): void;
     updateContent?(revisionId: number, revisionJson: any): void;
 }
@@ -67,7 +68,7 @@ BlockchainPublishPanelState
            <div>
                 <hr />
                 <h2 className="components-panel__body-title">Publish to Blockchain</h2>
-                <PanelRow>Status: {this.props.publishStatus}</PanelRow>
+                <PanelRow>Status: {this.props.publishStatus && this.props.correctNetwork}</PanelRow>
                 <PanelRow>
                     <TransactionButton disabled={this.props.publishDisabled} transactions={transactions} size={buttonSizes.SMALL}>
                         Publish to Blockchain
