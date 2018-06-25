@@ -8,6 +8,8 @@ export function user(state: Map<string, any> = Map(), action: AnyAction): Map<st
   switch (action.type) {
     case managerActions.ADD_ADDRESS:
       return state.set("address", action.data.address);
+    case managerActions.ADD_TXHASH:
+      return state.set("txHash", action.data.txHash);
     default:
       return state;
   }

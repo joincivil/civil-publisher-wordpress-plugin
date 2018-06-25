@@ -17,6 +17,18 @@ function is_valid_eth_address( $addr ) {
 	return preg_match( '/^(0x)?[0-9a-f]{40}$/i', $addr );
 }
 
+
+/**
+ * Check if given string is a valid hex ETH transaction hash.
+ *
+ * @param string $hash hash to check.
+ * @return bool  Whether or not address is valid hex ETH wallet address.
+ */
+function is_valid_txhash( $hash ) {
+	return preg_match( '/^(0x)?[0-9a-f]{64}$/i', $hash );
+}
+
+
 /**
  * Output custom fields for user profile.
  *
@@ -165,6 +177,23 @@ function newsroom_address_register_setting() {
 add_action( 'rest_api_init', __NAMESPACE__ . '\newsroom_address_register_setting' );
 
 /**
+ * Register newsroom contract deploy txhash.
+ */
+function newsroom_txhash_register_setting() {
+	register_setting(
+		'general',
+		NEWSROOM_TXHASH_OPTION_KEY,
+		array(
+			'type' => 'string',
+			'single' => true,
+			'show_in_rest' => true,
+			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_txhash',
+		)
+	);
+}
+add_action( 'rest_api_init', __NAMESPACE__ . '\newsroom_txhash_register_setting' );
+
+/**
  * Output form for capturing newsroom address.
  */
 function newsroom_address_input() {
@@ -208,6 +237,36 @@ function validate_newsroom_address( $input ) {
 	}
 
 	return $addr;
+}
+
+/**
+ * Validate newsroom txhash.
+ *
+ * @param string $input Newsroom txhash to validate.
+ * @return string Validated/sanitized newsroom address.
+ */
+function validate_newsroom_txhash( $input ) {
+	if ( ! $input ) {
+		return;
+	}
+
+	$txhash = sanitize_text_field( $input );
+
+	if ( ! is_valid_txhash( $txhash ) ) {
+		add_settings_error(
+			NEWSROOM_TXHASH_OPTION_KEY,
+			'civil_newsroom_protocol_newsroom_txhash_err',
+			sprintf(
+				/* translators: %1 is ETH contract address e.g. "0xabc123..." */
+				__( 'Newsroom Contract txhash "%1$s" is not a valid ETH transaction hash', 'civil' ),
+				$txhash
+			),
+			'error'
+		);
+		return '';
+	}
+
+	return $txhash;
 }
 
 /**

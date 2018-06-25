@@ -28,6 +28,7 @@ define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_newsroom_protocol_e
 
 // Site options.
 define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol_newsroom_address' );
+define( __NAMESPACE__ . '\NEWSROOM_TXHASH_OPTION_KEY', 'civil_newsroom_protocol_newsroom_txhash' );
 
 // Menus.
 define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-newsroom-protocol-management' );

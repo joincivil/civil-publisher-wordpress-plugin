@@ -2,14 +2,15 @@ const { apiRequest } = window.wp;
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
 import { Newsroom } from "@joincivil/newsroom-manager";
-import { Civil, EthAddress } from "@joincivil/core";
+import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
-import { addAddress } from "./actions";
-import { getNewsroomAddress } from "../util";
+import { addAddress, addTxHash } from "./actions";
+import { getNewsroomAddress, getCivil } from "../util";
 import { apiNamespace, siteOptionKeys } from "../constants";
 
 export interface AppProps {
   address?: EthAddress;
+  txHash?: TxHash;
 }
 
 class App extends React.Component<AppProps & DispatchProp<any>> {
@@ -17,7 +18,14 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
 
   constructor(props: AppProps & DispatchProp<any>) {
     super(props);
-    this.civil = new Civil();
+    this.civil = getCivil();
+  }
+
+  public async componentDidMount(): Promise<void> {
+    if (!this.props.address && this.props.txHash) {
+      const newsroom = await this.civil.newsroomFromFactoryTxHashUntrusted(this.props.txHash);
+      this.onNewsroomCreated(newsroom.address);
+    }
   }
 
   public render(): JSX.Element {
@@ -25,10 +33,22 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
       <Newsroom
         civil={this.civil}
         address={this.props.address}
+        txHash={this.props.txHash}
         onNewsroomCreated={this.onNewsroomCreated}
         getNameForAddress={this.getNameForAddress}
+        onContractDeployStarted={this.onContractDeployStarted}
       />
     );
+  }
+
+  private onContractDeployStarted = async (txHash: TxHash) => {
+    const settings = await apiRequest({
+      path: "/wp/v2/settings",
+      method: "PUT",
+      data: {
+        [siteOptionKeys.NEWSROOM_TXHASH]: txHash,
+      },
+    });
   }
 
   private onNewsroomCreated = async (address: EthAddress) => {
@@ -40,7 +60,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
       },
     });
     this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
-  };
+  }
 
   private getNameForAddress = async (address: EthAddress) => {
     try {
@@ -51,14 +71,16 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
     } catch (e) {
       return "Could not find a user with that address.";
     }
-  };
+  }
 }
 
 const mapStateToProps = (state: ManagerState): AppProps => {
   const { user } = state;
   const address = user.get("address");
+  const txHash = user.get("txHash");
   return {
     address,
+    txHash,
   };
 };
 

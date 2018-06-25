@@ -58,6 +58,7 @@ function contract_management_menu_content() {
  */
 function contract_management_script() {
 	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
+	$txhash = get_option( NEWSROOM_TXHASH_OPTION_KEY );
 	wp_enqueue_script(
 		'civil-newsroom-protocol-newsroom-management',
 		plugins_url( 'build/newsroom-management.build.js', __FILE__ ),
@@ -66,7 +67,7 @@ function contract_management_script() {
 		ASSETS_VERSION,
 		true
 	);
-	wp_add_inline_script( 'civil-newsroom-protocol-newsroom-management', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'after' );
+	wp_add_inline_script( 'civil-newsroom-protocol-newsroom-management', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.newsroomTxHash = \"${txhash}\";" . PHP_EOL, 'after' );
 }
 add_action( 'admin_print_scripts-toplevel_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
 

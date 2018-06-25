@@ -12,4 +12,5 @@ export enum userMetaKeys {
 
 export enum siteOptionKeys {
   NEWSROOM_ADDRESS = "civil_newsroom_protocol_newsroom_address",
+  NEWSROOM_TXHASH = "civil_newsroom_protocol_newsroom_txhash",
 }

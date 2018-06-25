@@ -10,12 +10,12 @@ import reducers from "./reducer";
 import App from "./App";
 
 function init(): void {
-  const { newsroomAddress } = window.civilNamespace;
+  const { newsroomAddress, newsroomTxHash } = window.civilNamespace;
 
   const store = createStore(
     reducers,
     {
-      user: Map<string, any>({ address: newsroomAddress }),
+      user: Map<string, any>({ address: newsroomAddress, txHash: newsroomTxHash }),
     },
     applyMiddleware(thunk),
   );
