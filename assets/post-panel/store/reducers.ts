@@ -63,14 +63,17 @@ export const signatures = (state: SignatureData = {}, action: AnyAction): Signat
   }
 };
 
-export const network = (state: {isCorrectNetwork: boolean} = {isCorrectNetwork: isCorrectNetwork()}, action: AnyAction) => {
+export const network = (
+  state: { isCorrectNetwork: boolean } = { isCorrectNetwork: isCorrectNetwork() },
+  action: AnyAction,
+) => {
   switch (action.type) {
     case actionTypes.CHANGE_NETWORK:
       return action.data;
     default:
       return state;
   }
-}
+};
 
 const reducer = combineReducers({
   username,

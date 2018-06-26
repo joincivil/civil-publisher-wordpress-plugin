@@ -25,23 +25,25 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
     civil.removeCallbackFromSetNetworkEmitter(this.props.onNetworkChange);
   }
   public render(): JSX.Element {
-    return (<>{this.props.children}</>);
+    return <>{this.props.children}</>;
   }
 }
 
 const BlockchainPluginInner = compose([
   withDispatch(
-  (dispatch: any): BlockchainPluginProps => {
-    const onNetworkChange = () => dispatch(setIsCorrectNetwork());
-    return {
-      onNetworkChange,
-    };
-  }),
+    (dispatch: any): BlockchainPluginProps => {
+      const onNetworkChange = () => dispatch(setIsCorrectNetwork());
+      return {
+        onNetworkChange,
+      };
+    },
+  ),
 ])(BlockchainPluginInnerComponent);
 
 class BlockchainPlugin extends React.Component {
   public render(): JSX.Element {
-    return (<PluginPostStatusInfo>
+    return (
+      <PluginPostStatusInfo>
         <BlockchainPluginInner>
           <BlockchainSignPanel />
           <BlockchainPublishPanel />

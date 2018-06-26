@@ -5,12 +5,7 @@ import * as React from "react";
 import { EthAddress, Hex, ApprovedRevision } from "@joincivil/core";
 import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage, hashPersonalMessage } from "@joincivil/utils";
 import { bufferToHex } from "ethereumjs-util";
-import {
-  getRevisionContentHash,
-  createSignatureData,
-  getNewsroom,
-  getNewsroomAddress,
-} from "../util";
+import { getRevisionContentHash, createSignatureData, getNewsroom, getNewsroomAddress } from "../util";
 import { postMetaKeys } from "../constants";
 import { SignatureData } from "./store/interfaces";
 import { BlockchainSignPanelProps, BlockchainSignPanelComponent } from "./components/BlockchainSignPanel";
