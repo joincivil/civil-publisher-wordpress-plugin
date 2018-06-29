@@ -1,8 +1,7 @@
-const { Button, PanelBody, PanelRow } = window.wp.components;
-const { PluginPostStatusInfo } = window.wp.editPost;
+const { PluginSidebar, PluginSidebarMoreMenuItem } = window.wp.editPost;
 const { registerPlugin } = window.wp.plugins;
 const { withDispatch } = window.wp.data;
-const { compose } = window.wp.element;
+const { compose, Fragment } = window.wp.element;
 import * as React from "react";
 import { getCivil } from "../util";
 import { setIsCorrectNetwork } from "./store/actions";
@@ -40,19 +39,26 @@ const BlockchainPluginInner = compose([
   ),
 ])(BlockchainPluginInnerComponent);
 
-class BlockchainPlugin extends React.Component {
-  public render(): JSX.Element {
-    return (
-      <PluginPostStatusInfo>
+const CivilSidebarToggle = (
+  // TODO: Style this. It's hard, because it's automatically wrapped in a button, but a poorly styled button that only looks like a button when it's active. But if we put another <Button> in here, then when active we have a button within a button. Might need to hack with custom styles or even add/remove classes from the parent button we get wrapped in. Might be improved in latest version of Gutenberg.
+  <>Civil</>
+);
+
+const CivilSidebar = () => {
+  return (
+    <Fragment>
+      <PluginSidebar name="civil-sidebar" title="Civil">
         <BlockchainPluginInner>
           <BlockchainSignPanel />
           <BlockchainPublishPanel />
         </BlockchainPluginInner>
-      </PluginPostStatusInfo>
-    );
-  }
-}
+      </PluginSidebar>
+      <PluginSidebarMoreMenuItem target="civil-sidebar">Civil</PluginSidebarMoreMenuItem>
+    </Fragment>
+  );
+};
 
-registerPlugin("blockchain-publish", {
-  render: () => new BlockchainPlugin({}).render(),
+registerPlugin("civil-sidebar", {
+  icon: CivilSidebarToggle,
+  render: CivilSidebar,
 });

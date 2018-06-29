@@ -1,4 +1,4 @@
-const { PanelRow } = window.wp.components;
+const { PanelBody, PanelRow } = window.wp.components;
 import * as React from "react";
 import { TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
@@ -65,9 +65,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
       ];
     }
     return (
-      <div>
-        <hr />
-        <h2 className="components-panel__body-title">Publish to Blockchain</h2>
+      <PanelBody title="Record to Blockchain">
         <PanelRow>Status: {this.props.publishStatus && this.props.correctNetwork}</PanelRow>
         <PanelRow>
           <TransactionButton disabled={this.props.publishDisabled} transactions={transactions} size={buttonSizes.SMALL}>
@@ -75,7 +73,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
           </TransactionButton>
           {this.props.isDirty && <i>Please save this post before publishing.</i>}
         </PanelRow>
-      </div>
+      </PanelBody>
     );
   }
 

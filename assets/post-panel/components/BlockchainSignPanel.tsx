@@ -1,4 +1,4 @@
-const { Button, PanelRow } = window.wp.components;
+const { Button, PanelBody, PanelRow } = window.wp.components;
 import * as React from "react";
 import { EthAddress, ApprovedRevision } from "@joincivil/core";
 import { SignatureData } from "../store/interfaces";
@@ -30,9 +30,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
     );
 
     return (
-      <div>
-        <hr />
-        <h2 className="components-panel__body-title">Signing</h2>
+      <PanelBody title="Sign">
         <PanelRow>
           <i>Sign article for enhanced credibility</i>
         </PanelRow>
@@ -56,7 +54,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
             )}
           </i>
         </PanelRow>
-      </div>
+      </PanelBody>
     );
   }
 }
