@@ -77,18 +77,23 @@ add_action( 'admin_print_scripts-toplevel_page_' . MANAGEMENT_PAGE, __NAMESPACE_
 function newsroom_setup_nag() {
 	if ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) ) {
 		?>
-		<div class="error notice">
+		<div class="notice notice-info">
+			<h4><?php esc_html_e( 'Civil Newsroom Manager Installed!', 'civil' ); ?></h4>
 			<p>
 			<?php
 				echo sprintf(
 					wp_kses(
 						/* translators: 1: Management page URL */
-						__( 'You need to <a href="%1$s">set up your Civil Newsroom</a> before you can publish to the blockchain.', 'civil' ),
+						__( 'Please take a few minutes to <a href="%1$s">set up your Civil Newsroom application</a> to start publishing your posts to the Ethereum blockchain.', 'civil' ),
 						[ 'a' => [ 'href' => [] ] ]
 					),
 					esc_url( menu_page_url( MANAGEMENT_PAGE, false ) )
 				);
 			?>
+			</p>
+			<p>
+				<a href="<?php echo esc_url( menu_page_url( MANAGEMENT_PAGE, false ) ); ?>" class="button button-primary"><?php esc_html_e( 'Set Up Newsroom', 'civil' ); ?></a>
+				<a href="<?php echo esc_url( menu_page_url( 'TODO', false ) ); ?>" style="line-height: 28px; margin-left: 15px;"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
 			</p>
 		</div>
 		<?php
