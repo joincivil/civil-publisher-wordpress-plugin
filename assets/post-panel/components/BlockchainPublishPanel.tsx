@@ -1,4 +1,4 @@
-const { Button, PanelRow } = window.wp.components;
+const { PanelRow } = window.wp.components;
 import * as React from "react";
 import { TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
@@ -79,7 +79,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
     );
   }
 
-  private onArchiveChange = (checked: boolean): void => {
-    this.setState({ archiveChecked: checked });
-  };
+  // private onArchiveChange = (checked: boolean): void => {
+  //   this.setState({ archiveChecked: checked });
+  // };
 }

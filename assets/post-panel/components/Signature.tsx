@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EthAddress, Hex, ApprovedRevision } from "@joincivil/core";
+import { EthAddress, Hex } from "@joincivil/core";
 const { PanelRow } = window.wp.components;
 
 export interface SignatureProps {
@@ -14,7 +14,8 @@ export interface SignatureProps {
 export function Signature(ownProps: SignatureProps): JSX.Element {
   const { authorUsername, authorAddress, sig, isDirty, isValid, isYou } = ownProps;
 
-  let validMessage, sigColor;
+  let validMessage;
+  let sigColor;
   if (!isValid) {
     validMessage = "invalid";
     sigColor = "red";

@@ -60,15 +60,12 @@ export function getCivilContentID(store: any): string | null {
 export function isPublishDisabled(state: any): boolean {
   const editorStore = select("core/editor");
   const currentPostLastRevisionId = editorStore.getCurrentPostLastRevisionId();
-  const currentRevisionData = currentPostLastRevisionId
-    ? select("civil/blockchain").getRevisionJSON(currentPostLastRevisionId)
-    : undefined;
   const publishedRevisions = getPublishedRevisions(state);
   const latestRevisionPublished = publishedRevisions.length
     ? publishedRevisions[publishedRevisions.length - 1]
     : undefined;
   const isLatestRevisionPublished =
-    latestRevisionPublished && latestRevisionPublished.revisionID === currentPostLastRevisionId;
+    (latestRevisionPublished && latestRevisionPublished.revisionID === currentPostLastRevisionId);
 
   return (
     !isPostPublished() || editorStore.isCleanNewPost() || editorStore.isEditedPostDirty() || isLatestRevisionPublished

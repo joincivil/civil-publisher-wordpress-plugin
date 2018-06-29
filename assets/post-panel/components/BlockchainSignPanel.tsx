@@ -1,6 +1,6 @@
 const { Button, PanelRow } = window.wp.components;
 import * as React from "react";
-import { EthAddress, Hex, ApprovedRevision } from "@joincivil/core";
+import { EthAddress, ApprovedRevision } from "@joincivil/core";
 import { SignatureData } from "../store/interfaces";
 import { Signature } from "./Signature";
 

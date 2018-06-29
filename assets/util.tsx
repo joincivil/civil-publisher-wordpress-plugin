@@ -2,10 +2,8 @@ const { apiRequest } = window.wp;
 const { select } = window.wp.data;
 
 import * as Web3 from "web3";
-import { bufferToHex } from "ethereumjs-util";
 import { Civil, ApprovedRevision } from "@joincivil/core";
 import { Newsroom } from "@joincivil/core/build/src/contracts/newsroom";
-import { prepareNewsroomMessage } from "@joincivil/utils";
 
 import { apiNamespace, userMetaKeys, siteOptionKeys } from "./constants";
 

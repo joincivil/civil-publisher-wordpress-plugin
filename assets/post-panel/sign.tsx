@@ -1,11 +1,9 @@
 const { Button, PanelRow } = window.wp.components;
 const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
-import * as React from "react";
-import { EthAddress, Hex, ApprovedRevision } from "@joincivil/core";
-import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage, hashPersonalMessage } from "@joincivil/utils";
-import { bufferToHex } from "ethereumjs-util";
-import { getRevisionContentHash, createSignatureData, getNewsroom, getNewsroomAddress } from "../util";
+import { ApprovedRevision } from "@joincivil/core";
+import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage } from "@joincivil/utils";
+import { createSignatureData } from "../util";
 import { postMetaKeys } from "../constants";
 import { SignatureData } from "./store/interfaces";
 import { BlockchainSignPanelProps, BlockchainSignPanelComponent } from "./components/BlockchainSignPanel";
@@ -81,7 +79,7 @@ const BlockchainSignPanel = compose([
     (dispatch: any, ownProps: BlockchainSignPanelProps): Partial<BlockchainSignPanelProps> => {
       const { editPost, savePost } = dispatch("core/editor");
       const { updateSignatures } = dispatch("civil/blockchain");
-      const { username, userWalletAddress, signatures } = ownProps;
+      const { username, signatures } = ownProps;
 
       const signArticle = async (): Promise<void> => {
         const signature = await createSignatureData();

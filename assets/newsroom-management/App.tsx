@@ -4,8 +4,8 @@ import { connect, DispatchProp } from "react-redux";
 import { Newsroom } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
-import { addAddress, addTxHash } from "./actions";
-import { getNewsroomAddress, getCivil } from "../util";
+import { addAddress } from "./actions";
+import { getCivil } from "../util";
 import { apiNamespace, siteOptionKeys } from "../constants";
 
 export interface AppProps {
@@ -24,7 +24,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
   public async componentDidMount(): Promise<void> {
     if (!this.props.address && this.props.txHash) {
       const newsroom = await this.civil.newsroomFromFactoryTxHashUntrusted(this.props.txHash);
-      this.onNewsroomCreated(newsroom.address);
+      await this.onNewsroomCreated(newsroom.address);
     }
   }
 
@@ -42,14 +42,14 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
   }
 
   private onContractDeployStarted = async (txHash: TxHash) => {
-    const settings = await apiRequest({
+    await apiRequest({
       path: "/wp/v2/settings",
       method: "PUT",
       data: {
         [siteOptionKeys.NEWSROOM_TXHASH]: txHash,
       },
     });
-  };
+  }
 
   private onNewsroomCreated = async (address: EthAddress) => {
     const settings = await apiRequest({
@@ -60,7 +60,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
       },
     });
     this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
-  };
+  }
 
   private getNameForAddress = async (address: EthAddress) => {
     try {
@@ -71,7 +71,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
     } catch (e) {
       return "Could not find a user with that address.";
     }
-  };
+  }
 }
 
 const mapStateToProps = (state: ManagerState): AppProps => {

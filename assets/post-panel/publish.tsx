@@ -1,10 +1,8 @@
-import * as React from "react";
-const { select, withSelect, withDispatch } = window.wp.data;
+const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
-import { getNewsroom, revisionJsonSansDate } from "../util";
+import { revisionJsonSansDate } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
 import { hashContent } from "@joincivil/utils";
-import { TransactionButton, buttonSizes } from "@joincivil/components";
 import { BlockchainPublishPanelComponent, BlockchainPublishPanelProps } from "./components/BlockchainPublishPanel";
 
 const BlockchainPublishPanel = compose([
@@ -13,7 +11,6 @@ const BlockchainPublishPanel = compose([
       const { getCurrentPostLastRevisionId, isEditedPostDirty } = selectStore("core/editor");
       const {
         getCivilContentID,
-        getPublishedStatus,
         getPublishedRevisions,
         getPublishStatusString,
         isPublishDisabled,
@@ -54,8 +51,8 @@ const BlockchainPublishPanel = compose([
   withDispatch(
     (dispatch: any, ownProps: BlockchainPublishPanelProps): Partial<BlockchainPublishPanelProps> => {
       const { editPost, savePost } = dispatch("core/editor");
-      const { publishContent, setCivilContentID, updatePublishedState } = dispatch("civil/blockchain");
-      const { civilContentID, currentPostLastRevisionId, publishedRevisions } = ownProps;
+      const { setCivilContentID, updatePublishedState } = dispatch("civil/blockchain");
+      const { publishedRevisions } = ownProps;
 
       const publishArticle = async (contentId: number, revisionId: number, revisionJson: any): Promise<void> => {
         const publishedDate = new Date();

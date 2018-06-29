@@ -22,7 +22,7 @@ export interface ManagerState {
   user: Map<string, any>;
 }
 
-export default combineReducers<ManagerState, AnyAction>({
+export default combineReducers<ManagerState>({
   newsrooms,
   newsroomUi,
   newsroomUsers,
