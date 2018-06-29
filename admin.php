@@ -76,6 +76,7 @@ add_action( 'admin_print_scripts-toplevel_page_' . MANAGEMENT_PAGE, __NAMESPACE_
  */
 function newsroom_setup_nag() {
 	if ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) ) {
+		$management_page_url = menu_page_url( MANAGEMENT_PAGE, false );
 		?>
 		<div class="notice notice-info">
 			<h4><?php esc_html_e( 'Civil Newsroom Manager Installed!', 'civil' ); ?></h4>
@@ -87,12 +88,12 @@ function newsroom_setup_nag() {
 						__( 'Please take a few minutes to <a href="%1$s">set up your Civil Newsroom application</a> to start publishing your posts to the Ethereum blockchain.', 'civil' ),
 						[ 'a' => [ 'href' => [] ] ]
 					),
-					esc_url( menu_page_url( MANAGEMENT_PAGE, false ) )
+					esc_url( $management_page_url )
 				);
 			?>
 			</p>
 			<p>
-				<a href="<?php echo esc_url( menu_page_url( MANAGEMENT_PAGE, false ) ); ?>" class="button button-primary"><?php esc_html_e( 'Set Up Newsroom', 'civil' ); ?></a>
+				<a href="<?php echo esc_url( $management_page_url ); ?>" class="button button-primary"><?php esc_html_e( 'Set Up Newsroom', 'civil' ); ?></a>
 				<a href="<?php echo esc_url( menu_page_url( 'TODO', false ) ); ?>" style="line-height: 28px; margin-left: 15px;"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
 			</p>
 		</div>
@@ -100,3 +101,34 @@ function newsroom_setup_nag() {
 	}
 }
 add_action( 'admin_notices', __NAMESPACE__ . '\newsroom_setup_nag' );
+
+/**
+ * If necessary, alert user that they need to fill in their ETH wallet address.
+ */
+function wallet_address_nag() {
+	if ( current_user_can( 'edit_posts' ) && empty( get_user_meta( get_current_user_id(), USER_ETH_ADDRESS_META_KEY ) ) ) {
+		$edit_profile_url = get_edit_user_link() . '#civil_newsroom_protocol_eth_wallet_address';
+		?>
+		<div class="notice notice-info">
+			<h4><?php esc_html_e( 'Civil Newsroom Manager', 'civil' ); ?></h4>
+			<p>
+			<?php
+				echo sprintf(
+					wp_kses(
+						/* translators: 1: Edit profile URL */
+						__( 'You need to <a href="%1$s">add your Wallet Address</a> before you can TODO copy TBD.', 'civil' ),
+						[ 'a' => [ 'href' => [] ] ]
+					),
+					esc_url( $edit_profile_url )
+				);
+			?>
+			</p>
+			<p>
+				<a href="<?php echo esc_url( $edit_profile_url ); ?>" class="button button-primary"><?php esc_html_e( 'Add Wallet Address', 'civil' ); ?></a>
+				<a href="<?php echo esc_url( menu_page_url( 'TODO', false ) ); ?>" style="line-height: 28px; margin-left: 15px;"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
+			</p>
+		</div>
+		<?php
+	}
+}
+add_action( 'admin_notices', __NAMESPACE__ . '\wallet_address_nag' );
