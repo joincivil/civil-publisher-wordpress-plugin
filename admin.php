@@ -12,7 +12,6 @@ namespace Civil_Newsroom_Protocol;
  */
 function enqueue_post_panel() {
 	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
-	$txhash = get_option( NEWSROOM_TXHASH_OPTION_KEY );
 	wp_enqueue_script(
 		'civil-newsroom-protocol-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),
