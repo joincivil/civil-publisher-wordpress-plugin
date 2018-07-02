@@ -54,11 +54,15 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
       <PanelBody title="Create Blockchain Record">
         <PanelRow>Status: {this.props.publishStatus}</PanelRow>
         <PanelRow>
-          <TransactionButton disabled={this.props.publishDisabled || !this.props.correctNetwork} transactions={transactions} size={buttonSizes.SMALL}>
+          <TransactionButton
+            disabled={this.props.publishDisabled || !this.props.correctNetwork}
+            transactions={transactions}
+            size={buttonSizes.SMALL}
+          >
             Create Blockchain Record
           </TransactionButton>
         </PanelRow>
-          {this.props.isDirty && <i>Please save this post before publishing.</i>}
+        {this.props.isDirty && <i>Please save this post before publishing.</i>}
       </PanelBody>
     );
   }

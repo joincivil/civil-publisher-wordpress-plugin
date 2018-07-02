@@ -45,20 +45,26 @@ const CivilSidebarToggle = (
 );
 
 const CivilSidebar = () => {
-  let panelContent = (<h3>
-    Please take a moment to set up your<a href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">Civil Newsroom contract</a>
-  </h3>);
+  let panelContent = (
+    <h3>
+      Please take a moment to set up your<a href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">
+        Civil Newsroom contract
+      </a>
+    </h3>
+  );
   if (window.civilNamespace.newsroomAddress) {
-    panelContent = (<BlockchainPluginInner>
-      <BlockchainSignPanel />
-      <BlockchainPublishPanel />
-    </BlockchainPluginInner>);
+    panelContent = (
+      <BlockchainPluginInner>
+        <BlockchainSignPanel />
+        <BlockchainPublishPanel />
+      </BlockchainPluginInner>
+    );
   }
   return (
     <>
       <PluginSidebar name="civil-sidebar" title="Civil">
-      {panelContent}
-        </PluginSidebar>
+        {panelContent}
+      </PluginSidebar>
       <PluginSidebarMoreMenuItem target="civil-sidebar">Civil</PluginSidebarMoreMenuItem>
     </>
   );
