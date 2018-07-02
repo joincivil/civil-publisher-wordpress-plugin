@@ -1,7 +1,7 @@
 const { PluginSidebar, PluginSidebarMoreMenuItem } = window.wp.editPost;
 const { registerPlugin } = window.wp.plugins;
 const { withDispatch } = window.wp.data;
-const { compose, Fragment } = window.wp.element;
+const { compose, PanelBody } = window.wp.element;
 import * as React from "react";
 import { getCivil } from "../util";
 import { setIsCorrectNetwork } from "./store/actions";
@@ -45,16 +45,22 @@ const CivilSidebarToggle = (
 );
 
 const CivilSidebar = () => {
+  let panelContent = (<h3>
+    Please take a moment to set up your<a href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">Civil Newsroom contract</a>
+  </h3>);
+  if (window.civilNamespace.newsroomAddress) {
+    panelContent = (<BlockchainPluginInner>
+      <BlockchainSignPanel />
+      <BlockchainPublishPanel />
+    </BlockchainPluginInner>);
+  }
   return (
-    <Fragment>
+    <>
       <PluginSidebar name="civil-sidebar" title="Civil">
-        <BlockchainPluginInner>
-          <BlockchainSignPanel />
-          <BlockchainPublishPanel />
-        </BlockchainPluginInner>
-      </PluginSidebar>
+      {panelContent}
+        </PluginSidebar>
       <PluginSidebarMoreMenuItem target="civil-sidebar">Civil</PluginSidebarMoreMenuItem>
-    </Fragment>
+    </>
   );
 };
 

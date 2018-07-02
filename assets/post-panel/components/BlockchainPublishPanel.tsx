@@ -50,8 +50,6 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
         },
       ];
     }
-    console.log(`publish disabled ${this.props.publishDisabled}, network ${this.props.correctNetwork}`);
-    console.log(`disabled: ${this.props.publishDisabled || !this.props.correctNetwork}`);
     return (
       <PanelBody title="Create Blockchain Record">
         <PanelRow>Status: {this.props.publishStatus}</PanelRow>

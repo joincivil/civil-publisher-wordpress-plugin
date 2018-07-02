@@ -11,6 +11,8 @@ namespace Civil_Newsroom_Protocol;
  * Enqueue Gutenberg editor plugin script.
  */
 function enqueue_post_panel() {
+	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
+	$txhash = get_option( NEWSROOM_TXHASH_OPTION_KEY );
 	wp_enqueue_script(
 		'civil-newsroom-protocol-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),
@@ -19,6 +21,7 @@ function enqueue_post_panel() {
 		true
 	);
 
+	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'before' );
 	// Prevent conflict between lodash required by civil packages and underscore used in Gutenberg, see https://github.com/WordPress/gutenberg/issues/4043#issuecomment-361049257.
 	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', 'window.lodash = _.noConflict();', 'after' );
 }
@@ -85,7 +88,7 @@ function newsroom_setup_nag() {
 				echo sprintf(
 					wp_kses(
 						/* translators: 1: Management page URL */
-						__( 'Please take a few minutes to <a href="%1$s">set up your Civil Newsroom application</a> to start publishing your posts to the Ethereum blockchain.', 'civil' ),
+						__( 'Please take a few minutes to <a href="%1$s">set up your Civil Newsroom contract</a> to start publishing your posts to the Ethereum blockchain.', 'civil' ),
 						[ 'a' => [ 'href' => [] ] ]
 					),
 					esc_url( $management_page_url )
