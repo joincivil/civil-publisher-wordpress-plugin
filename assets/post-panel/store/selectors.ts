@@ -64,11 +64,12 @@ export function isPublishDisabled(state: any): boolean {
   const latestRevisionPublished = publishedRevisions.length
     ? publishedRevisions[publishedRevisions.length - 1]
     : undefined;
+
   const isLatestRevisionPublished =
     latestRevisionPublished && latestRevisionPublished.revisionID === currentPostLastRevisionId;
 
   return (
-    !isPostPublished() || editorStore.isCleanNewPost() || editorStore.isEditedPostDirty() || isLatestRevisionPublished
+    !isPostPublished() || editorStore.isCleanNewPost() || editorStore.isEditedPostDirty() || !!isLatestRevisionPublished
   );
 }
 

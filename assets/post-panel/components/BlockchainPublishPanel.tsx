@@ -3,10 +3,6 @@ import * as React from "react";
 import { TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 
-export interface BlockchainPublishPanelState {
-  archiveChecked: boolean;
-}
-
 export interface BlockchainPublishPanelProps {
   publishStatus?: string;
   publishDisabled?: boolean;
@@ -22,17 +18,7 @@ export interface BlockchainPublishPanelProps {
   updateContent?(revisionId: number, revisionJson: any): void;
 }
 
-export class BlockchainPublishPanelComponent extends React.Component<
-  BlockchainPublishPanelProps,
-  BlockchainPublishPanelState
-> {
-  constructor(props: BlockchainPublishPanelProps) {
-    super(props);
-    this.state = {
-      archiveChecked: false,
-    };
-  }
-
+export class BlockchainPublishPanelComponent extends React.Component<BlockchainPublishPanelProps> {
   public render(): JSX.Element {
     let transactions;
     if (this.props.civilContentID) {
@@ -64,20 +50,18 @@ export class BlockchainPublishPanelComponent extends React.Component<
         },
       ];
     }
+    console.log(`publish disabled ${this.props.publishDisabled}, network ${this.props.correctNetwork}`);
+    console.log(`disabled: ${this.props.publishDisabled || !this.props.correctNetwork}`);
     return (
-      <PanelBody title="Record to Blockchain">
-        <PanelRow>Status: {this.props.publishStatus && this.props.correctNetwork}</PanelRow>
+      <PanelBody title="Create Blockchain Record">
+        <PanelRow>Status: {this.props.publishStatus}</PanelRow>
         <PanelRow>
-          <TransactionButton disabled={this.props.publishDisabled} transactions={transactions} size={buttonSizes.SMALL}>
-            Publish to Blockchain
+          <TransactionButton disabled={this.props.publishDisabled || !this.props.correctNetwork} transactions={transactions} size={buttonSizes.SMALL}>
+            Create Blockchain Record
           </TransactionButton>
-          {this.props.isDirty && <i>Please save this post before publishing.</i>}
         </PanelRow>
+          {this.props.isDirty && <i>Please save this post before publishing.</i>}
       </PanelBody>
     );
   }
-
-  // private onArchiveChange = (checked: boolean): void => {
-  //   this.setState({ archiveChecked: checked });
-  // };
 }
