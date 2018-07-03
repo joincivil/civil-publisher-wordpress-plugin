@@ -4,6 +4,7 @@ const { withDispatch } = window.wp.data;
 const { compose, PanelBody } = window.wp.element;
 import * as React from "react";
 import { getCivil } from "../util";
+import { Civil } from "@joincivil/core";
 import { setIsCorrectNetwork } from "./store/actions";
 import "./store";
 
@@ -15,16 +16,28 @@ export interface BlockchainPluginProps {
 }
 
 class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginProps> {
+  public civil: Civil | undefined;
+  constructor(props: BlockchainPluginProps) {
+    super(props);
+    this.civil = getCivil();
+  }
   public componentDidMount(): void {
-    const civil = getCivil();
-    civil.addCallbackToSetNetworkEmitter(this.props.onNetworkChange);
+    if (this.civil) {
+      this.civil.addCallbackToSetNetworkEmitter(this.props.onNetworkChange);
+    }
   }
   public componentWillUnmount(): void {
-    const civil = getCivil();
-    civil.removeCallbackFromSetNetworkEmitter(this.props.onNetworkChange);
+    if (this.civil) {
+      this.civil.removeCallbackFromSetNetworkEmitter(this.props.onNetworkChange);
+    }
   }
   public render(): JSX.Element {
-    return <>{this.props.children}</>;
+    const content = this.civil ? this.props.children : (<h3>
+      You need an in-browser Ethereum wallet. We recommend <a href="https://metamask.io/">
+        MetaMask
+      </a>.
+    </h3>);
+    return <>{content}</>;
   }
 }
 
