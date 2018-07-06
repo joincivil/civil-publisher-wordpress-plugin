@@ -32,11 +32,13 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
     }
   }
   public render(): JSX.Element {
-    const content = this.civil ? this.props.children : (<h3>
-      You need an in-browser Ethereum wallet. We recommend <a href="https://metamask.io/">
-        MetaMask
-      </a>.
-    </h3>);
+    const content = this.civil ? (
+      this.props.children
+    ) : (
+      <h3>
+        You need an in-browser Ethereum wallet. We recommend <a href="https://metamask.io/">MetaMask</a>.
+      </h3>
+    );
     return <>{content}</>;
   }
 }

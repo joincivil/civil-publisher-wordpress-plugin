@@ -50,7 +50,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
         [siteOptionKeys.NEWSROOM_TXHASH]: txHash,
       },
     });
-  }
+  };
 
   private onNewsroomCreated = async (address: EthAddress) => {
     const settings = await apiRequest({
@@ -61,7 +61,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
       },
     });
     this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
-  }
+  };
 
   private getNameForAddress = async (address: EthAddress) => {
     try {
@@ -72,7 +72,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
     } catch (e) {
       return "Could not find a user with that address.";
     }
-  }
+  };
 }
 
 const mapStateToProps = (state: ManagerState): AppProps => {
