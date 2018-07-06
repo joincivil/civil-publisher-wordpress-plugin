@@ -14,6 +14,10 @@ function isResolving(selectorName: string, ...args: any[]): boolean {
 }
 //*/
 
+export function isNewsroomEditor(state: any): boolean {
+  return state.isNewsroomEditor;
+}
+
 export function getUsername(state: any): string {
   return state.username;
 }

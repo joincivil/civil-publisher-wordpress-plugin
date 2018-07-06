@@ -10,6 +10,7 @@ const BlockchainPublishPanel = compose([
     (selectStore: any, ownProps: Partial<BlockchainPublishPanelProps>): Partial<BlockchainPublishPanelProps> => {
       const { getCurrentPostLastRevisionId, isEditedPostDirty } = selectStore("core/editor");
       const {
+        isNewsroomEditor,
         getUserCapabilities,
         getCivilContentID,
         getPublishedRevisions,
@@ -36,6 +37,7 @@ const BlockchainPublishPanel = compose([
       }
 
       return {
+        isNewsroomEditor: isNewsroomEditor(),
         userCapabilities,
         publishStatus,
         publishDisabled,

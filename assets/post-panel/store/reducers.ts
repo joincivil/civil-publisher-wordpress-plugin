@@ -4,6 +4,15 @@ import { AnyAction } from "redux";
 import { isCorrectNetwork } from "../../util";
 const { combineReducers } = window.wp.data;
 
+export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => {
+  switch (action.type) {
+    case actionTypes.SET_IS_NEWSROOM_EDITOR:
+      return !! action.data;
+    default:
+      return !! state;
+  }
+}
+
 export const username = (state: string | null = null, action: AnyAction): string | null => {
   switch (action.type) {
     case actionTypes.SET_USERNAME:
@@ -85,6 +94,7 @@ export const network = (
 };
 
 const reducer = combineReducers({
+  isNewsroomEditor,
   username,
   userWalletAddress,
   userCapabilities,

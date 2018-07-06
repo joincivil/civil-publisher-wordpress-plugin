@@ -4,6 +4,7 @@ import { TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 
 export interface BlockchainPublishPanelProps {
+  isNewsroomEditor: boolean;
   publishStatus?: string;
   publishDisabled?: boolean;
   civilContentID?: number;
@@ -52,13 +53,21 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
       ];
     }
 
-    const insufficientPermissions = ! this.props.userCapabilities.publish_posts;
+    let insufficientPermissions;
+    let permissionsMessage;
+    if (!this.props.userCapabilities.publish_posts) {
+      insufficientPermissions = true;
+      permissionsMessage = "your WordPress user account cannot publish posts";
+    } else if (!this.props.isNewsroomEditor) {
+      insufficientPermissions = true;
+      permissionsMessage = "you are not listed as an editor on your Newsroom contract";
+    }
 
     return (
       <PanelBody title="Create Blockchain Record">
         <PanelRow>
           Status: {this.props.publishStatus}
-          {insufficientPermissions && "Permissions not set to publish."}
+          {insufficientPermissions && `. Permissions not set to publish: ${permissionsMessage}.`}
         </PanelRow>
         {insufficientPermissions && <PanelRow>
           <p>You do not have permission to record this post to your Newsroom contract on the Ethereum blockchain.</p>

@@ -4,6 +4,13 @@ import { actionTypes } from "./constants";
 import { SignatureData } from "./interfaces";
 import { isCorrectNetwork } from "../../util";
 
+export function setIsNewsroomEditor(isEditor: boolean): AnyAction {
+  return {
+    type: actionTypes.SET_IS_NEWSROOM_EDITOR,
+    data: isEditor,
+  };
+}
+
 export function setUsername(username: string): AnyAction {
   return {
     type: actionTypes.SET_USERNAME,

@@ -1,10 +1,16 @@
 import { EthAddress } from "@joincivil/core";
 
 import { apiNamespace, userMetaKeys } from "../../constants";
-import { setUsername, setLoggedInUserAddress, setUserCapabilities, addOrUpdateRevision } from "./actions";
+import { getNewsroom } from "../../util";
+import { setIsNewsroomEditor, setUsername, setLoggedInUserAddress, setUserCapabilities, addOrUpdateRevision } from "./actions";
 import { AnyAction } from "redux";
 
 const { apiRequest } = window.wp;
+
+export async function isNewsroomEditor(state: any): Promise<AnyAction> {
+  const newsroom = await getNewsroom();
+  return setIsNewsroomEditor(await newsroom.isEditor());
+}
 
 export async function getRevisionJSON(state: any, revisionID: string): Promise<any | void> {
   try {
