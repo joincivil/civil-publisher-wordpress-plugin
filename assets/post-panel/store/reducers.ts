@@ -22,6 +22,15 @@ export const userWalletAddress = (state: string | null = null, action: AnyAction
   }
 };
 
+export const userCapabilities = (state: { [key: string]: boolean } = {}, action: AnyAction): { [key: string]: boolean } => {
+  switch (action.type) {
+    case actionTypes.SET_USER_CAPABILITIES:
+      return action.data || {};
+    default:
+      return state;
+  }
+};
+
 export const publishedStatus = (state: any[] = [], action: AnyAction): any => {
   switch (action.type) {
     case actionTypes.UPDATE_PUBLISHED_STATE:
@@ -78,6 +87,7 @@ export const network = (
 const reducer = combineReducers({
   username,
   userWalletAddress,
+  userCapabilities,
   signatures,
   publishedStatus,
   revisions,

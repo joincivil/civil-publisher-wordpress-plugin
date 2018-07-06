@@ -18,6 +18,13 @@ export function setLoggedInUserAddress(userWalletAddress: EthAddress): AnyAction
   };
 }
 
+export function setUserCapabilities(userCapabilities: { [key: string]: boolean}): AnyAction {
+  return {
+    type: actionTypes.SET_USER_CAPABILITIES,
+    data: userCapabilities,
+  };
+}
+
 export function updateSignatures(signatures: SignatureData): AnyAction {
   return {
     type: actionTypes.UPDATE_SIGNATURES,

@@ -23,6 +23,10 @@ export function getLoggedInUserAddress(state: any): EthAddress | null {
   return state.userWalletAddress;
 }
 
+export function getUserCapabilities(state: any): { [key: string]: boolean } {
+  return state.userCapabilities;
+}
+
 export function getSignatures(state: any): SignatureData {
   if (Object.keys(state.signatures).length) {
     return state.signatures;

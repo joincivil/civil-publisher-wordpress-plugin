@@ -1,7 +1,7 @@
 import { EthAddress } from "@joincivil/core";
 
 import { apiNamespace, userMetaKeys } from "../../constants";
-import { setUsername, setLoggedInUserAddress, addOrUpdateRevision } from "./actions";
+import { setUsername, setLoggedInUserAddress, setUserCapabilities, addOrUpdateRevision } from "./actions";
 import { AnyAction } from "redux";
 
 const { apiRequest } = window.wp;
@@ -24,7 +24,12 @@ export async function getUsername(state: any): Promise<AnyAction> {
 }
 
 /** Returns ETH address associated with logged-in WordPress user (rather than what web3 tells us) */
-export async function getLoggedInUserAddress(state: any): Promise<EthAddress | undefined> {
+export async function getLoggedInUserAddress(state: any): Promise<AnyAction> {
   const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
   return setLoggedInUserAddress(userInfo[userMetaKeys.WALLET_ADDRESS]);
+}
+
+export async function getUserCapabilities(state: any): Promise<AnyAction> {
+  const userInfo = await apiRequest({ path: "/wp/v2/users/me?context=edit" });
+  return setUserCapabilities(userInfo.capabilities);
 }

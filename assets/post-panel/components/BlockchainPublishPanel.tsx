@@ -14,6 +14,7 @@ export interface BlockchainPublishPanelProps {
   revisionUrl: string;
   isDirty: boolean;
   correctNetwork: boolean;
+  userCapabilities: {[capability: string]: boolean};
   publishContent?(contentId: number, revisionId: number, revisionJson: any): void;
   updateContent?(revisionId: number, revisionJson: any): void;
 }
@@ -50,12 +51,23 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
         },
       ];
     }
+
+    const insufficientPermissions = ! this.props.userCapabilities.publish_posts;
+
     return (
       <PanelBody title="Create Blockchain Record">
-        <PanelRow>Status: {this.props.publishStatus}</PanelRow>
+        <PanelRow>
+          Status: {this.props.publishStatus}
+          {insufficientPermissions && "Permissions not set to publish."}
+        </PanelRow>
+        {insufficientPermissions && <PanelRow>
+          <p>You do not have permission to record this post to your Newsroom contract on the Ethereum blockchain.</p>
+        { /* TODO: Right now Sign and Record are on same panel so Sign is above this message. When we move them to separate tabs, "sign your post" should be a link that opens the Sign tab. */ }
+          <p>You can sign your post above for enhanced credibility and verification using your wallet address.</p>
+        </PanelRow>}
         <PanelRow>
           <TransactionButton
-            disabled={this.props.publishDisabled || !this.props.correctNetwork}
+            disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
             transactions={transactions}
             size={buttonSizes.SMALL}
           >
