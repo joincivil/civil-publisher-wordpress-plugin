@@ -31,7 +31,10 @@ define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol
 define( __NAMESPACE__ . '\NEWSROOM_TXHASH_OPTION_KEY', 'civil_newsroom_protocol_newsroom_txhash' );
 
 // Menus.
+define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-newsroom-protocol-menu' );
 define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-newsroom-protocol-management' );
+define( __NAMESPACE__ . '\WALLET_PAGE', 'civil-newsroom-protocol-wallets' );
+define( __NAMESPACE__ . '\HELP_PAGE', 'civil-newsroom-protocol-help' );
 
 /**
  * Gets the blockchain enabled post types.

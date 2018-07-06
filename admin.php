@@ -27,32 +27,81 @@ function enqueue_post_panel() {
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
 
 /**
- * Add Civil Newsroom Management page.
+ * Add Civil admin menu and sub-menu items.
  */
-function contract_management_menu() {
+function add_menus() {
 	add_menu_page(
-		__( 'Civil Newsroom Management', 'civil' ),
-		__( 'Civil Newsroom Management', 'civil' ),
+		__( 'Civil', 'civil' ),
+		__( 'Civil', 'civil' ),
+		'edit_posts',
+		TOP_LEVEL_MENU
+	);
+
+	add_submenu_page(
+		TOP_LEVEL_MENU,
+		__( 'Newsroom Manager', 'civil' ),
+		__( 'Newsroom Manager', 'civil' ),
 		'manage_options',
 		MANAGEMENT_PAGE,
-		__NAMESPACE__ . '\contract_management_menu_content'
+		__NAMESPACE__ . '\newsroom_manager_content'
 	);
+
+	add_submenu_page(
+		TOP_LEVEL_MENU,
+		__( 'Wallet Addresses', 'civil' ),
+		__( 'Wallet Addresses', 'civil' ),
+		'edit_posts',
+		WALLET_PAGE,
+		__NAMESPACE__ . '\wallet_menu_content'
+	);
+
+	add_submenu_page(
+		TOP_LEVEL_MENU,
+		__( 'FAQ and Help', 'civil' ),
+		__( 'FAQ and Help', 'civil' ),
+		'edit_posts',
+		HELP_PAGE,
+		__NAMESPACE__ . '\help_menu_content'
+	);
+
+	// Remove unneeded "Civil" submenu.
+	remove_submenu_page( TOP_LEVEL_MENU, TOP_LEVEL_MENU );
 }
-add_action( 'admin_menu', __NAMESPACE__ . '\contract_management_menu' );
+add_action( 'admin_menu', __NAMESPACE__ . '\add_menus' );
 
 /**
  * Civil Newsroom Management page content.
  */
-function contract_management_menu_content() {
+function newsroom_manager_content() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
 	}
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Civil Newsroom Management', 'civil' ); ?></h1>
+		<h1><?php esc_html_e( 'Newsroom Manager', 'civil' ); ?></h1>
 		<div id="civil-newsroom-management"></div>
 	</div>
 	<?php
+}
+
+/**
+ * Wallet Addresses page content.
+ */
+function wallet_menu_content() {
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
+	}
+	require_once dirname( __FILE__ ) . '/wallet-addresses.php';
+}
+
+/**
+ * FAQ and Help page content.
+ */
+function help_menu_content() {
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
+	}
+	require_once dirname( __FILE__ ) . '/faq-help.php';
 }
 
 /**
@@ -71,7 +120,7 @@ function contract_management_script() {
 	);
 	wp_add_inline_script( 'civil-newsroom-protocol-newsroom-management', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.newsroomTxHash = \"${txhash}\";" . PHP_EOL, 'after' );
 }
-add_action( 'admin_print_scripts-toplevel_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
+add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
 
 /**
  * If necessary, alert user that they need to set up newsroom to use plugin.
