@@ -3,6 +3,7 @@ const { registerPlugin } = window.wp.plugins;
 const { withDispatch } = window.wp.data;
 const { compose, PanelBody } = window.wp.element;
 import * as React from "react";
+import * as ReactDom from "react-dom";
 import { getCivil } from "../util";
 import { Civil } from "@joincivil/core";
 import "./store";
@@ -56,9 +57,37 @@ const BlockchainPluginInner = compose([
   ),
 ])(BlockchainPluginInnerComponent);
 
+class CivilSidebarToggleComponent extends React.Component {
+  public divRef: HTMLDivElement | null;
+  public el: HTMLDivElement;
+
+  constructor(props: any) {
+    super(props);
+    this.divRef = null;
+    this.el = document.createElement("div");
+  }
+
+  public componentDidMount(): void {
+    if (this.divRef) {
+      const buttonContainer = this.divRef.parentElement;
+      buttonContainer!.style.height = "0px";
+      buttonContainer!.style.width = "0px";
+      buttonContainer!.style.padding = "0";
+      buttonContainer!.parentNode!.insertBefore(this.el, buttonContainer!.nextSibling)
+    }
+  }
+
+  public render(): JSX.Element {
+    const portal = ReactDom.createPortal(<h4>Civil</h4>, this.el);
+    return <>
+      {portal}
+      <div ref={el => this.divRef = el}></div>
+    </>;
+  }
+};
+
 const CivilSidebarToggle = (
-  // TODO: Style this. It's hard, because it's automatically wrapped in a button, but a poorly styled button that only looks like a button when it's active. But if we put another <Button> in here, then when active we have a button within a button. Might need to hack with custom styles or even add/remove classes from the parent button we get wrapped in. Might be improved in latest version of Gutenberg.
-  <>Civil</>
+  <><CivilSidebarToggleComponent/></>
 );
 
 const CivilSidebar = () => {
