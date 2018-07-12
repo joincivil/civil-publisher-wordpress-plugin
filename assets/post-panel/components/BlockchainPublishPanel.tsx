@@ -53,7 +53,7 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
       ];
     }
 
-    let insufficientPermissions;
+    let insufficientPermissions = false;
     let permissionsMessage;
     if (!this.props.userCapabilities.publish_posts) {
       insufficientPermissions = true;
