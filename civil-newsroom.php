@@ -54,6 +54,7 @@ require_once dirname( __FILE__ ) . '/traits/trait-singleton.php';
 
 require_once dirname( __FILE__ ) . '/custom-meta.php';
 require_once dirname( __FILE__ ) . '/admin.php';
+require_once dirname( __FILE__ ) . '/users-page.php';
 
 require_once dirname( __FILE__ ) . '/classes/class-post-hashing.php';
 require_once dirname( __FILE__ ) . '/classes/class-rest-api.php';
