@@ -4,6 +4,9 @@
  *
  * @package Civil_Newsroom_Protocol
  */
+
+namespace Civil_Newsroom_Protocol;
+
 ?>
 
 <div class="wrap">

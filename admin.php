@@ -76,12 +76,7 @@ function newsroom_manager_content() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
 	}
-	?>
-	<div class="wrap">
-		<h1><?php esc_html_e( 'Newsroom Manager', 'civil' ); ?></h1>
-		<div id="civil-newsroom-management"></div>
-	</div>
-	<?php
+	require_once dirname( __FILE__ ) . '/newsroom-manager.php';
 }
 
 /**
