@@ -9,7 +9,7 @@ namespace Civil_Newsroom_Protocol;
 
 ?>
 
-<div class="wrap">
+<div class="wrap" style="max-width: 825px">
 	<h1><?php esc_html_e( 'Civil Newsroom Manager', 'civil' ); ?></h1>
 
 	<h2><?php esc_html_e( 'Welcome to Civil', 'civil' ); ?></h2>

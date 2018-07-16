@@ -5,13 +5,17 @@ import { Newsroom } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
 import { addAddress, addTxHash } from "./actions";
-import { getNewsroomAddress, getCivil } from "../util";
+import { getNewsroomAddress, getCivil, hasInjectedProvider } from "../util";
 import { apiNamespace, siteOptionKeys } from "../constants";
+import { WalletStatus } from "./WalletStatus";
 
 export interface AppProps {
   address?: EthAddress;
   txHash?: TxHash;
 }
+
+const NETWORK_NAME = "rinkeby";
+const NETWORK_NICE_NAME = "Rinkeby Test Network";
 
 class App extends React.Component<AppProps & DispatchProp<any>> {
   public civil: Civil | undefined;
@@ -29,16 +33,27 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
   }
 
   public render(): JSX.Element {
+    // TODO Civil core breaks when no wallet installed because `EthApi.detectProvider()` attempts to use HttpProvider and fails.
     return (
-      <Newsroom
-        civil={this.civil}
-        address={this.props.address}
-        txHash={this.props.txHash}
-        onNewsroomCreated={this.onNewsroomCreated}
-        getNameForAddress={this.getNameForAddress}
-        onContractDeployStarted={this.onContractDeployStarted}
-        network="rinkeby"
-      />
+      <>
+        <WalletStatus
+          noProvider={!hasInjectedProvider()}
+          walletLocked={this.civil && !this.civil.userAccount}
+          wrongNetwork={this.civil && this.civil.networkName !== NETWORK_NAME}
+          networkName={NETWORK_NICE_NAME}
+          walletAddress={this.civil && this.civil.userAccount}
+        />
+        <hr />
+        <Newsroom
+          civil={this.civil}
+          address={this.props.address}
+          txHash={this.props.txHash}
+          onNewsroomCreated={this.onNewsroomCreated}
+          getNameForAddress={this.getNameForAddress}
+          onContractDeployStarted={this.onContractDeployStarted}
+          network={NETWORK_NAME}
+        />
+      </>
     );
   }
 
