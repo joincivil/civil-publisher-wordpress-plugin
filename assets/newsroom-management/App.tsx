@@ -43,6 +43,29 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
 
   public render(): JSX.Element {
     // TODO Civil core breaks when no wallet installed because `EthApi.detectProvider()` attempts to use HttpProvider and fails.
+    const manager = this.civil ? <Newsroom
+      civil={this.civil}
+      address={this.props.address}
+      txHash={this.props.txHash}
+      onNewsroomCreated={this.onNewsroomCreated}
+      getNameForAddress={this.getNameForAddress}
+      onContractDeployStarted={this.onContractDeployStarted}
+      network="rinkeby"
+      renderUserSearch={this.renderUserSearch}
+      theme={{
+        primaryButtonBackground: "#0085ba",
+        primaryButtonColor: "#fff",
+        primaryButtonHoverBackground: "#008ec2",
+        primaryButtonDisabledBackground: "#008ec2",
+        primaryButtonDisabledColor: "#66c6e4",
+        primaryButtonTextTransform: "none",
+        secondaryButtonColor: "#555555",
+        secondaryButtonBackground: "transparent",
+        secondaryButtonBorder: "#cccccc",
+        borderlessButtonColor: "#0085ba",
+        borderlessButtonHoverColor: "#008ec2",
+      }}
+    /> : null;
     return (
       <>
         <WalletStatus
@@ -53,29 +76,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           walletAddress={this.civil && this.civil.userAccount}
         />
         <hr />
-        <Newsroom
-          civil={this.civil}
-          address={this.props.address}
-          txHash={this.props.txHash}
-          onNewsroomCreated={this.onNewsroomCreated}
-          getNameForAddress={this.getNameForAddress}
-          onContractDeployStarted={this.onContractDeployStarted}
-          network="rinkeby"
-          renderUserSearch={this.renderUserSearch}
-          theme={{
-            primaryButtonBackground: "#0085ba",
-            primaryButtonColor: "#fff",
-            primaryButtonHoverBrackground: "#008ec2",
-            primaryButtonDisabledBackground: "#008ec2",
-            primaryButtonDisabledColor: "#66c6e4",
-            primaryButtonTextTransform: "none",
-            secondaryButtonColor: "#555555",
-            secondaryButtonBackground: "transparent",
-            secondaryButtonBorder: "#cccccc",
-            borderlessButtonColor: "#0085ba",
-            borderlessButtonHoverColor: "#008ec2",
-          }}
-        />
+        {manager}
         {this.renderCreationModal()}
       </>
 
