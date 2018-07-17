@@ -166,11 +166,9 @@ export class SearchUsers extends React.Component<SearchUserProps, SearchUserStat
             this.setState({error: ""});
         }
         this.setState({address: value});
-        console.log(this.state);
         if (isWellFormattedAddress(value)) {
             this.props.onSetAddress(value);
             if (this.state.canAddAddress && this.state.value.id) {
-                console.log({value});
                 const user = await apiRequest({
                     method: "POST",
                     path: `/wp/v2/users/${this.state.value.id}`,
@@ -178,7 +176,6 @@ export class SearchUsers extends React.Component<SearchUserProps, SearchUserStat
                         [userMetaKeys.WALLET_ADDRESS]: value,
                     },
                 });
-                console.log(user);
             } else {
                 try {
                     const userFromWallet = await apiRequest({
