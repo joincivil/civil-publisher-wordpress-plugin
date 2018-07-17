@@ -9,7 +9,6 @@ import App from "./App";
 
 function init(): void {
   const { newsroomAddress, newsroomTxHash } = window.civilNamespace;
-
   const store = createStore(
     reducers,
     {

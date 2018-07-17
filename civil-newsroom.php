@@ -14,8 +14,7 @@ namespace Civil_Newsroom_Protocol;
 define( __NAMESPACE__ . '\PATH', dirname( __FILE__ ) );
 define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil-newsroom-protocol/v1' );
 define( __NAMESPACE__ . '\SCHEMA_VERSION', '1.0.0' );
-define( __NAMESPACE__ . '\ASSETS_VERSION', '0.1.0' );
-
+define( __NAMESPACE__ . '\ASSETS_VERSION', '1.1.45' );
 // Post meta.
 define( __NAMESPACE__ . '\REVISION_HASH_META_KEY', 'civil_newsroom_protocol_revision_hash' );
 define( __NAMESPACE__ . '\REVISION_DATA_META_KEY', 'civil_newsroom_protocol_revision_extra_data' );
@@ -26,7 +25,7 @@ define( __NAMESPACE__ . '\CONTENT_ID_META_KEY', 'civil_newsroom_protocol_content
 // User meta.
 define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_newsroom_protocol_eth_wallet_address' );
 
-// Site options.
+// Site options
 define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol_newsroom_address' );
 define( __NAMESPACE__ . '\NEWSROOM_TXHASH_OPTION_KEY', 'civil_newsroom_protocol_newsroom_txhash' );
 
@@ -43,7 +42,7 @@ define( __NAMESPACE__ . '\HELP_PAGE', 'civil-newsroom-protocol-help' );
  */
 function get_blockchain_post_types() {
 	/**
-	 * Filters the post types available for blockchain support.
+	 * Filters the post types available for blockchain support
 	 *
 	 * @param $post_types The supported post types.
 	 */

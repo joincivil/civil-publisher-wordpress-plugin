@@ -8,6 +8,8 @@ import { addAddress, addTxHash } from "./actions";
 import { getNewsroomAddress, getCivil, hasInjectedProvider } from "../util";
 import { apiNamespace, siteOptionKeys } from "../constants";
 import { WalletStatus } from "./WalletStatus";
+import { Modal, buttonSizes, Button } from "@joincivil/components";
+import { SearchUsers } from "./SeachUsers";
 
 export interface AppProps {
   address?: EthAddress;
@@ -17,12 +19,19 @@ export interface AppProps {
 const NETWORK_NAME = "rinkeby";
 const NETWORK_NICE_NAME = "Rinkeby Test Network";
 
-class App extends React.Component<AppProps & DispatchProp<any>> {
+export interface AppState {
+  creationModalOpen: boolean;
+}
+
+class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   public civil: Civil | undefined;
 
   constructor(props: AppProps & DispatchProp<any>) {
     super(props);
     this.civil = getCivil();
+    this.state = {
+      creationModalOpen: false,
+    };
   }
 
   public async componentDidMount(): Promise<void> {
@@ -51,10 +60,49 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
           onNewsroomCreated={this.onNewsroomCreated}
           getNameForAddress={this.getNameForAddress}
           onContractDeployStarted={this.onContractDeployStarted}
-          network={NETWORK_NAME}
+          network="rinkeby"
+          renderUserSearch={this.renderUserSearch}
+          theme={{
+            primaryButtonBackground: "#0085ba",
+            primaryButtonColor: "#fff",
+            primaryButtonHoverBrackground: "#008ec2",
+            primaryButtonDisabledBackground: "#008ec2",
+            primaryButtonDisabledColor: "#66c6e4",
+            primaryButtonTextTransform: "none",
+            secondaryButtonColor: "#555555",
+            secondaryButtonBackground: "transparent",
+            secondaryButtonBorder: "#cccccc",
+            borderlessButtonColor: "#0085ba",
+            borderlessButtonHoverColor: "#008ec2",
+          }}
         />
+        {this.renderCreationModal()}
       </>
+
     );
+  }
+
+  private renderUserSearch = (onSetAddress: any): JSX.Element => {
+    return <SearchUsers onSetAddress={onSetAddress} getOptions={this.fetchUserTypeAhead}/>;
+  }
+
+  private fetchUserTypeAhead = async (str: string): Promise<any[]> => {
+    return apiRequest({
+      method: "GET",
+      path: `/wp/v2/users?search=${str}&context=edit`,
+    });
+  }
+
+  private renderCreationModal = (): JSX.Element | null => {
+    if (!this.state.creationModalOpen) {
+      return null;
+    }
+    return (<Modal>
+      <h2>Congratulations!</h2>
+      <p>You've created a newsroom.</p>
+      <p>Now you can add additional officers and editors to help you manage your newsroom and publish content on the blockchain.</p>
+      <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({creationModalOpen: false})}>Close</Button>
+    </Modal>)
   }
 
   private onContractDeployStarted = async (txHash: TxHash) => {
@@ -65,6 +113,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
         [siteOptionKeys.NEWSROOM_TXHASH]: txHash,
       },
     });
+    this.props.dispatch!(addTxHash(txHash));
   };
 
   private onNewsroomCreated = async (address: EthAddress) => {
@@ -75,6 +124,7 @@ class App extends React.Component<AppProps & DispatchProp<any>> {
         [siteOptionKeys.NEWSROOM_ADDRESS]: address,
       },
     });
+    this.setState({creationModalOpen: true});
     this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
   };
 
