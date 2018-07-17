@@ -212,12 +212,20 @@ class REST_API {
 	}
 
 	/**
-	 * Permissions check for if user can edit other users' ETH address.
+	 * Permissions check for if user can edit user ETH address.
 	 *
+	 * @param \WP_REST_Request $request The current REST API request.
 	 * @return Boolean|\WP_Error True if can access, or an error.
 	 */
-	public function set_user_eth_address_check() {
-		if ( ! current_user_can( 'edit_users' ) ) {
+	public function set_user_eth_address_check( \WP_REST_Request $request ) {
+		$params = $request->get_params();
+		$user_id = $params['user_id'];
+
+		if ( 'me' == $user_id && is_user_logged_in() ) {
+			return true;
+		}
+
+		if ( ! current_user_can( 'manage_options' )  ) {
 			return new \WP_Error(
 				'rest-forbidden',
 				esc_html__( 'Insufficient permissions.' ),
