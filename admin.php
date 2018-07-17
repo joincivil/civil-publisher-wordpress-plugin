@@ -121,6 +121,12 @@ add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ .
  * If necessary, alert user that they need to set up newsroom to use plugin.
  */
 function newsroom_setup_nag() {
+	// Don't show on newsroom manager page.
+	$page_id = get_current_screen()->id;
+	if ( $page_id == "civil_page_" . MANAGEMENT_PAGE ) {
+		return;
+	}
+
 	if ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) ) {
 		$management_page_url = menu_page_url( MANAGEMENT_PAGE, false );
 		?>
@@ -152,6 +158,17 @@ add_action( 'admin_notices', __NAMESPACE__ . '\newsroom_setup_nag' );
  * If necessary, alert user that they need to fill in their ETH wallet address.
  */
 function wallet_address_nag() {
+	// Don't show on newsroom manager page.
+	$page_id = get_current_screen()->id;
+	if ( $page_id == "civil_page_" . MANAGEMENT_PAGE ) {
+		return;
+	}
+
+	// Don't show both newsroom setup nag and wallet address nag.
+	if ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) ) {
+		return;
+	}
+
 	if ( current_user_can( 'edit_posts' ) && empty( get_user_meta( get_current_user_id(), USER_ETH_ADDRESS_META_KEY ) ) ) {
 		$edit_profile_url = get_edit_user_link() . '#civil_newsroom_protocol_eth_wallet_address';
 		?>
