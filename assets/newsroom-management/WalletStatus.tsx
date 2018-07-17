@@ -9,7 +9,9 @@ export interface WalletStatusProps {
   walletLocked?: boolean;
   wrongNetwork?: boolean;
   networkName: string;
-  walletAddress?: EthAddress;
+  metamaskWalletAddress?: EthAddress;
+  profileWalletAddress?: EthAddress;
+  saveAddressToProfile: () => {};
 }
 
 const Wrapper = styled.div`
@@ -147,15 +149,22 @@ export class WalletStatus extends React.Component<WalletStatusProps> {
           </p>
         </Wrapper>
       );
-    } else if (this.props.walletAddress) {
+    } else if (this.props.metamaskWalletAddress) {
       return (
         <Wrapper>
           <h2>Wallet Connected</h2>
           <p>Your wallet is connected. Now it’s time to set up your smart contract.</p>
           <p>
             Your Wallet Address is
-            <WalletAddress>{this.props.walletAddress}</WalletAddress>
+            <WalletAddress>{this.props.metamaskWalletAddress}</WalletAddress>
           </p>
+          {this.props.profileWalletAddress !== this.props.metamaskWalletAddress && (
+            <>
+              <p>Your MetaMask wallet address does not match your WordPress profile's wallet address, which is {this.props.profileWalletAddress || "not set"}.</p>
+              {/*TODO loading state + success/error state?*/}
+              <p><Button isPrimary={true} onClick={this.props.saveAddressToProfile}>Save MetaMask address to my profile</Button></p>
+            </>
+          )}
         </Wrapper>
       );
     } else {

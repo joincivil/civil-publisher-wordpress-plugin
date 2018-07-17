@@ -50,7 +50,7 @@ class REST_API {
 
 		// Endpoint for setting user ETH address.
 		register_rest_route(
-			REST_API_NAMESPACE, '/users/(?P<user_id>\d+)', [
+			REST_API_NAMESPACE, '/users/(?P<user_id>\w+)', [
 				'methods'  => 'POST',
 				'callback' => [ $this, 'set_user_eth_address' ],
 				'permission_callback' => [ $this, 'set_user_eth_address_check' ],
@@ -251,16 +251,19 @@ class REST_API {
 			);
 		}
 
-		$user = get_user_by( 'id', $user_id );
-
-		if ( empty( $user ) || ! ( $user instanceof \WP_User ) ) {
-			return new \WP_Error(
-				'no-user-found',
-				esc_html__( 'No user found with given id.' ),
-				[
-					'status' => 400,
-				]
-			);
+		if ( 'me' == $user_id ) {
+			$user_id = get_current_user_id();
+		} else {
+			$user = get_user_by( 'id', $user_id );
+			if ( empty( $user ) || ! ( $user instanceof \WP_User ) ) {
+				return new \WP_Error(
+					'no-user-found',
+					esc_html__( 'No user found with given id.' ),
+					[
+						'status' => 400,
+					]
+				);
+			}
 		}
 
 		if ( empty( $addr ) ) {

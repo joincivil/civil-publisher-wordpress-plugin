@@ -25,7 +25,7 @@ define( __NAMESPACE__ . '\CONTENT_ID_META_KEY', 'civil_newsroom_protocol_content
 // User meta.
 define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_newsroom_protocol_eth_wallet_address' );
 
-// Site options
+// Site options.
 define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol_newsroom_address' );
 define( __NAMESPACE__ . '\NEWSROOM_TXHASH_OPTION_KEY', 'civil_newsroom_protocol_newsroom_txhash' );
 

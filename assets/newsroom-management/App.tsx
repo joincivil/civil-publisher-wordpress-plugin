@@ -6,7 +6,7 @@ import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
 import { addAddress, addTxHash } from "./actions";
 import { getNewsroomAddress, getCivil, hasInjectedProvider } from "../util";
-import { apiNamespace, siteOptionKeys } from "../constants";
+import { apiNamespace, siteOptionKeys, userMetaKeys } from "../constants";
 import { WalletStatus } from "./WalletStatus";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
 import { SearchUsers } from "./SeachUsers";
@@ -21,6 +21,7 @@ const NETWORK_NICE_NAME = "Rinkeby Test Network";
 
 export interface AppState {
   creationModalOpen: boolean;
+  profileWalletAddress?: EthAddress;
 }
 
 class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
@@ -39,11 +40,18 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       const newsroom = await this.civil.newsroomFromFactoryTxHashUntrusted(this.props.txHash);
       this.onNewsroomCreated(newsroom.address);
     }
+
+    const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
+    this.setState({
+      profileWalletAddress: userInfo[userMetaKeys.WALLET_ADDRESS]
+    })
   }
 
   public render(): JSX.Element {
-    // TODO Civil core breaks when no wallet installed because `EthApi.detectProvider()` attempts to use HttpProvider and fails.
+    const metamaskWalletAddress = this.civil && this.civil.userAccount;
+
     const manager = this.civil ? <Newsroom
+      disabled={metamaskWalletAddress !== this.state.profileWalletAddress}
       civil={this.civil}
       address={this.props.address}
       txHash={this.props.txHash}
@@ -73,7 +81,9 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           walletLocked={this.civil && !this.civil.userAccount}
           wrongNetwork={this.civil && this.civil.networkName !== NETWORK_NAME}
           networkName={NETWORK_NICE_NAME}
-          walletAddress={this.civil && this.civil.userAccount}
+          metamaskWalletAddress={metamaskWalletAddress}
+          profileWalletAddress={this.state.profileWalletAddress}
+          saveAddressToProfile={this.saveAddressToProfile}
         />
         <hr />
         {manager}
@@ -128,6 +138,20 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     this.setState({creationModalOpen: true});
     this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
   };
+
+  private saveAddressToProfile = async () => {
+    await apiRequest({
+        method: "POST",
+        path: apiNamespace + "users/me",
+        data: {
+            [userMetaKeys.WALLET_ADDRESS]: this.civil!.userAccount,
+        },
+    });
+
+    this.setState({
+      profileWalletAddress: this.civil!.userAccount
+    });
+  }
 
   private getNameForAddress = async (address: EthAddress) => {
     try {

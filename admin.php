@@ -123,7 +123,7 @@ add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ .
 function newsroom_setup_nag() {
 	// Don't show on newsroom manager page.
 	$page_id = get_current_screen()->id;
-	if ( $page_id == "civil_page_" . MANAGEMENT_PAGE ) {
+	if ( 'civil_page_' . MANAGEMENT_PAGE == $page_id ) {
 		return;
 	}
 
@@ -160,7 +160,7 @@ add_action( 'admin_notices', __NAMESPACE__ . '\newsroom_setup_nag' );
 function wallet_address_nag() {
 	// Don't show on newsroom manager page.
 	$page_id = get_current_screen()->id;
-	if ( $page_id == "civil_page_" . MANAGEMENT_PAGE ) {
+	if ( 'civil_page_' . MANAGEMENT_PAGE == $page_id ) {
 		return;
 	}
 
