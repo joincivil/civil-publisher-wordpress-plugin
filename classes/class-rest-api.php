@@ -47,6 +47,15 @@ class REST_API {
 				'callback' => [ $this, 'get_user_by_eth_address' ],
 			]
 		);
+
+		// Endpoint for setting user ETH address.
+		register_rest_route(
+			REST_API_NAMESPACE, '/users/(?P<user_id>\d+)', [
+				'methods'  => 'POST',
+				'callback' => [ $this, 'set_user_eth_address' ],
+				'permission_callback' => [ $this, 'set_user_eth_address_check' ],
+			]
+		);
 	}
 
 	/**
@@ -200,6 +209,83 @@ class REST_API {
 				'display_name' => $users[0]->data->display_name,
 			]
 		);
+	}
+
+	/**
+	 * Permissions check for if user can edit other users' ETH address.
+	 *
+	 * @return Boolean|\WP_Error True if can access, or an error.
+	 */
+	public function set_user_eth_address_check() {
+		if ( ! current_user_can( 'edit_users' ) ) {
+			return new \WP_Error(
+				'rest-forbidden',
+				esc_html__( 'Insufficient permissions.' ),
+				[
+					'status' => 401,
+				]
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Set ETH wallet address for given user.
+	 *
+	 * @param \WP_REST_Request $request The current REST API request.
+	 * @return \WP_REST_Response|\WP_Error The REST API response or an error.
+	 */
+	public function set_user_eth_address( \WP_REST_Request $request ) {
+		$params = $request->get_params();
+		$user_id = $params['user_id'];
+		$addr = $params[ USER_ETH_ADDRESS_META_KEY ];
+
+		if ( empty( $user_id ) ) {
+			return new \WP_Error(
+				'no-id-found',
+				esc_html__( 'No user ID provided.' ),
+				[
+					'status' => 400,
+				]
+			);
+		}
+
+		$user = get_user_by( 'id', $user_id );
+
+		if ( empty( $user ) || ! ( $user instanceof \WP_User ) ) {
+			return new \WP_Error(
+				'no-user-found',
+				esc_html__( 'No user found with given id.' ),
+				[
+					'status' => 400,
+				]
+			);
+		}
+
+		if ( empty( $addr ) ) {
+			return new \WP_Error(
+				'no-addr-found',
+				esc_html__( 'No ETH address provided.' ),
+				[
+					'status' => 400,
+				]
+			);
+		}
+
+		if ( ! is_valid_eth_address( $addr ) ) {
+			return new \WP_Error(
+				'invalid-eth-address',
+				esc_html__( 'Invalid ETH address provided.' ),
+				[
+					'status' => 400,
+				]
+			);
+		}
+
+		update_user_meta( $user_id, USER_ETH_ADDRESS_META_KEY, $addr );
+
+		return rest_ensure_response( 'success' );
 	}
 
 	/**
