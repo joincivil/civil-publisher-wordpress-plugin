@@ -1,5 +1,6 @@
 import * as React from "react";
 import { EthAddress } from "@joincivil/core";
+import { NorthEastArrow } from "@joincivil/components";
 import styled, { StyledComponentClass } from "styled-components";
 const { Button } = window.wp.components;
 
@@ -29,6 +30,8 @@ const ActionButton = styled(Button)`
   &&& {
     padding: 8px 36px;
     height: auto;
+    font-size: 14px;
+    font-weight: bold;
   }
 `;
 
@@ -37,6 +40,13 @@ const WalletAddress = styled.span`
   margin: 0 0 10px 10px;
   padding: 5px 10px;
   border: 1px solid #dddddd;
+`;
+
+const ArrowWrap = styled.span`
+  margin-left: 5px;
+  path {
+    fill: white;
+  }
 `;
 
 export class WalletStatus extends React.Component<WalletStatusProps> {
@@ -77,7 +87,10 @@ export class WalletStatus extends React.Component<WalletStatusProps> {
             {/*TODO add northeast arrow*/}
             <p>
               <ActionButton isPrimary={true} href="https://metamask.io/" target="_blank">
-                View MetaMask
+                View MetaMask!{" "}
+                <ArrowWrap>
+                  <NorthEastArrow />
+                </ArrowWrap>
               </ActionButton>
             </p>
             <p>
