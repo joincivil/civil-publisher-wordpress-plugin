@@ -169,6 +169,7 @@ export class SearchUsers extends React.Component<SearchUserProps, SearchUserStat
         if (isWellFormattedAddress(value)) {
             this.props.onSetAddress(value);
             if (this.state.canAddAddress && this.state.value.id) {
+                this.setState({error: ""});
                 const user = await apiRequest({
                     method: "POST",
                     path: apiNamespace + `users/${this.state.value.id}`,
