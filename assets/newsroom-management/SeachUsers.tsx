@@ -173,10 +173,10 @@ export class SearchUsers extends React.Component<SearchUserProps, SearchUserStat
                 console.log({value});
                 const user = await apiRequest({
                     method: "POST",
-                    path: `/wp/v2/users/${this.state.value.id}?${userMetaKeys.WALLET_ADDRESS}=${value}`,
-                    // data: {
-                        // [userMetaKeys.WALLET_ADDRESS]: value,
-                    // },
+                    path: `/wp/v2/users/${this.state.value.id}`,
+                    data: {
+                        [userMetaKeys.WALLET_ADDRESS]: value,
+                    },
                 });
                 console.log(user);
             } else {
