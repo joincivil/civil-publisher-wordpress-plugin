@@ -1,4 +1,4 @@
-import { EthAddress } from "@joincivil/core";
+import { EthAddress, TxHash } from "@joincivil/core";
 
 import { postMetaKeys } from "../../constants";
 import { SignatureData } from "./interfaces";
@@ -142,3 +142,8 @@ export function getPublishStatusString(state: any): string {
 export function isCorrectNetwork(state: any): boolean {
   return state.network.isCorrectNetwork;
 }
+
+export function getTxHash(): TxHash | null {
+  const txHash = getPostMeta()[postMetaKeys.CIVIL_PUBLISH_TXHSAH];
+  return txHash;
+};

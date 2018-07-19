@@ -2,6 +2,8 @@ import { actionTypes } from "./constants";
 import { SignatureData } from "./interfaces";
 import { AnyAction } from "redux";
 import { isCorrectNetwork } from "../../util";
+import { postMetaKeys } from "../../constants";
+import { TxHash } from "@joincivil/core";
 const { combineReducers } = window.wp.data;
 
 export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => {
