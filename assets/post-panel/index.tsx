@@ -7,7 +7,7 @@ import { getCivil } from "../util";
 import { Civil } from "@joincivil/core";
 import { setIsCorrectNetwork } from "./store/actions";
 import "./store";
-
+import { ThemeProvider } from "styled-components";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 
@@ -78,7 +78,23 @@ const CivilSidebar = () => {
   return (
     <>
       <PluginSidebar name="civil-sidebar" title="Civil">
-        {panelContent}
+        <ThemeProvider theme={
+          {
+            primaryButtonBackground: "#0085ba",
+            primaryButtonColor: "#fff",
+            primaryButtonHoverBackground: "#008ec2",
+            primaryButtonDisabledBackground: "#008ec2",
+            primaryButtonDisabledColor: "#66c6e4",
+            primaryButtonTextTransform: "none",
+            secondaryButtonColor: "#555555",
+            secondaryButtonBackground: "transparent",
+            secondaryButtonBorder: "#cccccc",
+            borderlessButtonColor: "#0085ba",
+            borderlessButtonHoverColor: "#008ec2",
+          }
+        }>
+          {panelContent}
+        </ThemeProvider>
       </PluginSidebar>
       <PluginSidebarMoreMenuItem target="civil-sidebar">Civil</PluginSidebarMoreMenuItem>
     </>

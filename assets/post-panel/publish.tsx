@@ -104,7 +104,7 @@ const BlockchainPublishPanel = compose([
 
       const saveTxHash = (txHash: TxHash) => {
         const newPostMeta = {
-          [postMetaKeys.CIVIL_PUBLISH_TXHSAH]: `${txHash}`,
+          [postMetaKeys.CIVIL_PUBLISH_TXHASH]: `${txHash}`,
         }
         editPost({ meta: newPostMeta });
         savePost();

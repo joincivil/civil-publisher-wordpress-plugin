@@ -4,6 +4,7 @@ import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PostStatus } from "./PostStatus";
 import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
+import { IndexTransactionButton, DisabledTransactionProcessingButton } from "./Buttons";
 
 export interface BlockchainPublishPanelProps {
   isNewsroomEditor: boolean;
@@ -17,25 +18,38 @@ export interface BlockchainPublishPanelProps {
   revisionUrl: string;
   isDirty: boolean;
   correctNetwork: boolean;
-  txHash?: string;
+  txHash?: TxHash;
   userCapabilities: {[capability: string]: boolean};
   publishContent?(contentId: number, revisionId: number, revisionJson: any): void;
   updateContent?(revisionId: number, revisionJson: any): void;
   saveTxHash?(txHash: TxHash): void;
 }
 
-export class BlockchainPublishPanelComponent extends React.Component<BlockchainPublishPanelProps> {
+export interface BlockchainPublishPanelState {
+  loadedWithTxHash: boolean;
+}
+
+export class BlockchainPublishPanelComponent extends React.Component<BlockchainPublishPanelProps, BlockchainPublishPanelState> {
+  constructor(props: BlockchainPublishPanelProps) {
+    super(props);
+    this.state = {
+      loadedWithTxHash: false,
+    }
+  }
   public async componentDidMount(): Promise<void> {
     if (this.props.txHash && this.props.txHash.length > 0) {
+      this.setState({loadedWithTxHash: true});
       const newsroom = await getNewsroom();
       if (!this.props.civilContentID) {
         const contentId = await newsroom.contentIdFromTxHash(this.props.txHash);
-        this.props.publishContent!(contentId, this.props.currentPostLastRevisionId!, this.props.revisionJson);
+        await this.props.publishContent!(contentId, this.props.currentPostLastRevisionId!, this.props.revisionJson);
         this.props.saveTxHash!("");
+        this.setState({loadedWithTxHash: false});
       } else {
         const revisionId = await newsroom.revisionFromTxHash(this.props.txHash)
-        this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson);
+        await this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson);
         this.props.saveTxHash!("");
+        this.setState({loadedWithTxHash: false});
       }
     }
   }
@@ -89,6 +103,16 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
       permissionsMessage = "you are not listed as an editor on your Newsroom contract";
     }
 
+    const button = this.state.loadedWithTxHash ?
+      <DisabledTransactionProcessingButton>Transaction In Progress...</DisabledTransactionProcessingButton> :
+      (<TransactionButton
+          Button={IndexTransactionButton}
+          disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
+          transactions={transactions}
+        >
+          Index to Blockchain
+      </TransactionButton>);
+
     return (
       <Wrapper>
         <IntroSection>
@@ -121,13 +145,7 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
             <HelpText>
               This will open a MetaMask pop-up and you must complete the transacation to index your post.
             </HelpText>
-            <TransactionButton
-              disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
-              transactions={transactions}
-              size={buttonSizes.SMALL}
-            >
-              Index to Blockchain
-            </TransactionButton>
+
           </BodySection>
         </Body>
       </Wrapper>
