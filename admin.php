@@ -130,7 +130,7 @@ function newsroom_setup_nag() {
 	if ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) ) {
 		$management_page_url = menu_page_url( MANAGEMENT_PAGE, false );
 		?>
-		<div class="notice notice-info">
+		<div class="notice notice-error">
 			<h4><?php esc_html_e( 'Civil Newsroom Manager Installed!', 'civil' ); ?></h4>
 			<p>
 			<?php
@@ -172,7 +172,7 @@ function wallet_address_nag() {
 	if ( current_user_can( 'edit_posts' ) && empty( get_user_meta( get_current_user_id(), USER_ETH_ADDRESS_META_KEY ) ) ) {
 		$edit_profile_url = get_edit_user_link() . '#civil_newsroom_protocol_eth_wallet_address';
 		?>
-		<div class="notice notice-info">
+		<div class="notice notice-error">
 			<h4><?php esc_html_e( 'Civil Newsroom Manager', 'civil' ); ?></h4>
 			<p>
 			<?php

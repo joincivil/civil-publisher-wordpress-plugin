@@ -1,7 +1,7 @@
 import * as React from "react";
 import { EthAddress } from "@joincivil/core";
 import { NorthEastArrow } from "@joincivil/components";
-import styled, { StyledComponentClass } from "styled-components";
+import styled from "styled-components";
 const { Button } = window.wp.components;
 
 export interface WalletStatusProps {

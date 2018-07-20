@@ -1,8 +1,10 @@
-const { Button, PanelBody, PanelRow } = window.wp.components;
+const { Button } = window.wp.components;
 import * as React from "react";
 import { EthAddress, ApprovedRevision } from "@joincivil/core";
+import { ArticleSignIcon } from "@joincivil/components";
 import { SignatureData } from "../store/interfaces";
 import { Signature } from "./Signature";
+import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
 
 export interface BlockchainSignPanelProps {
   username: string;
@@ -30,31 +32,47 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
     );
 
     return (
-      <PanelBody title="Sign">
-        <PanelRow>
-          <i>Sign article for enhanced credibility</i>
-        </PanelRow>
-        {Object.keys(this.props.signatures).length > 0 && <>{signatures}</>}
-        <PanelRow>
-          <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
-            Sign Article
-          </Button>
-          {this.props.isDirty && <i>Please save this post before signing.</i>}
-        </PanelRow>
-        <PanelRow>
-          <i>
-            {this.props.userWalletAddress ? (
-              <>
-                Signing as <code>{this.props.userWalletAddress}</code>
-              </>
-            ) : (
-              <>
-                Please set your wallet address in your <a href="/wp-admin/profile.php">your profile</a> before signing.
-              </>
-            )}
-          </i>
-        </PanelRow>
-      </PanelBody>
+      <Wrapper>
+        <IntroSection>
+          <Heading>Sign</Heading>
+          <p>
+            We recommend you sign your posts for enhanced credibility. By signing this post, you are acknowledging that
+            you are its author and are fully aware of its content. <a href="TODO">Learn more</a>
+          </p>
+        </IntroSection>
+        <Body>
+          <BodySection>
+            <MainHeading>
+              Signatures
+              <IconWrap>
+                <ArticleSignIcon />
+              </IconWrap>
+            </MainHeading>
+            {Object.keys(this.props.signatures).length > 0 && <>{signatures}</>}
+          </BodySection>
+
+          <BodySection>
+            <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
+              Sign Article
+            </Button>
+            {this.props.isDirty && <i>Please save this post before signing.</i>}
+          </BodySection>
+
+          <BodySection>
+            <i>
+              {this.props.userWalletAddress ? (
+                <>
+                  Signing as <code>{this.props.userWalletAddress}</code>
+                </>
+              ) : (
+                <>
+                  Please set your wallet address in your <a href="/wp-admin/profile.php">your profile</a> before signing.
+                </>
+              )}
+            </i>
+          </BodySection>
+        </Body>
+      </Wrapper>
     );
   }
 }

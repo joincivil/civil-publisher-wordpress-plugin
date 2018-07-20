@@ -1,7 +1,7 @@
-const { PanelBody, PanelRow } = window.wp.components;
 import * as React from "react";
-import { TransactionButton, buttonSizes } from "@joincivil/components";
+import { ArticleIndexIcon, TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
+import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
 
 export interface BlockchainPublishPanelProps {
   isNewsroomEditor: boolean;
@@ -64,27 +64,46 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
     }
 
     return (
-      <PanelBody title="Create Blockchain Record">
-        <PanelRow>
-          Status: {this.props.publishStatus}
-          {insufficientPermissions && `. Permissions not set to publish: ${permissionsMessage}.`}
-        </PanelRow>
-        {insufficientPermissions && <PanelRow>
-          <p>You do not have permission to record this post to your Newsroom contract on the Ethereum blockchain.</p>
-        { /* TODO: Right now Sign and Record are on same panel so Sign is above this message. When we move them to separate tabs, "sign your post" should be a link that opens the Sign tab. */ }
-          <p>You can sign your post above for enhanced credibility and verification using your wallet address.</p>
-        </PanelRow>}
-        <PanelRow>
-          <TransactionButton
-            disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
-            transactions={transactions}
-            size={buttonSizes.SMALL}
-          >
-            Create Blockchain Record
-          </TransactionButton>
-        </PanelRow>
-        {this.props.isDirty && <i>Please save this post before publishing.</i>}
-      </PanelBody>
+      <Wrapper>
+        <IntroSection>
+          <Heading>Index</Heading>
+          <p>Index this post’s metadata and hash to your newsroom contract on the Ethereum blockchain. <a href="TODO">Learn more</a></p>
+        </IntroSection>
+
+        <Body>
+          <BodySection>
+            <Heading>Post Status</Heading>
+            Status: {this.props.publishStatus}
+            {insufficientPermissions && `. Permissions not set to publish: ${permissionsMessage}.`}
+          </BodySection>
+
+          {insufficientPermissions && <BodySection>
+            <p>You do not have permission to record this post to your Newsroom contract on the Ethereum blockchain.</p>
+            { /* TODO: Right now Sign and Record are on same panel so Sign is above this message. When we move them to separate tabs, "sign your post" should be a link that opens the Sign tab. */ }
+            <p>You can sign your post above for enhanced credibility and verification using your wallet address.</p>
+          </BodySection>}
+
+          <BodySection>
+            <MainHeading>
+              Create Index
+              <IconWrap>
+                <ArticleIndexIcon />
+              </IconWrap>
+            </MainHeading>
+            <HelpText>
+              This will open a MetaMask pop-up and you must complete the transacation to index your post.
+            </HelpText>
+            <TransactionButton
+              disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
+              transactions={transactions}
+              size={buttonSizes.SMALL}
+            >
+              Index to Blockchain
+            </TransactionButton>
+            {this.props.isDirty && <i>Please save this post before publishing.</i>}
+          </BodySection>
+        </Body>
+      </Wrapper>
     );
   }
 }
