@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ArticleIndexIcon, TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
-import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
+import { TxHash } from "@joincivil/core";
 
 export interface BlockchainPublishPanelProps {
   isNewsroomEditor: boolean;
@@ -15,12 +15,28 @@ export interface BlockchainPublishPanelProps {
   revisionUrl: string;
   isDirty: boolean;
   correctNetwork: boolean;
+  txHash?: string;
   userCapabilities: {[capability: string]: boolean};
   publishContent?(contentId: number, revisionId: number, revisionJson: any): void;
   updateContent?(revisionId: number, revisionJson: any): void;
+  saveTxHash?(txHash: TxHash): void;
 }
 
 export class BlockchainPublishPanelComponent extends React.Component<BlockchainPublishPanelProps> {
+  public async componentDidMount(): Promise<void> {
+    if (this.props.txHash && this.props.txHash.length > 0) {
+      const newsroom = await getNewsroom();
+      if (!this.props.civilContentID) {
+        const contentId = await newsroom.contentIdFromTxHash(this.props.txHash);
+        this.props.publishContent!(contentId, this.props.currentPostLastRevisionId!, this.props.revisionJson);
+        this.props.saveTxHash!("");
+      } else {
+        const revisionId = await newsroom.revisionFromTxHash(this.props.txHash)
+        this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson);
+        this.props.saveTxHash!("");
+      }
+    }
+  }
   public render(): JSX.Element {
     let transactions;
     if (this.props.civilContentID) {
@@ -36,7 +52,11 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
           },
           postTransaction: (result: number) => {
             this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson);
+            this.props.saveTxHash!("");
           },
+          handleTransactionHash: (txHash: TxHash) => {
+            this.props.saveTxHash!(txHash);
+          }
         },
       ];
     } else {
@@ -48,7 +68,11 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
           },
           postTransaction: (result: number) => {
             this.props.publishContent!(result, this.props.currentPostLastRevisionId!, this.props.revisionJson);
+            this.props.saveTxHash!("");
           },
+          handleTransactionHash: (txHash: TxHash) => {
+            this.props.saveTxHash!(txHash);
+          }
         },
       ];
     }
