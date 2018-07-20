@@ -2,6 +2,7 @@ import * as React from "react";
 import { ArticleIndexIcon, TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
+import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
 
 export interface BlockchainPublishPanelProps {
   isNewsroomEditor: boolean;
