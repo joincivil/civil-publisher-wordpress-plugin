@@ -3,6 +3,7 @@ import * as React from "react";
 import { EthAddress, ApprovedRevision } from "@joincivil/core";
 import { ArticleSignIcon } from "@joincivil/components";
 import { SignatureData } from "../store/interfaces";
+import { PostStatus } from "./PostStatus";
 import { Signature } from "./Signature";
 import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
 
@@ -41,6 +42,8 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           </p>
         </IntroSection>
         <Body>
+          <PostStatus actionString="signing" />
+
           <BodySection>
             <MainHeading>
               Signatures
@@ -55,7 +58,6 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
             <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
               Sign Article
             </Button>
-            {this.props.isDirty && <i>Please save this post before signing.</i>}
           </BodySection>
 
           <BodySection>

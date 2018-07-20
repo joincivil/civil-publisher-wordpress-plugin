@@ -2,6 +2,7 @@ import * as React from "react";
 import { ArticleIndexIcon, TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
+import { PostStatus } from "./PostStatus";
 import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
 
 export interface BlockchainPublishPanelProps {
@@ -96,6 +97,8 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
         </IntroSection>
 
         <Body>
+          <PostStatus requirePublish={true} actionString="indexing" />
+
           <BodySection>
             <Heading>Post Status</Heading>
             Status: {this.props.publishStatus}
@@ -125,7 +128,6 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
             >
               Index to Blockchain
             </TransactionButton>
-            {this.props.isDirty && <i>Please save this post before publishing.</i>}
           </BodySection>
         </Body>
       </Wrapper>

@@ -15,6 +15,10 @@ export const Wrapper = styled.div`
     line-height: 1.31;
     letter-spacing: -0.1px;
     color: #5f5f5f;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 `;
 
@@ -76,6 +80,12 @@ export const BodySection = styled.div`
 
 export const HelpText = styled.p`
   opacity: 0.3;
+`;
+
+export const ErrorText = styled.p`
+  && {
+    color: #f2524a;
+  }
 `;
 
 export class IntroSection extends React.Component {
