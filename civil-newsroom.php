@@ -20,6 +20,7 @@ define( __NAMESPACE__ . '\REVISION_HASH_META_KEY', 'civil_newsroom_protocol_revi
 define( __NAMESPACE__ . '\REVISION_DATA_META_KEY', 'civil_newsroom_protocol_revision_extra_data' );
 define( __NAMESPACE__ . '\SIGNATURES_META_KEY', 'civil_newsroom_protocol_article_signatures' );
 define( __NAMESPACE__ . '\REVISIONS_META_KEY', 'civil_newsroom_protocol_published_revisions' );
+define( __NAMESPACE__ . '\TXHASH_META_KEY', 'civil_newsroom_protocol_publish_tx_hash' );
 define( __NAMESPACE__ . '\CONTENT_ID_META_KEY', 'civil_newsroom_protocol_content_id' );
 
 // User meta.

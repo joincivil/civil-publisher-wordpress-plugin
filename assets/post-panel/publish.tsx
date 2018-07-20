@@ -4,6 +4,7 @@ import { revisionJsonSansDate } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
 import { hashContent } from "@joincivil/utils";
 import { BlockchainPublishPanelComponent, BlockchainPublishPanelProps } from "./components/BlockchainPublishPanel";
+import { TxHash } from "@joincivil/core";
 
 const BlockchainPublishPanel = compose([
   withSelect(
@@ -18,6 +19,7 @@ const BlockchainPublishPanel = compose([
         isPublishDisabled,
         getRevisionJSON,
         isCorrectNetwork,
+        getTxHash
       } = selectStore("civil/blockchain");
       const userCapabilities = getUserCapabilities();
       const publishDisabled = isPublishDisabled();
@@ -37,6 +39,7 @@ const BlockchainPublishPanel = compose([
       }
 
       return {
+        txHash: getTxHash(),
         isNewsroomEditor: isNewsroomEditor(),
         userCapabilities,
         publishStatus,
@@ -99,9 +102,18 @@ const BlockchainPublishPanel = compose([
         dispatch(updatePublishedState(publishedRevisionData));
       };
 
+      const saveTxHash = (txHash: TxHash) => {
+        const newPostMeta = {
+          [postMetaKeys.CIVIL_PUBLISH_TXHSAH]: `${txHash}`,
+        }
+        editPost({ meta: newPostMeta });
+        savePost();
+      }
+
       return {
         publishContent: publishArticle,
         updateContent: updateArticle,
+        saveTxHash,
       };
     },
   ),

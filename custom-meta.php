@@ -294,6 +294,13 @@ function expose_article_meta() {
 			'type' => 'string',
 		)
 	);
+	register_meta(
+		'post', TXHASH_META_KEY, array(
+			'show_in_rest' => true,
+			'single' => true,
+			'type' => 'string',
+		)
+	);
 }
 add_action( 'admin_init', __NAMESPACE__ . '\expose_article_meta' );
 add_action( 'rest_api_init', __NAMESPACE__ . '\expose_article_meta' );
