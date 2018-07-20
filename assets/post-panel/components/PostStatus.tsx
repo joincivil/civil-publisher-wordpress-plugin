@@ -14,9 +14,6 @@ export interface PostStatusProps {
 }
 
 class PostStatusComponent extends React.Component<PostStatusProps> {
-  public async componentDidMount(): Promise<void> {
-  }
-
   public render(): JSX.Element {
     let content;
     if (this.props.published) {
@@ -24,20 +21,17 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
       content = (
         <p>
           Post published
-          {this.props.updated && ", last updated"}
-          {" "}
-          <a href={this.props.url} target="_blank" style={{ display: "inline-block" }}>{timestampString}</a>
+          {this.props.updated && ", last updated"}{" "}
+          <a href={this.props.url} target="_blank" style={{ display: "inline-block" }}>
+            {timestampString}
+          </a>
         </p>
       );
     } else {
       if (this.props.requirePublish) {
-        content = (
-          <ErrorText>Waiting for post to be published to your site.</ErrorText>
-        );
+        content = <ErrorText>Waiting for post to be published to your site.</ErrorText>;
       } else if (this.props.saved) {
-        content = (
-          <p>Post saved.</p>
-        );
+        content = <p>Post saved.</p>;
       }
     }
 
@@ -45,7 +39,10 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
       content = (
         <>
           {content}
-          <ErrorText>Please save {this.props.published && "updates to"} this post before {this.props.actionString || "continuing"}.</ErrorText>
+          <ErrorText>
+            Please save {this.props.published && "updates to"} this post before{" "}
+            {this.props.actionString || "continuing"}.
+          </ErrorText>
         </>
       );
     }
@@ -61,12 +58,9 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
 
 export const PostStatus = withSelect(
   (selectStore: any, ownProps: Partial<PostStatusProps>): Partial<PostStatusProps> => {
-    const {
-      getEditedPostAttribute,
-      isEditedPostDirty,
-      isCleanNewPost,
-      isCurrentPostPublished,
-    } = selectStore("core/editor");
+    const { getEditedPostAttribute, isEditedPostDirty, isCleanNewPost, isCurrentPostPublished } = selectStore(
+      "core/editor",
+    );
 
     const date = getEditedPostAttribute("date");
     const modifiedDate = getEditedPostAttribute("modified");
@@ -79,5 +73,5 @@ export const PostStatus = withSelect(
       timestamp: modifiedDate || date,
       url: getEditedPostAttribute("link"),
     };
-  }
+  },
 )(PostStatusComponent);
