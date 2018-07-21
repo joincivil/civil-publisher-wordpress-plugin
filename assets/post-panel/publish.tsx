@@ -15,7 +15,6 @@ const BlockchainPublishPanel = compose([
         getUserCapabilities,
         getCivilContentID,
         getPublishedRevisions,
-        getPublishStatusString,
         isPublishDisabled,
         getRevisionJSON,
         isCorrectNetwork,
@@ -25,7 +24,6 @@ const BlockchainPublishPanel = compose([
       const publishDisabled = isPublishDisabled();
       const currentPostLastRevisionId = getCurrentPostLastRevisionId();
       const publishedRevisions = getPublishedRevisions();
-      const publishStatus = getPublishStatusString(publishedRevisions);
       const civilContentID = getCivilContentID();
       const isDirty = isEditedPostDirty();
       const correctNetwork = isCorrectNetwork();
@@ -42,7 +40,6 @@ const BlockchainPublishPanel = compose([
         txHash: getTxHash(),
         isNewsroomEditor: isNewsroomEditor(),
         userCapabilities,
-        publishStatus,
         publishDisabled,
         civilContentID,
         currentPostLastRevisionId,

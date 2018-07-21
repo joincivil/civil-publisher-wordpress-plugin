@@ -2,6 +2,10 @@ import * as React from "react";
 import styled, { StyledComponentClass } from "styled-components";
 import { CivilLogo } from "@joincivil/components";
 
+export const colors = {
+  LINK_BLUE: "#0073AA",
+};
+
 export const Wrapper = styled.div`
   overflow-x: hidden;
 
@@ -96,7 +100,7 @@ export class IntroSection extends React.Component {
           <IconWrap>
             <CivilLogo />
           </IconWrap>
-          <a href="TODO">Help</a>
+          <a href="#TODO">Help</a>
         </IntroHeader>
         {this.props.children}
       </Intro>

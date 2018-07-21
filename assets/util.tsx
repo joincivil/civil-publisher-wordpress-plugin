@@ -1,5 +1,7 @@
+import * as moment from "moment";
 const { apiRequest } = window.wp;
 const { select } = window.wp.data;
+const { dateI18n, getSettings } = window.wp.date;
 
 import * as Web3 from "web3";
 import { Civil, ApprovedRevision } from "@joincivil/core";
@@ -70,4 +72,11 @@ export function isCorrectNetwork(): boolean {
 
 export function hasInjectedProvider(): boolean {
   return typeof window !== "undefined" && (window as any).web3 !== undefined;
+}
+
+const dateSettings = getSettings();
+/* Uses timezone and date format specified in CMS settings to format a Date object or UTC string. */
+export function siteFormatTimeString(utcTimestamp: string | Date): string {
+  const timezoned = moment.utc(utcTimestamp).utcOffset(dateSettings.timezone.offset * 60);
+  return dateI18n(dateSettings.formats.datetime, timezoned);
 }

@@ -108,37 +108,6 @@ export function getPublishedRevisions(state: any): any {
   return publishedRevisions;
 }
 
-export function getPublishStatusString(state: any): string {
-  const currentPostLastRevisionId = select("core/editor").getCurrentPostLastRevisionId();
-  const currentRevisionData = currentPostLastRevisionId
-    ? select("civil/blockchain").getRevisionJSON(currentPostLastRevisionId)
-    : undefined;
-  const publishedRevisions = getPublishedRevisions(state);
-  let publishStatus;
-
-  // TODO: Explore if this should be in a resolver
-  if (!isPostPublished()) {
-    publishStatus = "You must publish post before publishing to newsroom smart contract";
-  } else if (!publishedRevisions.length) {
-    publishStatus = "Your article is live on the web but not yet published to newsroom smart contract";
-  } else {
-    const lastPublishedRevision = publishedRevisions[publishedRevisions.length - 1];
-    if (
-      currentRevisionData &&
-      hashContent(revisionJsonSansDate(currentRevisionData)) === lastPublishedRevision.revisionJsonSansDateHash
-    ) {
-      publishStatus = "Current version published";
-    } else {
-      const displayTime = lastPublishedRevision.published.toTimeString();
-      publishStatus = `Warning: your published update no longer matches
-        what's on the smart contract and will not validate.
-        Last published at ${displayTime} time`;
-    }
-  }
-
-  return publishStatus;
-}
-
 export function isCorrectNetwork(state: any): boolean {
   return state.network.isCorrectNetwork;
 }

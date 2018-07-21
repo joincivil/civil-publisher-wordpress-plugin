@@ -3,11 +3,11 @@ import { ArticleIndexIcon, TransactionButton, buttonSizes } from "@joincivil/com
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PostStatus } from "./PostStatus";
-import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
+import { CreateIndex } from "./CreateIndex";
+import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection } from "../styles";
 
 export interface BlockchainPublishPanelProps {
   isNewsroomEditor: boolean;
-  publishStatus?: string;
   publishDisabled?: boolean;
   civilContentID?: number;
   currentPostLastRevisionId?: number;
@@ -86,30 +86,36 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
       permissionsMessage = "your WordPress user account cannot publish posts";
     } else if (!this.props.isNewsroomEditor) {
       insufficientPermissions = true;
-      permissionsMessage = "you are not listed as an editor on your Newsroom contract";
+      permissionsMessage = "you are not listed on your newsroom contract";
+    }
+
+    const transactionButton = (
+      <TransactionButton
+        disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
+        transactions={transactions}
+        size={buttonSizes.SMALL}
+      >
+        Index to Blockchain
+      </TransactionButton>
+    );
+
+    let lastPublishedRevision;
+    if (this.props.currentPostLastRevisionId && this.props.publishedRevisions.length) {
+      lastPublishedRevision = this.props.publishedRevisions[this.props.publishedRevisions.length - 1];
     }
 
     return (
       <Wrapper>
         <IntroSection>
           <Heading>Index</Heading>
-          <p>Index this post’s metadata and hash to your newsroom contract on the Ethereum blockchain. <a href="TODO">Learn more</a></p>
+          <p>
+            Index this post’s metadata and hash to your newsroom contract on the Ethereum blockchain.{" "}
+            <a href="#TODO">Learn more</a>
+          </p>
         </IntroSection>
 
         <Body>
-          <PostStatus requirePublish={true} actionString="indexing" />
-
-          <BodySection>
-            <Heading>Post Status</Heading>
-            Status: {this.props.publishStatus}
-            {insufficientPermissions && `. Permissions not set to publish: ${permissionsMessage}.`}
-          </BodySection>
-
-          {insufficientPermissions && <BodySection>
-            <p>You do not have permission to record this post to your Newsroom contract on the Ethereum blockchain.</p>
-            { /* TODO: Right now Sign and Record are on same panel so Sign is above this message. When we move them to separate tabs, "sign your post" should be a link that opens the Sign tab. */ }
-            <p>You can sign your post above for enhanced credibility and verification using your wallet address.</p>
-          </BodySection>}
+          <PostStatus requirePublish={true} actionString={(lastPublishedRevision ? "re-" : "") + "indexing"} />
 
           <BodySection>
             <MainHeading>
@@ -118,16 +124,14 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
                 <ArticleIndexIcon />
               </IconWrap>
             </MainHeading>
-            <HelpText>
-              This will open a MetaMask pop-up and you must complete the transacation to index your post.
-            </HelpText>
-            <TransactionButton
-              disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
-              transactions={transactions}
-              size={buttonSizes.SMALL}
-            >
-              Index to Blockchain
-            </TransactionButton>
+
+            <CreateIndex
+              lastPublishedRevision={lastPublishedRevision}
+              transactionButton={transactionButton}
+              revisionJson={this.props.revisionJson}
+              insufficientPermissions={insufficientPermissions}
+              permissionsMessage={permissionsMessage}
+            />
           </BodySection>
         </Body>
       </Wrapper>

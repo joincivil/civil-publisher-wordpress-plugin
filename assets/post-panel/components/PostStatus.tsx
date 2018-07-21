@@ -1,6 +1,7 @@
 import * as React from "react";
 const { withSelect } = window.wp.data;
 const { dateI18n, getSettings } = window.wp.date;
+import { siteFormatTimeString } from "../../util";
 import { ErrorText, Heading, BodySection, HelpText } from "../styles";
 
 export interface PostStatusProps {
@@ -17,13 +18,12 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
   public render(): JSX.Element {
     let content;
     if (this.props.published) {
-      const timestampString = dateI18n(getSettings().formats.datetime, this.props.timestamp);
       content = (
         <p>
           Post published
           {this.props.updated && ", last updated"}{" "}
           <a href={this.props.url} target="_blank" style={{ display: "inline-block" }}>
-            {timestampString}
+            {siteFormatTimeString(this.props.timestamp)}
           </a>
         </p>
       );
@@ -62,8 +62,8 @@ export const PostStatus = withSelect(
       "core/editor",
     );
 
-    const date = getEditedPostAttribute("date");
-    const modifiedDate = getEditedPostAttribute("modified");
+    const date = getEditedPostAttribute("date_gmt");
+    const modifiedDate = getEditedPostAttribute("modified_gmt");
 
     return {
       requirePublish: ownProps.requirePublish,

@@ -34,6 +34,7 @@ module.exports = env => {
     },
     externals: {
       // Reuse libraries exposed by Gutenberg:
+      moment: "moment",
       jquery: "jQuery",
       react: "React",
       "react-dom": "ReactDOM",

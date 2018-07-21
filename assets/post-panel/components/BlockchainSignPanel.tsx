@@ -38,7 +38,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           <Heading>Sign</Heading>
           <p>
             We recommend you sign your posts for enhanced credibility. By signing this post, you are acknowledging that
-            you are its author and are fully aware of its content. <a href="TODO">Learn more</a>
+            you are its author and are fully aware of its content. <a href="#TODO">Learn more</a>
           </p>
         </IntroSection>
         <Body>
