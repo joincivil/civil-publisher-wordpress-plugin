@@ -33,7 +33,7 @@ const BlockchainSignPanel = compose([
         if (revisionJson.revisionContentHash !== signature.contentHash) {
           return false;
         }
-        if (revisionJson.newsroomAddress !== newsroomAddress) {
+        if (signature.newsroomAddress !== newsroomAddress) {
           return false;
         }
         if (
