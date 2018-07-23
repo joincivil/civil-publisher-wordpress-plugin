@@ -11,8 +11,7 @@ export function setIsNewsroomEditor(isEditor: boolean): AnyAction {
   };
 }
 
-export function setUserData(id: number, userData: any): AnyAction {
-  console.log("setUserData action being created", arguments);
+export function setUserData(id: number | "me", userData: any): AnyAction {
   return {
     type: actionTypes.SET_USER_DATA,
     data: {
@@ -26,27 +25,6 @@ export function setCurrentUserId(userId: number): AnyAction {
   return {
     type: actionTypes.SET_CURRENT_USER_ID,
     data: userId,
-  };
-}
-
-export function setUsername(username: string): AnyAction {
-  return {
-    type: actionTypes.SET_USERNAME,
-    data: username,
-  };
-}
-
-export function setLoggedInUserAddress(userWalletAddress: EthAddress): AnyAction {
-  return {
-    type: actionTypes.SET_LOGGED_IN_USER_ADDRESS,
-    data: userWalletAddress,
-  };
-}
-
-export function setUserCapabilities(userCapabilities: { [key: string]: boolean}): AnyAction {
-  return {
-    type: actionTypes.SET_USER_CAPABILITIES,
-    data: userCapabilities,
   };
 }
 

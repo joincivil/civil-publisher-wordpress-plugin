@@ -1,6 +1,6 @@
 import { EthAddress, TxHash } from "@joincivil/core";
 
-import { postMetaKeys } from "../../constants";
+import { postMetaKeys, userMetaKeys } from "../../constants";
 import { SignatureData } from "./interfaces";
 import { setCivilContentID, updatePublishedState } from "./actions";
 import { revisionJsonSansDate } from "../../util";
@@ -18,25 +18,25 @@ export function isNewsroomEditor(state: any): boolean {
   return state.isNewsroomEditor;
 }
 
-export function getUserData(state: any, id: number): any  {
-  return state.userData[id] || {};
+/** If no id supplied, defaults to current user. */
+export function getUserData(state: any, id?: number | "me"): any  {
+  if (!id) {
+    id = select("civil/blockchain").getCurrentUserId() || "me";
+  }
+  return state.userData[id!] || {};
 }
 
 export function getCurrentUserId(state: any): number {
   return state.currentUserId;
 }
 
-export function getUsername(state: any): string {
-  return state.username;
-}
-
 /** Returns ETH address associated with logged-in WordPress user (rather than what web3 tells us) */
-export function getLoggedInUserAddress(state: any): EthAddress | null {
-  return state.userWalletAddress;
+export function getLoggedInUserAddress(state: any): EthAddress | undefined {
+  return select("civil/blockchain").getUserData()[userMetaKeys.WALLET_ADDRESS];
 }
 
 export function getUserCapabilities(state: any): { [key: string]: boolean } {
-  return state.userCapabilities;
+  return select("civil/blockchain").getUserData().capabilities || {};
 }
 
 export function getSignatures(state: any): SignatureData {

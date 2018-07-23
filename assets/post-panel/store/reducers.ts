@@ -17,7 +17,12 @@ export const userData = (state: { [id: number]: any} = {}, action: AnyAction): {
   switch (action.type) {
     case actionTypes.SET_USER_DATA:
       const { id, userData } = action.data;
-      return { ...state, [id]: userData };
+      const newState = { ...state, [id]: userData };
+      if (id === "me") {
+        // also index by actual ID
+        newState[userData.id] = userData;
+      }
+      return newState;
     default:
       return state;
   }
@@ -27,33 +32,6 @@ export const currentUserId = (state: number | null = null, action: AnyAction): n
   switch (action.type) {
     case actionTypes.SET_CURRENT_USER_ID:
       return action.data;
-    default:
-      return state;
-  }
-};
-
-export const username = (state: string | null = null, action: AnyAction): string | null => {
-  switch (action.type) {
-    case actionTypes.SET_USERNAME:
-      return action.data;
-    default:
-      return state;
-  }
-};
-
-export const userWalletAddress = (state: string | null = null, action: AnyAction): string | null => {
-  switch (action.type) {
-    case actionTypes.SET_LOGGED_IN_USER_ADDRESS:
-      return action.data || null;
-    default:
-      return state;
-  }
-};
-
-export const userCapabilities = (state: { [key: string]: boolean } = {}, action: AnyAction): { [key: string]: boolean } => {
-  switch (action.type) {
-    case actionTypes.SET_USER_CAPABILITIES:
-      return action.data || {};
     default:
       return state;
   }
