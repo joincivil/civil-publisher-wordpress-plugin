@@ -11,6 +11,13 @@ export function setIsNewsroomEditor(isEditor: boolean): AnyAction {
   };
 }
 
+export function setCurrentUserId(userId: number): AnyAction {
+  return {
+    type: actionTypes.SET_CURRENT_USER_ID,
+    data: userId,
+  };
+}
+
 export function setUsername(username: string): AnyAction {
   return {
     type: actionTypes.SET_USERNAME,

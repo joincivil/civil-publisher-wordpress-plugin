@@ -14,9 +14,9 @@ const BlockchainSignPanel = compose([
   withSelect(
     (selectStore: any, ownProps: Partial<BlockchainSignPanelProps>): Partial<BlockchainSignPanelProps> => {
       const { isEditedPostDirty, isCleanNewPost, getCurrentPostLastRevisionId } = selectStore("core/editor");
-      const { getUsername, getLoggedInUserAddress, getSignatures, getRevisionJSON } = selectStore("civil/blockchain");
+      const { getCurrrentUserId, getCurrentUserId, getLoggedInUserAddress, getSignatures, getRevisionJSON } = selectStore("civil/blockchain");
 
-      const username = getUsername();
+      const currentUserId = getCurrentUserId();
       const contentID = getCurrentPostLastRevisionId();
       const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
       let revisionJson: any;
@@ -52,7 +52,7 @@ const BlockchainSignPanel = compose([
           return true;
         }
 
-        const ownSignature = signatures[username];
+        const ownSignature = signatures[currentUserId];
         if (ownSignature && isValidSignature(ownSignature)) {
           // No need to re-sign if signed and valid
           return true;
@@ -65,8 +65,8 @@ const BlockchainSignPanel = compose([
       };
 
       return {
+        currentUserId,
         signatures,
-        username,
         signDisabled: isSignButtonDisabled(),
         userWalletAddress: getLoggedInUserAddress(),
         isValidSignature,
@@ -79,14 +79,14 @@ const BlockchainSignPanel = compose([
     (dispatch: any, ownProps: BlockchainSignPanelProps): Partial<BlockchainSignPanelProps> => {
       const { editPost, savePost } = dispatch("core/editor");
       const { updateSignatures } = dispatch("civil/blockchain");
-      const { username, signatures } = ownProps;
+      const { currentUserId, signatures } = ownProps;
 
       const signArticle = async (): Promise<void> => {
         const signature = await createSignatureData();
-        signatures[username] = signature;
-        editPost({ meta: { [postMetaKeys.SIGNATURES]: JSON.stringify(signatures) } });
+        const newSignatures = { ...signatures, [currentUserId]: signature };
+        editPost({ meta: { [postMetaKeys.SIGNATURES]: JSON.stringify(newSignatures) } });
         savePost();
-        dispatch(updateSignatures(signatures));
+        dispatch(updateSignatures(newSignatures));
       };
 
       return {

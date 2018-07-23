@@ -3,7 +3,7 @@ import { EthAddress, Hex } from "@joincivil/core";
 const { PanelRow } = window.wp.components;
 
 export interface SignatureProps {
-  authorUsername: string;
+  authorUserId: number;
   authorAddress: EthAddress;
   sig: Hex;
   isDirty: boolean;

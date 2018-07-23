@@ -1,6 +1,6 @@
 import { ApprovedRevision } from "@joincivil/core";
 
-/** Maps from author wordpress user to ETH address and signature hex. */
+/** Maps from author wordpress user ID to ETH address and signature hex. */
 export interface SignatureData {
-  [authorUsername: string]: ApprovedRevision;
+  [authorId: number]: ApprovedRevision;
 }

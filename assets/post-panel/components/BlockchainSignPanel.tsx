@@ -8,7 +8,7 @@ import { Signature } from "./Signature";
 import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
 
 export interface BlockchainSignPanelProps {
-  username: string;
+  currentUserId: number;
   signatures: SignatureData;
   signDisabled: boolean;
   userWalletAddress?: EthAddress;
@@ -22,7 +22,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
     const signatures = Object.entries(this.props.signatures).map(
       ([key, val]: [string, ApprovedRevision]): JSX.Element => (
         <Signature
-          authorUsername={key}
+          authorUserId={key}
           authorAddress={val.author}
           sig={val.signature}
           isDirty={this.props.isDirty}

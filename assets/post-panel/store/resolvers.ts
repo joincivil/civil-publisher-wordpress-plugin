@@ -2,7 +2,7 @@ import { EthAddress } from "@joincivil/core";
 
 import { apiNamespace, userMetaKeys } from "../../constants";
 import { getNewsroom } from "../../util";
-import { setIsNewsroomEditor, setUsername, setLoggedInUserAddress, setUserCapabilities, addOrUpdateRevision } from "./actions";
+import { setIsNewsroomEditor, setCurrentUserId, setUsername, setLoggedInUserAddress, setUserCapabilities, addOrUpdateRevision } from "./actions";
 import { AnyAction } from "redux";
 
 const { apiRequest } = window.wp;
@@ -21,6 +21,11 @@ export async function getRevisionJSON(state: any, revisionID: string): Promise<a
     // TODO signal error to user
     throw Error("Failed to fetch revision JSON");
   }
+}
+
+export async function getCurrentUserId(state: any): Promise<AnyAction> {
+  const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
+  return setCurrentUserId(userInfo.id);
 }
 
 export async function getUsername(state: any): Promise<AnyAction> {
