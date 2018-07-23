@@ -2,7 +2,7 @@ import { EthAddress } from "@joincivil/core";
 
 import { apiNamespace, userMetaKeys } from "../../constants";
 import { getNewsroom } from "../../util";
-import { setIsNewsroomEditor, setCurrentUserId, setUsername, setLoggedInUserAddress, setUserCapabilities, addOrUpdateRevision } from "./actions";
+import { setIsNewsroomEditor, setUserData, setCurrentUserId, setUsername, setLoggedInUserAddress, setUserCapabilities, addOrUpdateRevision } from "./actions";
 import { AnyAction } from "redux";
 
 const { apiRequest } = window.wp;
@@ -10,6 +10,19 @@ const { apiRequest } = window.wp;
 export async function isNewsroomEditor(state: any): Promise<AnyAction> {
   const newsroom = await getNewsroom();
   return setIsNewsroomEditor(await newsroom.isEditor());
+}
+
+export async function getUserData(state: any, userId: number): Promise<any> {
+  console.log("getUserData resolver called for", userId);
+  try {
+    // TODO see if authors have permissions to list users (if not, how will we show names and avatars here?)
+    const response = await apiRequest({ path: "/wp/v2/users/" + userId });
+    return setUserData(userId, response);
+  } catch (err) {
+    console.error("Failed to fetch user data:", err);
+    // TODO signal error to user
+    throw Error("Failed to fetch user data");
+  }
 }
 
 export async function getRevisionJSON(state: any, revisionID: string): Promise<any | void> {

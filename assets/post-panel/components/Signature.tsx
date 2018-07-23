@@ -1,5 +1,6 @@
 import * as React from "react";
 import { EthAddress, Hex } from "@joincivil/core";
+const { withSelect } = window.wp.data;
 const { PanelRow } = window.wp.components;
 
 export interface SignatureProps {
@@ -8,11 +9,11 @@ export interface SignatureProps {
   sig: Hex;
   isDirty: boolean;
   isValid: boolean;
-  isYou: boolean;
+  userData: any;
 }
 
-export function Signature(ownProps: SignatureProps): JSX.Element {
-  const { authorUsername, authorAddress, sig, isDirty, isValid, isYou } = ownProps;
+function SignatureComponent(ownProps: SignatureProps): JSX.Element {
+  const { userData, authorAddress, sig, isDirty, isValid } = ownProps;
 
   let validMessage;
   let sigColor;
@@ -28,22 +29,26 @@ export function Signature(ownProps: SignatureProps): JSX.Element {
     sigColor = "green";
   }
 
+  const avatarUrl = userData.avatar_urls && userData.avatar_urls[48]; // TODO test if WP generates fallback or if we have to here
+
   return (
     <PanelRow>
-      <div style={{ border: "1px solid lightgray", padding: "5px" }}>
-        <div>
-          {authorUsername} {isYou && <b>(you) </b>}
-          <span>
-            (<code>{authorAddress}</code>)
-          </span>
-        </div>
-        <div>
-          Signature: <code>{sig}</code>
-        </div>
-        <div>
-          Status: <span style={{ color: sigColor }}>{validMessage}</span>
-        </div>
-      </div>
+      <img src={avatarUrl} style={{ width: "24px" }} />
+      <span>{userData.name}</span>
+      <span style={{ color: sigColor }}>{validMessage}</span>
     </PanelRow>
   );
 }
+
+export const Signature = withSelect(
+  (selectStore: any, ownProps: Partial<SignatureProps>): Partial<SignatureProps> => {
+    const { getUserData } = selectStore(
+      "civil/blockchain",
+    );
+
+    return {
+      ...ownProps,
+      userData: getUserData(ownProps.authorUserId),
+    };
+  },
+)(SignatureComponent);

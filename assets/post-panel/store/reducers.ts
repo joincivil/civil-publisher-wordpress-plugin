@@ -13,6 +13,16 @@ export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => 
   }
 }
 
+export const userData = (state: { [id: number]: any} = {}, action: AnyAction): { [id: number]: any} => {
+  switch (action.type) {
+    case actionTypes.SET_USER_DATA:
+      const { id, userData } = action.data;
+      return { ...state, [id]: userData };
+    default:
+      return state;
+  }
+};
+
 export const currentUserId = (state: number | null = null, action: AnyAction): number | null => {
   switch (action.type) {
     case actionTypes.SET_CURRENT_USER_ID:

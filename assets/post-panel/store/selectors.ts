@@ -18,6 +18,10 @@ export function isNewsroomEditor(state: any): boolean {
   return state.isNewsroomEditor;
 }
 
+export function getUserData(state: any, id: number): any  {
+  return state.userData[id] || {};
+}
+
 export function getCurrentUserId(state: any): number {
   return state.currentUserId;
 }

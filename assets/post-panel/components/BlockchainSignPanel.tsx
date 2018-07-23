@@ -27,7 +27,6 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           sig={val.signature}
           isDirty={this.props.isDirty}
           isValid={this.props.isValidSignature(val)}
-          isYou={val.author === this.props.userWalletAddress}
         />
       ),
     );
@@ -52,12 +51,11 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
               </IconWrap>
             </MainHeading>
             {Object.keys(this.props.signatures).length > 0 && <>{signatures}</>}
-          </BodySection>
-
-          <BodySection>
-            <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
-              Sign Article
-            </Button>
+            <p>
+              <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
+                Sign Article
+              </Button>
+            </p>
           </BodySection>
 
           <BodySection>
