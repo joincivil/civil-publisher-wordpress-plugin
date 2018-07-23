@@ -1,7 +1,6 @@
 import { actionTypes } from "./constants";
 import { SignatureData } from "./interfaces";
 import { AnyAction } from "redux";
-import { isCorrectNetwork } from "../../util";
 import { postMetaKeys } from "../../constants";
 import { TxHash } from "@joincivil/core";
 const { combineReducers } = window.wp.data;
@@ -84,7 +83,7 @@ export const signatures = (state: SignatureData = {}, action: AnyAction): Signat
 };
 
 export const network = (
-  state: { isCorrectNetwork: boolean } = { isCorrectNetwork: isCorrectNetwork() },
+  state: { isCorrectNetwork: boolean } = { isCorrectNetwork: true },
   action: AnyAction,
 ) => {
   switch (action.type) {

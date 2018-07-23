@@ -113,6 +113,6 @@ export function isCorrectNetwork(state: any): boolean {
 }
 
 export function getTxHash(): TxHash | null {
-  const txHash = getPostMeta()[postMetaKeys.CIVIL_PUBLISH_TXHSAH];
+  const txHash = getPostMeta()[postMetaKeys.CIVIL_PUBLISH_TXHASH];
   return txHash;
 };

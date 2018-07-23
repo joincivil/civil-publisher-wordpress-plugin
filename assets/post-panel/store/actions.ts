@@ -65,11 +65,11 @@ export function setCivilContentID(civilContentID: string): AnyAction {
   };
 }
 
-export function setIsCorrectNetwork(): AnyAction {
+export const setIsCorrectNetwork = (networkName: string): AnyAction => {
   return {
     type: actionTypes.CHANGE_NETWORK,
     data: {
-      isCorrectNetwork: isCorrectNetwork(),
+      isCorrectNetwork: isCorrectNetwork(networkName),
     },
   };
 }

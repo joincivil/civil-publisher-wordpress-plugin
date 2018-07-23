@@ -15,7 +15,6 @@ export async function isNewsroomEditor(state: any): Promise<AnyAction> {
 export async function getRevisionJSON(state: any, revisionID: string): Promise<any | void> {
   try {
     const response = await apiRequest({ path: apiNamespace + "revisions/" + revisionID });
-    // console.log("revision JSON response:", response);
     return addOrUpdateRevision(revisionID, response);
   } catch (err) {
     console.error("Failed to fetch revision JSON:", err);
