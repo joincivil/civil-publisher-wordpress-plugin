@@ -19,6 +19,8 @@ export interface BlockchainPublishPanelProps {
   isDirty: boolean;
   correctNetwork: boolean;
   txHash?: TxHash;
+  lastPublishedRevision: any;
+  currentIsVersionPublished: boolean;
   userCapabilities: {[capability: string]: boolean};
   publishContent?(contentId: number, revisionId: number, revisionJson: any): void;
   updateContent?(revisionId: number, revisionJson: any): void;
@@ -103,11 +105,6 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
       permissionsMessage = "you are not listed on your newsroom contract";
     }
 
-    let lastPublishedRevision;
-    if (this.props.currentPostLastRevisionId && this.props.publishedRevisions.length) {
-      lastPublishedRevision = this.props.publishedRevisions[this.props.publishedRevisions.length - 1];
-    }
-
     const button = this.state.loadedWithTxHash ?
       <DisabledTransactionProcessingButton>Transaction In Progress...</DisabledTransactionProcessingButton> :
       (<TransactionButton
@@ -129,8 +126,7 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
         </IntroSection>
 
         <Body>
-          <PostStatus requirePublish={true} actionString={(lastPublishedRevision ? "re-" : "") + "indexing"} />
-
+          <PostStatus requirePublish={true} actionString={(this.props.lastPublishedRevision ? "re-" : "") + "indexing"} />
           <BodySection>
             <MainHeading>
               Create Index
@@ -140,11 +136,12 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
             </MainHeading>
 
             <CreateIndex
-              lastPublishedRevision={lastPublishedRevision}
+              lastPublishedRevision={this.props.lastPublishedRevision}
               transactionButton={button}
               revisionJson={this.props.revisionJson}
               insufficientPermissions={insufficientPermissions}
               permissionsMessage={permissionsMessage}
+              currentIsVersionPublished={this.props.currentIsVersionPublished}
             />
           </BodySection>
         </Body>

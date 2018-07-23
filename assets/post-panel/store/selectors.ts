@@ -124,3 +124,27 @@ export function getTxHash(): TxHash | null {
   const txHash = getPostMeta()[postMetaKeys.CIVIL_PUBLISH_TXHASH];
   return txHash;
 };
+
+export function getCurrentIsVersionPublished(state: any): boolean {
+  const editorStore = select("core/editor");
+  const currentPostLastRevisionId = editorStore.getCurrentPostLastRevisionId();
+  if (!currentPostLastRevisionId) {
+    return false;
+  }
+
+  const lastPublishedRevision = getLastPublishedRevision(state);
+  if (!lastPublishedRevision) {
+    return false;
+  }
+  const revisionJson = getRevisionJSON(state, currentPostLastRevisionId);
+
+  return revisionJson &&
+    hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash;
+}
+
+export function getLastPublishedRevision(state: any): any {
+  const publishedRevisions = getPublishedRevisions(state);
+  if (publishedRevisions.length) {
+    return publishedRevisions[publishedRevisions.length - 1];
+  }
+}

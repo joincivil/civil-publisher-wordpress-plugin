@@ -1,6 +1,6 @@
 const { PluginSidebar, PluginSidebarMoreMenuItem } = window.wp.editPost;
 const { registerPlugin } = window.wp.plugins;
-const { withDispatch } = window.wp.data;
+const { withDispatch, withSelect } = window.wp.data;
 const { compose, PanelBody } = window.wp.element;
 import * as React from "react";
 import * as ReactDom from "react-dom";
@@ -10,6 +10,7 @@ import "./store";
 import { ThemeProvider } from "styled-components";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
+import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
 
 export interface BlockchainPluginProps {
   onNetworkChange(networkName: string): void;
@@ -57,39 +58,6 @@ const BlockchainPluginInner = compose([
   ),
 ])(BlockchainPluginInnerComponent);
 
-class CivilSidebarToggleComponent extends React.Component {
-  public divRef: HTMLDivElement | null;
-  public el: HTMLDivElement;
-
-  constructor(props: any) {
-    super(props);
-    this.divRef = null;
-    this.el = document.createElement("div");
-  }
-
-  public componentDidMount(): void {
-    if (this.divRef) {
-      const buttonContainer = this.divRef.parentElement;
-      buttonContainer!.style.height = "0px";
-      buttonContainer!.style.width = "0px";
-      buttonContainer!.style.padding = "0";
-      buttonContainer!.parentNode!.insertBefore(this.el, buttonContainer!.nextSibling)
-    }
-  }
-
-  public render(): JSX.Element {
-    const portal = ReactDom.createPortal(<h4>Civil</h4>, this.el);
-    return <>
-      {portal}
-      <div ref={el => this.divRef = el}></div>
-    </>;
-  }
-};
-
-const CivilSidebarToggle = (
-  <><CivilSidebarToggleComponent/></>
-);
-
 const CivilSidebar = () => {
   let panelContent = (
     <h3>
@@ -131,6 +99,10 @@ const CivilSidebar = () => {
     </>
   );
 };
+
+const CivilSidebarToggle = (
+  <><CivilSidebarWithComposed/></>
+);
 
 registerPlugin("civil-sidebar", {
   icon: CivilSidebarToggle,

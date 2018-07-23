@@ -13,6 +13,7 @@ export interface CreateIndexProps {
   transactionButton: JSX.Element;
   insufficientPermissions: boolean;
   permissionsMessage?: string;
+  currentIsVersionPublished: boolean;
 }
 
 const ArrowWrap = styled.span`
@@ -26,16 +27,10 @@ const ArrowWrap = styled.span`
 
 export class CreateIndex extends React.Component<CreateIndexProps> {
   public render(): JSX.Element {
-    let currentIsVersionPublished;
     let indexTextUrl;
     let indexTimestamp;
 
     if (this.props.lastPublishedRevision) {
-      currentIsVersionPublished =
-        this.props.revisionJson &&
-        hashContent(revisionJsonSansDate(this.props.revisionJson)) ===
-          this.props.lastPublishedRevision.revisionJsonSansDateHash;
-
       indexTimestamp = siteFormatTimeString(this.props.lastPublishedRevision.published);
       indexTextUrl = this.props.lastPublishedRevision.data && this.props.lastPublishedRevision.data.revisionContentUrl;
     }
@@ -77,13 +72,13 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
         )}
 
         {this.props.lastPublishedRevision &&
-          !currentIsVersionPublished && (
+          !this.props.currentIsVersionPublished && (
             <ErrorText>
               Your published update no longer matches what's indexed on the smart contract and will not validate.
             </ErrorText>
           )}
 
-        {!currentIsVersionPublished && (
+        {!this.props.currentIsVersionPublished && (
           <>
             <HelpText>
               This will open a MetaMask pop-up and you must complete the transacation to index your post.

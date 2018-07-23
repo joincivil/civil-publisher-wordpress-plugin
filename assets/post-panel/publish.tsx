@@ -18,7 +18,9 @@ const BlockchainPublishPanel = compose([
         isPublishDisabled,
         getRevisionJSON,
         isCorrectNetwork,
-        getTxHash
+        getTxHash,
+        getLastPublishedRevision,
+        getCurrentIsVersionPublished,
       } = selectStore("civil/blockchain");
       const userCapabilities = getUserCapabilities();
       const publishDisabled = isPublishDisabled();
@@ -49,6 +51,8 @@ const BlockchainPublishPanel = compose([
         revisionUrl,
         isDirty,
         correctNetwork,
+        currentIsVersionPublished: getCurrentIsVersionPublished(),
+        lastPublishedRevision: getLastPublishedRevision(),
       };
     },
   ),
