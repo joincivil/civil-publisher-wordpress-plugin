@@ -60,12 +60,8 @@ export async function getNewsroom(): Promise<Newsroom> {
   return civil!.newsroomAtUntrusted(newsroomAddress);
 }
 
-export function isCorrectNetwork(): boolean {
-  const civil = getCivil();
-  if (!civil) {
-    return false;
-  }
-  return civil.networkName === "rinkeby"; // just hard code it for now
+export function isCorrectNetwork(networkName: string): boolean {
+  return networkName === "rinkeby"; // just hard code it for now
 }
 
 export function hasInjectedProvider(): boolean {

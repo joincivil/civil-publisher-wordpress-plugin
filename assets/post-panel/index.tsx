@@ -5,30 +5,31 @@ const { compose, PanelBody } = window.wp.element;
 import * as React from "react";
 import { getCivil } from "../util";
 import { Civil } from "@joincivil/core";
-import { setIsCorrectNetwork } from "./store/actions";
 import "./store";
 import { ThemeProvider } from "styled-components";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 
 export interface BlockchainPluginProps {
-  onNetworkChange(): void;
+  onNetworkChange(networkName: string): void;
 }
 
 class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginProps> {
   public civil: Civil | undefined;
+  public networkStream: any;
+
   constructor(props: BlockchainPluginProps) {
     super(props);
     this.civil = getCivil();
   }
   public componentDidMount(): void {
     if (this.civil) {
-      this.civil.addCallbackToSetNetworkEmitter(this.props.onNetworkChange);
+      this.networkStream = this.civil.networkNameStream.subscribe(this.props.onNetworkChange);
     }
   }
   public componentWillUnmount(): void {
-    if (this.civil) {
-      this.civil.removeCallbackFromSetNetworkEmitter(this.props.onNetworkChange);
+    if (this.networkStream) {
+      this.networkStream.unsubscribe();
     }
   }
   public render(): JSX.Element {
@@ -46,7 +47,8 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
 const BlockchainPluginInner = compose([
   withDispatch(
     (dispatch: any): BlockchainPluginProps => {
-      const onNetworkChange = () => dispatch(setIsCorrectNetwork());
+      const { setIsCorrectNetwork } = dispatch("civil/blockchain");
+      const onNetworkChange = (networkName: string) => dispatch(setIsCorrectNetwork(networkName));
       return {
         onNetworkChange,
       };

@@ -22,10 +22,14 @@ const NETWORK_NICE_NAME = "Rinkeby Test Network";
 export interface AppState {
   creationModalOpen: boolean;
   profileWalletAddress?: EthAddress;
+  account?: EthAddress;
+  currentNetwork?: string;
 }
 
 class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   public civil: Civil | undefined;
+  public accountStream: any;
+  public networkStream: any;
 
   constructor(props: AppProps & DispatchProp<any>) {
     super(props);
@@ -41,24 +45,38 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       this.onNewsroomCreated(newsroom.address);
     }
 
+    if (this.civil) {
+      this.accountStream = this.civil!.accountStream.subscribe(this.setUserAccount);
+      this.networkStream = this.civil!.networkNameStream.subscribe(this.setNetwork);
+    }
+
     const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
     this.setState({
       profileWalletAddress: userInfo[userMetaKeys.WALLET_ADDRESS]
     })
   }
 
-  public render(): JSX.Element {
-    const metamaskWalletAddress = this.civil && this.civil.userAccount;
+  public async componentWillMount(): Promise<void> {
+    if (this.accountStream) {
+      this.accountStream.unsubscribe();
+    }
+    if (this.networkStream) {
+      this.networkStream.unsubscribe();
+    }
+  }
 
+  public render(): JSX.Element {
     const manager = this.civil ? <Newsroom
-      disabled={metamaskWalletAddress !== this.state.profileWalletAddress}
+      disabled={this.state.account !== this.state.profileWalletAddress}
       civil={this.civil}
       address={this.props.address}
       txHash={this.props.txHash}
+      account={this.state.account}
       onNewsroomCreated={this.onNewsroomCreated}
       getNameForAddress={this.getNameForAddress}
       onContractDeployStarted={this.onContractDeployStarted}
-      network="rinkeby"
+      requiredNetwork="rinkeby"
+      currentNetwork={this.state.currentNetwork}
       renderUserSearch={this.renderUserSearch}
       theme={{
         primaryButtonBackground: "#0085ba",
@@ -78,10 +96,10 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       <>
         <WalletStatus
           noProvider={!hasInjectedProvider()}
-          walletLocked={this.civil && !this.civil.userAccount}
-          wrongNetwork={this.civil && this.civil.networkName !== NETWORK_NAME}
+          walletLocked={this.civil && !this.state.account}
+          wrongNetwork={this.civil && this.state.currentNetwork !== NETWORK_NAME}
           networkName={NETWORK_NICE_NAME}
-          metamaskWalletAddress={metamaskWalletAddress}
+          metamaskWalletAddress={this.state.account}
           profileWalletAddress={this.state.profileWalletAddress}
           saveAddressToProfile={this.saveAddressToProfile}
         />
@@ -91,6 +109,14 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       </>
 
     );
+  }
+
+  private setUserAccount = (address: EthAddress): void => {
+    this.setState({account: address});
+  }
+
+  private setNetwork = (network: string): void => {
+    this.setState({currentNetwork: network});
   }
 
   private renderUserSearch = (onSetAddress: any): JSX.Element => {
@@ -144,12 +170,12 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
         method: "POST",
         path: apiNamespace + "users/me",
         data: {
-            [userMetaKeys.WALLET_ADDRESS]: this.civil!.userAccount,
+            [userMetaKeys.WALLET_ADDRESS]: this.state.account,
         },
     });
 
     this.setState({
-      profileWalletAddress: this.civil!.userAccount
+      profileWalletAddress: this.state.account
     });
   }
 

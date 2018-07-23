@@ -142,6 +142,7 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
                 <ArticleIndexIcon />
               </IconWrap>
             </MainHeading>
+            {button}
             <HelpText>
               This will open a MetaMask pop-up and you must complete the transacation to index your post.
             </HelpText>
