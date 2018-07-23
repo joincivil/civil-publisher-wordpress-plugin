@@ -3,7 +3,6 @@ import { SignatureData } from "./interfaces";
 import { AnyAction } from "redux";
 import { postMetaKeys } from "../../constants";
 import { TxHash } from "@joincivil/core";
-const { combineReducers } = window.wp.data;
 
 export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => {
   switch (action.type) {
@@ -102,17 +101,3 @@ export const network = (
       return state;
   }
 };
-
-const reducer = combineReducers({
-  isNewsroomEditor,
-  username,
-  userWalletAddress,
-  userCapabilities,
-  signatures,
-  publishedStatus,
-  revisions,
-  civilContentID,
-  network,
-});
-
-export default reducer;
