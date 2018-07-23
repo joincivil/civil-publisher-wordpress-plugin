@@ -103,16 +103,6 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
       permissionsMessage = "you are not listed on your newsroom contract";
     }
 
-    const transactionButton = (
-      <TransactionButton
-        disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
-        transactions={transactions}
-        size={buttonSizes.SMALL}
-      >
-        Index to Blockchain
-      </TransactionButton>
-    );
-
     let lastPublishedRevision;
     if (this.props.currentPostLastRevisionId && this.props.publishedRevisions.length) {
       lastPublishedRevision = this.props.publishedRevisions[this.props.publishedRevisions.length - 1];
@@ -151,7 +141,7 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
 
             <CreateIndex
               lastPublishedRevision={lastPublishedRevision}
-              transactionButton={transactionButton}
+              transactionButton={button}
               revisionJson={this.props.revisionJson}
               insufficientPermissions={insufficientPermissions}
               permissionsMessage={permissionsMessage}
