@@ -160,9 +160,16 @@ export class WalletStatus extends React.Component<WalletStatusProps> {
           </p>
           {this.props.profileWalletAddress !== this.props.metamaskWalletAddress && (
             <>
-              <p>Your MetaMask wallet address does not match your WordPress profile's wallet address, which is {this.props.profileWalletAddress || "not set"}.</p>
+              <p>
+                Your MetaMask wallet address does not match your WordPress profile's wallet address, which is{" "}
+                {this.props.profileWalletAddress || "not set"}.
+              </p>
               {/*TODO loading state + success/error state?*/}
-              <p><Button isPrimary={true} onClick={this.props.saveAddressToProfile}>Save MetaMask address to my profile</Button></p>
+              <p>
+                <Button isPrimary={true} onClick={this.props.saveAddressToProfile}>
+                  Save MetaMask address to my profile
+                </Button>
+              </p>
             </>
           )}
         </Wrapper>

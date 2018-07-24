@@ -13,18 +13,14 @@ export type signatureStatusType = "unsigned" | "valid" | "invalid";
 const BlockchainSignPanel = compose([
   withSelect(
     (selectStore: any, ownProps: Partial<BlockchainSignPanelProps>): Partial<BlockchainSignPanelProps> => {
-      const {
-        isEditedPostDirty,
-        isCleanNewPost,
-        getCurrentPostLastRevisionId
-      } = selectStore("core/editor");
+      const { isEditedPostDirty, isCleanNewPost, getCurrentPostLastRevisionId } = selectStore("core/editor");
       const {
         getCurrrentUserId,
         getCurrentUserId,
         getLoggedInUserAddress,
         getSignatures,
         getRevisionJSON,
-        isValidSignature
+        isValidSignature,
       } = selectStore("civil/blockchain");
 
       const currentUserId = getCurrentUserId();

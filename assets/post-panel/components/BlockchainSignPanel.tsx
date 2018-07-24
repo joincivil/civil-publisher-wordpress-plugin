@@ -66,7 +66,8 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
                 </>
               ) : (
                 <>
-                  Please set your wallet address in your <a href="/wp-admin/profile.php">your profile</a> before signing.
+                  Please set your wallet address in your <a href="/wp-admin/profile.php">your profile</a> before
+                  signing.
                 </>
               )}
             </i>

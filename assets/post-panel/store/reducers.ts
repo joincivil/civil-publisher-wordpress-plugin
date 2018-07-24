@@ -7,13 +7,13 @@ import { TxHash } from "@joincivil/core";
 export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => {
   switch (action.type) {
     case actionTypes.SET_IS_NEWSROOM_EDITOR:
-      return !! action.data;
+      return !!action.data;
     default:
-      return !! state;
+      return !!state;
   }
-}
+};
 
-export const userData = (state: { [id: number]: any} = {}, action: AnyAction): { [id: number]: any} => {
+export const userData = (state: { [id: number]: any } = {}, action: AnyAction): { [id: number]: any } => {
   switch (action.type) {
     case actionTypes.SET_USER_DATA:
       const { id, userData } = action.data;
@@ -78,10 +78,7 @@ export const signatures = (state: SignatureData = {}, action: AnyAction): Signat
   }
 };
 
-export const network = (
-  state: { isCorrectNetwork: boolean } = { isCorrectNetwork: true },
-  action: AnyAction,
-) => {
+export const network = (state: { isCorrectNetwork: boolean } = { isCorrectNetwork: true }, action: AnyAction) => {
   switch (action.type) {
     case actionTypes.CHANGE_NETWORK:
       return action.data;

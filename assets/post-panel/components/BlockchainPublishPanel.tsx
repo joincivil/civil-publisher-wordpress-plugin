@@ -21,7 +21,7 @@ export interface BlockchainPublishPanelProps {
   txHash?: TxHash;
   lastPublishedRevision: any;
   currentIsVersionPublished: boolean;
-  userCapabilities: {[capability: string]: boolean};
+  userCapabilities: { [capability: string]: boolean };
   publishContent?(contentId: number, revisionId: number, revisionJson: any): void;
   updateContent?(revisionId: number, revisionJson: any): void;
   saveTxHash?(txHash: TxHash): void;
@@ -31,27 +31,30 @@ export interface BlockchainPublishPanelState {
   loadedWithTxHash: boolean;
 }
 
-export class BlockchainPublishPanelComponent extends React.Component<BlockchainPublishPanelProps, BlockchainPublishPanelState> {
+export class BlockchainPublishPanelComponent extends React.Component<
+  BlockchainPublishPanelProps,
+  BlockchainPublishPanelState
+> {
   constructor(props: BlockchainPublishPanelProps) {
     super(props);
     this.state = {
       loadedWithTxHash: false,
-    }
+    };
   }
   public async componentDidMount(): Promise<void> {
     if (this.props.txHash && this.props.txHash.length > 0) {
-      this.setState({loadedWithTxHash: true});
+      this.setState({ loadedWithTxHash: true });
       const newsroom = await getNewsroom();
       if (!this.props.civilContentID) {
         const contentId = await newsroom.contentIdFromTxHash(this.props.txHash);
         await this.props.publishContent!(contentId, this.props.currentPostLastRevisionId!, this.props.revisionJson);
         this.props.saveTxHash!("");
-        this.setState({loadedWithTxHash: false});
+        this.setState({ loadedWithTxHash: false });
       } else {
-        const revisionId = await newsroom.revisionFromTxHash(this.props.txHash)
+        const revisionId = await newsroom.revisionFromTxHash(this.props.txHash);
         await this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson);
         this.props.saveTxHash!("");
-        this.setState({loadedWithTxHash: false});
+        this.setState({ loadedWithTxHash: false });
       }
     }
   }
@@ -74,7 +77,7 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
           },
           handleTransactionHash: (txHash: TxHash) => {
             this.props.saveTxHash!(txHash);
-          }
+          },
         },
       ];
     } else {
@@ -90,7 +93,7 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
           },
           handleTransactionHash: (txHash: TxHash) => {
             this.props.saveTxHash!(txHash);
-          }
+          },
         },
       ];
     }
@@ -105,15 +108,17 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
       permissionsMessage = "you are not listed on your newsroom contract";
     }
 
-    const button = this.state.loadedWithTxHash ?
-      <DisabledTransactionProcessingButton>Transaction In Progress...</DisabledTransactionProcessingButton> :
-      (<TransactionButton
-          Button={IndexTransactionButton}
-          disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
-          transactions={transactions}
-        >
-          Index to Blockchain
-      </TransactionButton>);
+    const button = this.state.loadedWithTxHash ? (
+      <DisabledTransactionProcessingButton>Transaction In Progress...</DisabledTransactionProcessingButton>
+    ) : (
+      <TransactionButton
+        Button={IndexTransactionButton}
+        disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
+        transactions={transactions}
+      >
+        Index to Blockchain
+      </TransactionButton>
+    );
 
     return (
       <Wrapper>
@@ -126,7 +131,10 @@ export class BlockchainPublishPanelComponent extends React.Component<BlockchainP
         </IntroSection>
 
         <Body>
-          <PostStatus requirePublish={true} actionString={(this.props.lastPublishedRevision ? "re-" : "") + "indexing"} />
+          <PostStatus
+            requirePublish={true}
+            actionString={(this.props.lastPublishedRevision ? "re-" : "") + "indexing"}
+          />
           <BodySection>
             <MainHeading>
               Create Index

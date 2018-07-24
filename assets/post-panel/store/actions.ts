@@ -17,7 +17,7 @@ export function setUserData(id: number | "me", userData: any): AnyAction {
     data: {
       id,
       userData,
-    }
+    },
   };
 }
 
@@ -68,4 +68,4 @@ export const setIsCorrectNetwork = (networkName: string): AnyAction => {
       isCorrectNetwork: isCorrectNetwork(networkName),
     },
   };
-}
+};

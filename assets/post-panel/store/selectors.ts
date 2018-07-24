@@ -19,7 +19,7 @@ export function isNewsroomEditor(state: any): boolean {
 }
 
 /** If no id supplied, defaults to current user. */
-export function getUserData(state: any, id?: number | "me"): any  {
+export function getUserData(state: any, id?: number | "me"): any {
   if (!id) {
     id = select("civil/blockchain").getCurrentUserId() || "me";
   }
@@ -123,7 +123,7 @@ export function isCorrectNetwork(state: any): boolean {
 export function getTxHash(): TxHash | null {
   const txHash = getPostMeta()[postMetaKeys.CIVIL_PUBLISH_TXHASH];
   return txHash;
-};
+}
 
 export function getCurrentIsVersionPublished(state: any): boolean {
   const editorStore = select("core/editor");
@@ -138,8 +138,9 @@ export function getCurrentIsVersionPublished(state: any): boolean {
   }
   const revisionJson = getRevisionJSON(state, currentPostLastRevisionId);
 
-  return revisionJson &&
-    hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash;
+  return (
+    revisionJson && hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash
+  );
 }
 
 export function getLastPublishedRevision(state: any): any {

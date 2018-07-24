@@ -42,9 +42,7 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
 
 export const Signature = withSelect(
   (selectStore: any, ownProps: Partial<SignatureProps>): Partial<SignatureProps> => {
-    const { getUserData } = selectStore(
-      "civil/blockchain",
-    );
+    const { getUserData } = selectStore("civil/blockchain");
 
     return {
       ...ownProps,

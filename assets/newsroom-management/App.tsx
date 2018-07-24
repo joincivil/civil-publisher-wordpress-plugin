@@ -52,8 +52,8 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
 
     const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
     this.setState({
-      profileWalletAddress: userInfo[userMetaKeys.WALLET_ADDRESS]
-    })
+      profileWalletAddress: userInfo[userMetaKeys.WALLET_ADDRESS],
+    });
   }
 
   public async componentWillMount(): Promise<void> {
@@ -66,32 +66,34 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   }
 
   public render(): JSX.Element {
-    const manager = this.civil ? <Newsroom
-      disabled={this.state.account !== this.state.profileWalletAddress}
-      civil={this.civil}
-      address={this.props.address}
-      txHash={this.props.txHash}
-      account={this.state.account}
-      onNewsroomCreated={this.onNewsroomCreated}
-      getNameForAddress={this.getNameForAddress}
-      onContractDeployStarted={this.onContractDeployStarted}
-      requiredNetwork="rinkeby"
-      currentNetwork={this.state.currentNetwork}
-      renderUserSearch={this.renderUserSearch}
-      theme={{
-        primaryButtonBackground: "#0085ba",
-        primaryButtonColor: "#fff",
-        primaryButtonHoverBackground: "#008ec2",
-        primaryButtonDisabledBackground: "#008ec2",
-        primaryButtonDisabledColor: "#66c6e4",
-        primaryButtonTextTransform: "none",
-        secondaryButtonColor: "#555555",
-        secondaryButtonBackground: "transparent",
-        secondaryButtonBorder: "#cccccc",
-        borderlessButtonColor: "#0085ba",
-        borderlessButtonHoverColor: "#008ec2",
-      }}
-    /> : null;
+    const manager = this.civil ? (
+      <Newsroom
+        disabled={this.state.account !== this.state.profileWalletAddress}
+        civil={this.civil}
+        address={this.props.address}
+        txHash={this.props.txHash}
+        account={this.state.account}
+        onNewsroomCreated={this.onNewsroomCreated}
+        getNameForAddress={this.getNameForAddress}
+        onContractDeployStarted={this.onContractDeployStarted}
+        requiredNetwork="rinkeby"
+        currentNetwork={this.state.currentNetwork}
+        renderUserSearch={this.renderUserSearch}
+        theme={{
+          primaryButtonBackground: "#0085ba",
+          primaryButtonColor: "#fff",
+          primaryButtonHoverBackground: "#008ec2",
+          primaryButtonDisabledBackground: "#008ec2",
+          primaryButtonDisabledColor: "#66c6e4",
+          primaryButtonTextTransform: "none",
+          secondaryButtonColor: "#555555",
+          secondaryButtonBackground: "transparent",
+          secondaryButtonBorder: "#cccccc",
+          borderlessButtonColor: "#0085ba",
+          borderlessButtonHoverColor: "#008ec2",
+        }}
+      />
+    ) : null;
     return (
       <>
         <WalletStatus
@@ -107,40 +109,46 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
         {manager}
         {this.renderCreationModal()}
       </>
-
     );
   }
 
   private setUserAccount = (address: EthAddress): void => {
-    this.setState({account: address});
-  }
+    this.setState({ account: address });
+  };
 
   private setNetwork = (network: string): void => {
-    this.setState({currentNetwork: network});
-  }
+    this.setState({ currentNetwork: network });
+  };
 
   private renderUserSearch = (onSetAddress: any): JSX.Element => {
-    return <SearchUsers onSetAddress={onSetAddress} getOptions={this.fetchUserTypeAhead}/>;
-  }
+    return <SearchUsers onSetAddress={onSetAddress} getOptions={this.fetchUserTypeAhead} />;
+  };
 
   private fetchUserTypeAhead = async (str: string): Promise<any[]> => {
     return apiRequest({
       method: "GET",
       path: `/wp/v2/users?search=${str}&context=edit`,
     });
-  }
+  };
 
   private renderCreationModal = (): JSX.Element | null => {
     if (!this.state.creationModalOpen) {
       return null;
     }
-    return (<Modal>
-      <h2>Congratulations!</h2>
-      <p>You've created a newsroom.</p>
-      <p>Now you can add additional officers and editors to help you manage your newsroom and publish content on the blockchain.</p>
-      <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({creationModalOpen: false})}>Close</Button>
-    </Modal>)
-  }
+    return (
+      <Modal>
+        <h2>Congratulations!</h2>
+        <p>You've created a newsroom.</p>
+        <p>
+          Now you can add additional officers and editors to help you manage your newsroom and publish content on the
+          blockchain.
+        </p>
+        <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({ creationModalOpen: false })}>
+          Close
+        </Button>
+      </Modal>
+    );
+  };
 
   private onContractDeployStarted = async (txHash: TxHash) => {
     const settings = await apiRequest({
@@ -161,23 +169,23 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
         [siteOptionKeys.NEWSROOM_ADDRESS]: address,
       },
     });
-    this.setState({creationModalOpen: true});
+    this.setState({ creationModalOpen: true });
     this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
   };
 
   private saveAddressToProfile = async () => {
     await apiRequest({
-        method: "POST",
-        path: apiNamespace + "users/me",
-        data: {
-            [userMetaKeys.WALLET_ADDRESS]: this.state.account,
-        },
+      method: "POST",
+      path: apiNamespace + "users/me",
+      data: {
+        [userMetaKeys.WALLET_ADDRESS]: this.state.account,
+      },
     });
 
     this.setState({
-      profileWalletAddress: this.state.account
+      profileWalletAddress: this.state.account,
     });
-  }
+  };
 
   private getNameForAddress = async (address: EthAddress) => {
     try {

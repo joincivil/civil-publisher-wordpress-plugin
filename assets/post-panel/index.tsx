@@ -77,8 +77,8 @@ const CivilSidebar = () => {
   return (
     <>
       <PluginSidebar name="civil-sidebar" title="Civil">
-        <ThemeProvider theme={
-          {
+        <ThemeProvider
+          theme={{
             primaryButtonBackground: "#0085ba",
             primaryButtonColor: "#fff",
             primaryButtonHoverBackground: "#008ec2",
@@ -90,8 +90,8 @@ const CivilSidebar = () => {
             secondaryButtonBorder: "#cccccc",
             borderlessButtonColor: "#0085ba",
             borderlessButtonHoverColor: "#008ec2",
-          }
-        }>
+          }}
+        >
           {panelContent}
         </ThemeProvider>
       </PluginSidebar>
@@ -101,7 +101,9 @@ const CivilSidebar = () => {
 };
 
 const CivilSidebarToggle = (
-  <><CivilSidebarWithComposed/></>
+  <>
+    <CivilSidebarWithComposed />
+  </>
 );
 
 registerPlugin("civil-sidebar", {
