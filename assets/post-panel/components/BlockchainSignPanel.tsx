@@ -50,7 +50,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
                 <ArticleSignIcon />
               </IconWrap>
             </MainHeading>
-            {Object.keys(this.props.signatures).length > 0 && <>{signatures}</>}
+            {signatures}
             <p>
               <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
                 Sign Article

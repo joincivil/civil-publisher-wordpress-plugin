@@ -1,10 +1,10 @@
-import { EthAddress, TxHash } from "@joincivil/core";
+import { EthAddress, TxHash, ApprovedRevision } from "@joincivil/core";
 
+import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage, hashContent } from "@joincivil/utils";
 import { postMetaKeys, userMetaKeys } from "../../constants";
 import { SignatureData } from "./interfaces";
 import { setCivilContentID, updatePublishedState } from "./actions";
 import { revisionJsonSansDate } from "../../util";
-import { hashContent } from "@joincivil/utils";
 
 const { dispatch, select } = window.wp.data;
 
@@ -147,4 +147,32 @@ export function getLastPublishedRevision(state: any): any {
   if (publishedRevisions.length) {
     return publishedRevisions[publishedRevisions.length - 1];
   }
+}
+
+export function isValidSignature(state: any, signature: ApprovedRevision): boolean {
+  const { getCurrentPostLastRevisionId } = select("core/editor");
+  const contentId = getCurrentPostLastRevisionId();
+  const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
+  let revisionJson: any;
+  if (contentId) {
+    revisionJson = getRevisionJSON(state, contentId);
+  }
+  if (!revisionJson) {
+    return false;
+  }
+  if (revisionJson.revisionContentHash !== signature.contentHash) {
+    return false;
+  }
+  if (signature.newsroomAddress !== newsroomAddress) {
+    return false;
+  }
+  if (
+    recoverSignerPersonal({
+      message: prepareUserFriendlyNewsroomMessage(signature.newsroomAddress, signature.contentHash),
+      signature: signature.signature,
+    }) !== signature.author
+  ) {
+    return false;
+  }
+  return true;
 }

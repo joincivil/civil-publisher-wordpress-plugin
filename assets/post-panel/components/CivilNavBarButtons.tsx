@@ -34,6 +34,8 @@ export interface CivilNavBarButtonsProps {
     txHash?: TxHash;
     lastpublishedRevision?: any;
     currentIsVersionPublished?: boolean;
+    isSignaturePresent?: boolean;
+    isSignatureValid?: boolean;
 }
 
 export class CivilNavBarButtons extends React.Component<CivilNavBarButtonsProps> {
@@ -43,7 +45,7 @@ export class CivilNavBarButtons extends React.Component<CivilNavBarButtonsProps>
             <CivilButton> Civil </CivilButton>
             <IconSection isClosed={this.props.isClosed}>
                 <ArticleSignIcon color={color} />
-                <CircleIndicator border={!this.props.isClosed!} indicatorColor={indicatorColors.WHITE}/>
+                <CircleIndicator border={!this.props.isClosed!} indicatorColor={this.signIndicatorColor()}/>
                 <ArticleIndexIcon color={color}/>
                 <CircleIndicator border={!this.props.isClosed!} indicatorColor={this.indexIndicatorColor()}/>
             </IconSection>
@@ -59,5 +61,15 @@ export class CivilNavBarButtons extends React.Component<CivilNavBarButtonsProps>
             return indicatorColors.GREEN;
         }
         return indicatorColors.WHITE;
+    }
+
+    private signIndicatorColor = (): indicatorColors => {
+        if (!this.props.isSignaturePresent) {
+            return indicatorColors.WHITE;
+        }
+        if (this.props.isSignatureValid) {
+            return indicatorColors.GREEN;
+        }
+        return indicatorColors.RED;
     }
 }

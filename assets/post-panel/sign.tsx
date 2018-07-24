@@ -13,8 +13,19 @@ export type signatureStatusType = "unsigned" | "valid" | "invalid";
 const BlockchainSignPanel = compose([
   withSelect(
     (selectStore: any, ownProps: Partial<BlockchainSignPanelProps>): Partial<BlockchainSignPanelProps> => {
-      const { isEditedPostDirty, isCleanNewPost, getCurrentPostLastRevisionId } = selectStore("core/editor");
-      const { getCurrrentUserId, getCurrentUserId, getLoggedInUserAddress, getSignatures, getRevisionJSON } = selectStore("civil/blockchain");
+      const {
+        isEditedPostDirty,
+        isCleanNewPost,
+        getCurrentPostLastRevisionId
+      } = selectStore("core/editor");
+      const {
+        getCurrrentUserId,
+        getCurrentUserId,
+        getLoggedInUserAddress,
+        getSignatures,
+        getRevisionJSON,
+        isValidSignature
+      } = selectStore("civil/blockchain");
 
       const currentUserId = getCurrentUserId();
       const contentID = getCurrentPostLastRevisionId();
@@ -24,28 +35,6 @@ const BlockchainSignPanel = compose([
         revisionJson = getRevisionJSON(contentID);
       }
       const signatures = getSignatures();
-
-      /** Check if given signature is valid given the current post content. */
-      const isValidSignature = (signature: ApprovedRevision): boolean => {
-        if (!revisionJson) {
-          return false;
-        }
-        if (revisionJson.revisionContentHash !== signature.contentHash) {
-          return false;
-        }
-        if (signature.newsroomAddress !== newsroomAddress) {
-          return false;
-        }
-        if (
-          recoverSignerPersonal({
-            message: prepareUserFriendlyNewsroomMessage(signature.newsroomAddress, signature.contentHash),
-            signature: signature.signature,
-          }) !== signature.author
-        ) {
-          return false;
-        }
-        return true;
-      };
 
       const isSignButtonDisabled = (): boolean => {
         if (!getLoggedInUserAddress()) {

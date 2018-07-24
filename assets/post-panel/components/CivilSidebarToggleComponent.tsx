@@ -25,7 +25,6 @@ export class CivilSidebarToggleComponent extends React.Component<CivilNavBarButt
     }
 
     public render(): JSX.Element {
-      console.log({props: this.props, state: this.state});
       const portal = ReactDom.createPortal(<CivilNavBarButtons {...this.props}/>, this.el);
       return <>
         {portal}
@@ -42,13 +41,26 @@ export const CivilSidebarWithComposed = compose([
             getTxHash,
             getLastPublishedRevision,
             getCurrentIsVersionPublished,
+            getCurrentUserId,
+            getSignatures,
+            isValidSignature,
         } = selectStore("civil/blockchain");
+
+        const userId = getCurrentUserId();
+        const signatures = getSignatures();
+        const ownSignature = signatures[userId];
+        let isSignatureValid: boolean | undefined;
+        if (ownSignature) {
+            isSignatureValid = isValidSignature(ownSignature);
+        }
 
         return {
             isClosed: isPluginSidebarOpened(),
             txHash: getTxHash(),
             lastpublishedRevision: getLastPublishedRevision(),
             currentIsVersionPublished: getCurrentIsVersionPublished(),
+            isSignaturePresent: !!ownSignature,
+            isSignatureValid,
         }
     }),
   ])(CivilSidebarToggleComponent);
