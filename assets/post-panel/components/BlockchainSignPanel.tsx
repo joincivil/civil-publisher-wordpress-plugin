@@ -51,6 +51,9 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
               </IconWrap>
             </MainHeading>
             {signatures}
+            <HelpText style={{ marginTop: 16 }}>
+              This will open a MetaMask pop-up that will ask you to sign a statement. Note: that this step is optional.
+            </HelpText>
             <p>
               <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
                 Sign Article

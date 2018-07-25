@@ -15,6 +15,7 @@ export const Wrapper = styled.div`
   }
 
   p {
+    margin-bottom: 16px;
     font-size: 13px;
     line-height: 1.31;
     letter-spacing: -0.1px;
@@ -83,7 +84,9 @@ export const BodySection = styled.div`
 `;
 
 export const HelpText = styled.p`
-  opacity: 0.3;
+  && {
+    color: #72777C;
+  }
 `;
 
 export const ErrorText = styled.p`
