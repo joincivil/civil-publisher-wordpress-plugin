@@ -102,10 +102,10 @@ export class BlockchainPublishPanelComponent extends React.Component<
     let permissionsMessage;
     if (!this.props.userCapabilities.publish_posts) {
       insufficientPermissions = true;
-      permissionsMessage = "your WordPress user account cannot publish posts";
+      permissionsMessage = "Only Editors and Admins have the ability to publish and index posts.";
     } else if (!this.props.isNewsroomEditor) {
       insufficientPermissions = true;
-      permissionsMessage = "you are not listed on your newsroom contract";
+      permissionsMessage = "You are not listed on your newsroom contract.";
     }
 
     const button = this.state.loadedWithTxHash ? (

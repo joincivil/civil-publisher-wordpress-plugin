@@ -40,7 +40,7 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
         {this.props.insufficientPermissions ? (
           <>
             <p>
-              You are not able to index this post to your newsroom contract because {this.props.permissionsMessage}.
+              You are not able to index this post to your newsroom contract on the Ethereum blockchain. {this.props.permissionsMessage}
             </p>
             {/* TODO: Right now Sign and Record are on same panel so Sign is above this message. When we move them to separate tabs, "sign your post" should be a link that opens the Sign tab. */}
             <p>You can sign your post above for enhanced credibility and verification using your wallet address.</p>
