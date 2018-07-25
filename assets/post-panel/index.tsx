@@ -6,6 +6,7 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 import { getCivil } from "../util";
 import { Civil } from "@joincivil/core";
+import { Tabs, Tab } from "@joincivil/components";
 import "./store";
 import { ThemeProvider } from "styled-components";
 import BlockchainSignPanel from "./sign";
@@ -69,8 +70,14 @@ const CivilSidebar = () => {
   if (window.civilNamespace.newsroomAddress) {
     panelContent = (
       <BlockchainPluginInner>
-        <BlockchainSignPanel />
-        <BlockchainPublishPanel />
+        <Tabs>
+        <Tab title="Sign">
+          <BlockchainSignPanel />
+        </Tab>
+        <Tab title="index">
+          <BlockchainPublishPanel />
+        </Tab>
+        </Tabs>
       </BlockchainPluginInner>
     );
   }
@@ -90,6 +97,7 @@ const CivilSidebar = () => {
             secondaryButtonBorder: "#cccccc",
             borderlessButtonColor: "#0085ba",
             borderlessButtonHoverColor: "#008ec2",
+            sanserifFont: `-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif`,
           }}
         >
           {panelContent}
