@@ -1,7 +1,7 @@
 const { Button } = window.wp.components;
 import * as React from "react";
 import { EthAddress, ApprovedRevision } from "@joincivil/core";
-import { ArticleSignIcon } from "@joincivil/components";
+import { ArticleSignPanelIcon } from "@joincivil/components";
 import { SignatureData } from "../store/interfaces";
 import { PostStatus } from "./PostStatus";
 import { Signature } from "./Signature";
@@ -46,8 +46,8 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           <BodySection>
             <MainHeading>
               Signatures
-              <IconWrap>
-                <ArticleSignIcon />
+              <IconWrap style={{ top: 5 }}>
+                <ArticleSignPanelIcon />
               </IconWrap>
             </MainHeading>
             {signatures}

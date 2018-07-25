@@ -38,11 +38,11 @@ export const Heading = styled.div`
   color: #23282d;
 
   ${IconWrap} {
+    top: 3px;
     left: 6px;
     svg {
       width: 18px;
       height: 18px;
-      opacity: 0.5;
     }
   }
 `;

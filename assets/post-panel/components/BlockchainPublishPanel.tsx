@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArticleIndexIcon, TransactionButton, buttonSizes } from "@joincivil/components";
+import { ArticleIndexPanelIcon, TransactionButton, buttonSizes } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PostStatus } from "./PostStatus";
@@ -139,7 +139,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
             <MainHeading>
               Create Index
               <IconWrap>
-                <ArticleIndexIcon />
+                <ArticleIndexPanelIcon />
               </IconWrap>
             </MainHeading>
 
