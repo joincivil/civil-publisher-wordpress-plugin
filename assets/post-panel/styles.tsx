@@ -83,7 +83,11 @@ export const BodySection = styled.div`
   }
 `;
 
-export const HelpText = styled.p`
+export interface HelpTextProps {
+  disabled?: boolean;
+}
+export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTextProps, "p">("p")`
+  opacity: ${props => (props.disabled ? 0.3 : 1)};
   && {
     color: #72777C;
   }

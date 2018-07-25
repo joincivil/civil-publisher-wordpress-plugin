@@ -108,12 +108,13 @@ export class BlockchainPublishPanelComponent extends React.Component<
       permissionsMessage = "You are not listed on your newsroom contract.";
     }
 
+    const buttonDisabled = this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions;
     const button = this.state.loadedWithTxHash ? (
       <DisabledTransactionProcessingButton>Transaction In Progress...</DisabledTransactionProcessingButton>
     ) : (
       <TransactionButton
         Button={IndexTransactionButton}
-        disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
+        disabled={buttonDisabled}
         transactions={transactions}
       >
         Index to Blockchain
@@ -146,6 +147,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
             <CreateIndex
               lastPublishedRevision={this.props.lastPublishedRevision}
               transactionButton={button}
+              transactionButtonDisabled={buttonDisabled}
               revisionJson={this.props.revisionJson}
               insufficientPermissions={insufficientPermissions}
               permissionsMessage={permissionsMessage}

@@ -11,6 +11,7 @@ export interface CreateIndexProps {
   lastPublishedRevision?: any;
   revisionJson?: any;
   transactionButton: JSX.Element;
+  transactionButtonDisabled: boolean;
   insufficientPermissions: boolean;
   permissionsMessage?: string;
   currentIsVersionPublished: boolean;
@@ -80,7 +81,7 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
 
         {!this.props.currentIsVersionPublished && (
           <>
-            <HelpText>
+            <HelpText disabled={this.props.transactionButtonDisabled}>
               This will open a MetaMask pop-up and you must complete the transacation to index your post.
             </HelpText>
 
