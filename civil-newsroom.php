@@ -13,8 +13,8 @@ namespace Civil_Newsroom_Protocol;
 
 define( __NAMESPACE__ . '\PATH', dirname( __FILE__ ) );
 define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil-newsroom-protocol/v1' );
-define( __NAMESPACE__ . '\SCHEMA_VERSION', '1.0.0' );
-define( __NAMESPACE__ . '\ASSETS_VERSION', '1.1.50' );
+define( __NAMESPACE__ . '\SCHEMA_VERSION', '0.0.1' );
+define( __NAMESPACE__ . '\ASSETS_VERSION', '1.1.51' );
 // Post meta.
 define( __NAMESPACE__ . '\REVISION_HASH_META_KEY', 'civil_newsroom_protocol_revision_hash' );
 define( __NAMESPACE__ . '\REVISION_DATA_META_KEY', 'civil_newsroom_protocol_revision_extra_data' );
