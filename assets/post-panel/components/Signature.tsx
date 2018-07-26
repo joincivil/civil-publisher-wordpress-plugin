@@ -7,7 +7,7 @@ import { IconWrap } from "../styles";
 
 export interface SignatureProps {
   authorUserId: number;
-  sigData: ApprovedRevision
+  sigData: ApprovedRevision;
   isDirty: boolean;
   isValid: boolean;
   userData: any;
@@ -32,7 +32,7 @@ const Avatar = styled.img`
   width: 24px;
   margin-right: 8px;
   border-radius: 50%;
-  border: .5px solid #d5d5d5;
+  border: 0.5px solid #d5d5d5;
 `;
 
 function SignatureComponent(ownProps: SignatureProps): JSX.Element {
@@ -40,7 +40,7 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
 
   let validIndicator;
   let showValidity = true;
-  if (! sigData || isValid === null) {
+  if (!sigData || isValid === null) {
     // still loading, or not yet signed
     showValidity = false;
   } else if (!isValid) {

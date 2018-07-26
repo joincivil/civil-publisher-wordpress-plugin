@@ -89,7 +89,7 @@ export interface HelpTextProps {
 export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTextProps, "p">("p")`
   opacity: ${props => (props.disabled ? 0.3 : 1)};
   && {
-    color: #72777C;
+    color: #72777c;
   }
 `;
 
