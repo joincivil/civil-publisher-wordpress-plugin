@@ -33,7 +33,7 @@ export const IconWrap = styled.span`
 `;
 
 export const Heading = styled.div`
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   font-size: 14px;
   letter-spacing: -0.2px;
   color: #23282d;

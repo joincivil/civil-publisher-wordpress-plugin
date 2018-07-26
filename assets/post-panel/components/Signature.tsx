@@ -1,14 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
-import { EthAddress, Hex } from "@joincivil/core";
+import { ApprovedRevision, EthAddress, Hex } from "@joincivil/core";
 import { HollowGreenCheck, HollowRedNoGood, QuestionToolTip } from "@joincivil/components";
 const { withSelect } = window.wp.data;
 import { IconWrap } from "../styles";
 
 export interface SignatureProps {
   authorUserId: number;
-  authorAddress: EthAddress;
-  sig: Hex;
+  sigData: ApprovedRevision
   isDirty: boolean;
   isValid: boolean;
   userData: any;
@@ -18,7 +17,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
+  margin-bottom: 16px;
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 const UserWrap = styled.span`
@@ -34,12 +36,12 @@ const Avatar = styled.img`
 `;
 
 function SignatureComponent(ownProps: SignatureProps): JSX.Element {
-  const { userData, authorAddress, sig, isDirty, isValid } = ownProps;
+  const { sigData, userData, isDirty, isValid } = ownProps;
 
   let validIndicator;
   let showValidity = true;
-  if (isValid === null) {
-    // still loading
+  if (! sigData || isValid === null) {
+    // still loading, or not yet signed
     showValidity = false;
   } else if (!isValid) {
     validIndicator = <HollowRedNoGood />;
@@ -66,10 +68,12 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
 
 export const Signature = withSelect(
   (selectStore: any, ownProps: Partial<SignatureProps>): Partial<SignatureProps> => {
+    const { isEditedPostDirty } = selectStore("core/editor");
     const { getUserData } = selectStore("civil/blockchain");
 
     return {
       ...ownProps,
+      isDirty: isEditedPostDirty(),
       userData: getUserData(ownProps.authorUserId),
     };
   },

@@ -17,6 +17,9 @@ function isResolving(selectorName: string, ...args: any[]): boolean {
 export function isNewsroomEditor(state: any): boolean {
   return state.isNewsroomEditor;
 }
+export function isWpEditor(): boolean {
+  return select("civil/blockchain").getUserCapabilities().edit_others_posts;
+}
 
 /** If no id supplied, defaults to current user. */
 export function getUserData(state: any, id?: number | "me"): any {
