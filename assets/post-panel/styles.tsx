@@ -15,6 +15,7 @@ export const Wrapper = styled.div`
   }
 
   p {
+    margin-bottom: 16px;
     font-size: 13px;
     line-height: 1.31;
     letter-spacing: -0.1px;
@@ -32,17 +33,17 @@ export const IconWrap = styled.span`
 `;
 
 export const Heading = styled.div`
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   font-size: 14px;
   letter-spacing: -0.2px;
   color: #23282d;
 
   ${IconWrap} {
+    top: 3px;
     left: 6px;
     svg {
       width: 18px;
       height: 18px;
-      opacity: 0.5;
     }
   }
 `;
@@ -82,8 +83,14 @@ export const BodySection = styled.div`
   }
 `;
 
-export const HelpText = styled.p`
-  opacity: 0.3;
+export interface HelpTextProps {
+  disabled?: boolean;
+}
+export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTextProps, "p">("p")`
+  opacity: ${props => (props.disabled ? 0.3 : 1)};
+  && {
+    color: #72777c;
+  }
 `;
 
 export const ErrorText = styled.p`

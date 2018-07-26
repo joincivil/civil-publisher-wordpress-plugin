@@ -1,14 +1,25 @@
 const { Button } = window.wp.components;
 import * as React from "react";
 import { EthAddress, ApprovedRevision } from "@joincivil/core";
-import { ArticleSignIcon } from "@joincivil/components";
+import { ArticleSignPanelIcon } from "@joincivil/components";
 import { SignatureData } from "../store/interfaces";
 import { PostStatus } from "./PostStatus";
 import { Signature } from "./Signature";
-import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, HelpText } from "../styles";
+import {
+  Wrapper,
+  IconWrap,
+  Heading,
+  MainHeading,
+  IntroSection,
+  Body,
+  BodySection,
+  ErrorText,
+  HelpText,
+} from "../styles";
 
 export interface BlockchainSignPanelProps {
   currentUserId: number;
+  isWpEditor: boolean;
   signatures: SignatureData;
   signDisabled: boolean;
   userWalletAddress?: EthAddress;
@@ -19,17 +30,24 @@ export interface BlockchainSignPanelProps {
 
 export class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelProps> {
   public render(): JSX.Element {
-    const signatures = Object.entries(this.props.signatures).map(
-      ([key, val]: [string, ApprovedRevision]): JSX.Element => (
-        <Signature
-          authorUserId={key}
-          authorAddress={val.author}
-          sig={val.signature}
-          isDirty={this.props.isDirty}
-          isValid={this.props.isValidSignature(val)}
-        />
-      ),
-    );
+    const ownSigData = this.props.signatures[this.props.currentUserId];
+    const ownSigValid = ownSigData && this.props.isValidSignature(ownSigData);
+    const needsReSign = ownSigData && !ownSigValid;
+    const ownSig = <Signature authorUserId={this.props.currentUserId} sigData={ownSigData} isValid={ownSigValid} />;
+
+    const othersSigs = Object.entries(this.props.signatures)
+      .filter(
+        ([userId, sigData]: [string, ApprovedRevision]): boolean => parseInt(userId, 10) !== this.props.currentUserId,
+      )
+      .map(
+        ([userId, sigData]: [string, ApprovedRevision]): JSX.Element => (
+          <Signature
+            authorUserId={parseInt(userId, 10)}
+            sigData={sigData}
+            isValid={this.props.isValidSignature(sigData)}
+          />
+        ),
+      );
 
     return (
       <Wrapper>
@@ -46,17 +64,30 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           <BodySection>
             <MainHeading>
               Signatures
-              <IconWrap>
-                <ArticleSignIcon />
+              <IconWrap style={{ top: 5 }}>
+                <ArticleSignPanelIcon />
               </IconWrap>
             </MainHeading>
-            {signatures}
+
+            {!this.props.signDisabled &&
+              (needsReSign ? (
+                <ErrorText>Post updated and signature is no longer valid. Needs to be re-signed.</ErrorText>
+              ) : (
+                <p>Post ready to sign.</p>
+              ))}
+            {ownSig}
+
+            <HelpText disabled={this.props.signDisabled}>
+              This will open a MetaMask pop-up that will ask you to sign a statement. Note: this step is optional.
+            </HelpText>
             <p>
               <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
-                Sign Article
+                {needsReSign ? "Re-s" : "S"}ign Post
               </Button>
             </p>
           </BodySection>
+
+          {this.props.isWpEditor && !!othersSigs.length && <BodySection>{othersSigs}</BodySection>}
 
           <BodySection>
             <i>

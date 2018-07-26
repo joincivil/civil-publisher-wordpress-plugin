@@ -170,18 +170,19 @@ export class BlockchainPublishPanelComponent extends React.Component<
     let permissionsMessage;
     if (!this.props.userCapabilities.publish_posts) {
       insufficientPermissions = true;
-      permissionsMessage = "your WordPress user account cannot publish posts";
+      permissionsMessage = "Only Editors and Admins have the ability to publish and index posts.";
     } else if (!this.props.isNewsroomEditor) {
       insufficientPermissions = true;
-      permissionsMessage = "you are not listed on your newsroom contract";
+      permissionsMessage = "You are not listed on your newsroom contract.";
     }
 
+    const buttonDisabled = this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions;
     const button = this.state.loadedWithTxHash ? (
       <DisabledTransactionProcessingButton>Transaction In Progress...</DisabledTransactionProcessingButton>
     ) : (
       <TransactionButtonNoModal
         Button={IndexTransactionButton}
-        disabled={this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions}
+        disabled={buttonDisabled}
         transactions={transactions}
       >
         Index to Blockchain
@@ -207,13 +208,14 @@ export class BlockchainPublishPanelComponent extends React.Component<
             <MainHeading>
               Create Index
               <IconWrap>
-                <ArticleIndexIcon />
+                <ArticleIndexPanelIcon />
               </IconWrap>
             </MainHeading>
 
             <CreateIndex
               lastPublishedRevision={this.props.lastPublishedRevision}
               transactionButton={button}
+              transactionButtonDisabled={buttonDisabled}
               revisionJson={this.props.revisionJson}
               insufficientPermissions={insufficientPermissions}
               permissionsMessage={permissionsMessage}

@@ -5,7 +5,7 @@ import { Newsroom } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
 import { addAddress, addTxHash } from "./actions";
-import { getNewsroomAddress, getCivil, hasInjectedProvider } from "../util";
+import { getCivil, hasInjectedProvider } from "../util";
 import { apiNamespace, siteOptionKeys, userMetaKeys } from "../constants";
 import { WalletStatus } from "./WalletStatus";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
