@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArticleIndexIcon, TransactionButtonNoModal, Modal, buttonSizes, BorderlessButton, Button } from "@joincivil/components";
+import { ArticleIndexPanelIcon, TransactionButtonNoModal, Modal, buttonSizes, BorderlessButton, Button } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PostStatus } from "./PostStatus";
