@@ -7,7 +7,7 @@ import * as Web3 from "web3";
 import { Civil, ApprovedRevision } from "@joincivil/core";
 import { Newsroom } from "@joincivil/core/build/src/contracts/newsroom";
 
-import { apiNamespace, siteOptionKeys } from "./constants";
+import { apiNamespace } from "./constants";
 
 export const getCivil = (() => {
   const civil: Civil | undefined = hasInjectedProvider() ? new Civil() : undefined;
@@ -45,14 +45,9 @@ export async function createSignatureData(): Promise<ApprovedRevision> {
   return newsroom!.approveByAuthorPersonalSign(contentHash);
 }
 
-export async function getNewsroomAddress(): Promise<string> {
-  const siteSettings = await apiRequest({ path: "/wp/v2/settings" });
-  return siteSettings[siteOptionKeys.NEWSROOM_ADDRESS];
-}
-
 export async function getNewsroom(): Promise<Newsroom> {
   const civil = getCivil();
-  const newsroomAddress = await getNewsroomAddress();
+  const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
   return civil!.newsroomAtUntrusted(newsroomAddress);
 }
 
