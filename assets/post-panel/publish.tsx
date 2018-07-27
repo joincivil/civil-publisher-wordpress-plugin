@@ -63,7 +63,7 @@ const BlockchainPublishPanel = compose([
       const { setCivilContentID, updatePublishedState } = dispatch("civil/blockchain");
       const { publishedRevisions } = ownProps;
 
-      const publishArticle = async (contentId: number, revisionId: number, revisionJson: any): Promise<void> => {
+      const publishArticle = async (contentId: number, revisionId: number, revisionJson: any, txHash: TxHash): Promise<void> => {
         const publishedDate = new Date();
         const revisionJsonSansDateHash = hashContent(revisionJsonSansDate(revisionJson)); // publishing changes the revision date but nothing else, so publishing invalidates whats published
         const publishedRevisionData = {
@@ -84,12 +84,13 @@ const BlockchainPublishPanel = compose([
         dispatch(updatePublishedState(publishedRevisionData));
       };
 
-      const updateArticle = async (revisionId: number, revisionJson: any): Promise<void> => {
+      const updateArticle = async (revisionId: number, revisionJson: any, txHash: TxHash): Promise<void> => {
         const publishedDate = new Date();
         const revisionJsonSansDateHash = hashContent(revisionJsonSansDate(revisionJson));
         const publishedRevisionData = {
           revisionID: revisionId,
           revisionJsonSansDateHash,
+          txHash,
           published: publishedDate,
         };
         publishedRevisions.push(publishedRevisionData);

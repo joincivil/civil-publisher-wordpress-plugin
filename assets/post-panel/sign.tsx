@@ -13,24 +13,19 @@ export type signatureStatusType = "unsigned" | "valid" | "invalid";
 const BlockchainSignPanel = compose([
   withSelect(
     (selectStore: any, ownProps: Partial<BlockchainSignPanelProps>): Partial<BlockchainSignPanelProps> => {
-      const { isEditedPostDirty, isCleanNewPost, getCurrentPostLastRevisionId } = selectStore("core/editor");
+      const {
+        isEditedPostDirty,
+        isCleanNewPost,
+      } = selectStore("core/editor");
       const {
         getCurrrentUserId,
         getCurrentUserId,
         getLoggedInUserAddress,
         getSignatures,
-        getRevisionJSON,
-        isValidSignature,
-        isWpEditor,
+        isValidSignature
       } = selectStore("civil/blockchain");
 
       const currentUserId = getCurrentUserId();
-      const contentID = getCurrentPostLastRevisionId();
-      const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
-      let revisionJson: any;
-      if (contentID) {
-        revisionJson = getRevisionJSON(contentID);
-      }
       const signatures = getSignatures();
 
       const isSignButtonDisabled = (): boolean => {
@@ -45,13 +40,13 @@ const BlockchainSignPanel = compose([
         } else {
           // Otherwise either they've previously signed but it's invalid, or they've never signed.
           // We only want to allow them to sign if the post has been saved to DB, so that we can fetch content hash from server in order to create sign message
+          // TODO alert user about this (e.g. "you must save post before signing")
           return isEditedPostDirty() || isCleanNewPost();
         }
       };
 
       return {
         currentUserId,
-        isWpEditor: isWpEditor(),
         signatures,
         signDisabled: isSignButtonDisabled(),
         userWalletAddress: getLoggedInUserAddress(),

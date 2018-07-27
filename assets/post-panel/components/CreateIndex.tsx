@@ -3,7 +3,7 @@ import styled from "styled-components";
 const { withSelect } = window.wp.data;
 const { dateI18n, getSettings } = window.wp.date;
 import { hashContent } from "@joincivil/utils";
-import { NorthEastArrow } from "@joincivil/components";
+import { ViewTransactionLink } from "@joincivil/components";
 import { revisionJsonSansDate, siteFormatTimeString } from "../../util";
 import { colors, ErrorText, HelpText } from "../styles";
 
@@ -58,12 +58,7 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
                   </a>
                 </p>
                 <p>
-                  <a href={indexTextUrl} target="_blank">
-                    {indexTimestamp}
-                    <ArrowWrap>
-                      <NorthEastArrow />
-                    </ArrowWrap>
-                  </a>
+                  <ViewTransactionLink txHash={this.props.lastPublishedRevision.txHash} network="rinkeby" text={indexTimestamp}/>
                 </p>
               </>
             ) : (

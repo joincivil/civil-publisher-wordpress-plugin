@@ -97,6 +97,8 @@ const CivilSidebar = () => {
             secondaryButtonBorder: "#cccccc",
             borderlessButtonColor: "#0085ba",
             borderlessButtonHoverColor: "#008ec2",
+            linkColor: "#0085ba",
+            linkColorHover: "#008ec2",
             sanserifFont: `-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif`,
           }}
         >
