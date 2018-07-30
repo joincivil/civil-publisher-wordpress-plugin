@@ -225,7 +225,7 @@ class REST_API {
 			return true;
 		}
 
-		if ( ! current_user_can( 'manage_options' )  ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return new \WP_Error(
 				'rest-forbidden',
 				esc_html__( 'Insufficient permissions.' ),

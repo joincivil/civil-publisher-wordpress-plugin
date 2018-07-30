@@ -196,12 +196,12 @@ function wallet_address_nag() {
 }
 add_action( 'admin_notices', __NAMESPACE__ . '\wallet_address_nag' );
 
-// TODO: Remove before deploy to production, but putting here now because it's messing with user tests.
+/** TODO: Remove before deploy to production, but putting here now because it's messing with user tests. */
 function no_vaultpress_notice() {
-  echo '<style>
-    #vp-notice {
-      display: none;
-    }
-  </style>';
+	echo '<style>
+		#vp-notice {
+			display: none;
+		}
+	</style>';
 }
-add_action('admin_head', __NAMESPACE__ . '\no_vaultpress_notice');
+add_action( 'admin_head', __NAMESPACE__ . '\no_vaultpress_notice' );

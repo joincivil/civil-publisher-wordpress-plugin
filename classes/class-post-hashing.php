@@ -162,7 +162,7 @@ class Post_Hashing {
 					$sig_data = $signatures[ $coauthor->ID ];
 				} else if ( ! empty( $coauthor->linked_account ) ) {
 					// This is a co-authors-plus "guest author" profile linked to an actual wordpress account which we should check for signatures.
-					$coauthor_user = get_user_by( 'login', $coauthor->linked_account);
+					$coauthor_user = get_user_by( 'login', $coauthor->linked_account );
 					if ( ! empty( $signatures[ $coauthor_user->ID ] ) ) {
 						$author_id = $coauthor_user->ID;
 						$sig_data = $signatures[ $coauthor_user->ID ];
@@ -176,7 +176,7 @@ class Post_Hashing {
 					}
 
 					// Whether it's valid or not, remove this signature now we've checked it, so we can see if there are any left over from non-authors (e.g. an editor added a signature).
-					unset($signatures[$author_id]);
+					unset( $signatures[ $author_id ] );
 				}
 
 				$all_author_data[] = $author_data;
@@ -185,8 +185,9 @@ class Post_Hashing {
 
 		// Handle non-author signatures.
 		if ( ! empty( $signatures ) ) {
-			foreach ( $signatures as $signer_id => $sig_data) {
-				$signer = get_user_by( 'id', $signer_id);
+			foreach ( $signatures as $signer_id => $sig_data ) {
+				error_log( 'SIGNER ' . $signer_id );
+				$signer = get_user_by( 'id', $signer_id );
 				$author_data = [
 					// TODO Should this be "byline" or something else? Should we not be in "authors"?
 					// TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. How do we go from WP User to Guest author? There's `coauthors_wp_list_authors` but that lists all authors, must be a better way. There's `get_coauthor_by` but it's private, we can't get it from here.
