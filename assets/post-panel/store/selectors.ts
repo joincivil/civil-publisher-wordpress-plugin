@@ -79,7 +79,7 @@ export function getCivilContentID(store: any): string | null {
 export function isPublishDisabled(state: any): boolean {
   const editorStore = select("core/editor");
   const currentPostLastRevisionId = editorStore.getCurrentPostLastRevisionId();
-  const publishedRevisions = getPublishedRevisions(state);
+  const publishedRevisions = select("civil/blockchain").getPublishedRevisions();
   const latestRevisionPublished = publishedRevisions.length
     ? publishedRevisions[publishedRevisions.length - 1]
     : undefined;
@@ -135,11 +135,11 @@ export function getCurrentIsVersionPublished(state: any): boolean {
     return false;
   }
 
-  const lastPublishedRevision = getLastPublishedRevision(state);
+  const lastPublishedRevision = select("civil/blockchain").getLastPublishedRevision();
   if (!lastPublishedRevision) {
     return false;
   }
-  const revisionJson = getRevisionJSON(state, currentPostLastRevisionId);
+  const revisionJson = select("civil/blockchain").getRevisionJSON(currentPostLastRevisionId);
 
   return (
     revisionJson && hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash
@@ -147,7 +147,7 @@ export function getCurrentIsVersionPublished(state: any): boolean {
 }
 
 export function getLastPublishedRevision(state: any): any {
-  const publishedRevisions = getPublishedRevisions(state);
+  const publishedRevisions = select("civil/blockchain").getPublishedRevisions();
   if (publishedRevisions.length) {
     return publishedRevisions[publishedRevisions.length - 1];
   }
@@ -155,11 +155,11 @@ export function getLastPublishedRevision(state: any): any {
 
 export function isValidSignature(state: any, signature: ApprovedRevision): boolean {
   const { getCurrentPostLastRevisionId } = select("core/editor");
-  const contentId = getCurrentPostLastRevisionId();
+  const revisionId = getCurrentPostLastRevisionId();
   const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
   let revisionJson: any;
-  if (contentId) {
-    revisionJson = getRevisionJSON(state, contentId);
+  if (revisionId) {
+    revisionJson = select("civil/blockchain").getRevisionJSON(revisionId);
   }
   if (!revisionJson) {
     return false;
