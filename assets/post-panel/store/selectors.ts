@@ -53,9 +53,9 @@ export function getPublishedStatus(state: any): any {
   return state.publishedStatus;
 }
 
-/** We can't rely on only `select("core/editor").getCurrentPostLastRevisionId`. Because we have to disable `wp_save_post_revision_check_for_changes` in order to save revisions separately, two revision saves are triggered with every save, and meta updates (including signatures) only happen on the second, and `getCurrentPostLastRevisionId` only gets updated after the first. So instead, this checks both gutenberg store and our own store that we update on meta box save, and gets latest. */
+/** We can't rely on only `select("core/editor").getCurrentPostLastRevisionId`. Because we have to disable `wp_save_post_revision_check_for_changes` in order to save revisions separately, two revision saves are triggered with every save, and meta updates (including signatures) only happen on the second, and `getCurrentPostLastRevisionId` only gets updated after the first. So instead, we keep track ourselves and update this value on every save. */
 export function getLastRevisionId(state: any): number {
-  return Math.max(select("core/editor").getCurrentPostLastRevisionId(), state.lastRevisionId);
+  return state.lastRevisionId;
 }
 
 export function getRevisionJSON(state: any, revisionID: string): any {

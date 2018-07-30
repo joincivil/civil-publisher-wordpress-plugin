@@ -53,7 +53,8 @@ export const publishedStatus = (state: any[] = [], action: AnyAction): any => {
 export const lastRevisionId = (state: number | null = null, action: AnyAction): number | null => {
   switch (action.type) {
     case actionTypes.SET_LAST_REVISION_ID:
-      return action.data;
+      // Since in most cases when you save in gutenberg, we do a regular save and a meta box save because of our revisions hack, and after both we hit our endpoint to get last revision ID, and there's a chance those requests come back in the wrong order, so get the max of new and old:
+      return Math.max(state!, action.data);
     default:
       return state;
   }
