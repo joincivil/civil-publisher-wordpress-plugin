@@ -8,28 +8,6 @@
 namespace Civil_Newsroom_Protocol;
 
 /**
- * Check if given string is a valid hex ETH wallet address.
- *
- * @param string $addr Address to check.
- * @return bool  Whether or not address is valid hex ETH wallet address.
- */
-function is_valid_eth_address( $addr ) {
-	return preg_match( '/^(0x)?[0-9a-f]{40}$/i', $addr );
-}
-
-
-/**
- * Check if given string is a valid hex ETH transaction hash.
- *
- * @param string $hash hash to check.
- * @return bool  Whether or not address is valid hex ETH wallet address.
- */
-function is_valid_txhash( $hash ) {
-	return preg_match( '/^(0x)?[0-9a-f]{64}$/i', $hash );
-}
-
-
-/**
  * Output custom fields for user profile.
  *
  * @param object $user A WP_User object.

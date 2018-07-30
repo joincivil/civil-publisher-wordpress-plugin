@@ -36,19 +36,7 @@ define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-newsroom-protocol-management'
 define( __NAMESPACE__ . '\WALLET_PAGE', 'civil-newsroom-protocol-wallets' );
 define( __NAMESPACE__ . '\HELP_PAGE', 'civil-newsroom-protocol-help' );
 
-/**
- * Gets the blockchain enabled post types.
- *
- * @return array The supported post types.
- */
-function get_blockchain_post_types() {
-	/**
-	 * Filters the post types available for blockchain support
-	 *
-	 * @param $post_types The supported post types.
-	 */
-	return apply_filters( 'get_blockchain_post_types', [ 'post' ] );
-}
+require_once dirname( __FILE__ ) . '/utils.php';
 
 require_once dirname( __FILE__ ) . '/traits/trait-singleton.php';
 
