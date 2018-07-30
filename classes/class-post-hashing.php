@@ -157,6 +157,7 @@ class Post_Hashing {
 					'byline' => $coauthor->display_name,
 				];
 
+				$sig_data = null;
 				if ( ! empty( $signatures[ $coauthor->ID ] ) ) {
 					$author_id = $coauthor->ID;
 					$sig_data = $signatures[ $coauthor->ID ];
