@@ -6,7 +6,7 @@ import { setIsNewsroomEditor, setUserData, setCurrentUserId, addOrUpdateRevision
 import { AnyAction } from "redux";
 
 const { apiRequest } = window.wp;
-const { select } = window.wp.data;
+const { select, dispatch } = window.wp.data;
 
 export async function isNewsroomEditor(state: any): Promise<AnyAction> {
   const newsroom = await getNewsroom();
@@ -28,6 +28,25 @@ export async function getUserData(state: any, id?: number | "me"): Promise<any> 
     console.error("Failed to fetch user data:", err);
     // TODO signal error to user
     throw Error("Failed to fetch user data");
+  }
+}
+
+export async function getLastRevisionId(): Promise<AnyAction | void> {
+  const postId = select("core/editor").getCurrentPostId();
+  const { setLastRevisionId } = dispatch("civil/blockchain");
+
+  try {
+    const response = await apiRequest({ path: apiNamespace + "posts/" + postId + "/last-revision-id" });
+    const revisionId = parseInt(response, 10);
+
+    if (isNaN(revisionId)) {
+      throw Error("Invalid response fetching last revision ID");
+    }
+
+    return setLastRevisionId(revisionId);
+  } catch (err) {
+    console.error("Failed to fetch last revision ID:", err);
+    throw Error("Failed to fetch last revision ID");
   }
 }
 

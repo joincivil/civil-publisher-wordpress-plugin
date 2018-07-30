@@ -6,6 +6,7 @@ import * as reducers from "./reducers";
 import * as actions from "./actions";
 import * as selectors from "./selectors";
 import * as resolvers from "./resolvers";
+import "./effects";
 
 const store = registerStore(REDUCER_KEY, {
   reducer: combineReducers(reducers),

@@ -24,6 +24,7 @@ const BlockchainSignPanel = compose([
         getSignatures,
         isValidSignature,
         isWpEditor,
+        getLatestRevisionJSON,
       } = selectStore("civil/blockchain");
 
       const currentUserId = getCurrentUserId();
@@ -53,6 +54,7 @@ const BlockchainSignPanel = compose([
         userWalletAddress: getLoggedInUserAddress(),
         isValidSignature,
         isDirty: isEditedPostDirty(),
+        latestRevisionJson: getLatestRevisionJSON(),
       };
     },
   ),
@@ -64,7 +66,7 @@ const BlockchainSignPanel = compose([
       const { currentUserId, signatures } = ownProps;
 
       const signArticle = async (): Promise<void> => {
-        const signature = await createSignatureData();
+        const signature = await createSignatureData(ownProps.latestRevisionJson);
         const newSignatures = { ...signatures, [currentUserId]: signature };
         editPost({ meta: { [postMetaKeys.SIGNATURES]: JSON.stringify(newSignatures) } });
         savePost();

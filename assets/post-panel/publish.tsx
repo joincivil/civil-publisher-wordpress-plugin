@@ -9,7 +9,7 @@ import { TxHash } from "@joincivil/core";
 const BlockchainPublishPanel = compose([
   withSelect(
     (selectStore: any, ownProps: Partial<BlockchainPublishPanelProps>): Partial<BlockchainPublishPanelProps> => {
-      const { getCurrentPostLastRevisionId, isEditedPostDirty } = selectStore("core/editor");
+      const { isEditedPostDirty } = selectStore("core/editor");
       const {
         isNewsroomEditor,
         getUserCapabilities,
@@ -21,10 +21,11 @@ const BlockchainPublishPanel = compose([
         getTxHash,
         getLastPublishedRevision,
         getCurrentIsVersionPublished,
+        getLastRevisionId,
       } = selectStore("civil/blockchain");
       const userCapabilities = getUserCapabilities();
       const publishDisabled = isPublishDisabled();
-      const currentPostLastRevisionId = getCurrentPostLastRevisionId();
+      const currentPostLastRevisionId = getLastRevisionId();
       const publishedRevisions = getPublishedRevisions();
       const civilContentID = getCivilContentID();
       const isDirty = isEditedPostDirty();

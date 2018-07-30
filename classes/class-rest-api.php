@@ -32,6 +32,14 @@ class REST_API {
 			]
 		);
 
+		// Endpoint for returning latest revision ID for a post. This is needed because our disabling of `wp_save_post_revision_check_for_changes` throws off how Gutenberg detects latest revision.
+		register_rest_route(
+			REST_API_NAMESPACE, '/posts/(?P<postID>\d+)/last-revision-id', [
+				'methods'  => 'GET',
+				'callback' => [ $this, 'get_last_revision_id' ],
+			]
+		);
+
 		// Endpoint for returning revision content based on hash value.
 		register_rest_route(
 			REST_API_NAMESPACE, '/revisions-content/(?P<hash>\w+)', [
@@ -108,6 +116,47 @@ class REST_API {
 		}
 
 		return rest_ensure_response( $this->clean_item( $revision ) );
+	}
+
+	/**
+	 * Returns the last revision ID for given post.
+	 *
+	 * @param \WP_REST_Request $request The current REST API request.
+	 * @return \WP_REST_Response|\WP_Error The REST API response with revision ID, or an error.
+	 */
+	public function get_last_revision_id( \WP_REST_Request $request ) {
+		// Get parameters from request.
+		$params = $request->get_params();
+
+		// Get the revision ID.
+		$post_id = $params['postID'] ?? 0;
+
+		// No post ID provided.
+		if ( empty( $post_id ) ) {
+			return new \WP_Error(
+				'no-post-id-found',
+				esc_html__( 'No post ID provided.' ),
+				[
+					'status' => 400,
+				]
+			);
+		}
+
+		// Get the revision.
+		$last_revision = array_shift( wp_get_post_revisions( $post_id ) );
+
+		// Unable to find a revision.
+		if ( ! ( $last_revision instanceof \WP_Post ) ) {
+			return new \WP_Error(
+				'no-revision-found',
+				esc_html__( 'No revision found for the provided post ID.' ),
+				[
+					'status' => 400,
+				]
+			);
+		}
+
+		return rest_ensure_response( $last_revision->ID );
 	}
 
 	/**
