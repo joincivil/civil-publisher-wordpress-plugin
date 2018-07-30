@@ -42,6 +42,13 @@ export function updatePublishedState(publishedData: any): AnyAction {
   };
 }
 
+export function setLastRevisionId(revisionID: number): AnyAction {
+  return {
+    type: actionTypes.SET_LAST_REVISION_ID,
+    data: revisionID,
+  };
+}
+
 export function addOrUpdateRevision(revisionID: string, revisionData: any): AnyAction {
   return {
     type: actionTypes.ADD_OR_UPDATE_REVISION,

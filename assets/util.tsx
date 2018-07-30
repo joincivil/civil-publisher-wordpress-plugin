@@ -14,19 +14,6 @@ export const getCivil = (() => {
   return (): Civil | undefined => civil;
 })();
 
-export async function getRevisionJson(): Promise<any> {
-  const revisionId = select("core/editor").getCurrentPostLastRevisionId();
-
-  try {
-    const response = await apiRequest({ path: apiNamespace + "revisions/" + revisionId });
-    return response;
-  } catch (err) {
-    console.error("Failed to fetch revision JSON:", err);
-    // TODO signal error to user
-    throw Error("Failed to fetch revision JSON");
-  }
-}
-
 export function revisionJsonSansDate(revisionJson: any): any {
   return {
     ...revisionJson,
@@ -34,14 +21,14 @@ export function revisionJsonSansDate(revisionJson: any): any {
   };
 }
 
-export async function getRevisionContentHash(): Promise<string> {
-  const revisionJson = await getRevisionJson();
-  return revisionJson.revisionContentHash;
+export function getRevisionContentHash(): string {
+  const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
+  return revisionJson && revisionJson.revisionContentHash;
 }
 
 export async function createSignatureData(): Promise<ApprovedRevision> {
   const newsroom = await getNewsroom();
-  const contentHash = await getRevisionContentHash();
+  const contentHash = getRevisionContentHash();
   return newsroom!.approveByAuthorPersonalSign(contentHash);
 }
 

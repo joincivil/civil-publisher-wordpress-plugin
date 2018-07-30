@@ -53,8 +53,19 @@ export function getPublishedStatus(state: any): any {
   return state.publishedStatus;
 }
 
+/** We can't rely on only `select("core/editor").getCurrentPostLastRevisionId`. Because we have to disable `wp_save_post_revision_check_for_changes` in order to save revisions separately, two revision saves are triggered with every save, and meta updates (including signatures) only happen on the second, and `getCurrentPostLastRevisionId` only gets updated after the first. So instead, this checks both gutenberg store and our own store that we update on meta box save, and gets latest. */
+export function getLastRevisionId(state: any): number {
+  return Math.max(select("core/editor").getCurrentPostLastRevisionId(), state.lastRevisionId);
+}
+
 export function getRevisionJSON(state: any, revisionID: string): any {
   return state.revisions[revisionID];
+}
+
+export function getLatestRevisionJSON(): any {
+  const { getLastRevisionId, getRevisionJSON } = select("civil/blockchain");
+  const lastRevisionId = getLastRevisionId();
+  return lastRevisionId && getRevisionJSON(lastRevisionId);
 }
 
 function getPostMeta(): any {
@@ -78,7 +89,7 @@ export function getCivilContentID(store: any): string | null {
 
 export function isPublishDisabled(state: any): boolean {
   const editorStore = select("core/editor");
-  const currentPostLastRevisionId = editorStore.getCurrentPostLastRevisionId();
+  const currentPostLastRevisionId = select("civil/blockchain").getLastRevisionId();
   const publishedRevisions = select("civil/blockchain").getPublishedRevisions();
   const latestRevisionPublished = publishedRevisions.length
     ? publishedRevisions[publishedRevisions.length - 1]
@@ -129,23 +140,19 @@ export function getTxHash(): TxHash | null {
 }
 
 export function getCurrentIsVersionPublished(state: any): boolean {
-  const editorStore = select("core/editor");
-  const currentPostLastRevisionId = editorStore.getCurrentPostLastRevisionId();
-  if (!currentPostLastRevisionId) {
-    return false;
-  }
-
   const lastPublishedRevision = select("civil/blockchain").getLastPublishedRevision();
   if (!lastPublishedRevision) {
     return false;
   }
-  const revisionJson = select("civil/blockchain").getRevisionJSON(currentPostLastRevisionId);
+
+  const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
 
   return (
     revisionJson && hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash
   );
 }
 
+/** Last *indexed* revision. TODO we should change "publish" to "index" everywhere but can't find/replace because we also use "publish" to refer to WP stuff, also I'm not convinced "index" will stay forever. */
 export function getLastPublishedRevision(state: any): any {
   const publishedRevisions = select("civil/blockchain").getPublishedRevisions();
   if (publishedRevisions.length) {
@@ -154,13 +161,9 @@ export function getLastPublishedRevision(state: any): any {
 }
 
 export function isValidSignature(state: any, signature: ApprovedRevision): boolean {
-  const { getCurrentPostLastRevisionId } = select("core/editor");
-  const revisionId = getCurrentPostLastRevisionId();
   const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
-  let revisionJson: any;
-  if (revisionId) {
-    revisionJson = select("civil/blockchain").getRevisionJSON(revisionId);
-  }
+  const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
+
   if (!revisionJson) {
     return false;
   }

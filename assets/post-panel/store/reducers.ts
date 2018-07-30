@@ -50,6 +50,15 @@ export const publishedStatus = (state: any[] = [], action: AnyAction): any => {
   }
 };
 
+export const lastRevisionId = (state: number | null = null, action: AnyAction): number | null => {
+  switch (action.type) {
+    case actionTypes.SET_LAST_REVISION_ID:
+      return action.data;
+    default:
+      return state;
+  }
+};
+
 export const revisions = (state: any = {}, action: AnyAction): any => {
   switch (action.type) {
     case actionTypes.ADD_OR_UPDATE_REVISION:
