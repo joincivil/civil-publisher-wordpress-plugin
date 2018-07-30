@@ -59,6 +59,7 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
     <Wrapper>
       <UserWrap>
         <Avatar src={avatarUrl} />
+        {/* TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. */}
         {userData.name}
       </UserWrap>
       {showValidity && <IconWrap>{validIndicator}</IconWrap>}

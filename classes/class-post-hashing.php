@@ -134,7 +134,7 @@ class Post_Hashing {
 	 * @return array List of data for each author on post.
 	 */
 	public function get_author_data( $post ) {
-		$all_author_data   = [];
+		$all_author_data = [];
 
 		$coauthors = [];
 		if ( function_exists( 'get_coauthors' ) ) {
@@ -188,7 +188,8 @@ class Post_Hashing {
 			foreach ( $signatures as $signer_id => $sig_data) {
 				$signer = get_user_by( 'id', $signer_id);
 				$author_data = [
-					// TODO/tobek Should this be "byline" or something else? Should we not be in "authors"?
+					// TODO Should this be "byline" or something else? Should we not be in "authors"?
+					// TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. How do we go from WP User to Guest author? There's `coauthors_wp_list_authors` but that lists all authors, must be a better way. There's `get_coauthor_by` but it's private, we can't get it from here.
 					'byline' => $signer->display_name,
 				];
 
