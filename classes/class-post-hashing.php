@@ -136,7 +136,7 @@ class Post_Hashing {
 	public function get_author_data( $post ) {
 		$all_author_data = [];
 
-		$authors = get_post_authors_data($post->post_parent);
+		$authors = get_post_authors_data( $post->post_parent );
 
 		// $post is a revision, and this meta is stored on post itself, so get from the parent.
 		$signatures = get_post_meta( $post->post_parent, SIGNATURES_META_KEY, true );

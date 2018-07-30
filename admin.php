@@ -29,7 +29,7 @@ function enqueue_post_panel() {
 
 	global $post;
 	$authors = [];
-	if ( ! empty ( $post->ID ) ) {
+	if ( ! empty( $post->ID ) ) {
 		$authors = get_post_authors_data( $post->ID );
 	}
 	$authors_json = json_encode( $authors );
