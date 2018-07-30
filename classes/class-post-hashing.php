@@ -81,45 +81,8 @@ class Post_Hashing {
 		}
 
 		// Hash the post content.
-		$revision_hash = $this->hash( $post->post_content );
-		update_metadata( 'post', $post_id, REVISION_HASH_META_KEY, $revision_hash );
-
-		// Add authors.
-		$authors   = [];
-		$coauthors = [];
-		if ( function_exists( 'get_coauthors' ) ) {
-			$coauthors = get_coauthors( $post->post_parent );
-		} else {
-			// Support absence of co-authors-plus plugin.
-			$author = get_user_by( 'id', $post->post_author );
-			if ( ! empty( $author ) ) {
-				$coauthors[] = $author;
-			}
-		}
-
-		$newsroom_address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
-		// $post is a revision, and this meta is stored on post itself, so get from the parent.
-		$signatures = get_post_meta( $post->post_parent, SIGNATURES_META_KEY, true );
-		$signatures = ! empty( $signatures ) ? json_decode( $signatures, true ) : null;
-
-		if ( ! empty( $coauthors ) ) {
-			foreach ( $coauthors as $coauthor ) {
-				$author_data = [
-					'byline' => $coauthor->display_name,
-				];
-
-				if ( ! empty( $signatures[ $coauthor->user_login ] ) ) {
-					$sig_data = $signatures[ $coauthor->user_login ];
-					// Check signature still valid for current state of post before adding to author data.
-					if ( $sig_data['newsroomAddress'] == $newsroom_address && $sig_data['contentHash'] == $revision_hash ) {
-						$author_data['address'] = $sig_data['author'];
-						$author_data['signature'] = $sig_data['signature'];
-					}
-				}
-
-				$authors[] = $author_data;
-			}
-		}
+		$this->revision_hash = $this->hash( $post->post_content );
+		update_metadata( 'post', $post_id, REVISION_HASH_META_KEY, $this->revision_hash );
 
 		// Add images.
 		$images       = [];
@@ -153,7 +116,7 @@ class Post_Hashing {
 
 		// Create revision JSON payload data.
 		$json_payload_data = [
-			'authors'               => $authors,
+			'authors'               => $this->get_author_data( $post ),
 			'images'                => $images,
 			'tags'                  => wp_get_post_tags( $post->post_parent, [ 'fields' => 'slugs' ] ),
 			'primaryTag'            => $primary_category,
@@ -162,6 +125,74 @@ class Post_Hashing {
 
 		// Save revision JSON payload data.
 		update_metadata( 'post', $post_id, REVISION_DATA_META_KEY, $json_payload_data );
+	}
+
+	/**
+	 * Get author data, including signatures, for given post
+	 *
+	 * @param object $post A WP_Post object.
+	 * @return array List of data for each author on post.
+	 */
+	public function get_author_data( $post ) {
+		$all_author_data   = [];
+
+		$coauthors = [];
+		if ( function_exists( 'get_coauthors' ) ) {
+			$coauthors = get_coauthors( $post->post_parent );
+		} else {
+			// Support absence of co-authors-plus plugin.
+			$author = get_user_by( 'id', $post->post_author );
+			if ( ! empty( $author ) ) {
+				$coauthors[] = $author;
+			}
+		}
+
+		// $post is a revision, and this meta is stored on post itself, so get from the parent.
+		$signatures = get_post_meta( $post->post_parent, SIGNATURES_META_KEY, true );
+		$signatures = ! empty( $signatures ) ? json_decode( $signatures, true ) : null;
+
+		if ( ! empty( $coauthors ) ) {
+			foreach ( $coauthors as $coauthor ) {
+				$author_data = [
+					'byline' => $coauthor->display_name,
+				];
+
+				if ( ! empty( $signatures[ $coauthor->ID ] ) ) {
+					$author_id = $coauthor->ID;
+					$sig_data = $signatures[ $coauthor->ID ];
+				} else if ( ! empty( $coauthor->linked_account ) ) {
+					// This is a co-authors-plus "guest author" profile linked to an actual wordpress account which we should check for signatures.
+					$coauthor_user = get_user_by( 'login', $coauthor->linked_account);
+					if ( ! empty( $signatures[ $coauthor_user->ID ] ) ) {
+						$author_id = $coauthor_user->ID;
+						$sig_data = $signatures[ $coauthor_user->ID ];
+					}
+				}
+
+				if ( ! empty( $sig_data ) ) {
+					if ( $this->sig_valid_for_post( $sig_data ) ) {
+						$author_data['address'] = $sig_data['author'];
+						$author_data['signature'] = $sig_data['signature'];
+					}
+				}
+
+
+				$all_author_data[] = $author_data;
+			}
+		}
+
+		return $all_author_data;
+	}
+
+	/**
+	 * Check signature still valid for current state of post.
+	 *
+	 * @param object $sig_data Signature data.
+	 * @return boolean Whether it's valid for the current post.
+	 */
+	public function sig_valid_for_post( $sig_data ) {
+		$newsroom_address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
+		return $sig_data['newsroomAddress'] == $newsroom_address && $sig_data['contentHash'] == $this->revision_hash;
 	}
 
 	/**
