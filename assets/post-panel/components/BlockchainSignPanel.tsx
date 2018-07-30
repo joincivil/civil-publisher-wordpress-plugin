@@ -24,6 +24,7 @@ export interface BlockchainSignPanelProps {
   signDisabled: boolean;
   userWalletAddress?: EthAddress;
   isDirty: boolean;
+  latestRevisionJson: any;
   signArticle(): void;
   isValidSignature(signature: ApprovedRevision): boolean;
 }

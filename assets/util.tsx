@@ -21,15 +21,13 @@ export function revisionJsonSansDate(revisionJson: any): any {
   };
 }
 
-export function getRevisionContentHash(): string {
-  const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
-  return revisionJson && revisionJson.revisionContentHash;
-}
-
-export async function createSignatureData(): Promise<ApprovedRevision> {
+export async function createSignatureData(revisionJson: any): Promise<ApprovedRevision> {
+  if (!revisionJson) {
+    // Super edge case could only happen on a slow internet connection and if they opened sign panel and instantly hit sign before data hydrated.
+    throw Error("Failed to create signature data: revisionJson is falsey");
+  }
   const newsroom = await getNewsroom();
-  const contentHash = getRevisionContentHash();
-  return newsroom!.approveByAuthorPersonalSign(contentHash);
+  return newsroom!.approveByAuthorPersonalSign(revisionJson.revisionContentHash);
 }
 
 export async function getNewsroom(): Promise<Newsroom> {
