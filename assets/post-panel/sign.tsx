@@ -22,7 +22,8 @@ const BlockchainSignPanel = compose([
         getCurrentUserId,
         getLoggedInUserAddress,
         getSignatures,
-        isValidSignature
+        isValidSignature,
+        isWpEditor,
       } = selectStore("civil/blockchain");
 
       const currentUserId = getCurrentUserId();
@@ -40,13 +41,13 @@ const BlockchainSignPanel = compose([
         } else {
           // Otherwise either they've previously signed but it's invalid, or they've never signed.
           // We only want to allow them to sign if the post has been saved to DB, so that we can fetch content hash from server in order to create sign message
-          // TODO alert user about this (e.g. "you must save post before signing")
           return isEditedPostDirty() || isCleanNewPost();
         }
       };
 
       return {
         currentUserId,
+        isWpEditor: isWpEditor(),
         signatures,
         signDisabled: isSignButtonDisabled(),
         userWalletAddress: getLoggedInUserAddress(),
