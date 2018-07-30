@@ -99,7 +99,7 @@ const CivilSidebar = () => {
             borderlessButtonHoverColor: "#008ec2",
             linkColor: "#0085ba",
             linkColorHover: "#008ec2",
-            sanserifFont: `-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif`,
+            sansSerifFont: `-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif`,
           }}
         >
           {panelContent}
