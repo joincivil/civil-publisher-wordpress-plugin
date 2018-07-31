@@ -38,6 +38,10 @@ export function getLoggedInUserAddress(state: any): EthAddress | undefined {
   return select("civil/blockchain").getUserData()[userMetaKeys.WALLET_ADDRESS];
 }
 
+export function getWeb3ProviderAddress(state: any): EthAddress {
+  return state.web3ProviderAddress;
+}
+
 export function getUserCapabilities(state: any): { [key: string]: boolean } {
   return select("civil/blockchain").getUserData().capabilities || {};
 }

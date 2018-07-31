@@ -32,6 +32,22 @@ export const IconWrap = styled.span`
   top: 2px;
 `;
 
+export interface HelpTextProps {
+  disabled?: boolean;
+}
+export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTextProps, "p">("p")`
+  opacity: ${props => (props.disabled ? 0.3 : 1)};
+  && {
+    color: #72777c;
+  }
+`;
+
+export const ErrorText = styled.p`
+  && {
+    color: #f2524a;
+  }
+`;
+
 export const Heading = styled.div`
   margin-bottom: 16px;
   font-size: 14px;
@@ -45,6 +61,11 @@ export const Heading = styled.div`
       width: 18px;
       height: 18px;
     }
+  }
+
+  ${ErrorText} {
+    font-size: 13px;
+    float: right;
   }
 `;
 export const MainHeading = Heading.extend`
@@ -80,22 +101,6 @@ export const BodySection = styled.div`
   border-bottom: 1px solid #d8d8d8;
   &:last-child {
     border-bottom: 0;
-  }
-`;
-
-export interface HelpTextProps {
-  disabled?: boolean;
-}
-export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTextProps, "p">("p")`
-  opacity: ${props => (props.disabled ? 0.3 : 1)};
-  && {
-    color: #72777c;
-  }
-`;
-
-export const ErrorText = styled.p`
-  && {
-    color: #f2524a;
   }
 `;
 

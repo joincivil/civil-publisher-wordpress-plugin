@@ -2,6 +2,7 @@ import * as React from "react";
 import { ArticleIndexPanelIcon, TransactionButtonNoModal, Modal, buttonSizes, BorderlessButton, Button } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
+import { PanelWalletStatus } from "./PanelWalletStatus";
 import { PostStatus } from "./PostStatus";
 import { CreateIndex } from "./CreateIndex";
 import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection } from "../styles";
@@ -202,6 +203,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
         </IntroSection>
 
         <Body>
+          <PanelWalletStatus />
           <PostStatus
             requirePublish={true}
             actionString={(this.props.lastPublishedRevision ? "re-" : "") + "indexing"}

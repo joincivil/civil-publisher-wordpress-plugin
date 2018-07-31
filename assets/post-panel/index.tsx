@@ -5,7 +5,7 @@ const { compose, PanelBody } = window.wp.element;
 import * as React from "react";
 import * as ReactDom from "react-dom";
 import { getCivil } from "../util";
-import { Civil } from "@joincivil/core";
+import { Civil, EthAddress } from "@joincivil/core";
 import { Tabs, Tab } from "@joincivil/components";
 import "./store";
 import { ThemeProvider } from "styled-components";
@@ -15,10 +15,12 @@ import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleCompone
 
 export interface BlockchainPluginProps {
   onNetworkChange(networkName: string): void;
+  onAccountChange(address: EthAddress): void;
 }
 
 class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginProps> {
   public civil: Civil | undefined;
+  public accountStream: any;
   public networkStream: any;
 
   constructor(props: BlockchainPluginProps) {
@@ -27,32 +29,31 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
   }
   public componentDidMount(): void {
     if (this.civil) {
+      this.accountStream = this.civil.accountStream.subscribe(this.props.onAccountChange);
       this.networkStream = this.civil.networkNameStream.subscribe(this.props.onNetworkChange);
     }
   }
   public componentWillUnmount(): void {
+    if (this.accountStream) {
+      this.accountStream.unsubscribe();
+    }
     if (this.networkStream) {
       this.networkStream.unsubscribe();
     }
   }
   public render(): JSX.Element {
-    const content = this.civil ? (
-      this.props.children
-    ) : (
-      <h3>
-        You need an in-browser Ethereum wallet. We recommend <a href="https://metamask.io/">MetaMask</a>.
-      </h3>
-    );
-    return <>{content}</>;
+    return <>{this.props.children}</>;
   }
 }
 
 const BlockchainPluginInner = compose([
   withDispatch(
     (dispatch: any): BlockchainPluginProps => {
-      const { setIsCorrectNetwork } = dispatch("civil/blockchain");
+      const { setIsCorrectNetwork, setWeb3ProviderAddress } = dispatch("civil/blockchain");
+      const onAccountChange = (address: EthAddress) => dispatch(setWeb3ProviderAddress(address));
       const onNetworkChange = (networkName: string) => dispatch(setIsCorrectNetwork(networkName));
       return {
+        onAccountChange,
         onNetworkChange,
       };
     },

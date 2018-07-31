@@ -21,6 +21,13 @@ export function setUserData(id: number | "me", userData: any): AnyAction {
   };
 }
 
+export function setWeb3ProviderAddress(address: EthAddress): AnyAction {
+  return {
+    type: actionTypes.SET_WEB3_PROVIDER_ADDRESS,
+    data: address,
+  };
+}
+
 export function setCurrentUserId(userId: number): AnyAction {
   return {
     type: actionTypes.SET_CURRENT_USER_ID,

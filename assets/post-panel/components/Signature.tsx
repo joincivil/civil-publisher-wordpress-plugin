@@ -38,7 +38,6 @@ const Avatar = styled.img`
 
 function SignatureComponent(ownProps: SignatureProps): JSX.Element {
   const { sigData, userData, isDirty, isValid } = ownProps;
-  console.log(sigData);
   let validIndicator;
   let tipText;
   let showValidity = true;

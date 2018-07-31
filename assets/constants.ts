@@ -15,3 +15,6 @@ export enum siteOptionKeys {
   NEWSROOM_ADDRESS = "civil_newsroom_protocol_newsroom_address",
   NEWSROOM_TXHASH = "civil_newsroom_protocol_newsroom_txhash",
 }
+
+export const NETWORK_NAME = "rinkeby";
+export const NETWORK_NICE_NAME = "Rinkeby Test Network";

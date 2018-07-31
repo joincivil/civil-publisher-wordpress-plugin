@@ -6,7 +6,7 @@ import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
 import { addAddress, addTxHash } from "./actions";
 import { getCivil, hasInjectedProvider } from "../util";
-import { apiNamespace, siteOptionKeys, userMetaKeys } from "../constants";
+import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME } from "../constants";
 import { WalletStatus } from "./WalletStatus";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
 import { SearchUsers } from "./SeachUsers";
@@ -15,9 +15,6 @@ export interface AppProps {
   address?: EthAddress;
   txHash?: TxHash;
 }
-
-const NETWORK_NAME = "rinkeby";
-const NETWORK_NICE_NAME = "Rinkeby Test Network";
 
 export interface AppState {
   creationModalOpen: boolean;

@@ -2,7 +2,7 @@ import { actionTypes } from "./constants";
 import { SignatureData } from "./interfaces";
 import { AnyAction } from "redux";
 import { postMetaKeys } from "../../constants";
-import { TxHash } from "@joincivil/core";
+import { EthAddress, TxHash } from "@joincivil/core";
 
 export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => {
   switch (action.type) {
@@ -27,6 +27,15 @@ export const userData = (state: { [id: number]: any } = {}, action: AnyAction): 
       return state;
   }
 };
+
+export const web3ProviderAddress = (state: EthAddress | null = null, action: AnyAction): EthAddress | null => {
+  switch (action.type) {
+    case actionTypes.SET_WEB3_PROVIDER_ADDRESS:
+      return action.data || null;
+    default:
+      return state;
+  }
+}
 
 export const currentUserId = (state: number | null = null, action: AnyAction): number | null => {
   switch (action.type) {

@@ -3,6 +3,7 @@ import * as React from "react";
 import { EthAddress, ApprovedRevision } from "@joincivil/core";
 import { ArticleSignPanelIcon } from "@joincivil/components";
 import { SignatureData } from "../store/interfaces";
+import { PanelWalletStatus } from "./PanelWalletStatus";
 import { PostStatus } from "./PostStatus";
 import { Signature } from "./Signature";
 import {
@@ -60,6 +61,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           </p>
         </IntroSection>
         <Body>
+          <PanelWalletStatus />
           <PostStatus actionString="signing" />
 
           <BodySection>
