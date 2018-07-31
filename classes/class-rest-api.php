@@ -143,7 +143,8 @@ class REST_API {
 		}
 
 		// Get the revision.
-		$last_revision = array_shift( wp_get_post_revisions( $post_id ) );
+		$revisions = wp_get_post_revisions( $post_id );
+		$last_revision = array_shift( $revisions );
 
 		// Unable to find a revision.
 		if ( ! ( $last_revision instanceof \WP_Post ) ) {
