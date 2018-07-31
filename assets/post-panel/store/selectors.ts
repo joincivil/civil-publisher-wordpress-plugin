@@ -35,11 +35,12 @@ export function getCurrentUserId(state: any): number {
 
 /** Returns ETH address associated with logged-in WordPress user (rather than what web3 tells us) */
 export function getLoggedInUserAddress(state: any): EthAddress | undefined {
-  return select("civil/blockchain").getUserData()[userMetaKeys.WALLET_ADDRESS];
+  const walletAddress = select("civil/blockchain").getUserData()[userMetaKeys.WALLET_ADDRESS];
+  return walletAddress ? walletAddress.toLowerCase() : walletAddress;
 }
 
 export function getWeb3ProviderAddress(state: any): EthAddress {
-  return state.web3ProviderAddress;
+  return state.web3ProviderAddress ? state.web3ProviderAddress.toLowerCase() : state.web3ProviderAddress;
 }
 
 export function getUserCapabilities(state: any): { [key: string]: boolean } {

@@ -23,7 +23,6 @@ export interface BlockchainSignPanelProps {
   isWpEditor: boolean;
   signatures: SignatureData;
   signDisabled: boolean;
-  userWalletAddress?: EthAddress;
   isDirty: boolean;
   latestRevisionJson: any;
   signArticle(): void;
@@ -91,21 +90,6 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           </BodySection>
 
           {this.props.isWpEditor && !!othersSigs.length && <BodySection>{othersSigs}</BodySection>}
-
-          <BodySection>
-            <i>
-              {this.props.userWalletAddress ? (
-                <>
-                  Signing as <code>{this.props.userWalletAddress}</code>
-                </>
-              ) : (
-                <>
-                  Please set your wallet address in your <a href="/wp-admin/profile.php">your profile</a> before
-                  signing.
-                </>
-              )}
-            </i>
-          </BodySection>
         </Body>
       </Wrapper>
     );

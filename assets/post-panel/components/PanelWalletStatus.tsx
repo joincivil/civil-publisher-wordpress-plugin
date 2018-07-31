@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 const { compose } = window.wp.element;
 const { withSelect, withDispatch } = window.wp.data;
+const { Button } = window.wp.components;
 import { EthAddress } from "@joincivil/core";
 import { hasInjectedProvider } from "../../util";
 import { ErrorText, Heading, BodySection } from "../styles";
@@ -10,6 +11,7 @@ import { NETWORK_NICE_NAME } from "../../constants";
 export interface PanelWalletStatusProps {
   noProvider: boolean;
   isCorrectNetwork: boolean;
+  wpUserWalletAddress?: EthAddress;
   web3ProviderAddress?: EthAddress;
 }
 
@@ -51,9 +53,23 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
           {faqText}
         </p>
       );
-    }
-
-    if (!errorHeading) {
+    } else if (!this.props.wpUserWalletAddress) {
+      errorHeading = "Not saved to profile";
+      errorBody = (
+        <>
+          <p>You must add your wallet address to your WordPress user profile before continuing.</p>
+          <Button isPrimary={true} href="/wp-admin/profile.php" target="_blank">Add to Your Profile</Button>
+        </>
+      );
+    } else if (this.props.wpUserWalletAddress !== this.props.web3ProviderAddress) {
+      errorHeading = "Wallet address mismatch";
+      errorBody = (
+        <>
+          <p>You wallet address in MetaMask (<code>{this.props.web3ProviderAddress}</code>) does not match the wallet address saved your WordPress user profile (<code>{this.props.wpUserWalletAddress}</code>). Please either log in to MetaMask with the correct wallet address, or change the wallet address saved in your profile.</p>
+          <Button isPrimary={true} href="/wp-admin/profile.php" target="_blank">Save MetaMask Address to Your Profile</Button>
+        </>
+      );
+    } else {
       return null;
     }
 
@@ -72,11 +88,16 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
 export const PanelWalletStatus = compose([
   withSelect(
     (select: any, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
-      const { isCorrectNetwork, getWeb3ProviderAddress } = select("civil/blockchain");
+      const {
+        isCorrectNetwork,
+        getWeb3ProviderAddress,
+        getLoggedInUserAddress,
+      } = select("civil/blockchain");
       return {
         noProvider: !hasInjectedProvider(),
         isCorrectNetwork: isCorrectNetwork(),
         web3ProviderAddress: getWeb3ProviderAddress(),
+        wpUserWalletAddress: getLoggedInUserAddress(),
       };
     },
   ),
