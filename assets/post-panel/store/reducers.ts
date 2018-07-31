@@ -14,21 +14,18 @@ export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => 
 };
 
 export const userData = (state: { [id: number]: any } = {}, action: AnyAction): { [id: number]: any } => {
-  let id;
   switch (action.type) {
-    case actionTypes.SET_USER_DATA:
-      const { userData } = action.data;
-      id = action.data.id;
+    case actionTypes.SET_USER_DATA: {
+      const { id, userData } = action.data;
       const newState = { ...state, [id]: userData };
       if (id === "me") {
         // also index by actual ID
         newState[userData.id] = userData;
       }
       return newState;
-
-    case actionTypes.SET_WP_USER_ADDRESS:
-      const { address } = action.data;
-      id = action.data.id;
+    }
+    case actionTypes.SET_WP_USER_ADDRESS: {
+      const { id, address } = action.data;
       return {
         ...state,
         [id]: {
@@ -36,9 +33,10 @@ export const userData = (state: { [id: number]: any } = {}, action: AnyAction): 
           [userMetaKeys.WALLET_ADDRESS]: address,
         },
       };
-
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };
 
