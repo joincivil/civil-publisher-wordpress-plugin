@@ -71,6 +71,7 @@ const BlockchainPublishPanel = compose([
           revisionID: revisionId,
           revisionJsonSansDateHash,
           published: publishedDate,
+          txHash
         };
         publishedRevisions.push(publishedRevisionData);
 
