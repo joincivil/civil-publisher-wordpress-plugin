@@ -2,8 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 const { compose } = window.wp.element;
 const { withSelect, withDispatch } = window.wp.data;
-import { Civil, EthAddress } from "@joincivil/core";
-import { getCivil, hasInjectedProvider } from "../../util";
+import { EthAddress } from "@joincivil/core";
+import { hasInjectedProvider } from "../../util";
 import { ErrorText, Heading, BodySection } from "../styles";
 import { NETWORK_NICE_NAME } from "../../constants";
 
@@ -19,18 +19,7 @@ export interface PanelWalletStatusState {
 }
 
 class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps, PanelWalletStatusState> {
-  public civil: Civil | undefined;
-
-  constructor(props: PanelWalletStatusProps) {
-    super(props);
-    this.civil = getCivil();
-  }
-  public componentDidMount(): void {
-  }
-  public componentWillUnmount(): void {
-  }
-
-  public render(): JSX.Element {
+  public render(): JSX.Element | null {
     const faqText = <><a href="#TODO" target="_blank">Read our FAQ</a> for more help.</>;
     let errorHeading = null;
     let errorBody = null;
@@ -46,7 +35,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
     }
 
     if (! errorHeading) {
-      return <>{null}</>;
+      return null;
     }
 
     return (
@@ -69,12 +58,6 @@ export const PanelWalletStatus = compose([
         noProvider: !hasInjectedProvider(),
         isCorrectNetwork: isCorrectNetwork(),
         web3ProviderAddress: getWeb3ProviderAddress(),
-      };
-    }
-  ),
-  withDispatch(
-    (dispatch: any): Partial<PanelWalletStatusProps> => {
-      return {
       };
     }
   ),
