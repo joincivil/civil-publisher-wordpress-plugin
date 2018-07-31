@@ -1,3 +1,4 @@
+const { select } = window.wp.data;
 import { EthAddress, TxHash } from "@joincivil/core";
 import { AnyAction } from "redux";
 import { actionTypes } from "./constants";
@@ -17,6 +18,19 @@ export function setUserData(id: number | "me", userData: any): AnyAction {
     data: {
       id,
       userData,
+    },
+  };
+}
+
+export function setWpUserAddress(
+  address: EthAddress,
+  id: number = select("civil/blockchain").getCurrentUserId(),
+): AnyAction {
+  return {
+    type: actionTypes.SET_WP_USER_ADDRESS,
+    data: {
+      id,
+      address,
     },
   };
 }

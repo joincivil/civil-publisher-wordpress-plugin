@@ -5,7 +5,7 @@ import { Newsroom } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
 import { addAddress, addTxHash } from "./actions";
-import { getCivil, hasInjectedProvider } from "../util";
+import { getCivil, hasInjectedProvider, saveAddressToProfile } from "../util";
 import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME } from "../constants";
 import { WalletStatus } from "./WalletStatus";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
@@ -100,7 +100,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           networkName={NETWORK_NICE_NAME}
           metamaskWalletAddress={this.state.account}
           profileWalletAddress={this.state.profileWalletAddress}
-          saveAddressToProfile={this.saveAddressToProfile}
+          saveAddressToProfile={this.saveAddress}
         />
         <hr />
         {manager}
@@ -170,15 +170,8 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
   };
 
-  private saveAddressToProfile = async () => {
-    await apiRequest({
-      method: "POST",
-      path: apiNamespace + "users/me",
-      data: {
-        [userMetaKeys.WALLET_ADDRESS]: this.state.account,
-      },
-    });
-
+  private saveAddress = async () => {
+    await saveAddressToProfile(this.state.account!);
     this.setState({
       profileWalletAddress: this.state.account,
     });

@@ -34,7 +34,7 @@ export function getCurrentUserId(state: any): number {
 }
 
 /** Returns ETH address associated with logged-in WordPress user (rather than what web3 tells us) */
-export function getLoggedInUserAddress(state: any): EthAddress | undefined {
+export function getCurrentWpUserAddress(state: any): EthAddress | undefined {
   const walletAddress = select("civil/blockchain").getUserData()[userMetaKeys.WALLET_ADDRESS];
   return walletAddress ? walletAddress.toLowerCase() : walletAddress;
 }

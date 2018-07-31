@@ -1,7 +1,7 @@
 import { actionTypes } from "./constants";
 import { SignatureData } from "./interfaces";
 import { AnyAction } from "redux";
-import { postMetaKeys } from "../../constants";
+import { userMetaKeys } from "../../constants";
 import { EthAddress, TxHash } from "@joincivil/core";
 
 export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => {
@@ -14,15 +14,29 @@ export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => 
 };
 
 export const userData = (state: { [id: number]: any } = {}, action: AnyAction): { [id: number]: any } => {
+  let id;
   switch (action.type) {
     case actionTypes.SET_USER_DATA:
-      const { id, userData } = action.data;
+      const { userData } = action.data;
+      id = action.data.id;
       const newState = { ...state, [id]: userData };
       if (id === "me") {
         // also index by actual ID
         newState[userData.id] = userData;
       }
       return newState;
+
+    case actionTypes.SET_WP_USER_ADDRESS:
+      const { address } = action.data;
+      id = action.data.id;
+      return {
+        ...state,
+        [id]: {
+          ...(state[id] || {}),
+          [userMetaKeys.WALLET_ADDRESS]: address,
+        },
+      };
+
     default:
       return state;
   }
@@ -35,7 +49,7 @@ export const web3ProviderAddress = (state: EthAddress | null = null, action: Any
     default:
       return state;
   }
-}
+};
 
 export const currentUserId = (state: number | null = null, action: AnyAction): number | null => {
   switch (action.type) {

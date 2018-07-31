@@ -21,7 +21,7 @@ const BlockchainSignPanel = compose([
         getCurrrentUserId,
         getCurrentUserId,
         getWeb3ProviderAddress,
-        getLoggedInUserAddress,
+        getCurrentWpUserAddress,
         getSignatures,
         isValidSignature,
         isWpEditor,
@@ -32,7 +32,7 @@ const BlockchainSignPanel = compose([
       const signatures = getSignatures();
 
       const isSignButtonDisabled = (): boolean => {
-        const wpUserAddress = getLoggedInUserAddress();
+        const wpUserAddress = getCurrentWpUserAddress();
         const web3Address = getWeb3ProviderAddress();
         if (!wpUserAddress || !web3Address || wpUserAddress !== web3Address) {
           return true;
