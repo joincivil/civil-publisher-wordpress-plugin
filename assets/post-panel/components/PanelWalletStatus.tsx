@@ -20,21 +20,40 @@ export interface PanelWalletStatusState {
 
 class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps, PanelWalletStatusState> {
   public render(): JSX.Element | null {
-    const faqText = <><a href="#TODO" target="_blank">Read our FAQ</a> for more help.</>;
+    const faqText = (
+      <>
+        <a href="#TODO" target="_blank">
+          Read our FAQ
+        </a>{" "}
+        for more help.
+      </>
+    );
     let errorHeading = null;
     let errorBody = null;
     if (this.props.noProvider) {
       errorHeading = "Not logged into wallet";
-      errorBody = <p>Don’t have a wallet? We recommend installing <a href="https://metamask.io/" target="_blank">MetaMask</a>, where you can create and set up your wallet. {faqText}</p>
+      errorBody = (
+        <p>
+          Don’t have a wallet? We recommend installing{" "}
+          <a href="https://metamask.io/" target="_blank">
+            MetaMask
+          </a>, where you can create and set up your wallet. {faqText}
+        </p>
+      );
     } else if (!this.props.web3ProviderAddress) {
       errorHeading = "Wallet locked";
-      errorBody = <p>Please log in to your wallet to continue. {faqText}</p>
+      errorBody = <p>Please log in to your wallet to continue. {faqText}</p>;
     } else if (!this.props.isCorrectNetwork) {
       errorHeading = "Change your network";
-      errorBody = <p>Looks like you’re using an unsupported Ethereum network. Make sure you're using the {NETWORK_NICE_NAME}. {faqText}</p>
+      errorBody = (
+        <p>
+          Looks like you’re using an unsupported Ethereum network. Make sure you're using the {NETWORK_NICE_NAME}.{" "}
+          {faqText}
+        </p>
+      );
     }
 
-    if (! errorHeading) {
+    if (!errorHeading) {
       return null;
     }
 
@@ -53,12 +72,12 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
 export const PanelWalletStatus = compose([
   withSelect(
     (select: any, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
-      const { isCorrectNetwork, getWeb3ProviderAddress } = select("civil/blockchain")
+      const { isCorrectNetwork, getWeb3ProviderAddress } = select("civil/blockchain");
       return {
         noProvider: !hasInjectedProvider(),
         isCorrectNetwork: isCorrectNetwork(),
         web3ProviderAddress: getWeb3ProviderAddress(),
       };
-    }
+    },
   ),
 ])(PanelWalletStatusComponent);
