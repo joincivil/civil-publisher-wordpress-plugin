@@ -38,20 +38,35 @@ function show_profile_fields( $user ) {
 	$wallet_address = get_the_author_meta( USER_ETH_ADDRESS_META_KEY, $user->ID );
 	wp_nonce_field( 'civil_newsroom_protocol_update_wallet_address_action', 'civil_newsroom_protocol_eth_wallet_address_nonce' );
 	?>
-	<h3><?php esc_html_e( 'Civil Identity', 'civil' ); ?></h3>
+	<h3><?php esc_html_e( 'Civil Newsroom Manager - Wallet Address', 'civil' ); ?></h3>
 
 	<table class="form-table">
 		<tr>
-			<th><label for="<?php echo esc_attr( USER_ETH_ADDRESS_META_KEY ); ?>"><?php esc_html_e( 'ETH wallet address', 'civil' ); ?></label></th>
+			<th><label for="<?php echo esc_attr( USER_ETH_ADDRESS_META_KEY ); ?>"><?php esc_html_e( 'Your wallet address', 'civil' ); ?></label></th>
 			<td>
-				<input type="text"
-					size="42"
-					id="<?php echo esc_attr( USER_ETH_ADDRESS_META_KEY ); ?>"
-					name="<?php echo esc_attr( USER_ETH_ADDRESS_META_KEY ); ?>"
-					value="<?php echo esc_attr( $wallet_address ); ?>"
-					placeholder="0xabc123"
-					class="regular-text"
-				/>
+				<div style="max-width: 400px;">
+					<input type="text"
+						size="42"
+						id="<?php echo esc_attr( USER_ETH_ADDRESS_META_KEY ); ?>"
+						name="<?php echo esc_attr( USER_ETH_ADDRESS_META_KEY ); ?>"
+						value="<?php echo esc_attr( $wallet_address ); ?>"
+						placeholder="0xabc123"
+						class="regular-text"
+					/>
+					<p>
+					<?php
+						echo sprintf(
+							wp_kses(
+								/* translators: 1: FAQm-age URL */
+								__( 'This is a your wallet address. Authors need wallet addresses to sign articles, and editors need wallet addresses to sign and index posts to the blockchain. If you change your wallet address, you or your team may <a href="%1$s">lose access to your newsroom</a>, so be sure to verify that this address is correct.', 'civil' ),
+								[ 'a' => [ 'href' => [] ] ]
+							),
+							esc_url( menu_page_url( HELP_PAGE, false ) . '#TODO' )
+						);
+					?>
+					</p>
+					<p><a href="<?php esc_url( menu_page_url( HELP_PAGE ) ); ?>#TODO"><?php esc_html_e( 'Learn more about wallet addresses' ); ?></a>.</p>
+				</div>
 			</td>
 		</tr>
 	</table>

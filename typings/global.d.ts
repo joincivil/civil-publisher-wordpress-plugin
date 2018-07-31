@@ -6,6 +6,10 @@ interface Window {
   web3: any;
   _wpGutenbergPost: any;
   civilNamespace: { newsroomAddress: string; newsroomTxHash: string };
+  civilImages: {
+    metamask_confim_modal: string;
+    metamask_logo: string;
+  };
 }
 
 declare module "refx";

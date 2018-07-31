@@ -14,7 +14,7 @@ export interface SignatureProps {
   userData: any;
 }
 
-const Wrapper = styled.div`
+const WrapperInner = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -22,6 +22,10 @@ const Wrapper = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const WrapperOuter = styled.div`
+  margin-bottom: 16px;
 `;
 
 const UserWrap = styled.span`
@@ -48,28 +52,28 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
     tipText = "This post has been updated since last signed and requires a new signature";
     validIndicator = <HollowRedNoGood />;
   } else if (isDirty) {
-    tipText = `Signed ${moment(sigData.date).format("MMMM DD hh:mm a")}`
     // Since we can't distinguish between dirty due to post content changes (which would invalidate sig) or dirty due to other changes (which wouldn't) this is the best we can do, unless we cache post content and repeatedly check against it, but that seems slow and messy.
     // TODO check if we can get revision JSON from autosave (ch1446) and check against that (though we'd still be in unknown state until autosave happened)
     validIndicator = <QuestionToolTip explainerText="Please save this post in order to check signature validity." />;
   } else {
+    tipText = `Signed ${moment(sigData.date).format("MMMM DD h:mm a")}`
     validIndicator = <HollowGreenCheck />;
   }
 
   const avatarUrl = userData.avatar_urls && userData.avatar_urls[48];
 
-  return (
-    <Wrapper>
-      <ToolTip explainerText={tipText}>
-        <UserWrap>
-          <Avatar src={avatarUrl} />
-        {/* TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. */}
-          {userData.name}
-        </UserWrap>
-        {showValidity && <IconWrap>{validIndicator}</IconWrap>}
-      </ToolTip>
-    </Wrapper>
-  );
+  const signatureInner = (<WrapperInner>
+    <UserWrap>
+      <Avatar src={avatarUrl} />
+    {/* TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. */}
+      {userData.name}
+    </UserWrap>
+    {showValidity && <IconWrap>{validIndicator}</IconWrap>}
+  </WrapperInner>);
+
+  return tipText ? (<WrapperOuter><ToolTip explainerText={tipText}>
+      {signatureInner}
+  </ToolTip></WrapperOuter>) : signatureInner;
 }
 
 export const Signature = withSelect(

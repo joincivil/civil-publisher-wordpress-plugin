@@ -1,12 +1,18 @@
 import * as React from "react";
-import { TransactionButtonInnerProps, Button, buttonSizes } from "@joincivil/components";
+import { TransactionButtonInnerProps, Button, buttonSizes, ClipLoader } from "@joincivil/components";
 import styled, { StyledComponentClass } from "styled-components";
 
 export const DisabledTransactionProcessingButton: StyledComponentClass<any, "button"> = styled.button`
-  padding: 6px 40px;
+  padding: 6px 20px 6px 40px;
   background: transparent;
   border-radius: 3px;
   border: solid 1px #dddddd;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ClipL = ClipLoader.extend`
+  margin-left: 5px;
 `;
 
 export const IndexTransactionButton: React.StatelessComponent<TransactionButtonInnerProps> = props => {
@@ -25,7 +31,7 @@ export const IndexTransactionButton: React.StatelessComponent<TransactionButtonI
       break;
     case 2:
       buttonComponent = (
-        <DisabledTransactionProcessingButton>Transaction In Progress</DisabledTransactionProcessingButton>
+        <DisabledTransactionProcessingButton>Transaction In Progress <ClipL size={15} /></DisabledTransactionProcessingButton>
       );
       break;
   }
