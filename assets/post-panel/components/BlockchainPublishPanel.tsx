@@ -6,6 +6,22 @@ import { PostStatus } from "./PostStatus";
 import { CreateIndex } from "./CreateIndex";
 import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection } from "../styles";
 import { IndexTransactionButton, DisabledTransactionProcessingButton } from "./Buttons";
+import { MetaMaskModal } from "../../shared-components/MetaMaskModal";
+import styled from "styled-components";
+
+const ModalHeader = styled.h2`
+  font-size: 20px;
+`;
+
+const ModalP = styled.p`
+  font-size: 16px;
+  color: #5f5f5f;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 export interface BlockchainPublishPanelProps {
   isNewsroomEditor: boolean;
@@ -30,6 +46,7 @@ export interface BlockchainPublishPanelProps {
 export interface BlockchainPublishPanelState {
   loadedWithTxHash: boolean;
   isPreTransactionModalOpen: boolean;
+  isWaitingTransactionModalOpen: boolean;
   isTransactionInProggressModalOpen: boolean;
   isTransactionCompleteModalOpen: boolean;
   startTransaction?(): any;
@@ -44,6 +61,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
     super(props);
     this.state = {
       loadedWithTxHash: false,
+      isWaitingTransactionModalOpen: false,
       isPreTransactionModalOpen: false,
       isTransactionInProggressModalOpen: false,
       isTransactionCompleteModalOpen: false,
@@ -72,12 +90,30 @@ export class BlockchainPublishPanelComponent extends React.Component<
     if (!this.state.isPreTransactionModalOpen) {
       return null;
     }
-    return (<Modal>
-      <h2>Open MetaMask to Index This Article on the Blockchain</h2>
-      <p> MetaMask will open a new window for you to confirm this transaction with your wallet.</p>
-      <BorderlessButton onClick={this.cancelTransaction}>Cancel</BorderlessButton>
-      <Button onClick={this.startTransaction}>Open MetaMask</Button>
-    </Modal>);
+    return (
+      <MetaMaskModal
+        waiting={false}
+        cancelTransaction={() => this.cancelTransaction() }
+        startTransaction={() => this.startTransaction() }
+      >
+        <ModalHeader>Open MetaMask to Index This Article on the Blockchain</ModalHeader>
+      </MetaMaskModal>
+    );
+  }
+
+  public renderAwaitingTransactionModal(): JSX.Element | null {
+    if (!this.state.isWaitingTransactionModalOpen) {
+      return null;
+    }
+    return (
+      <MetaMaskModal
+        waiting={true}
+        cancelTransaction={() => this.cancelTransaction() }
+        startTransaction={() => this.startTransaction() }
+      >
+        <ModalHeader>Waiting to Confirm in MetaMask</ModalHeader>
+      </MetaMaskModal>
+    );
   }
 
   public renderTransactionPendingModal(): JSX.Element | null {
@@ -85,10 +121,12 @@ export class BlockchainPublishPanelComponent extends React.Component<
       return null;
     }
     return (<Modal>
-      <h2>Your Post is being indexed</h2>
-      <p> This can take some time depending on traffic on the Ethereum network.</p>
-      <p> You are welcome to leave this page open while continuing to work, but please note that any changes you make to a post once the blockchain indexing process has begun will not be reflected on that blockchain index unless you re-index.</p>
-      <Button onClick={() => this.setState({isTransactionInProggressModalOpen: false})}>Close</Button>
+      <ModalHeader>Your Post is being indexed</ModalHeader>
+      <ModalP> This can take some time depending on traffic on the Ethereum network.</ModalP>
+      <ModalP> You are welcome to leave this page open while continuing to work, but please note that any changes you make to a post once the blockchain indexing process has begun will not be reflected on that blockchain index unless you re-index.</ModalP>
+      <ButtonContainer>
+        <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({isTransactionInProggressModalOpen: false})}>OK</Button>
+      </ButtonContainer>
     </Modal>);
   }
 
@@ -97,10 +135,12 @@ export class BlockchainPublishPanelComponent extends React.Component<
       return null;
     }
     return (<Modal>
-      <h2>Index added!</h2>
-      <p>Your post was successfully indexed to the Ethereum blockchain.</p>
-      <p>Note that any time you make an update or revision to a post, we recommend you also index that revision to the blockchain</p>
-      <Button onClick={() => this.setState({isTransactionCompleteModalOpen: false})}>Close</Button>
+      <ModalHeader>Index added!</ModalHeader>
+      <ModalP>Your post was successfully indexed to the Ethereum blockchain.</ModalP>
+      <ModalP>Note that any time you make an update or revision to a post, we recommend you also index that revision to the blockchain</ModalP>
+      <ButtonContainer>
+        <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({isTransactionCompleteModalOpen: false})}>OK</Button>
+      </ButtonContainer>
     </Modal>);
   }
 
@@ -127,13 +167,16 @@ export class BlockchainPublishPanelComponent extends React.Component<
             });
           },
           postTransaction: (result: number) => {
-            this.setState({isTransactionCompleteModalOpen: true});
+            this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
             console.log(this.props.txHash);
             this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash);
             this.props.saveTxHash!("");
           },
           handleTransactionHash: (txHash: TxHash) => {
-            this.setState({isTransactionInProggressModalOpen: true});
+            this.setState({
+              isTransactionInProggressModalOpen: true,
+              isWaitingTransactionModalOpen: false,
+            });
             this.props.saveTxHash!(txHash);
           },
         },
@@ -155,13 +198,16 @@ export class BlockchainPublishPanelComponent extends React.Component<
             });
           },
           postTransaction: (result: number) => {
-            this.setState({isTransactionCompleteModalOpen: true});
+            this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
             console.log(this.props.txHash);
             this.props.publishContent!(result, this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash);
             this.props.saveTxHash!("");
           },
           handleTransactionHash: (txHash: TxHash) => {
-            this.setState({isTransactionInProggressModalOpen: true});
+            this.setState({
+              isTransactionInProggressModalOpen: true,
+              isWaitingTransactionModalOpen: false,
+            });
             this.props.saveTxHash!(txHash);
           },
         },
@@ -228,6 +274,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
         {this.renderPreTransactionModal()}
         {this.renderTransactionPendingModal()}
         {this.renderTransactionCompleteModal()}
+        {this.renderAwaitingTransactionModal()}
       </Wrapper>
     );
   }
@@ -251,6 +298,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
       cancelTransaction: undefined,
       startTransaction: undefined,
       isPreTransactionModalOpen: false,
+      isWaitingTransactionModalOpen: true,
     })
   }
 }

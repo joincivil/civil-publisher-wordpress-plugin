@@ -6,9 +6,9 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 import { getCivil } from "../util";
 import { Civil } from "@joincivil/core";
-import { Tabs, Tab } from "@joincivil/components";
+import { Tabs, Tab, TabComponentProps } from "@joincivil/components";
 import "./store";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
@@ -16,6 +16,21 @@ import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleCompone
 export interface BlockchainPluginProps {
   onNetworkChange(networkName: string): void;
 }
+
+const StyledLi = styled.li`
+  border-bottom: ${(props: TabComponentProps) => (props.isActive ? "3px solid #01a0d2" : "none")};
+  box-sizing: border-box;
+  font-family: ${props => props.theme.sansSerifFont};
+  font-weight: 600;
+  margin-bottom: 0;
+  padding: 15px 0 18px;
+  text-align: center;
+  width: 75px;
+
+  & a {
+    color: inherit;
+  }
+`;
 
 class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginProps> {
   public civil: Civil | undefined;
@@ -70,7 +85,7 @@ const CivilSidebar = () => {
   if (window.civilNamespace.newsroomAddress) {
     panelContent = (
       <BlockchainPluginInner>
-        <Tabs>
+        <Tabs TabComponent={StyledLi}>
         <Tab title="Sign">
           <BlockchainSignPanel />
         </Tab>
