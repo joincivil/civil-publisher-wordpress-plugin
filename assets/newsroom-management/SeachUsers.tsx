@@ -5,6 +5,9 @@ import { isWellFormattedAddress } from "@joincivil/utils";
 import { debounce } from "lodash";
 import styled from "styled-components";
 import { userMetaKeys, apiNamespace } from "../constants";
+import { connect, DispatchProp } from "react-redux";
+import { addUser } from "@joincivil/newsroom-manager";
+import { ManagerState } from "./reducer";
 
 export interface SearchUserProps {
   getOptions(str: string): Promise<any[]>;
@@ -73,8 +76,8 @@ const noAddressError =
 const noUserError =
   "No user matches this address. Make sure the address is correct and that all your newsroom members have added their addresses";
 
-export class SearchUsers extends React.Component<SearchUserProps, SearchUserState> {
-  constructor(props: SearchUserProps) {
+export class SearchUsersComponent extends React.Component<SearchUserProps & DispatchProp<any>, SearchUserState> {
+  constructor(props: SearchUserProps & DispatchProp<any>) {
     super(props);
     this.setOptions = debounce(this.setOptions, 200);
     this.state = {
@@ -117,6 +120,7 @@ export class SearchUsers extends React.Component<SearchUserProps, SearchUserStat
   }
 
   public render(): JSX.Element {
+    console.log(this.props);
     const error = this.state.error ? <ErrorP>{this.state.error}</ErrorP> : null;
     return (
       <Wrapper>
@@ -191,6 +195,7 @@ export class SearchUsers extends React.Component<SearchUserProps, SearchUserStat
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
+        this.props.dispatch(addUser(value, this.state.value.name!))
       } else {
         try {
           const userFromWallet = await apiRequest({
@@ -212,3 +217,9 @@ export class SearchUsers extends React.Component<SearchUserProps, SearchUserStat
     }
   };
 }
+
+const mapStateToProps = (state: ManagerState, ownProps: SearchUserProps) => {
+    return ownProps;
+}
+
+export const SearchUsers = connect(mapStateToProps)(SearchUsersComponent);

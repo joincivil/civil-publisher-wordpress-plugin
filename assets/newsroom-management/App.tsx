@@ -1,7 +1,7 @@
 const { apiRequest } = window.wp;
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
-import { Newsroom } from "@joincivil/newsroom-manager";
+import { Newsroom, addUser } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
 import { addAddress, addTxHash } from "./actions";
@@ -100,7 +100,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           networkName={NETWORK_NICE_NAME}
           metamaskWalletAddress={this.state.account}
           profileWalletAddress={this.state.profileWalletAddress}
-          saveAddressToProfile={this.saveAddress}
+          saveAddressToProfile={this.saveAddressToProfile}
         />
         <hr />
         {manager}
@@ -170,7 +170,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
   };
 
-  private saveAddress = async () => {
+  private saveAddressToProfile = async () => {
     await saveAddressToProfile(this.state.account!);
     this.setState({
       profileWalletAddress: this.state.account,
