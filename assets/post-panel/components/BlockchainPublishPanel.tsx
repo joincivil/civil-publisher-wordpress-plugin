@@ -169,8 +169,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
           },
           postTransaction: (result: number) => {
             this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
-            console.log(this.props.txHash);
-            this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash);
+            this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash!);
             this.props.saveTxHash!("");
           },
           handleTransactionHash: (txHash: TxHash) => {
@@ -200,8 +199,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
           },
           postTransaction: (result: number) => {
             this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
-            console.log(this.props.txHash);
-            this.props.publishContent!(result, this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash);
+            this.props.publishContent!(result, this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash!);
             this.props.saveTxHash!("");
           },
           handleTransactionHash: (txHash: TxHash) => {
