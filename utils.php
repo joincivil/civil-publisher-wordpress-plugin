@@ -43,9 +43,9 @@ function is_valid_txhash( $hash ) {
 }
 
 /**
- * Gets subset of WP user data (just ID and display name) from WP_User, or data from WP_User that's linked to coauthors-plus guest author
+ * Gets subset of WP user data (just ID and display name) from given WP_User, or data from WP_User that's linked to given co-authors-plus guest author.
  *
- * @param object $user A WP_User object or coauthors-plus author object.
+ * @param object $user A WP_User object or co-authors-plus author object.
  * @return object Data from WP_User object, but any display name set in guest author overrides regular user display name.
  */
 function get_user_data( $user ) {
@@ -75,17 +75,16 @@ function get_user_data( $user ) {
 }
 
 /**
- * Gets subset of data (just ID and display name) about post authors.
+ * Gets subset of data (just ID and display name) about all post authors for this post.
  *
  * @param int $post_id Post ID.
- * @return array Data from WP_Users who are authors of the post - any coauthors-plus guest authors are dereferenced to their WP_Users.
+ * @return array Data from WP_Users who are authors of the post - any co-authors-plus guest authors are dereferenced to their WP_Users.
  */
 function get_post_authors_data( $post_id ) {
 	$authors = [];
 	if ( function_exists( 'get_coauthors' ) ) {
 		$authors = get_coauthors( $post_id );
 	} else {
-		// Support absence of co-authors-plus plugin.
 		$post = get_post( $post_id );
 		$author = get_user_by( 'id', $post->post_author );
 		if ( ! empty( $author ) ) {

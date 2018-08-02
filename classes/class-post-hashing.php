@@ -166,7 +166,6 @@ class Post_Hashing {
 		// Handle non-author signatures.
 		if ( ! empty( $signatures ) ) {
 			foreach ( $signatures as $signer_id => $sig_data ) {
-				error_log( 'SIGNER ' . $signer_id );
 				$signer = get_user_by( 'id', $signer_id );
 				$author_data = [
 					// TODO Should this be "byline" or something else? Should we not be in "authors"?

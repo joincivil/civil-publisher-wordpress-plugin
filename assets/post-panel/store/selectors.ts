@@ -192,3 +192,9 @@ export function isValidSignature(state: any, signature: ApprovedRevision): boole
 export function getPostAuthors(): any[] {
   return JSON.parse(getPostMeta()[postMetaKeys.POST_AUTHORS]) || [];
 }
+
+export function currentUserIsPostAuthor(): boolean {
+  const id = select("civil/blockchain").getCurrentUserId();
+  const authors: any[] = select("civil/blockchain").getPostAuthors();
+  return authors.map(author => author.ID).indexOf(id) !== -1;
+}
