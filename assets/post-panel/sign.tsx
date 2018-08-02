@@ -26,6 +26,8 @@ const BlockchainSignPanel = compose([
         isValidSignature,
         isWpEditor,
         getLatestRevisionJSON,
+        getPostAuthors,
+        currentUserIsPostAuthor,
       } = selectStore("civil/blockchain");
 
       const currentUserId = getCurrentUserId();
@@ -57,6 +59,8 @@ const BlockchainSignPanel = compose([
         isValidSignature,
         isDirty: isEditedPostDirty(),
         latestRevisionJson: getLatestRevisionJSON(),
+        postAuthors: getPostAuthors(),
+        currentUserIsPostAuthor: currentUserIsPostAuthor(),
       };
     },
   ),

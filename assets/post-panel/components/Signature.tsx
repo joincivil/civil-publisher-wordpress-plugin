@@ -8,10 +8,10 @@ import { IconWrap } from "../styles";
 
 export interface SignatureProps {
   authorUserId: number;
-  sigData: ApprovedRevision;
   isDirty: boolean;
-  isValid: boolean;
   userData: any;
+  sigData?: ApprovedRevision;
+  isValid?: boolean;
 }
 
 const WrapperInner = styled.div`

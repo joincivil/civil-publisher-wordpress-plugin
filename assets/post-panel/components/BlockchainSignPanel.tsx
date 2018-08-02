@@ -25,6 +25,8 @@ export interface BlockchainSignPanelProps {
   signDisabled: boolean;
   isDirty: boolean;
   latestRevisionJson: any;
+  postAuthors: any[];
+  currentUserIsPostAuthor: boolean;
   signArticle(): void;
   isValidSignature(signature: ApprovedRevision): boolean;
 }
@@ -48,6 +50,12 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
             isValid={this.props.isValidSignature(sigData)}
           />
         ),
+      )
+      // create placeholder signature elements for any remaining post authors who haven't signed:
+      .concat(
+        this.props.postAuthors
+          .filter(author => !this.props.signatures[author.ID])
+          .map(author => <Signature authorUserId={author.ID} />),
       );
 
     return (
@@ -55,8 +63,12 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
         <IntroSection>
           <Heading>Sign</Heading>
           <p>
-            We recommend you sign your posts for enhanced credibility. By signing this post, you are acknowledging that
-            you are its author and are fully aware of its content. <a href="#TODO">Learn more</a>
+            We recommend you sign your posts for enhanced credibility.
+            {this.props.currentUserIsPostAuthor
+              ? " By signing this post, you are acknowledging that you are its author and are fully aware of its content. "
+              : " By signing this post, you are acknowledging that you are fully aware of its content as a representative of your newsroom. "}
+            {/*TODO confirm this copy*/}
+            <a href="#TODO">Learn more</a>
           </p>
         </IntroSection>
         <Body>
