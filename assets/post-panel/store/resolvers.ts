@@ -20,9 +20,7 @@ export async function getUserData(state: any, id?: number | "me"): Promise<any> 
   }
 
   try {
-    // TODO authors can't list users (can't get any info about them at all), so we have to show dummy data for other sigs
     const userData = await apiRequest({ path: "/wp/v2/users/" + id + "?context=edit" });
-    id = id === "me" ? userData.id : id;
     return setUserData(id!, userData);
   } catch (err) {
     console.error("Failed to fetch user data:", err);
