@@ -46,7 +46,7 @@ function is_valid_txhash( $hash ) {
  * Gets subset of WP user data (just ID and display name) from given WP_User, or data from WP_User that's linked to given co-authors-plus guest author.
  *
  * @param object $user A WP_User object or co-authors-plus author object.
- * @return object Data from WP_User object, but any display name set in guest author overrides regular user display name.
+ * @return array Associative array of data from WP_User object, but any display name set in guest author overrides regular user display name.
  */
 function get_user_data( $user ) {
 	$data = null;
