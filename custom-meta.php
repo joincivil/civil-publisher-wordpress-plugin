@@ -265,6 +265,8 @@ function validate_newsroom_txhash( $input ) {
 /**
  * Saves minimal amount of data about post authors that we need to be able to access from Gutenberg. Co-Authors Plus doesn't seem to support any way to do this, so on save we will generate this data and store in post meta.
  *
+ * NOTE: Some information about coauthors is available from legacy metabox interface in Gutenberg store accessible via `wp.data.select('core/edit-post').getMetaBox('normal').data` which has various coauthors fields, but it... doesn't list more than two coauthors. Maybe the data is there hiding somewhere, or this will be improved in the future?
+ *
  * @param int $post_id The post ID.
  */
 function save_post_author_data( $post_id ) {
