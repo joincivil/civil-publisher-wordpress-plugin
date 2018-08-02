@@ -97,3 +97,12 @@ export const setIsCorrectNetwork = (networkName: string): AnyAction => {
     },
   };
 };
+
+export const setOpenTab = (openTabIndex: number): AnyAction => {
+  return {
+    type: actionTypes.SET_OPEN_TAB,
+    data: {
+      openTabIndex,
+    },
+  };
+};

@@ -117,3 +117,12 @@ export const network = (state: { isCorrectNetwork: boolean } = { isCorrectNetwor
       return state;
   }
 };
+
+export const uiControl = (state: { openTabIndex: number} = { openTabIndex: 0}, action: AnyAction) => {
+  switch (action.type) {
+    case actionTypes.SET_OPEN_TAB:
+      return action.data;
+    default:
+      return state;
+  }
+}

@@ -14,8 +14,10 @@ import BlockchainPublishPanel from "./publish";
 import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
 
 export interface BlockchainPluginProps {
+  openTab: number,
   onNetworkChange(networkName: string): void;
   onAccountChange(address: EthAddress): void;
+  onTabChange(openTabIndex: number): void;
 }
 
 const StyledLi = styled.li`
@@ -57,20 +59,39 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
     }
   }
   public render(): JSX.Element {
-    return <>{this.props.children}</>;
+    return (<Tabs  activeIndex={this.props.openTab} onActiveTabChange={this.props.onTabChange} TabComponent={StyledLi}>
+      <Tab title="Sign">
+        <BlockchainSignPanel />
+      </Tab>
+      <Tab title="index">
+        <BlockchainPublishPanel />
+      </Tab>
+    </Tabs>);
   }
 }
 
 const BlockchainPluginInner = compose([
   withDispatch(
-    (dispatch: any): BlockchainPluginProps => {
-      const { setIsCorrectNetwork, setWeb3ProviderAddress } = dispatch("civil/blockchain");
+    (dispatch: any): Partial<BlockchainPluginProps> => {
+      const { setIsCorrectNetwork, setWeb3ProviderAddress, setOpenTab } = dispatch("civil/blockchain");
       const onAccountChange = (address: EthAddress) => dispatch(setWeb3ProviderAddress(address));
       const onNetworkChange = (networkName: string) => dispatch(setIsCorrectNetwork(networkName));
+      const onTabChange = (openTabIndex: number) => dispatch(setOpenTab(openTabIndex));
       return {
         onAccountChange,
         onNetworkChange,
+        onTabChange,
       };
+    },
+  ),
+  withSelect(
+    (selectStore: any): Partial<BlockchainPluginProps> => {
+      const {
+        getTabIndex
+      } = selectStore("civil/blockchain");
+      return {
+        openTab: getTabIndex(),
+      }
     },
   ),
 ])(BlockchainPluginInnerComponent);
@@ -84,18 +105,7 @@ const CivilSidebar = () => {
     </h3>
   );
   if (window.civilNamespace.newsroomAddress) {
-    panelContent = (
-      <BlockchainPluginInner>
-        <Tabs TabComponent={StyledLi}>
-        <Tab title="Sign">
-          <BlockchainSignPanel />
-        </Tab>
-        <Tab title="index">
-          <BlockchainPublishPanel />
-        </Tab>
-        </Tabs>
-      </BlockchainPluginInner>
-    );
+    panelContent = <BlockchainPluginInner/>;
   }
   return (
     <>

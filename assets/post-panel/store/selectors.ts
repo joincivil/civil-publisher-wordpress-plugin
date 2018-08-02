@@ -198,3 +198,7 @@ export function currentUserIsPostAuthor(): boolean {
   const authors: any[] = select("civil/blockchain").getPostAuthors();
   return authors.map(author => author.ID).indexOf(id) !== -1;
 }
+
+export function getTabIndex(state: any): number {
+  return state.uiControl.openTabIndex;
+}

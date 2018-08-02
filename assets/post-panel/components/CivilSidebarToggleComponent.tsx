@@ -37,7 +37,7 @@ export class CivilSidebarToggleComponent extends React.Component<CivilNavBarButt
 
 export const CivilSidebarWithComposed = compose([
   withSelect(
-    (selectStore: any): CivilNavBarButtonsProps => {
+    (selectStore: any): Partial<CivilNavBarButtonsProps> => {
       const { isPluginSidebarOpened } = selectStore("core/edit-post");
       const {
         getTxHash,
@@ -57,12 +57,29 @@ export const CivilSidebarWithComposed = compose([
       }
 
       return {
-        isClosed: isPluginSidebarOpened(),
+        isOpen: isPluginSidebarOpened(),
         txHash: getTxHash(),
         lastpublishedRevision: getLastPublishedRevision(),
         currentIsVersionPublished: getCurrentIsVersionPublished(),
         isSignaturePresent: !!ownSignature,
         isSignatureValid,
+      };
+    },
+  ),
+  withDispatch(
+    (dispatch: any): Partial<CivilNavBarButtonsProps> => {
+      const { setOpenTab } = dispatch("civil/blockchain");
+      const { openGeneralSidebar, closePublishSidebar } = dispatch("core/edit-post");
+
+      const openCivilSidebar = () => {
+        openGeneralSidebar("civil-sidebar/civil-sidebar");
+        closePublishSidebar();
+      }
+      const setOpenTabDispatch = (index: number) => dispatch(setOpenTab(index));
+
+      return {
+          setOpenTab: setOpenTabDispatch,
+          openCivilSidebar,
       };
     },
   ),
