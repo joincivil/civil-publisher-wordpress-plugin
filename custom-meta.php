@@ -263,6 +263,22 @@ function validate_newsroom_txhash( $input ) {
 }
 
 /**
+ * Saves minimal amount of data about post authors that we need to be able to access from Gutenberg. Co-Authors Plus doesn't seem to support any way to do this, so on save we will generate this data and store in post meta.
+ *
+ * @param int $post_id The post ID.
+ */
+function save_post_author_data( $post_id ) {
+	if ( wp_is_post_revision( $post_id ) ) {
+		return;
+	}
+
+	$author_data = get_post_authors_data( $post_id );
+	$json = str_replace( "\u0022" , "\\\\\"", json_encode( $author_data, JSON_NUMERIC_CHECK | JSON_HEX_QUOT ) );
+	update_metadata( 'post', $post_id, POST_AUTHORS_META_KEY, $json );
+}
+add_action( 'save_post', __NAMESPACE__ . '\save_post_author_data', 200 );
+
+/**
  * Ensure custom post meta visible/editable in REST API and Gutenberg.
  */
 function expose_article_meta() {
@@ -275,6 +291,13 @@ function expose_article_meta() {
 	);
 	register_meta(
 		'post', REVISIONS_META_KEY, array(
+			'show_in_rest' => true,
+			'single' => true,
+			'type' => 'string', // Actually will be stringified JSON.
+		)
+	);
+	register_meta(
+		'post', POST_AUTHORS_META_KEY, array(
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string', // Actually will be stringified JSON.

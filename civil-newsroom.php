@@ -15,13 +15,15 @@ define( __NAMESPACE__ . '\PATH', dirname( __FILE__ ) );
 define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil-newsroom-protocol/v1' );
 define( __NAMESPACE__ . '\SCHEMA_VERSION', '0.0.1' );
 define( __NAMESPACE__ . '\ASSETS_VERSION', '1.1.8' );
-// Post meta
+
+// Post meta.
 define( __NAMESPACE__ . '\REVISION_HASH_META_KEY', 'civil_newsroom_protocol_revision_hash' );
 define( __NAMESPACE__ . '\REVISION_DATA_META_KEY', 'civil_newsroom_protocol_revision_extra_data' );
 define( __NAMESPACE__ . '\SIGNATURES_META_KEY', 'civil_newsroom_protocol_article_signatures' );
 define( __NAMESPACE__ . '\REVISIONS_META_KEY', 'civil_newsroom_protocol_published_revisions' );
 define( __NAMESPACE__ . '\TXHASH_META_KEY', 'civil_newsroom_protocol_publish_tx_hash' );
 define( __NAMESPACE__ . '\CONTENT_ID_META_KEY', 'civil_newsroom_protocol_content_id' );
+define( __NAMESPACE__ . '\POST_AUTHORS_META_KEY', 'civil_newsroom_protocol_post_authors' );
 
 // User meta.
 define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_newsroom_protocol_eth_wallet_address' );

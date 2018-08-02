@@ -22,19 +22,12 @@ function enqueue_post_panel() {
 
 	$images = array(
 		'metamask_confim_modal' => plugins_url( 'assets/images/img-metamask-modalconfirm.png', __FILE__ ),
-		'metamask_logo' => plugins_url( 'assets/images/img-metamask-small@2x.png', __FILE__ )
+		'metamask_logo' => plugins_url( 'assets/images/img-metamask-small@2x.png', __FILE__ ),
 	);
 
 	wp_localize_script( 'civil-newsroom-protocol-post-panel', 'civilImages', $images );
 
-	global $post;
-	$authors = [];
-	if ( ! empty( $post->ID ) ) {
-		$authors = get_post_authors_data( $post->ID );
-	}
-	$authors_json = json_encode( $authors );
-
-	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.postAuthors = ${authors_json};" . PHP_EOL, 'before' );
+	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'before' );
 	// Prevent conflict between lodash required by civil packages and underscore used in Gutenberg, see https://github.com/WordPress/gutenberg/issues/4043#issuecomment-361049257.
 	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', 'window.lodash = _.noConflict();', 'after' );
 }

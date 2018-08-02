@@ -145,18 +145,18 @@ class Post_Hashing {
 		if ( ! empty( $authors ) ) {
 			foreach ( $authors as $author ) {
 				$author_data = [
-					'byline' => $author->display_name,
+					'byline' => $author['display_name'],
 				];
 
-				if ( ! empty( $signatures[ $author->ID ] ) ) {
-					$sig_data = $signatures[ $author->ID ];
+				if ( ! empty( $signatures[ $author['ID'] ] ) ) {
+					$sig_data = $signatures[ $author['ID'] ];
 					if ( $this->sig_valid_for_post( $sig_data ) ) {
 						$author_data['address'] = $sig_data['author'];
 						$author_data['signature'] = $sig_data['signature'];
 					}
 
 					// Whether it's valid or not, remove this signature now we've checked it, so we can see if there are any left over from non-authors (e.g. an editor added a signature).
-					unset( $signatures[ $author->ID ] );
+					unset( $signatures[ $author['ID'] ] );
 				}
 
 				$all_author_data[] = $author_data;
