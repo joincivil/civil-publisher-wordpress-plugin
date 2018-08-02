@@ -5,6 +5,7 @@ export enum postMetaKeys {
   PUBLISHED_REVISIONS = "civil_newsroom_protocol_published_revisions",
   CIVIL_CONTENT_ID = "civil_newsroom_protocol_content_id",
   CIVIL_PUBLISH_TXHASH = "civil_newsroom_protocol_publish_tx_hash",
+  POST_AUTHORS = "civil_newsroom_protocol_post_authors",
 }
 
 export enum userMetaKeys {

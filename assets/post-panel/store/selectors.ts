@@ -188,3 +188,7 @@ export function isValidSignature(state: any, signature: ApprovedRevision): boole
   }
   return true;
 }
+
+export function getPostAuthors(): any[] {
+  return JSON.parse(getPostMeta()[postMetaKeys.POST_AUTHORS]) || [];
+}

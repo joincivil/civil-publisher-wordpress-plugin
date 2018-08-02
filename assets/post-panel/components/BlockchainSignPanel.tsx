@@ -25,6 +25,7 @@ export interface BlockchainSignPanelProps {
   signDisabled: boolean;
   isDirty: boolean;
   latestRevisionJson: any;
+  postAuthors: any[];
   signArticle(): void;
   isValidSignature(signature: ApprovedRevision): boolean;
 }
@@ -48,6 +49,12 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
             isValid={this.props.isValidSignature(sigData)}
           />
         ),
+      )
+      // create placeholder signature elements for any remaining post authors who haven't signed:
+      .concat(
+        this.props.postAuthors
+          .filter(author => ! this.props.signatures[author.ID])
+          .map(author => <Signature authorUserId={author.ID} />)
       );
 
     return (
