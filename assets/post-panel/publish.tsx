@@ -2,6 +2,7 @@ const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
 import { revisionJsonSansDate } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
+import { debounce } from "lodash";
 import { hashContent } from "@joincivil/utils";
 import { BlockchainPublishPanelComponent, BlockchainPublishPanelProps } from "./components/BlockchainPublishPanel";
 import { TxHash } from "@joincivil/core";
@@ -64,6 +65,9 @@ const BlockchainPublishPanel = compose([
       const { setCivilContentID, updatePublishedState } = dispatch("civil/blockchain");
       const { publishedRevisions } = ownProps;
 
+      // savePost fails if post is currently saving, leaving us unexpectedly in dirty state e.g. cause tx hash save happens right after saving updating published revisions data. so debounce.
+      const debouncedSave = debounce(savePost, 200);
+
       const publishArticle = async (contentId: number, revisionId: number, revisionJson: any, txHash: TxHash): Promise<void> => {
         const publishedDate = new Date();
         const revisionJsonSansDateHash = hashContent(revisionJsonSansDate(revisionJson)); // publishing changes the revision date but nothing else, so publishing invalidates whats published
@@ -82,7 +86,7 @@ const BlockchainPublishPanel = compose([
           [postMetaKeys.PUBLISHED_REVISIONS]: updatedPublishedRevisions,
         };
         editPost({ meta: newPostMeta });
-        savePost();
+        debouncedSave();
         dispatch(updatePublishedState(publishedRevisionData));
       };
 
@@ -102,7 +106,7 @@ const BlockchainPublishPanel = compose([
           [postMetaKeys.PUBLISHED_REVISIONS]: updatedPublishedRevisions,
         };
         editPost({ meta: newPostMeta });
-        savePost();
+        debouncedSave();
         dispatch(updatePublishedState(publishedRevisionData));
       };
 
@@ -111,7 +115,7 @@ const BlockchainPublishPanel = compose([
           [postMetaKeys.CIVIL_PUBLISH_TXHASH]: `${txHash}`,
         };
         editPost({ meta: newPostMeta });
-        savePost();
+        debouncedSave();
       };
 
       return {
