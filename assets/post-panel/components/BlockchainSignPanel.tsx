@@ -35,7 +35,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
   public render(): JSX.Element {
     const ownSigData = this.props.signatures[this.props.currentUserId];
     const ownSigValid = ownSigData && this.props.isValidSignature(ownSigData);
-    const needsReSign = ownSigData && !ownSigValid;
+    const needsReSign = ownSigData && ownSigValid === false;
     const ownSig = <Signature authorUserId={this.props.currentUserId} sigData={ownSigData} isValid={ownSigValid} />;
 
     const othersSigs = Object.entries(this.props.signatures)

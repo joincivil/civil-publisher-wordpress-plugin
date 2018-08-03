@@ -14,7 +14,7 @@ export async function isNewsroomEditor(state: any): Promise<AnyAction> {
 }
 
 /** If no id supplied, defaults to current user. */
-export async function getUserData(state: any, id?: number | "me"): Promise<any> {
+export async function getUserData(state: any, id?: number | "me"): Promise<AnyAction> {
   if (!id) {
     id = select("civil/blockchain").getCurrentUserId() || "me";
   }
@@ -29,7 +29,7 @@ export async function getUserData(state: any, id?: number | "me"): Promise<any> 
   }
 }
 
-export async function getLastRevisionId(): Promise<AnyAction | void> {
+export async function getLastRevisionId(): Promise<AnyAction> {
   const postId = select("core/editor").getCurrentPostId();
   const { setLastRevisionId } = dispatch("civil/blockchain");
 

@@ -170,12 +170,13 @@ export function getLastPublishedRevision(state: any): any {
   }
 }
 
-export function isValidSignature(state: any, signature: ApprovedRevision): boolean {
+/** Returns true or false if sig is valid/invalid, or null if not enough information to tell. */
+export function isValidSignature(state: any, signature: ApprovedRevision): boolean | null {
   const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
   const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
 
   if (!revisionJson) {
-    return false;
+    return null;
   }
   if (revisionJson.revisionContentHash !== signature.contentHash) {
     return false;
