@@ -71,6 +71,15 @@ export const publishedStatus = (state: any[] = [], action: AnyAction): any => {
   }
 };
 
+export const currentVersionWasPublished = (state: boolean = false, action: AnyAction): boolean => {
+  switch (action.type) {
+    case actionTypes.SET_CURRENT_VERSION_WAS_PUBLISHED:
+      return action.data;
+    default:
+      return state;
+  }
+};
+
 export const lastRevisionId = (state: number | null = null, action: AnyAction): number | null => {
   switch (action.type) {
     case actionTypes.SET_LAST_REVISION_ID:

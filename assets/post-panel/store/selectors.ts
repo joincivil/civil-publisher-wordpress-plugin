@@ -150,16 +150,28 @@ export function getTxHash(): TxHash | null {
 }
 
 export function getCurrentIsVersionPublished(state: any): boolean {
-  const lastPublishedRevision = select("civil/blockchain").getLastPublishedRevision();
+  const { getLastPublishedRevision, getLatestRevisionJSON, getCurrentVersionWasPublished } = select("civil/blockchain");
+  const { setCurrentVersionWasPublished } = dispatch("civil/blockchain");
+
+  const lastPublishedRevision = getLastPublishedRevision();
   if (!lastPublishedRevision) {
     return false;
   }
 
-  const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
+  const revisionJson = getLatestRevisionJSON();
+  if (!revisionJson) {
+    // Avoid states flashing back and forth by caching value from last time we had revisionJson. We'll have it again in a sec.
+    return getCurrentVersionWasPublished();
+  }
 
-  return (
-    revisionJson && hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash
-  );
+  const isPublished = hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash;
+  setCurrentVersionWasPublished(isPublished);
+
+  return isPublished;
+}
+
+export function getCurrentVersionWasPublished(state: any): boolean {
+  return state.currentVersionWasPublished;
 }
 
 /** Last *indexed* revision. TODO we should change "publish" to "index" everywhere but can't find/replace because we also use "publish" to refer to WP stuff, also I'm not convinced "index" will stay forever. */
