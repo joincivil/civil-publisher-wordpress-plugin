@@ -79,7 +79,7 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
         {!this.props.currentIsVersionPublished && (
           <>
             {this.props.transactionInProgress
-              ? <ErrorText>Your post is currently processing...</ErrorText>
+              ? <ErrorText>Your {this.props.lastPublishedRevision && "re-"}index is currently processing...</ErrorText>
               : <HelpText disabled={this.props.transactionButtonDisabled}>
                   This will open a MetaMask pop-up and you must complete the transacation to index your post.
                 </HelpText>
