@@ -54,7 +54,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
       // create placeholder signature elements for any remaining post authors who haven't signed:
       .concat(
         this.props.postAuthors
-          .filter(author => !this.props.signatures[author.ID])
+          .filter(author => !this.props.signatures[author.ID] && author.ID !== this.props.currentUserId)
           .map(author => <Signature authorUserId={author.ID} />),
       );
 
