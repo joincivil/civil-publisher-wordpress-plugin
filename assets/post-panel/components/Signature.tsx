@@ -9,6 +9,7 @@ import { IconWrap } from "../styles";
 export interface SignatureProps {
   authorUserId: number;
   isDirty: boolean;
+  isSavingPost: boolean;
   userData: any;
   sigData?: ApprovedRevision;
   isValid?: boolean;
@@ -41,11 +42,11 @@ const Avatar = styled.img`
 `;
 
 function SignatureComponent(ownProps: SignatureProps): JSX.Element {
-  const { sigData, userData, isDirty, isValid } = ownProps;
+  const { sigData, userData, isDirty, isValid, isSavingPost } = ownProps;
   let validIndicator;
   let tipText;
   let showValidity = true;
-  if (!sigData || isValid === null) {
+  if (!sigData || isValid === null || isSavingPost) {
     // still loading, or not yet signed
     showValidity = false;
   } else if (!isValid) {
@@ -78,12 +79,13 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
 
 export const Signature = withSelect(
   (selectStore: any, ownProps: Partial<SignatureProps>): Partial<SignatureProps> => {
-    const { isEditedPostDirty } = selectStore("core/editor");
+    const { isEditedPostDirty, isSavingPost } = selectStore("core/editor");
     const { getUserData } = selectStore("civil/blockchain");
 
     return {
       ...ownProps,
       isDirty: isEditedPostDirty(),
+      isSavingPost: isSavingPost(),
       userData: getUserData(ownProps.authorUserId),
     };
   },
