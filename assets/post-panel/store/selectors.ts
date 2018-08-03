@@ -190,7 +190,7 @@ export function isValidSignature(state: any, signature: ApprovedRevision): boole
 }
 
 export function getPostAuthors(): any[] {
-  return JSON.parse(getPostMeta()[postMetaKeys.POST_AUTHORS]) || [];
+  return JSON.parse(getPostMeta()[postMetaKeys.POST_AUTHORS] || "[]");
 }
 
 export function currentUserIsPostAuthor(): boolean {
