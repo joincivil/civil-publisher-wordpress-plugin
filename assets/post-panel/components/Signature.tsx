@@ -45,7 +45,10 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
   const { sigData, userData, isDirty, isValid, isSavingPost } = ownProps;
   let validIndicator;
   let tipText;
-  if (!sigData || isValid === null || isSavingPost) {
+  if (!sigData) {
+    tipText = "This user hasn't signed yet"
+    validIndicator = null
+  } else if (isValid === null || isSavingPost) {
     tipText = "Validating signature..."
     validIndicator = <ClipLoader size={20} />
   } else if (!isValid) {

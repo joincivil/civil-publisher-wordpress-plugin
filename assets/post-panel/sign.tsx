@@ -16,6 +16,7 @@ const BlockchainSignPanel = compose([
       const {
         isEditedPostDirty,
         isCleanNewPost,
+        isSavingPost,
       } = selectStore("core/editor");
       const {
         getCurrrentUserId,
@@ -63,6 +64,7 @@ const BlockchainSignPanel = compose([
         signDisabled: isSignButtonDisabled(),
         isValidSignature,
         isDirty: isEditedPostDirty(),
+        isSavingPost: isSavingPost(),
         latestRevisionJson: getLatestRevisionJSON(),
         postAuthors: getPostAuthors(),
         currentUserIsPostAuthor: currentUserIsPostAuthor(),

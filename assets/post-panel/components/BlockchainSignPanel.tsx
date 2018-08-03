@@ -24,6 +24,7 @@ export interface BlockchainSignPanelProps {
   signatures: SignatureData;
   signDisabled: boolean;
   isDirty: boolean;
+  isSavingPost: boolean;
   latestRevisionJson: any;
   postAuthors: any[];
   currentUserIsPostAuthor: boolean;
@@ -57,6 +58,11 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           .filter(author => !this.props.signatures[author.ID] && author.ID !== this.props.currentUserId)
           .map(author => <Signature authorUserId={author.ID} />),
       );
+
+    let buttonText = (needsReSign ? "Re-s" : "S") + "ign Post";
+    if (ownSigValid === null || this.props.isSavingPost) {
+      buttonText = "Validating...";
+    }
 
     return (
       <Wrapper>
@@ -96,7 +102,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
             </HelpText>
             <p>
               <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
-                {needsReSign ? "Re-s" : "S"}ign Post
+                {buttonText}
               </Button>
             </p>
           </BodySection>
