@@ -51,7 +51,7 @@ export function getSignatures(state: any): SignatureData {
   if (Object.keys(state.signatures).length) {
     return state.signatures;
   }
-  return JSON.parse(getPostMeta()[postMetaKeys.SIGNATURES] || "{}");
+  return JSON.parse(getPostMeta(postMetaKeys.SIGNATURES) || "{}");
 }
 
 export function getPublishedStatus(state: any): any {
@@ -73,8 +73,13 @@ export function getLatestRevisionJSON(): any {
   return lastRevisionId && getRevisionJSON(lastRevisionId);
 }
 
-function getPostMeta(): any {
-  return select("core/editor").getEditedPostAttribute("meta");
+function getPostMeta(key: string): any {
+  const editedMeta = select("core/editor").getEditedPostAttribute("meta");
+  if (editedMeta[key]) {
+    return editedMeta[key];
+  }
+  // getEditedPostAttribute returns only the values that are dirty or, if none are dirty, it returns all of the values from the saved state. This means if one meta value is dirty, but not the one we're looking for, then the one we're looking for won't be in there, so let's look in getCurrentPost, which returns the last saved version of post:
+  return select("core/editor").getCurrentPost().meta[key];
 }
 
 function isPostPublished(): boolean {
@@ -86,7 +91,7 @@ export function getCivilContentID(store: any): string | null {
 
   // TODO: Hmm, should this be in a resolver?
   if (!civilContentID) {
-    civilContentID = getPostMeta()[postMetaKeys.CIVIL_CONTENT_ID];
+    civilContentID = getPostMeta(postMetaKeys.CIVIL_CONTENT_ID);
     dispatch(setCivilContentID(civilContentID));
   }
   return civilContentID;
@@ -112,7 +117,7 @@ export function getPublishedRevisions(state: any): any {
   let publishedRevisions = state.publishedStatus;
 
   if (!publishedRevisions.length) {
-    const persistedPublishedRevisions = getPostMeta()[postMetaKeys.PUBLISHED_REVISIONS];
+    const persistedPublishedRevisions = getPostMeta(postMetaKeys.PUBLISHED_REVISIONS);
     publishedRevisions = JSON.parse(persistedPublishedRevisions || "[]");
     publishedRevisions = publishedRevisions.map((revision: any) => {
       let newRevision = revision;
@@ -140,7 +145,7 @@ export function isCorrectNetwork(state: any): boolean {
 }
 
 export function getTxHash(): TxHash | null {
-  const txHash = getPostMeta()[postMetaKeys.CIVIL_PUBLISH_TXHASH];
+  const txHash = getPostMeta(postMetaKeys.CIVIL_PUBLISH_TXHASH);
   return txHash;
 }
 
@@ -190,7 +195,7 @@ export function isValidSignature(state: any, signature: ApprovedRevision): boole
 }
 
 export function getPostAuthors(): any[] {
-  return JSON.parse(getPostMeta()[postMetaKeys.POST_AUTHORS] || "[]");
+  return JSON.parse(getPostMeta(postMetaKeys.POST_AUTHORS) || "[]");
 }
 
 export function currentUserIsPostAuthor(): boolean {
