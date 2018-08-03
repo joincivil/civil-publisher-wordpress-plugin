@@ -63,7 +63,7 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
                 </p>
               </>
             ) : (
-              <p>Your post is published to your site and is now ready to be indexed to the Ethereum blockchain.</p>
+              !this.props.transactionInProgress && <p>Your post is published to your site and is now ready to be indexed to the Ethereum blockchain.</p>
             )}
           </>
         )}
