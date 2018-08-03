@@ -12,6 +12,7 @@ export interface CreateIndexProps {
   revisionJson?: any;
   transactionButton: JSX.Element;
   transactionButtonDisabled: boolean;
+  transactionInProgress: boolean;
   insufficientPermissions: boolean;
   permissionsMessage?: string;
   currentIsVersionPublished: boolean;
@@ -68,7 +69,8 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
         )}
 
         {this.props.lastPublishedRevision &&
-          !this.props.currentIsVersionPublished && (
+          !this.props.currentIsVersionPublished &&
+          !this.props.transactionInProgress && (
             <ErrorText>
               Your published update no longer matches what's indexed on the smart contract and will not validate.
             </ErrorText>
@@ -76,10 +78,12 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
 
         {!this.props.currentIsVersionPublished && (
           <>
-            <HelpText disabled={this.props.transactionButtonDisabled}>
-              This will open a MetaMask pop-up and you must complete the transacation to index your post.
-            </HelpText>
-
+            {this.props.transactionInProgress
+              ? <ErrorText>Your post is currently processing...</ErrorText>
+              : <HelpText disabled={this.props.transactionButtonDisabled}>
+                  This will open a MetaMask pop-up and you must complete the transacation to index your post.
+                </HelpText>
+            }
             <p>{this.props.transactionButton}</p>
           </>
         )}

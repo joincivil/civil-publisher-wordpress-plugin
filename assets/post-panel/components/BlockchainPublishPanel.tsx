@@ -264,6 +264,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
               lastPublishedRevision={this.props.lastPublishedRevision}
               transactionButton={button}
               transactionButtonDisabled={buttonDisabled}
+              transactionInProgress={!!this.props.txHash}
               revisionJson={this.props.revisionJson}
               insufficientPermissions={insufficientPermissions}
               permissionsMessage={permissionsMessage}
