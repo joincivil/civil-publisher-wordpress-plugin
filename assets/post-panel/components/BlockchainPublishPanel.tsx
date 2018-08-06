@@ -213,17 +213,20 @@ export class BlockchainPublishPanelComponent extends React.Component<
       ];
     }
 
-    let insufficientPermissions = false;
+    let insufficientPermissions: boolean | null = false;
     let permissionsMessage;
     if (!this.props.userCapabilities.publish_posts) {
       insufficientPermissions = true;
       permissionsMessage = "Only Editors and Admins have the ability to publish and index posts.";
+    } else if (this.props.isNewsroomEditor === null) {
+      // still loading this from contract
+      insufficientPermissions = null;
     } else if (!this.props.isNewsroomEditor) {
       insufficientPermissions = true;
       permissionsMessage = "You are not listed on your newsroom contract.";
     }
 
-    const buttonDisabled = this.props.publishDisabled || !this.props.correctNetwork || insufficientPermissions;
+    const buttonDisabled = this.props.publishDisabled || !this.props.correctNetwork || !!insufficientPermissions;
     const button = this.state.loadedWithTxHash ? (
       <DisabledTransactionProcessingButton>Transaction In Progress...</DisabledTransactionProcessingButton>
     ) : (

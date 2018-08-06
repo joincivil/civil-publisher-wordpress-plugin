@@ -13,7 +13,7 @@ export interface CreateIndexProps {
   transactionButton: JSX.Element;
   transactionButtonDisabled: boolean;
   transactionInProgress: boolean;
-  insufficientPermissions: boolean;
+  insufficientPermissions: boolean | null;
   permissionsMessage?: string;
   currentIsVersionPublished: boolean;
 }
@@ -38,7 +38,7 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
     }
 
     let insufficientPermissions = null;
-    if (this.props.insufficientPermissions) {
+    if (this.props.insufficientPermissions === true) {
       insufficientPermissions = (
         <>
           <p>

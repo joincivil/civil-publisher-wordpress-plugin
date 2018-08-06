@@ -4,12 +4,12 @@ import { AnyAction } from "redux";
 import { userMetaKeys } from "../../constants";
 import { EthAddress, TxHash } from "@joincivil/core";
 
-export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => {
+export const isNewsroomEditor = (state: boolean | null = null, action: AnyAction): boolean | null => {
   switch (action.type) {
     case actionTypes.SET_IS_NEWSROOM_EDITOR:
       return !!action.data;
     default:
-      return !!state;
+      return state;
   }
 };
 
