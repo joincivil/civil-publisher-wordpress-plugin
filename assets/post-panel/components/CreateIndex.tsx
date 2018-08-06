@@ -52,7 +52,7 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
     }
 
     let publishedRevisionInfo = null;
-    if (this.props.lastPublishedRevision) {
+    if (this.props.lastPublishedRevision && !this.props.transactionInProgress) {
       publishedRevisionInfo = (
         <>
           <p>
