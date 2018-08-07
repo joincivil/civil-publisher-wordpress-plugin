@@ -2,7 +2,7 @@ const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
 import { revisionJsonSansDate } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
-import { debounce } from "lodash";
+import { debounce } from "underscore";
 import { hashContent } from "@joincivil/utils";
 import { BlockchainPublishPanelComponent, BlockchainPublishPanelProps } from "./components/BlockchainPublishPanel";
 import { TxHash } from "@joincivil/core";

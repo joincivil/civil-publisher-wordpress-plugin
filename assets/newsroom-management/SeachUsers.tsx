@@ -2,7 +2,7 @@ import * as React from "react";
 const { apiRequest } = window.wp;
 import { TextInput } from "@joincivil/components";
 import { isWellFormattedAddress } from "@joincivil/utils";
-import { debounce } from "lodash";
+import { debounce } from "underscore";
 import styled from "styled-components";
 import { userMetaKeys, apiNamespace } from "../constants";
 import { connect, DispatchProp } from "react-redux";

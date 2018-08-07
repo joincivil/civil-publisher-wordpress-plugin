@@ -8,6 +8,15 @@
 namespace Civil_Newsroom_Protocol;
 
 /**
+ * Prevent conflict between lodash required by civil packages and underscore used in WP admin dashboard, see https://github.com/WordPress/gutenberg/issues/4043#issuecomment-361049257.
+ *
+ * @param string $script_name Name of dependency that uses lodash.
+ */
+function lodash_no_conflict( $script_name ) {
+	wp_add_inline_script( $script_name, 'window.lodash = _.noConflict();', 'after' );
+}
+
+/**
  * Enqueue Gutenberg editor plugin script.
  */
 function enqueue_post_panel() {
@@ -28,8 +37,7 @@ function enqueue_post_panel() {
 	wp_localize_script( 'civil-newsroom-protocol-post-panel', 'civilImages', $images );
 
 	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'before' );
-	// Prevent conflict between lodash required by civil packages and underscore used in Gutenberg, see https://github.com/WordPress/gutenberg/issues/4043#issuecomment-361049257.
-	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', 'window.lodash = _.noConflict();', 'after' );
+	lodash_no_conflict( 'civil-newsroom-protocol-post-panel' );
 }
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
 
@@ -121,6 +129,7 @@ function contract_management_script() {
 		true
 	);
 	wp_add_inline_script( 'civil-newsroom-protocol-newsroom-management', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.newsroomTxHash = \"${txhash}\";" . PHP_EOL, 'after' );
+	lodash_no_conflict( 'civil-newsroom-protocol-newsroom-management' );
 }
 add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
 
