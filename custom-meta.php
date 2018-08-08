@@ -275,7 +275,7 @@ function save_post_author_data( $post_id ) {
 	}
 
 	$author_data = get_post_authors_data( $post_id );
-	$json = str_replace( "\u0022" , "\\\\\"", json_encode( $author_data, JSON_NUMERIC_CHECK | JSON_HEX_QUOT ) );
+	$json = html_entity_decode( str_replace( "\u0022", '\\\\\"', json_encode( $author_data, JSON_NUMERIC_CHECK | JSON_HEX_QUOT ) ) );
 	update_metadata( 'post', $post_id, POST_AUTHORS_META_KEY, $json );
 }
 add_action( 'save_post', __NAMESPACE__ . '\save_post_author_data', 200 );
