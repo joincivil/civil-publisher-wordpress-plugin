@@ -14,7 +14,7 @@ class CivilRestApiTest extends CivilTestCase {
 		'canonicalUrl'          => '',
 		'slug'                  => '',
 		'description'           => '',
-		'authors'               => '',
+		'contributors'          => '',
 		'images'                => '',
 		'tags'                  => '',
 		'primaryTag'            => '',
