@@ -16,6 +16,7 @@ const BlockchainSignPanel = compose([
       const {
         isEditedPostDirty,
         isCleanNewPost,
+        isSavingPost,
       } = selectStore("core/editor");
       const {
         getCurrrentUserId,
@@ -34,6 +35,11 @@ const BlockchainSignPanel = compose([
       const signatures = getSignatures();
 
       const isSignButtonDisabled = (): boolean => {
+        if (!getLatestRevisionJSON()) {
+          // Validity can't be checked, wait til revision JSON loaded
+          return true;
+        }
+
         const wpUserAddress = getCurrentWpUserAddress();
         const web3Address = getWeb3ProviderAddress();
         if (!wpUserAddress || !web3Address || wpUserAddress !== web3Address) {
@@ -58,6 +64,7 @@ const BlockchainSignPanel = compose([
         signDisabled: isSignButtonDisabled(),
         isValidSignature,
         isDirty: isEditedPostDirty(),
+        isSavingPost: isSavingPost(),
         latestRevisionJson: getLatestRevisionJSON(),
         postAuthors: getPostAuthors(),
         currentUserIsPostAuthor: currentUserIsPostAuthor(),

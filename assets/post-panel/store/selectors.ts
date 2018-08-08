@@ -51,7 +51,7 @@ export function getSignatures(state: any): SignatureData {
   if (Object.keys(state.signatures).length) {
     return state.signatures;
   }
-  return JSON.parse(getPostMeta()[postMetaKeys.SIGNATURES] || "{}");
+  return JSON.parse(getPostMeta(postMetaKeys.SIGNATURES) || "{}");
 }
 
 export function getPublishedStatus(state: any): any {
@@ -73,8 +73,13 @@ export function getLatestRevisionJSON(): any {
   return lastRevisionId && getRevisionJSON(lastRevisionId);
 }
 
-function getPostMeta(): any {
-  return select("core/editor").getEditedPostAttribute("meta");
+function getPostMeta(key: string): any {
+  const editedMeta = select("core/editor").getEditedPostAttribute("meta");
+  if (editedMeta[key]) {
+    return editedMeta[key];
+  }
+  // getEditedPostAttribute returns only the values that are dirty or, if none are dirty, it returns all of the values from the saved state. This means if one meta value is dirty, but not the one we're looking for, then the one we're looking for won't be in there, so let's look in getCurrentPost, which returns the last saved version of post:
+  return select("core/editor").getCurrentPost().meta[key];
 }
 
 function isPostPublished(): boolean {
@@ -86,7 +91,7 @@ export function getCivilContentID(store: any): string | null {
 
   // TODO: Hmm, should this be in a resolver?
   if (!civilContentID) {
-    civilContentID = getPostMeta()[postMetaKeys.CIVIL_CONTENT_ID];
+    civilContentID = getPostMeta(postMetaKeys.CIVIL_CONTENT_ID);
     dispatch(setCivilContentID(civilContentID));
   }
   return civilContentID;
@@ -112,7 +117,7 @@ export function getPublishedRevisions(state: any): any {
   let publishedRevisions = state.publishedStatus;
 
   if (!publishedRevisions.length) {
-    const persistedPublishedRevisions = getPostMeta()[postMetaKeys.PUBLISHED_REVISIONS];
+    const persistedPublishedRevisions = getPostMeta(postMetaKeys.PUBLISHED_REVISIONS);
     publishedRevisions = JSON.parse(persistedPublishedRevisions || "[]");
     publishedRevisions = publishedRevisions.map((revision: any) => {
       let newRevision = revision;
@@ -140,21 +145,33 @@ export function isCorrectNetwork(state: any): boolean {
 }
 
 export function getTxHash(): TxHash | null {
-  const txHash = getPostMeta()[postMetaKeys.CIVIL_PUBLISH_TXHASH];
+  const txHash = getPostMeta(postMetaKeys.CIVIL_PUBLISH_TXHASH);
   return txHash;
 }
 
 export function getCurrentIsVersionPublished(state: any): boolean {
-  const lastPublishedRevision = select("civil/blockchain").getLastPublishedRevision();
+  const { getLastPublishedRevision, getLatestRevisionJSON, getCurrentVersionWasPublished } = select("civil/blockchain");
+  const { setCurrentVersionWasPublished } = dispatch("civil/blockchain");
+
+  const lastPublishedRevision = getLastPublishedRevision();
   if (!lastPublishedRevision) {
     return false;
   }
 
-  const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
+  const revisionJson = getLatestRevisionJSON();
+  if (!revisionJson) {
+    // Avoid states flashing back and forth by caching value from last time we had revisionJson. We'll have it again in a sec.
+    return getCurrentVersionWasPublished();
+  }
 
-  return (
-    revisionJson && hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash
-  );
+  const isPublished = hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash;
+  setCurrentVersionWasPublished(isPublished);
+
+  return isPublished;
+}
+
+export function getCurrentVersionWasPublished(state: any): boolean {
+  return state.currentVersionWasPublished;
 }
 
 /** Last *indexed* revision. TODO we should change "publish" to "index" everywhere but can't find/replace because we also use "publish" to refer to WP stuff, also I'm not convinced "index" will stay forever. */
@@ -165,12 +182,13 @@ export function getLastPublishedRevision(state: any): any {
   }
 }
 
-export function isValidSignature(state: any, signature: ApprovedRevision): boolean {
+/** Returns true or false if sig is valid/invalid, or null if not enough information to tell. */
+export function isValidSignature(state: any, signature: ApprovedRevision): boolean | null {
   const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
   const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
 
   if (!revisionJson) {
-    return false;
+    return null;
   }
   if (revisionJson.revisionContentHash !== signature.contentHash) {
     return false;
@@ -190,7 +208,7 @@ export function isValidSignature(state: any, signature: ApprovedRevision): boole
 }
 
 export function getPostAuthors(): any[] {
-  return JSON.parse(getPostMeta()[postMetaKeys.POST_AUTHORS]) || [];
+  return JSON.parse(getPostMeta(postMetaKeys.POST_AUTHORS) || "[]");
 }
 
 export function currentUserIsPostAuthor(): boolean {

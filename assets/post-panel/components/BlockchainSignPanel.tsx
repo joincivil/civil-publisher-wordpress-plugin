@@ -24,6 +24,7 @@ export interface BlockchainSignPanelProps {
   signatures: SignatureData;
   signDisabled: boolean;
   isDirty: boolean;
+  isSavingPost: boolean;
   latestRevisionJson: any;
   postAuthors: any[];
   currentUserIsPostAuthor: boolean;
@@ -35,7 +36,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
   public render(): JSX.Element {
     const ownSigData = this.props.signatures[this.props.currentUserId];
     const ownSigValid = ownSigData && this.props.isValidSignature(ownSigData);
-    const needsReSign = ownSigData && !ownSigValid;
+    const needsReSign = ownSigData && ownSigValid === false;
     const ownSig = <Signature authorUserId={this.props.currentUserId} sigData={ownSigData} isValid={ownSigValid} />;
 
     const othersSigs = Object.entries(this.props.signatures)
@@ -54,9 +55,14 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
       // create placeholder signature elements for any remaining post authors who haven't signed:
       .concat(
         this.props.postAuthors
-          .filter(author => !this.props.signatures[author.ID])
+          .filter(author => !this.props.signatures[author.ID] && author.ID !== this.props.currentUserId)
           .map(author => <Signature authorUserId={author.ID} />),
       );
+
+    let buttonText = (needsReSign ? "Re-s" : "S") + "ign Post";
+    if (ownSigValid === null || this.props.isSavingPost) {
+      buttonText = "Validating...";
+    }
 
     return (
       <Wrapper>
@@ -96,7 +102,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
             </HelpText>
             <p>
               <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
-                {needsReSign ? "Re-s" : "S"}ign Post
+                {buttonText}
               </Button>
             </p>
           </BodySection>

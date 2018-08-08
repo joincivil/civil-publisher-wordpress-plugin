@@ -12,7 +12,8 @@ export interface CreateIndexProps {
   revisionJson?: any;
   transactionButton: JSX.Element;
   transactionButtonDisabled: boolean;
-  insufficientPermissions: boolean;
+  transactionInProgress: boolean;
+  insufficientPermissions: boolean | null;
   permissionsMessage?: string;
   currentIsVersionPublished: boolean;
 }
@@ -36,53 +37,90 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
       indexTextUrl = this.props.lastPublishedRevision.data && this.props.lastPublishedRevision.data.revisionContentUrl;
     }
 
-    return (
-      <>
-        {this.props.insufficientPermissions ? (
-          <>
-            <p>
-              You are not able to index this post to your newsroom contract on the Ethereum blockchain. {this.props.permissionsMessage}
-            </p>
-            {/* TODO: Right now Sign and Record are on same panel so Sign is above this message. When we move them to separate tabs, "sign your post" should be a link that opens the Sign tab. */}
-            <p>You can sign your post above for enhanced credibility and verification using your wallet address.</p>
-          </>
-        ) : (
-          <>
-            {this.props.lastPublishedRevision ? (
-              <>
-                <p>
-                  Your post is indexed to the blockchain. If you update your post on your site in any way, we also
-                  recommend updating it on the blockchain.{" "}
-                  <a href="#TODO" target="_blank">
-                    Why?
-                  </a>
-                </p>
-                <p>
-                  <ViewTransactionLink txHash={this.props.lastPublishedRevision.txHash} network="rinkeby" text={indexTimestamp}/>
-                </p>
-              </>
-            ) : (
-              <p>Your post is published to your site and is now ready to be indexed to the Ethereum blockchain.</p>
-            )}
-          </>
-        )}
+    let insufficientPermissions = null;
+    if (this.props.insufficientPermissions === true) {
+      insufficientPermissions = (
+        <>
+          <p>
+            You are not able to index this post to your newsroom contract on the Ethereum blockchain.{" "}
+            {this.props.permissionsMessage}
+          </p>
+          {/* TODO: Right now Sign and Record are on same panel so Sign is above this message. When we move them to separate tabs, "sign your post" should be a link that opens the Sign tab. */}
+          <p>You can sign your post above for enhanced credibility and verification using your wallet address.</p>
+        </>
+      );
+    }
 
-        {this.props.lastPublishedRevision &&
-          !this.props.currentIsVersionPublished && (
-            <ErrorText>
-              Your published update no longer matches what's indexed on the smart contract and will not validate.
-            </ErrorText>
-          )}
+    let publishedRevisionInfo = null;
+    if (this.props.lastPublishedRevision && !this.props.transactionInProgress) {
+      publishedRevisionInfo = (
+        <>
+          <p>
+            Your post is indexed to the blockchain. If you update your post on your site in any way, we also recommend
+            updating it on the blockchain.{" "}
+            <a href="#TODO" target="_blank">
+              Why?
+            </a>
+          </p>
+          <p>
+            <ViewTransactionLink
+              txHash={this.props.lastPublishedRevision.txHash}
+              network="rinkeby"
+              text={indexTimestamp}
+            />
+          </p>
+        </>
+      );
+    }
 
-        {!this.props.currentIsVersionPublished && (
-          <>
+    let readyForFirstIndex = null;
+    if (
+      !this.props.transactionInProgress &&
+      !this.props.lastPublishedRevision &&
+      !this.props.insufficientPermissions &&
+      !this.props.transactionButtonDisabled
+    ) {
+      readyForFirstIndex = (
+        <p>Your post is published to your site and is now ready to be indexed to the Ethereum blockchain.</p>
+      );
+    }
+
+    let outdatedIndexMessage = null;
+    if (
+      this.props.lastPublishedRevision &&
+      !this.props.currentIsVersionPublished &&
+      !this.props.transactionInProgress
+    ) {
+      outdatedIndexMessage = (
+        <ErrorText>
+          Your published update no longer matches what's indexed on the smart contract and will not validate.
+        </ErrorText>
+      );
+    }
+
+    let createIndex = null;
+    if (!this.props.insufficientPermissions && !this.props.currentIsVersionPublished) {
+      createIndex = (
+        <>
+          {this.props.transactionInProgress ? (
+            <ErrorText>Your {this.props.lastPublishedRevision && "re-"}index is currently processing...</ErrorText>
+          ) : (
             <HelpText disabled={this.props.transactionButtonDisabled}>
               This will open a MetaMask pop-up and you must complete the transacation to index your post.
             </HelpText>
+          )}
+          <p>{this.props.transactionButton}</p>
+        </>
+      );
+    }
 
-            <p>{this.props.transactionButton}</p>
-          </>
-        )}
+    return (
+      <>
+        {insufficientPermissions}
+        {publishedRevisionInfo}
+        {readyForFirstIndex}
+        {outdatedIndexMessage}
+        {createIndex}
       </>
     );
   }

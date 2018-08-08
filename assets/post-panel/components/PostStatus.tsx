@@ -12,6 +12,7 @@ export interface PostStatusProps {
   updated: boolean;
   timestamp: string;
   url: string;
+  isSavingPost: boolean;
 }
 
 class PostStatusComponent extends React.Component<PostStatusProps> {
@@ -29,7 +30,7 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
       );
     } else {
       if (this.props.requirePublish) {
-        content = <ErrorText>Waiting for post to be published to your site.</ErrorText>;
+        content = <ErrorText>Please publish your post before continuing.</ErrorText>;
       } else if (this.props.saved) {
         content = <p>Post saved.</p>;
       }
@@ -40,8 +41,14 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
         <>
           {content}
           <ErrorText>
-            Please save {this.props.published && "updates to"} this post before{" "}
-            {this.props.actionString || "continuing"}.
+            {this.props.isSavingPost ? (
+              "Saving post..."
+            ) : (
+              <>
+                Please save {this.props.published && "updates to"} this post before{" "}
+                {this.props.actionString || "continuing"}.
+              </>
+            )}
           </ErrorText>
         </>
       );
@@ -58,9 +65,13 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
 
 export const PostStatus = withSelect(
   (selectStore: any, ownProps: Partial<PostStatusProps>): Partial<PostStatusProps> => {
-    const { getEditedPostAttribute, isEditedPostDirty, isCleanNewPost, isCurrentPostPublished } = selectStore(
-      "core/editor",
-    );
+    const {
+      getEditedPostAttribute,
+      isEditedPostDirty,
+      isCleanNewPost,
+      isCurrentPostPublished,
+      isSavingPost,
+    } = selectStore("core/editor");
 
     const date = getEditedPostAttribute("date_gmt");
     const modifiedDate = getEditedPostAttribute("modified_gmt");
@@ -72,6 +83,7 @@ export const PostStatus = withSelect(
       updated: modifiedDate && modifiedDate !== date,
       timestamp: modifiedDate || date,
       url: getEditedPostAttribute("link"),
+      isSavingPost: isSavingPost(),
     };
   },
 )(PostStatusComponent);

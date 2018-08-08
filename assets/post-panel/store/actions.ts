@@ -63,6 +63,13 @@ export function updatePublishedState(publishedData: any): AnyAction {
   };
 }
 
+export function setCurrentVersionWasPublished(wasIt: boolean): AnyAction {
+  return {
+    type: actionTypes.SET_CURRENT_VERSION_WAS_PUBLISHED,
+    data: wasIt,
+  };
+}
+
 export function setLastRevisionId(revisionID: number): AnyAction {
   return {
     type: actionTypes.SET_LAST_REVISION_ID,

@@ -14,15 +14,13 @@ export async function isNewsroomEditor(state: any): Promise<AnyAction> {
 }
 
 /** If no id supplied, defaults to current user. */
-export async function getUserData(state: any, id?: number | "me"): Promise<any> {
+export async function getUserData(state: any, id?: number | "me"): Promise<AnyAction> {
   if (!id) {
     id = select("civil/blockchain").getCurrentUserId() || "me";
   }
 
   try {
-    // TODO authors can't list users (can't get any info about them at all), so we have to show dummy data for other sigs
     const userData = await apiRequest({ path: "/wp/v2/users/" + id + "?context=edit" });
-    id = id === "me" ? userData.id : id;
     return setUserData(id!, userData);
   } catch (err) {
     console.error("Failed to fetch user data:", err);
@@ -31,7 +29,7 @@ export async function getUserData(state: any, id?: number | "me"): Promise<any> 
   }
 }
 
-export async function getLastRevisionId(): Promise<AnyAction | void> {
+export async function getLastRevisionId(): Promise<AnyAction> {
   const postId = select("core/editor").getCurrentPostId();
   const { setLastRevisionId } = dispatch("civil/blockchain");
 

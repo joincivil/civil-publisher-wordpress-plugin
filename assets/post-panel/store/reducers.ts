@@ -4,12 +4,12 @@ import { AnyAction } from "redux";
 import { userMetaKeys } from "../../constants";
 import { EthAddress, TxHash } from "@joincivil/core";
 
-export const isNewsroomEditor = (state: boolean, action: AnyAction): boolean => {
+export const isNewsroomEditor = (state: boolean | null = null, action: AnyAction): boolean | null => {
   switch (action.type) {
     case actionTypes.SET_IS_NEWSROOM_EDITOR:
       return !!action.data;
     default:
-      return !!state;
+      return state;
   }
 };
 
@@ -66,6 +66,15 @@ export const publishedStatus = (state: any[] = [], action: AnyAction): any => {
         return state;
       }
       return state.concat([action.data]);
+    default:
+      return state;
+  }
+};
+
+export const currentVersionWasPublished = (state: boolean = false, action: AnyAction): boolean => {
+  switch (action.type) {
+    case actionTypes.SET_CURRENT_VERSION_WAS_PUBLISHED:
+      return action.data;
     default:
       return state;
   }
