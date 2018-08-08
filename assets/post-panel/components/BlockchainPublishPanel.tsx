@@ -7,7 +7,6 @@ import { PostStatus } from "./PostStatus";
 import { CreateIndex } from "./CreateIndex";
 import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, ModalHeader, ModalP, ModalButtonContainer } from "../styles";
 import { IndexTransactionButton, DisabledTransactionProcessingButton } from "./Buttons";
-// import { MetaMaskModal } from "../../shared-components/MetaMaskModal";
 import styled from "styled-components";
 
 export interface BlockchainPublishPanelProps {

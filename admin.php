@@ -29,11 +29,6 @@ function enqueue_post_panel() {
 		true
 	);
 
-	$images = array(
-		'metamask_confim_modal' => plugins_url( 'assets/images/img-metamask-modalconfirm.png', __FILE__ ),
-		'metamask_logo' => plugins_url( 'assets/images/img-metamask-small@2x.png', __FILE__ ),
-	);
-
 	wp_localize_script( 'civil-newsroom-protocol-post-panel', 'civilImages', $images );
 
 	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'before' );
