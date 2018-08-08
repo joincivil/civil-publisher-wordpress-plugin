@@ -27,7 +27,7 @@ export async function createSignatureData(revisionJson: any): Promise<ApprovedRe
     throw Error("Failed to create signature data: revisionJson is falsey");
   }
   const newsroom = await getNewsroom();
-  return newsroom!.approveByAuthorPersonalSign(revisionJson.revisionContentHash);
+  return await newsroom!.approveByAuthorPersonalSign(revisionJson.revisionContentHash);
 }
 
 export async function getNewsroom(): Promise<Newsroom> {

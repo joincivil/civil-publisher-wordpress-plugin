@@ -119,3 +119,17 @@ export class IntroSection extends React.Component {
     );
   }
 }
+
+export const ModalHeader = styled.h2`
+  font-size: 20px;
+`;
+
+export const ModalP = styled.p`
+  font-size: 16px;
+  color: #5f5f5f;
+`;
+
+export const ModalButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;

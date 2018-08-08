@@ -5,24 +5,10 @@ import { TxHash } from "@joincivil/core";
 import { PanelWalletStatus } from "./PanelWalletStatus";
 import { PostStatus } from "./PostStatus";
 import { CreateIndex } from "./CreateIndex";
-import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection } from "../styles";
+import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, ModalHeader, ModalP, ModalButtonContainer } from "../styles";
 import { IndexTransactionButton, DisabledTransactionProcessingButton } from "./Buttons";
 import { MetaMaskModal } from "../../shared-components/MetaMaskModal";
 import styled from "styled-components";
-
-const ModalHeader = styled.h2`
-  font-size: 20px;
-`;
-
-const ModalP = styled.p`
-  font-size: 16px;
-  color: #5f5f5f;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
 
 export interface BlockchainPublishPanelProps {
   isNewsroomEditor: boolean;
@@ -125,9 +111,9 @@ export class BlockchainPublishPanelComponent extends React.Component<
       <ModalHeader>Your Post is being indexed</ModalHeader>
       <ModalP> This can take some time depending on traffic on the Ethereum network.</ModalP>
       <ModalP> You are welcome to leave this page open while continuing to work, but please note that any changes you make to a post once the blockchain indexing process has begun will not be reflected on that blockchain index unless you re-index.</ModalP>
-      <ButtonContainer>
+      <ModalButtonContainer>
         <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({isTransactionInProggressModalOpen: false})}>OK</Button>
-      </ButtonContainer>
+      </ModalButtonContainer>
     </Modal>);
   }
 
@@ -139,9 +125,9 @@ export class BlockchainPublishPanelComponent extends React.Component<
       <ModalHeader>Index added!</ModalHeader>
       <ModalP>Your post was successfully indexed to the Ethereum blockchain.</ModalP>
       <ModalP>Note that any time you make an update or revision to a post, we recommend you also index that revision to the blockchain</ModalP>
-      <ButtonContainer>
+      <ModalButtonContainer>
         <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({isTransactionCompleteModalOpen: false})}>OK</Button>
-      </ButtonContainer>
+      </ModalButtonContainer>
     </Modal>);
   }
 
