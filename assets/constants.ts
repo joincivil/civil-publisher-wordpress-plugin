@@ -19,3 +19,21 @@ export enum siteOptionKeys {
 
 export const NETWORK_NAME = "rinkeby";
 export const NETWORK_NICE_NAME = "Rinkeby Test Network";
+
+export const theme = {
+  primaryButtonBackground: "#0085ba",
+  primaryButtonColor: "#fff",
+  primaryButtonFontWeight: "bold",
+  primaryButtonHoverBackground: "#008ec2",
+  primaryButtonDisabledBackground: "#008ec2",
+  primaryButtonDisabledColor: "#66c6e4",
+  primaryButtonTextTransform: "none",
+  secondaryButtonColor: "#555555",
+  secondaryButtonBackground: "transparent",
+  secondaryButtonBorder: "#cccccc",
+  borderlessButtonColor: "#0085ba",
+  borderlessButtonHoverColor: "#008ec2",
+  linkColor: "#0085ba",
+  linkColorHover: "#008ec2",
+  sansSerifFont: `-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif`,
+};
