@@ -1,12 +1,13 @@
 const { PluginSidebar, PluginSidebarMoreMenuItem } = window.wp.editPost;
 const { registerPlugin } = window.wp.plugins;
+const { PanelRow } = window.wp.components;
 const { withDispatch, withSelect } = window.wp.data;
 const { compose, PanelBody } = window.wp.element;
 import * as React from "react";
 import * as ReactDom from "react-dom";
 import { getCivil } from "../util";
 import { Civil, EthAddress } from "@joincivil/core";
-import { Tabs, Tab, TabComponentProps } from "@joincivil/components";
+import { Tabs, Tab, TabComponentProps, Button, buttonSizes } from "@joincivil/components";
 import "./store";
 import styled, { ThemeProvider } from "styled-components";
 import BlockchainSignPanel from "./sign";
@@ -33,6 +34,19 @@ const StyledLi = styled.li`
   & a {
     color: inherit;
   }
+`;
+
+const Wrapper = styled.div`
+  padding: 30px 20px;
+`;
+
+const P = styled.p`
+  margin-bottom: 0;
+`;
+
+const LinkButton = Button.extend`
+  width: 100%;
+  text-align: center;
 `;
 
 class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginProps> {
@@ -98,11 +112,22 @@ const BlockchainPluginInner = compose([
 
 const CivilSidebar = () => {
   let panelContent = (
-    <h3>
-      Please take a moment to set up your<a href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">
-        Civil Newsroom contract
-      </a>
-    </h3>
+    <Wrapper>
+      <PanelRow>
+        <P>
+          A newsroom contract has not been set up. Please got to your{" "}
+          <a href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">
+            Civil Newsroom Manager
+          </a>
+          {" "}page to create a Newsroom smart contract.
+        </P>
+      </PanelRow>
+      <PanelRow>
+        <LinkButton size={buttonSizes.MEDIUM_WIDE} href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">
+          Newsroom Manager
+        </LinkButton>
+      </PanelRow>
+    </Wrapper>
   );
   if (window.civilNamespace.newsroomAddress) {
     panelContent = <BlockchainPluginInner/>;
