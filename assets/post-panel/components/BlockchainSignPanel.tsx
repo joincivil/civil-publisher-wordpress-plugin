@@ -1,7 +1,6 @@
-const { Button } = window.wp.components;
 import * as React from "react";
 import { EthAddress, ApprovedRevision } from "@joincivil/core";
-import { ArticleSignPanelIcon } from "@joincivil/components";
+import { ArticleSignPanelIcon, Modal, Button, buttonSizes } from "@joincivil/components";
 import { SignatureData } from "../store/interfaces";
 import { PanelWalletStatus } from "./PanelWalletStatus";
 import { PostStatus } from "./PostStatus";
@@ -16,6 +15,9 @@ import {
   BodySection,
   ErrorText,
   HelpText,
+  ModalHeader,
+  ModalP,
+  ModalButtonContainer,
 } from "../styles";
 
 export interface BlockchainSignPanelProps {
@@ -27,11 +29,22 @@ export interface BlockchainSignPanelProps {
   latestRevisionJson: any;
   postAuthors: any[];
   currentUserIsPostAuthor: boolean;
-  signArticle(): void;
+  signArticle(cb: () => void): Promise<void>;
   isValidSignature(signature: ApprovedRevision): boolean;
 }
 
-export class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelProps> {
+export interface BlockchainSignPanelState {
+  isSignSuccessModalOpen: boolean;
+}
+
+export class BlockchainSignPanelComponent extends React.Component<BlockchainSignPanelProps, BlockchainSignPanelState> {
+  constructor(props: BlockchainSignPanelProps) {
+    super(props);
+    this.state = {
+      isSignSuccessModalOpen: false,
+    };
+  }
+
   public render(): JSX.Element {
     const ownSigData = this.props.signatures[this.props.currentUserId];
     const ownSigValid = ownSigData && this.props.isValidSignature(ownSigData);
@@ -95,7 +108,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
               This will open a MetaMask pop-up that will ask you to sign a statement. Note: this step is optional.
             </HelpText>
             <p>
-              <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
+              <Button size={buttonSizes.MEDIUM_WIDE} fullWidth disabled={this.props.signDisabled} onClick={this.sign}>
                 {needsReSign ? "Re-s" : "S"}ign Post
               </Button>
             </p>
@@ -103,7 +116,35 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
 
           {this.props.isWpEditor && !!othersSigs.length && <BodySection>{othersSigs}</BodySection>}
         </Body>
+        {this.renderSignSuccessModal()}
       </Wrapper>
     );
   }
+
+  private renderSignSuccessModal(): JSX.Element | null {
+    if (!this.state.isSignSuccessModalOpen) {
+      return null;
+    }
+    return (
+      <Modal>
+        <ModalHeader>Post signed!</ModalHeader>
+        <ModalP>Your post was successfully signed.</ModalP>
+        <ModalP>
+          Note that any time an update to your post is published to your site, we recommend you also update your
+          signature.
+        </ModalP>
+        <ModalButtonContainer>
+          <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({ isSignSuccessModalOpen: false })}>
+            Close
+          </Button>
+        </ModalButtonContainer>
+      </Modal>
+    );
+  }
+
+  private sign = async () => {
+    this.props.signArticle(() => {
+      this.setState({ isSignSuccessModalOpen: true });
+    });
+  };
 }

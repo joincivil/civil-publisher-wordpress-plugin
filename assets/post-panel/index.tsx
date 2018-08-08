@@ -9,6 +9,7 @@ import { Civil, EthAddress } from "@joincivil/core";
 import { Tabs, Tab, TabComponentProps } from "@joincivil/components";
 import "./store";
 import styled, { ThemeProvider } from "styled-components";
+import { theme } from "../constants";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
@@ -110,24 +111,7 @@ const CivilSidebar = () => {
   return (
     <>
       <PluginSidebar name="civil-sidebar" title="Civil">
-        <ThemeProvider
-          theme={{
-            primaryButtonBackground: "#0085ba",
-            primaryButtonColor: "#fff",
-            primaryButtonHoverBackground: "#008ec2",
-            primaryButtonDisabledBackground: "#008ec2",
-            primaryButtonDisabledColor: "#66c6e4",
-            primaryButtonTextTransform: "none",
-            secondaryButtonColor: "#555555",
-            secondaryButtonBackground: "transparent",
-            secondaryButtonBorder: "#cccccc",
-            borderlessButtonColor: "#0085ba",
-            borderlessButtonHoverColor: "#008ec2",
-            linkColor: "#0085ba",
-            linkColorHover: "#008ec2",
-            sansSerifFont: `-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif`,
-          }}
-        >
+        <ThemeProvider theme={theme}>
           {panelContent}
         </ThemeProvider>
       </PluginSidebar>
