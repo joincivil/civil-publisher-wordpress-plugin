@@ -1,8 +1,7 @@
 import * as React from "react";
 import { EthAddress } from "@joincivil/core";
-import { NorthEastArrow } from "@joincivil/components";
+import { NorthEastArrow, Button, buttonSizes } from "@joincivil/components";
 import styled from "styled-components";
-const { Button } = window.wp.components;
 
 export interface WalletStatusProps {
   noProvider?: boolean;
@@ -28,13 +27,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const ActionButton = styled(Button)`
-  &&& {
-    padding: 8px 36px;
-    height: auto;
-    font-size: 14px;
-    font-weight: bold;
-  }
+const LargeishButton = Button.extend`
+  box-sizing: border-box;
+  height: 42px;
+`;
+// fix vertical alignment on anchor tag:
+const LargeishLinkButton = LargeishButton.extend`
+  padding-top: 11px;
 `;
 
 const WalletAddress = styled.span`
@@ -45,7 +44,7 @@ const WalletAddress = styled.span`
 `;
 
 const ArrowWrap = styled.span`
-  margin-left: 5px;
+  margin-left: 1px;
   path {
     fill: white;
   }
@@ -86,14 +85,13 @@ export class WalletStatus extends React.Component<WalletStatusProps> {
 
           <h2>Set up MetaMask wallet</h2>
           <div style={{ display: "inline-block" }}>
-            {/*TODO add northeast arrow*/}
             <p>
-              <ActionButton isPrimary={true} href="https://metamask.io/" target="_blank">
-                View MetaMask!{" "}
+              <LargeishLinkButton size={buttonSizes.MEDIUM_WIDE} href="https://metamask.io/" target="_blank">
+                Open MetaMask.io{" "}
                 <ArrowWrap>
                   <NorthEastArrow />
                 </ArrowWrap>
-              </ActionButton>
+              </LargeishLinkButton>
             </p>
             <p>
               Once done,{" "}
@@ -125,9 +123,9 @@ export class WalletStatus extends React.Component<WalletStatusProps> {
           </p>
           <p>Once you are on logged in, refresh this page.</p>
           <p>
-            <ActionButton isPrimary={true} onClick={() => window.location.reload()}>
+            <LargeishButton size={buttonSizes.MEDIUM_WIDE} onClick={() => window.location.reload()}>
               Refresh
-            </ActionButton>
+            </LargeishButton>
           </p>
         </Wrapper>
       );
@@ -143,9 +141,9 @@ export class WalletStatus extends React.Component<WalletStatusProps> {
           </p>
           <p>Once you are on the correct network, refresh this page.</p>
           <p>
-            <ActionButton isPrimary={true} onClick={() => window.location.reload()}>
+            <LargeishButton size={buttonSizes.MEDIUM_WIDE} onClick={() => window.location.reload()}>
               Refresh
-            </ActionButton>
+            </LargeishButton>
           </p>
         </Wrapper>
       );
@@ -166,7 +164,7 @@ export class WalletStatus extends React.Component<WalletStatusProps> {
               </p>
               {/*TODO loading state + success/error state?*/}
               <p>
-                <Button isPrimary={true} onClick={this.props.saveAddressToProfile}>
+                <Button size={buttonSizes.MEDIUM_WIDE} onClick={this.props.saveAddressToProfile}>
                   Save MetaMask address to my profile
                 </Button>
               </p>

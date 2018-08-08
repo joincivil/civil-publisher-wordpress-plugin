@@ -2,8 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 const { compose } = window.wp.element;
 const { withSelect, withDispatch } = window.wp.data;
-const { Button } = window.wp.components;
 import { EthAddress } from "@joincivil/core";
+import { Button, buttonSizes } from "@joincivil/components";
 import { hasInjectedProvider, saveAddressToProfile } from "../../util";
 import { ErrorText, Heading, BodySection } from "../styles";
 import { NETWORK_NICE_NAME } from "../../constants";
@@ -62,7 +62,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
       errorBody = (
         <>
           <p>You must save your wallet address to your WordPress user profile before continuing.</p>
-          <Button isPrimary={true} onClick={this.saveAddress}>
+          <Button size={buttonSizes.MEDIUM_WIDE} onClick={this.saveAddress}>
             Save to Your Profile
           </Button>
         </>
@@ -77,7 +77,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
             Please either log in to MetaMask with the correct wallet address, or change the wallet address saved in your
             profile.
           </p>
-          <Button isPrimary={true} onClick={this.saveAddress}>
+          <Button size={buttonSizes.MEDIUM_WIDE} onClick={this.saveAddress}>
             Save MetaMask Address to Your Profile
           </Button>
         </>

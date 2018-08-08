@@ -9,6 +9,7 @@ export const DisabledTransactionProcessingButton: StyledComponentClass<any, "but
   border: solid 1px #dddddd;
   display: flex;
   justify-content: space-between;
+  width: 100%;
 `;
 
 const ClipL = ClipLoader.extend`
@@ -17,14 +18,14 @@ const ClipL = ClipLoader.extend`
 
 export const IndexTransactionButton: React.StatelessComponent<TransactionButtonInnerProps> = props => {
   let buttonComponent = (
-    <Button disabled={props.disabled} onClick={props.onClick} size={buttonSizes.MEDIUM_WIDE}>
+    <Button disabled={props.disabled} onClick={props.onClick} size={buttonSizes.MEDIUM_WIDE} fullWidth>
       Index to Blockchain
     </Button>
   );
   switch (props.step) {
     case 1:
       buttonComponent = (
-        <Button disabled={true} size={buttonSizes.MEDIUM_WIDE}>
+        <Button disabled={true} size={buttonSizes.MEDIUM_WIDE} fullWidth>
           Indexing...
         </Button>
       );

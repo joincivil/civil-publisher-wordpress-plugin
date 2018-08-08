@@ -1,4 +1,3 @@
-const { Button, PanelRow } = window.wp.components;
 const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
 import { ApprovedRevision } from "@joincivil/core";
@@ -78,12 +77,13 @@ const BlockchainSignPanel = compose([
       const { updateSignatures } = dispatch("civil/blockchain");
       const { currentUserId, signatures } = ownProps;
 
-      const signArticle = async (): Promise<void> => {
+      const signArticle = async (cb?: () => void): Promise<void> => {
         const signature = await createSignatureData(ownProps.latestRevisionJson);
         const newSignatures = { ...signatures, [currentUserId]: signature };
         editPost({ meta: { [postMetaKeys.SIGNATURES]: JSON.stringify(newSignatures) } });
         savePost();
         dispatch(updateSignatures(newSignatures));
+        cb && cb();
       };
 
       return {

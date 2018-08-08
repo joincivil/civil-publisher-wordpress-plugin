@@ -1,12 +1,13 @@
 const { apiRequest } = window.wp;
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
+import { ThemeProvider } from "styled-components";
 import { Newsroom, addUser } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "./reducer";
 import { addAddress, addTxHash } from "./actions";
 import { getCivil, hasInjectedProvider, saveAddressToProfile } from "../util";
-import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME } from "../constants";
+import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme } from "../constants";
 import { WalletStatus } from "./WalletStatus";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
 import { SearchUsers } from "./SeachUsers";
@@ -76,36 +77,26 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
         requiredNetwork="rinkeby"
         currentNetwork={this.state.currentNetwork}
         renderUserSearch={this.renderUserSearch}
-        theme={{
-          primaryButtonBackground: "#0085ba",
-          primaryButtonColor: "#fff",
-          primaryButtonHoverBackground: "#008ec2",
-          primaryButtonDisabledBackground: "#008ec2",
-          primaryButtonDisabledColor: "#66c6e4",
-          primaryButtonTextTransform: "none",
-          secondaryButtonColor: "#555555",
-          secondaryButtonBackground: "transparent",
-          secondaryButtonBorder: "#cccccc",
-          borderlessButtonColor: "#0085ba",
-          borderlessButtonHoverColor: "#008ec2",
-        }}
+        theme={theme}
       />
     ) : null;
     return (
-      <>
-        <WalletStatus
-          noProvider={!hasInjectedProvider()}
-          walletLocked={this.civil && !this.state.account}
-          wrongNetwork={this.civil && this.state.currentNetwork !== NETWORK_NAME}
-          networkName={NETWORK_NICE_NAME}
-          metamaskWalletAddress={this.state.account}
-          profileWalletAddress={this.state.profileWalletAddress}
-          saveAddressToProfile={this.saveAddressToProfile}
-        />
-        <hr />
-        {manager}
-        {this.renderCreationModal()}
-      </>
+      <ThemeProvider theme={theme}>
+        <>
+          <WalletStatus
+            noProvider={!hasInjectedProvider()}
+            walletLocked={this.civil && !this.state.account}
+            wrongNetwork={this.civil && this.state.currentNetwork !== NETWORK_NAME}
+            networkName={NETWORK_NICE_NAME}
+            metamaskWalletAddress={this.state.account}
+            profileWalletAddress={this.state.profileWalletAddress}
+            saveAddressToProfile={this.saveAddressToProfile}
+          />
+          <hr />
+          {manager}
+          {this.renderCreationModal()}
+        </>
+      </ThemeProvider>
     );
   }
 

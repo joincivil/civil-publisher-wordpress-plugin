@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-const { withSelect } = window.wp.data;
+const { dispatch, withSelect } = window.wp.data;
 const { dateI18n, getSettings } = window.wp.date;
 import { hashContent } from "@joincivil/utils";
 import { ViewTransactionLink } from "@joincivil/components";
@@ -45,8 +45,13 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
             You are not able to index this post to your newsroom contract on the Ethereum blockchain.{" "}
             {this.props.permissionsMessage}
           </p>
-          {/* TODO: Right now Sign and Record are on same panel so Sign is above this message. When we move them to separate tabs, "sign your post" should be a link that opens the Sign tab. */}
-          <p>You can sign your post above for enhanced credibility and verification using your wallet address.</p>
+          <p>
+            You can{" "}
+            <a href="#" onClick={this.openSignTab}>
+              sign your post
+            </a>{" "}
+            for enhanced credibility and verification using your wallet address.
+          </p>
         </>
       );
     }
@@ -124,4 +129,9 @@ export class CreateIndex extends React.Component<CreateIndexProps> {
       </>
     );
   }
+
+  private openSignTab = () => {
+    dispatch("civil/blockchain").setOpenTab(0);
+    return false;
+  };
 }
