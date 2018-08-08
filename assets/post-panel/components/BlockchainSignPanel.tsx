@@ -29,7 +29,7 @@ export interface BlockchainSignPanelProps {
   latestRevisionJson: any;
   postAuthors: any[];
   currentUserIsPostAuthor: boolean;
-  signArticle(): Promise<void>;
+  signArticle(cb: () => void): Promise<void>;
   isValidSignature(signature: ApprovedRevision): boolean;
 }
 
@@ -143,7 +143,8 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
   }
 
   private sign = async () => {
-    await this.props.signArticle();
-    this.setState({ isSignSuccessModalOpen: true });
+    this.props.signArticle(() => {
+      this.setState({ isSignSuccessModalOpen: true });
+    });
   };
 }
