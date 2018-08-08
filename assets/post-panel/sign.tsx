@@ -1,4 +1,3 @@
-const { Button, PanelRow } = window.wp.components;
 const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
 import { ApprovedRevision } from "@joincivil/core";

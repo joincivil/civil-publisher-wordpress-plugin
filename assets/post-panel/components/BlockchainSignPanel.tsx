@@ -1,7 +1,6 @@
-const { Button } = window.wp.components;
 import * as React from "react";
 import { EthAddress, ApprovedRevision } from "@joincivil/core";
-import { ArticleSignPanelIcon } from "@joincivil/components";
+import { ArticleSignPanelIcon, Button, buttonSizes } from "@joincivil/components";
 import { SignatureData } from "../store/interfaces";
 import { PanelWalletStatus } from "./PanelWalletStatus";
 import { PostStatus } from "./PostStatus";
@@ -95,7 +94,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
               This will open a MetaMask pop-up that will ask you to sign a statement. Note: this step is optional.
             </HelpText>
             <p>
-              <Button isPrimary={true} disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
+              <Button size={buttonSizes.MEDIUM_WIDE} fullWidth disabled={this.props.signDisabled} onClick={() => this.props.signArticle()}>
                 {needsReSign ? "Re-s" : "S"}ign Post
               </Button>
             </p>
