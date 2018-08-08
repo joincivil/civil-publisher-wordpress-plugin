@@ -29,6 +29,19 @@ module.exports = env => {
           enforce: "pre",
           test: /\.js$/,
           loader: "source-map-loader"
+        },
+        {
+          test: /\.(png|jpg|gif)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: "[name].[ext]",
+                publicPath: "/wp-content/plugins/civil-newsroom/images/",
+                outputPath: 'images/'
+              }  
+            }
+          ]
         }
       ],
     },

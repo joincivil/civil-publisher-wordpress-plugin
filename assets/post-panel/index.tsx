@@ -14,7 +14,8 @@ import { theme } from "../constants";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
-
+const modalImageUrl = window.civilImages.metamask_confim_modal;
+console.log({modalImageUrl});
 export interface BlockchainPluginProps {
   openTab: number,
   onNetworkChange(networkName: string): void;

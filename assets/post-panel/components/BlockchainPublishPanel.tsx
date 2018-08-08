@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArticleIndexPanelIcon, TransactionButtonNoModal, Modal, buttonSizes, BorderlessButton, Button } from "@joincivil/components";
+import { ArticleIndexPanelIcon, TransactionButtonNoModal, Modal, buttonSizes, BorderlessButton, Button, MetaMaskModal } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PanelWalletStatus } from "./PanelWalletStatus";
@@ -7,7 +7,7 @@ import { PostStatus } from "./PostStatus";
 import { CreateIndex } from "./CreateIndex";
 import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, ModalHeader, ModalP, ModalButtonContainer } from "../styles";
 import { IndexTransactionButton, DisabledTransactionProcessingButton } from "./Buttons";
-import { MetaMaskModal } from "../../shared-components/MetaMaskModal";
+// import { MetaMaskModal } from "../../shared-components/MetaMaskModal";
 import styled from "styled-components";
 
 export interface BlockchainPublishPanelProps {
