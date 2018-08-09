@@ -9,7 +9,10 @@ module.exports = env => {
       "newsroom-management": path.join(__dirname, "/assets/newsroom-management/index.tsx"),
     },
     resolve: {
-      extensions: [".ts", ".tsx", ".js", ".json"]
+      extensions: [".ts", ".tsx", ".js", ".json"],
+      alias: {
+        'styled-components': path.resolve(__dirname, 'node_modules', 'styled-components'),
+      },
     },
     output: {
       path: __dirname,
