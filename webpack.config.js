@@ -11,6 +11,7 @@ module.exports = env => {
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".json"],
       alias: {
+        // Make Webpack always resolve styled-components to the version of module required by us, to resolve problem caused by linked @joincivil/components including its own copy of the module (https://www.styled-components.com/docs/faqs#why-am-i-getting-a-warning-about-several-instances-of-module-on-the-page):
         'styled-components': path.resolve(__dirname, 'node_modules', 'styled-components'),
       },
     },
@@ -42,7 +43,7 @@ module.exports = env => {
                 name: "[name].[ext]",
                 publicPath: "/wp-content/plugins/civil-newsroom/images/",
                 outputPath: 'images/'
-              }  
+              }
             }
           ]
         }
