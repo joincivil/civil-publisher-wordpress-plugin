@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArticleIndexPanelIcon, TransactionButtonNoModal, Modal, buttonSizes, BorderlessButton, Button, MetaMaskModal } from "@joincivil/components";
+import { ArticleIndexPanelIcon, TransactionButtonNoModal, Transaction, Modal, buttonSizes, BorderlessButton, Button, MetaMaskModal } from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PanelWalletStatus } from "./PanelWalletStatus";
@@ -35,6 +35,7 @@ export interface BlockchainPublishPanelState {
   isWaitingTransactionModalOpen: boolean;
   isTransactionInProggressModalOpen: boolean;
   isTransactionCompleteModalOpen: boolean;
+  isTransactionDeniedModalOpen: boolean;
   startTransaction?(): any;
   cancelTransaction?(): any;
 }
@@ -51,6 +52,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
       isPreTransactionModalOpen: false,
       isTransactionInProggressModalOpen: false,
       isTransactionCompleteModalOpen: false,
+      isTransactionDeniedModalOpen: false,
     };
   }
 
@@ -83,6 +85,23 @@ export class BlockchainPublishPanelComponent extends React.Component<
         startTransaction={() => this.startTransaction() }
       >
         <ModalHeader>Open MetaMask to Index This Article on the Blockchain</ModalHeader>
+      </MetaMaskModal>
+    );
+  }
+
+  public renderTransactionRejectedModal(): JSX.Element | null {
+    if (!this.state.isTransactionDeniedModalOpen) {
+      return null;
+    }
+    return (
+      <MetaMaskModal
+        waiting={false}
+        denied={true}
+        denialText={"To create your newsroom smart contract, you need to Confirm the transaction in your MetaMask waller. You will not be able to proceed without creating a newsroom smart contract."}
+        cancelTransaction={() => this.cancelTransaction()}
+        denialRestartTransactions={this.getTransaction(true)}
+      >
+        <ModalHeader>Your newsroom smart contract did not complete</ModalHeader>
       </MetaMaskModal>
     );
   }
@@ -131,72 +150,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
   }
 
   public render(): JSX.Element {
-    let transactions;
-    if (this.props.civilContentID) {
-      transactions = [
-        {
-          transaction: async () => {
-            const newsroom = await getNewsroom();
-            return newsroom.updateRevisionURIAndHash(
-              this.props.civilContentID!,
-              this.props.revisionUrl,
-              this.props.revisionJsonHash,
-            );
-          },
-          requireBeforeTransaction: () => {
-            return new Promise((res, rej) => {
-              this.setState({
-                startTransaction: res,
-                cancelTransaction: rej,
-                isPreTransactionModalOpen: true,
-              });
-            });
-          },
-          postTransaction: (result: number) => {
-            this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
-            this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash!);
-            this.props.saveTxHash!("");
-          },
-          handleTransactionHash: (txHash: TxHash) => {
-            this.setState({
-              isTransactionInProggressModalOpen: true,
-              isWaitingTransactionModalOpen: false,
-            });
-            this.props.saveTxHash!(txHash);
-          },
-        },
-      ];
-    } else {
-      transactions = [
-        {
-          transaction: async () => {
-            const newsroom = await getNewsroom();
-            return newsroom.publishURIAndHash(this.props.revisionUrl, this.props.revisionJsonHash);
-          },
-          requireBeforeTransaction: () => {
-            return new Promise((res, rej) => {
-              this.setState({
-                startTransaction: res,
-                cancelTransaction: rej,
-                isPreTransactionModalOpen: true,
-              });
-            });
-          },
-          postTransaction: (result: number) => {
-            this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
-            this.props.publishContent!(result, this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash!);
-            this.props.saveTxHash!("");
-          },
-          handleTransactionHash: (txHash: TxHash) => {
-            this.setState({
-              isTransactionInProggressModalOpen: true,
-              isWaitingTransactionModalOpen: false,
-            });
-            this.props.saveTxHash!(txHash);
-          },
-        },
-      ];
-    }
+    const transactions = this.getTransaction();
 
     let insufficientPermissions: boolean | null = false;
     let permissionsMessage;
@@ -264,8 +218,86 @@ export class BlockchainPublishPanelComponent extends React.Component<
         {this.renderTransactionPendingModal()}
         {this.renderTransactionCompleteModal()}
         {this.renderAwaitingTransactionModal()}
+        {this.renderTransactionRejectedModal()}
       </Wrapper>
     );
+  }
+
+  private getTransaction = (noPreModal?: boolean): Transaction[] => {
+    if (this.props.civilContentID) {
+      return [
+        {
+          transaction: async () => {
+            this.setState({
+              isTransactionDeniedModalOpen: false,
+              isWaitingTransactionModalOpen: true,
+              isPreTransactionModalOpen: false,
+            });
+            const newsroom = await getNewsroom();
+            return newsroom.updateRevisionURIAndHash(
+              this.props.civilContentID!,
+              this.props.revisionUrl,
+              this.props.revisionJsonHash,
+            );
+          },
+          requireBeforeTransaction: noPreModal ? undefined : this.requireBeforeTransaction,
+          postTransaction: (result: number) => {
+            this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
+            this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash!);
+            this.props.saveTxHash!("");
+          },
+          handleTransactionHash: this.handleTransactionHash,
+          handleTransactionError: this.handleTransactionError
+        },
+      ];
+    } else {
+      return [
+        {
+          transaction: async () => {
+            this.setState({
+              isTransactionDeniedModalOpen: false,
+              isWaitingTransactionModalOpen: true,
+              isPreTransactionModalOpen: false,
+            });
+            const newsroom = await getNewsroom();
+            return newsroom.publishURIAndHash(this.props.revisionUrl, this.props.revisionJsonHash);
+          },
+          requireBeforeTransaction: noPreModal ? undefined : this.requireBeforeTransaction,
+          postTransaction: (result: number) => {
+            this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
+            this.props.publishContent!(result, this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash!);
+            this.props.saveTxHash!("");
+          },
+          handleTransactionHash: this.handleTransactionHash,
+          handleTransactionError: this.handleTransactionError,
+        },
+      ];
+    }
+  }
+
+  private requireBeforeTransaction =  () => {
+    return new Promise((res, rej) => {
+      this.setState({
+        startTransaction: res,
+        cancelTransaction: rej,
+        isPreTransactionModalOpen: true,
+      });
+    });
+  }
+
+  private handleTransactionHash = (txHash: TxHash) => {
+    this.setState({
+      isTransactionInProggressModalOpen: true,
+      isWaitingTransactionModalOpen: false,
+    });
+    this.props.saveTxHash!(txHash);
+  }
+
+  private handleTransactionError = (err: Error) => {
+    this.setState({isWaitingTransactionModalOpen: false});
+    if (err.message === "Error: MetaMask Tx Signature: User denied transaction signature.") {
+      this.setState({isTransactionDeniedModalOpen: true})
+    }
   }
 
   private cancelTransaction = () => {
@@ -276,7 +308,8 @@ export class BlockchainPublishPanelComponent extends React.Component<
       cancelTransaction: undefined,
       startTransaction: undefined,
       isPreTransactionModalOpen: false,
-    })
+      isTransactionDeniedModalOpen: false,
+    });
   }
 
   private startTransaction = () => {
@@ -286,8 +319,6 @@ export class BlockchainPublishPanelComponent extends React.Component<
     this.setState({
       cancelTransaction: undefined,
       startTransaction: undefined,
-      isPreTransactionModalOpen: false,
-      isWaitingTransactionModalOpen: true,
-    })
+    });
   }
 }
