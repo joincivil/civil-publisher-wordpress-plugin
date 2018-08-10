@@ -383,7 +383,7 @@ class REST_API {
 			'canonicalUrl'          => get_permalink( $parent_post->ID ),
 			'slug'                  => $parent_post->post_name,
 			'description'           => $post->post_excerpt,
-			'authors'               => $json_payload_data['authors'] ?? [],
+			'contributors'          => $json_payload_data['contributors'] ?? [],
 			'images'                => $json_payload_data['images'] ?? [],
 			'tags'                  => $json_payload_data['tags'] ?? [],
 			'primaryTag'            => $json_payload_data['primaryTag'] ?? '',

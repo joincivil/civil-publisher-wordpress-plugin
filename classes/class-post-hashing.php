@@ -116,7 +116,7 @@ class Post_Hashing {
 
 		// Create revision JSON payload data.
 		$json_payload_data = [
-			'authors'               => $this->get_author_data( $post ),
+			'contributors'          => $this->get_contributor_data( $post ),
 			'images'                => $images,
 			'tags'                  => wp_get_post_tags( $post->post_parent, [ 'fields' => 'slugs' ] ),
 			'primaryTag'            => $primary_category,
@@ -128,13 +128,13 @@ class Post_Hashing {
 	}
 
 	/**
-	 * Get author data, including signatures, for given post
+	 * Get contributor (authors, editors, others in the future) data, including signatures, for given post
 	 *
 	 * @param object $post A WP_Post object.
-	 * @return array List of data for each author on post.
+	 * @return array List of data for each contributor on post.
 	 */
-	public function get_author_data( $post ) {
-		$all_author_data = [];
+	public function get_contributor_data( $post ) {
+		$contributors = [];
 
 		$authors = get_post_authors_data( $post->post_parent );
 
@@ -145,7 +145,8 @@ class Post_Hashing {
 		if ( ! empty( $authors ) ) {
 			foreach ( $authors as $author ) {
 				$author_data = [
-					'byline' => $author['display_name'],
+					'role' => 'author',
+					'name' => $author['display_name'],
 				];
 
 				if ( ! empty( $signatures[ $author['ID'] ] ) ) {
@@ -159,30 +160,30 @@ class Post_Hashing {
 					unset( $signatures[ $author['ID'] ] );
 				}
 
-				$all_author_data[] = $author_data;
+				$contributors[] = $author_data;
 			}
 		}
 
-		// Handle non-author signatures.
+		// Handle non-author signatures. For now we will assume that anybody who is not an author but who signed did so in an editorial capacity.
 		if ( ! empty( $signatures ) ) {
 			foreach ( $signatures as $signer_id => $sig_data ) {
 				$signer = get_user_by( 'id', $signer_id );
-				$author_data = [
-					// TODO Should this be "byline" or something else? Should we not be in "authors"?
+				$signer_data = [
 					// TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. How do we go from WP User to Guest author? There's `coauthors_wp_list_authors` but that lists all authors, must be a better way. There's `get_coauthor_by` but it's private, we can't get it from here.
-					'byline' => $signer->display_name,
+					'role' => 'editor',
+					'name' => $signer->display_name,
 				];
 
 				if ( $this->sig_valid_for_post( $sig_data ) ) {
-					$author_data['address'] = $sig_data['author'];
-					$author_data['signature'] = $sig_data['signature'];
+					$signer_data['address'] = $sig_data['author'];
+					$signer_data['signature'] = $sig_data['signature'];
 				}
 
-				$all_author_data[] = $author_data;
+				$contributors[] = $signer_data;
 			}
 		}
 
-		return $all_author_data;
+		return $contributors;
 	}
 
 	/**

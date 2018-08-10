@@ -54,7 +54,7 @@ function get_user_data( $user ) {
 	if ( ! empty( $user->linked_account ) ) {
 		// From co-authors plus.
 		$actual_user = get_user_by( 'login', $user->linked_account );
-		// TODO See if we can get guest author avatar from here (it's not in the guest user object though)
+		// TODO See if we can get guest author avatar from here (it's not in the guest user object though).
 		if ( ! empty( $actual_user ) ) {
 			$data = $actual_user->data;
 			if ( ! empty( $user->display_name ) ) {
