@@ -97,11 +97,11 @@ export class BlockchainPublishPanelComponent extends React.Component<
       <MetaMaskModal
         waiting={false}
         denied={true}
-        denialText={"To create your newsroom smart contract, you need to Confirm the transaction in your MetaMask waller. You will not be able to proceed without creating a newsroom smart contract."}
+        denialText={"To index your post on the blockchain, you need to confirm the transaction in your MetaMask wallet."}
         cancelTransaction={() => this.cancelTransaction()}
         denialRestartTransactions={this.getTransaction(true)}
       >
-        <ModalHeader>Your newsroom smart contract did not complete</ModalHeader>
+        <ModalHeader>Your index transaction did not complete</ModalHeader>
       </MetaMaskModal>
     );
   }
