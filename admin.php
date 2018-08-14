@@ -21,6 +21,7 @@ function lodash_no_conflict( $script_name ) {
  */
 function enqueue_post_panel() {
 	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
+	$domain = get_option("siteurl");
 	wp_enqueue_script(
 		'civil-newsroom-protocol-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),
@@ -31,7 +32,7 @@ function enqueue_post_panel() {
 
 	wp_localize_script( 'civil-newsroom-protocol-post-panel', 'civilImages', $images );
 
-	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'before' );
+	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.wpDomain = \"${domain}\";" . PHP_EOL, 'before' );
 	lodash_no_conflict( 'civil-newsroom-protocol-post-panel' );
 }
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );

@@ -5,7 +5,11 @@ interface Window {
   wp: any;
   web3: any;
   _wpGutenbergPost: any;
-  civilNamespace: { newsroomAddress: string; newsroomTxHash: string };
+  civilNamespace: {
+    newsroomAddress: string;
+    newsroomTxHash: string;
+    wpDomain: string;
+  };
   civilImages: {
     metamask_confim_modal: string;
     metamask_logo: string;
