@@ -8,7 +8,6 @@ import { ManagerState } from "./reducer";
 import { addAddress, addTxHash } from "./actions";
 import { getCivil, hasInjectedProvider, saveAddressToProfile } from "../util";
 import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme } from "../constants";
-import { WalletStatus } from "./WalletStatus";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
 import { SearchUsers } from "./SeachUsers";
 
@@ -64,39 +63,27 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   }
 
   public render(): JSX.Element {
-    const manager = this.civil ? (
-      <Newsroom
-        disabled={this.state.account !== this.state.profileWalletAddress}
-        civil={this.civil}
-        address={this.props.address}
-        txHash={this.props.txHash}
-        account={this.state.account}
-        onNewsroomCreated={this.onNewsroomCreated}
-        getNameForAddress={this.getNameForAddress}
-        onContractDeployStarted={this.onContractDeployStarted}
-        requiredNetwork="rinkeby"
-        currentNetwork={this.state.currentNetwork}
-        renderUserSearch={this.renderUserSearch}
-        theme={theme}
-      />
-    ) : null;
     return (
-      <ThemeProvider theme={theme}>
-        <>
-          <WalletStatus
-            noProvider={!hasInjectedProvider()}
-            walletLocked={this.civil && !this.state.account}
-            wrongNetwork={this.civil && this.state.currentNetwork !== NETWORK_NAME}
-            networkName={NETWORK_NICE_NAME}
-            metamaskWalletAddress={this.state.account}
-            profileWalletAddress={this.state.profileWalletAddress}
-            saveAddressToProfile={this.saveAddressToProfile}
-          />
-          <hr />
-          {manager}
-          {this.renderCreationModal()}
-        </>
-      </ThemeProvider>
+      <>
+        <Newsroom
+          disabled={this.state.account !== this.state.profileWalletAddress}
+          civil={this.civil}
+          address={this.props.address}
+          txHash={this.props.txHash}
+          account={this.state.account}
+          onNewsroomCreated={this.onNewsroomCreated}
+          getNameForAddress={this.getNameForAddress}
+          onContractDeployStarted={this.onContractDeployStarted}
+          requiredNetwork={NETWORK_NAME}
+          requiredNetworkNiceName={NETWORK_NICE_NAME}
+          currentNetwork={this.state.currentNetwork}
+          renderUserSearch={this.renderUserSearch}
+          theme={theme}
+          saveAddressToProfile={this.saveAddressToProfile}
+          profileWalletAddress={this.state.profileWalletAddress}
+        />
+        {this.renderCreationModal()}
+      </>
     );
   }
 
