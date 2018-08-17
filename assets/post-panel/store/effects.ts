@@ -12,7 +12,7 @@ const unsub = subscribe(async () => {
   const isSavingPost = select('core/editor').isSavingPost();
   const isSavingMeta = select('core/edit-post').isSavingMetaBoxes();
 
-  if (wasSavingMeta && ! isSavingMeta) {
+  if ((wasSavingMeta && ! isSavingMeta) || (wasSavingPost && ! isSavingPost)) {
     dispatch(await getLastRevisionId());
   }
 
