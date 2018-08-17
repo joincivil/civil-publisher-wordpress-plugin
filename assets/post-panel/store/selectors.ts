@@ -74,7 +74,7 @@ export function getLatestRevisionJSON(): any {
 
 function getPostMeta(key: string): any {
   const editedMeta = select("core/editor").getEditedPostAttribute("meta");
-  if (editedMeta[key]) {
+  if (key in editedMeta) {
     return editedMeta[key];
   }
   // getEditedPostAttribute returns only the values that are dirty or, if none are dirty, it returns all of the values from the saved state. This means if one meta value is dirty, but not the one we're looking for, then the one we're looking for won't be in there, so let's look in getCurrentPost, which returns the last saved version of post:
