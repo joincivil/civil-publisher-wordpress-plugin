@@ -1,6 +1,8 @@
 import * as moment from "moment";
 const { apiRequest } = window.wp;
-const { dispatch } = window.wp.data;
+const { select, dispatch } = window.wp.data;
+const { getPostEdits } = select('core/editor');
+const { editPost } = dispatch('core/editor');
 const { dateI18n, getSettings } = window.wp.date;
 
 import * as Web3 from "web3";
@@ -64,4 +66,11 @@ export async function saveAddressToProfile(address: EthAddress) {
   if (civilDispatch) {
     civilDispatch.setWpUserAddress(address);
   }
+}
+
+export function updatePostMeta(metaUpdates: Object) {
+  const unsavedMeta = getPostEdits().meta;
+  editPost({
+    meta: { ...unsavedMeta, ...metaUpdates }
+  });
 }

@@ -1,6 +1,6 @@
 const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
-import { revisionJsonSansDate } from "../util";
+import { revisionJsonSansDate, updatePostMeta } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
 import { debounce } from "underscore";
 import { hashContent } from "@joincivil/utils";
@@ -61,7 +61,7 @@ const BlockchainPublishPanel = compose([
 
   withDispatch(
     (dispatch: any, ownProps: BlockchainPublishPanelProps): Partial<BlockchainPublishPanelProps> => {
-      const { editPost, savePost } = dispatch("core/editor");
+      const { savePost } = dispatch("core/editor");
       const { setCivilContentID, updatePublishedState } = dispatch("civil/blockchain");
       const { publishedRevisions } = ownProps;
 
@@ -85,7 +85,7 @@ const BlockchainPublishPanel = compose([
           [postMetaKeys.CIVIL_CONTENT_ID]: `${contentId}`,
           [postMetaKeys.PUBLISHED_REVISIONS]: updatedPublishedRevisions,
         };
-        editPost({ meta: newPostMeta });
+        updatePostMeta(newPostMeta);
         debouncedSave();
         dispatch(updatePublishedState(publishedRevisionData));
       };
@@ -105,7 +105,7 @@ const BlockchainPublishPanel = compose([
         const newPostMeta = {
           [postMetaKeys.PUBLISHED_REVISIONS]: updatedPublishedRevisions,
         };
-        editPost({ meta: newPostMeta });
+        updatePostMeta(newPostMeta);
         debouncedSave();
         dispatch(updatePublishedState(publishedRevisionData));
       };
@@ -114,7 +114,7 @@ const BlockchainPublishPanel = compose([
         const newPostMeta = {
           [postMetaKeys.CIVIL_PUBLISH_TXHASH]: `${txHash}`,
         };
-        editPost({ meta: newPostMeta });
+        updatePostMeta(newPostMeta);
         debouncedSave();
       };
 
