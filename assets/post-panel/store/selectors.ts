@@ -3,7 +3,6 @@ import { EthAddress, TxHash, ApprovedRevision } from "@joincivil/core";
 import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage, hashContent } from "@joincivil/utils";
 import { postMetaKeys, userMetaKeys } from "../../constants";
 import { SignatureData } from "./interfaces";
-import { setCivilContentID, updatePublishedState } from "./actions";
 import { revisionJsonSansDate } from "../../util";
 
 const { dispatch, select } = window.wp.data;
@@ -92,7 +91,7 @@ export function getCivilContentID(store: any): string | null {
   // TODO: Hmm, should this be in a resolver?
   if (!civilContentID) {
     civilContentID = getPostMeta(postMetaKeys.CIVIL_CONTENT_ID);
-    dispatch(setCivilContentID(civilContentID));
+    dispatch("civil/blockchain").setCivilContentID(civilContentID);
   }
   return civilContentID;
 }
@@ -117,6 +116,8 @@ export function getPublishedRevisions(state: any): any {
   let publishedRevisions = state.publishedStatus;
 
   if (!publishedRevisions.length) {
+    const { updatePublishedState } = dispatch("civil/blockchain");
+
     const persistedPublishedRevisions = getPostMeta(postMetaKeys.PUBLISHED_REVISIONS);
     publishedRevisions = JSON.parse(persistedPublishedRevisions || "[]");
     publishedRevisions = publishedRevisions.map((revision: any) => {
@@ -125,7 +126,7 @@ export function getPublishedRevisions(state: any): any {
         const published = new Date(revision.published);
         newRevision = { ...revision, published };
       }
-      dispatch(updatePublishedState(newRevision));
+      updatePublishedState(newRevision);
       return newRevision;
     });
   }
