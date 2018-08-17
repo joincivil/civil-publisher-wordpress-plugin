@@ -66,7 +66,7 @@ const BlockchainPublishPanel = compose([
       const { publishedRevisions } = ownProps;
 
       // savePost fails if post is currently saving, leaving us unexpectedly in dirty state e.g. cause tx hash save happens right after saving updating published revisions data. so debounce.
-      const debouncedSave = debounce(savePost, 200);
+      const debouncedSave = savePost;
 
       const publishArticle = async (contentId: number, revisionId: number, revisionJson: any, txHash: TxHash): Promise<void> => {
         const publishedDate = new Date();

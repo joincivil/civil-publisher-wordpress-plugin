@@ -61,6 +61,15 @@ function add_menus() {
 
 	add_submenu_page(
 		TOP_LEVEL_MENU,
+		__( 'Content Viewer', 'civil' ),
+		__( 'Content Viewer', 'civil' ),
+		'edit_posts',
+		CONTENT_VIEWER,
+		__NAMESPACE__ . '\content_viewer_content'
+	);
+
+	add_submenu_page(
+		TOP_LEVEL_MENU,
 		__( 'Wallet Addresses', 'civil' ),
 		__( 'Wallet Addresses', 'civil' ),
 		'edit_posts',
@@ -90,6 +99,13 @@ function newsroom_manager_content() {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
 	}
 	require_once dirname( __FILE__ ) . '/newsroom-manager.php';
+}
+
+function content_viewer_content() {
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
+	}
+	require_once dirname( __FILE__ ) . '/content-viewer.php';
 }
 
 /**
@@ -130,6 +146,24 @@ function contract_management_script() {
 	lodash_no_conflict( 'civil-newsroom-protocol-newsroom-management' );
 }
 add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
+
+/**
+ * Enqueue Content Viewer.
+ */
+function content_viewer_script() {
+	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
+	wp_enqueue_script(
+		'civil-newsroom-protocol-content-viewer',
+		plugins_url( 'build/content-viewer.build.js', __FILE__ ),
+		// Need these deps in order to expose React and wp.apiRequest.
+		array( 'wp-edit-post', 'wp-data' ),
+		ASSETS_VERSION,
+		true
+	);
+	wp_add_inline_script( 'civil-newsroom-protocol-content-viewer', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\";" . PHP_EOL, 'after' );
+	lodash_no_conflict( 'civil-newsroom-protocol-content-viewer' );
+}
+add_action( 'admin_print_scripts-civil_page_' . CONTENT_VIEWER, __NAMESPACE__ . '\content_viewer_script' );
 
 /**
  * If necessary, alert user that they need to set up newsroom to use plugin.
