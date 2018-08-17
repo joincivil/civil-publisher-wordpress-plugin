@@ -10,7 +10,7 @@ const { select, dispatch } = window.wp.data;
 
 export async function isNewsroomEditor(state: any): Promise<AnyAction> {
   const newsroom = await getNewsroom();
-  return setIsNewsroomEditor(await newsroom.isEditor());
+  return setIsNewsroomEditor(await newsroom.hasEditorCapabilities());
 }
 
 /** If no id supplied, defaults to current user. */
