@@ -7,6 +7,7 @@ module.exports = env => {
     entry: {
       "post-panel": path.join(__dirname, "/assets/post-panel/index.tsx"),
       "newsroom-management": path.join(__dirname, "/assets/newsroom-management/index.tsx"),
+      "content-viewer": path.join(__dirname, "/assets/content-viewer/index.tsx"),
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js", ".json"],

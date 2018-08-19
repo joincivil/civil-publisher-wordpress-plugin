@@ -4,8 +4,8 @@ import { connect, DispatchProp } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { Newsroom, addUser } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
-import { ManagerState } from "./reducer";
-import { addAddress, addTxHash } from "./actions";
+import { ManagerState } from "../shared/reducer";
+import { addAddress, addTxHash } from "../shared/actions";
 import { getCivil, hasInjectedProvider, saveAddressToProfile } from "../util";
 import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme } from "../constants";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
@@ -170,10 +170,8 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
 const mapStateToProps = (state: ManagerState): AppProps => {
   const { user } = state;
   const address = user.get("address");
-  const txHash = user.get("txHash");
   return {
     address,
-    txHash,
   };
 };
 

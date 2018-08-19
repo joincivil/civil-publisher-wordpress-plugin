@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { userMetaKeys, apiNamespace } from "../constants";
 import { connect, DispatchProp } from "react-redux";
 import { addUser } from "@joincivil/newsroom-manager";
-import { ManagerState } from "./reducer";
+import { ManagerState } from "../shared/reducer";
 
 export interface SearchUserProps {
   getOptions(str: string): Promise<any[]>;

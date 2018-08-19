@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { Map } from "immutable";
-import reducers from "./reducer";
+import reducers from "../shared/reducer";
 import App from "./App";
 
 function init(): void {
