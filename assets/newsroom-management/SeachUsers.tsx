@@ -14,13 +14,15 @@ export interface SearchUserProps {
   onSetAddress(address: string): void;
 }
 
+export interface SearchUsersStateValue {
+  id?: number;
+  name?: string;
+  address?: string;
+  email?: string;
+}
+
 export interface SearchUserState {
-  value: {
-    id?: number;
-    name?: string;
-    address?: string;
-    email?: string;
-  };
+  value: SearchUsersStateValue;
   options: any[];
   selected: number;
   address: string;
@@ -120,7 +122,6 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
   }
 
   public render(): JSX.Element {
-    console.log(this.props);
     const error = this.state.error ? <ErrorP>{this.state.error}</ErrorP> : null;
     return (
       <Wrapper>
@@ -157,8 +158,8 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
           break;
         case "Enter":
           const selection = this.state.options[this.state.selected];
-          this.setState({ value: selection, address: selection[userMetaKeys.WALLET_ADDRESS] });
-          this.props.onSetAddress(selection[userMetaKeys.WALLET_ADDRESS]);
+          this.setState({ value: selection});
+          this.onAddressChange("", selection[userMetaKeys.WALLET_ADDRESS], selection);
           break;
       }
     }
@@ -171,6 +172,9 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
   };
 
   private onChange = async (name: string, value: string): Promise<void> => {
+    if (value === "") {
+      this.setState({ error: "" });
+    }
     this.setState({ value: { name: value } });
     if (value.length > 1) {
       await this.setOptions(value);
@@ -179,23 +183,24 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
     }
   };
 
-  private onAddressChange = async (name: string, value: string): Promise<void> => {
+  private onAddressChange = async (name: string, value: string, user?: SearchUsersStateValue): Promise<void> => {
     if (value === "") {
       this.setState({ error: "" });
     }
     this.setState({ address: value });
+    const userValue = user || this.state.value;
     if (isWellFormattedAddress(value)) {
       this.props.onSetAddress(value);
-      if (this.state.canAddAddress && this.state.value.id) {
+      if (this.state.canAddAddress && (userValue.id)) {
         this.setState({ error: "" });
         const user = await apiRequest({
           method: "POST",
-          path: apiNamespace + `users/${this.state.value.id}`,
+          path: apiNamespace + `users/${userValue.id}`,
           data: {
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(addUser(value, this.state.value.name!))
+        this.props.dispatch(addUser(value, userValue.name!))
       } else {
         try {
           const userFromWallet = await apiRequest({
