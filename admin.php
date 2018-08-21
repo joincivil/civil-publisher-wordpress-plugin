@@ -185,7 +185,7 @@ function newsroom_setup_nag() {
 			echo sprintf(
 				wp_kses(
 					/* translators: 1: Management page URL */
-					__( 'Please take a few minutes to <a href="%1$s">create your Civil Newsroom contract</a> to start publishing your posts to the Ethereum blockchain.', 'civil' ),
+					__( 'Please take a few minutes to <a href="%1$s">set up your Civil newsroom smart contract</a> to start publishing your posts to the Ethereum blockchain.', 'civil' ),
 					[ 'a' => [ 'href' => [] ] ]
 				),
 				esc_url( $management_page_url )

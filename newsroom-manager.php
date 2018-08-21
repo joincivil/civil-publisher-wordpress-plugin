@@ -12,7 +12,7 @@ namespace Civil_Newsroom_Protocol;
 <div class="wrap" style="max-width: 825px">
 	<h1><?php esc_html_e( 'Civil Newsroom Manager', 'civil' ); ?></h1>
 
-	<h2><?php esc_html_e( 'Welcome to Civil', 'civil' ); ?></h2>
+	<h2><?php esc_html_e( 'Welcome', 'civil' ); ?></h2>
 	<p><?php esc_html_e( 'Before getting started, here are the steps to set up your newsroom contract.', 'civil' ); ?></p>
 	<p>
 	<?php
@@ -64,7 +64,7 @@ namespace Civil_Newsroom_Protocol;
 	echo sprintf(
 		wp_kses(
 			/* Translators: URL. */
-			__( 'For full instructions on how to configure the Civil Newsroom Manager, <a href="%1$s" target="_blank">read our FAQ</a>.', 'civil' ),
+			__( 'For full details about the Civil Newsroom Manager, <a href="%1$s" target="_blank">view more</a>.', 'civil' ),
 			[
 				'a' => [
 					'href' => [],
