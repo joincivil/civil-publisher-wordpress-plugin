@@ -145,7 +145,7 @@ class REST_API {
 		// Get the revision.
 		$revisions = wp_get_post_revisions( $post_id );
 		$last_revision = null;
-		// Clone & Replace changes the order of revisions so we have to actually loop through to find the latest.
+		// Clone & Replace (and possibly other plugins) changes the order of revisions, so we have to actually loop through to find the latest.
 		foreach ( $revisions as $revision ) {
 			if ( ! $last_revision || ( $revision->ID > $last_revision->ID ) ) {
 				$last_revision = $revision;
