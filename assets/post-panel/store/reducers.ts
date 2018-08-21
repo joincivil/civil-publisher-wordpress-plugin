@@ -103,7 +103,7 @@ export const revisions = (state: any = {}, action: AnyAction): any => {
 export const civilContentID = (state: string | null = null, action: AnyAction): string | null => {
   switch (action.type) {
     case actionTypes.SET_CIVIL_CONTENT_ID:
-      return action.data.civilContentID;
+      return action.data.civilContentID || null;
     default:
       return state;
   }
