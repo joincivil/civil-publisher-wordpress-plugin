@@ -23,7 +23,7 @@ export const NETWORK_NICE_NAME = "Rinkeby Test Network";
 export const theme = {
   primaryButtonBackground: "#0085ba",
   primaryButtonColor: "#fff",
-  primaryButtonFontWeight: "400",
+  primaryButtonFontWeight: "600",
   primaryButtonHoverBackground: "#008ec2",
   primaryButtonDisabledBackground: "#008ec2",
   primaryButtonDisabledColor: "#66c6e4",
