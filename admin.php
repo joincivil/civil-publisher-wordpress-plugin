@@ -30,8 +30,6 @@ function enqueue_post_panel() {
 		true
 	);
 
-	wp_localize_script( 'civil-newsroom-protocol-post-panel', 'civilImages', $images );
-
 	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.wpDomain = \"${domain}\";" . PHP_EOL, 'before' );
 	lodash_no_conflict( 'civil-newsroom-protocol-post-panel' );
 }
