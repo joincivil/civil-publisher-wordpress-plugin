@@ -22,7 +22,7 @@ function lodash_no_conflict( $script_name ) {
  * @param string $script_name Name of dependency that will use these constants.
  */
 function constants_script( $script_name ) {
-	$site_url = get_option("siteurl");
+	$site_url = get_option( 'siteurl' );
 	$admin_url = get_admin_url();
 	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
 	$txhash = get_option( NEWSROOM_TXHASH_OPTION_KEY );
@@ -111,6 +111,9 @@ function newsroom_manager_content() {
 	require_once dirname( __FILE__ ) . '/newsroom-manager.php';
 }
 
+/**
+ * Newsroom content viewer.
+ */
 function content_viewer_content() {
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
