@@ -27,7 +27,7 @@ export interface SearchUserState {
   selected: number;
   address: string;
   focused: boolean;
-  error: string;
+  error: string | JSX.Element;
   canAddAddress: boolean;
 }
 
@@ -106,7 +106,15 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
                 if (val[userMetaKeys.WALLET_ADDRESS]) {
                   this.props.onSetAddress(val[userMetaKeys.WALLET_ADDRESS]);
                 } else {
-                  this.setState({ error: noAddressError, canAddAddress: true });
+                  const errorNotice = (
+                    <>
+                      {noAddressError}{" "}
+                      <a href={`${window.civilNamespace.wpAdminUrl}user-edit.php?user_id=${val.id}`} target="_blank">
+                        Open User Profile
+                      </a>
+                    </>
+                  );
+                  this.setState({ error: errorNotice, canAddAddress: true });
                 }
                 this.setState({ value: val, address: val[userMetaKeys.WALLET_ADDRESS] });
               }}
@@ -158,7 +166,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
           break;
         case "Enter":
           const selection = this.state.options[this.state.selected];
-          this.setState({ value: selection});
+          this.setState({ value: selection });
           this.onAddressChange("", selection[userMetaKeys.WALLET_ADDRESS], selection);
           break;
       }
@@ -191,7 +199,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
     const userValue = user || this.state.value;
     if (isWellFormattedAddress(value)) {
       this.props.onSetAddress(value);
-      if (this.state.canAddAddress && (userValue.id)) {
+      if (this.state.canAddAddress && userValue.id) {
         this.setState({ error: "" });
         const user = await apiRequest({
           method: "POST",
@@ -200,7 +208,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(addUser(value, userValue.name!))
+        this.props.dispatch(addUser(value, userValue.name!));
       } else {
         try {
           const userFromWallet = await apiRequest({
@@ -224,7 +232,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
 }
 
 const mapStateToProps = (state: ManagerState, ownProps: SearchUserProps) => {
-    return ownProps;
-}
+  return ownProps;
+};
 
 export const SearchUsers = connect(mapStateToProps)(SearchUsersComponent);
