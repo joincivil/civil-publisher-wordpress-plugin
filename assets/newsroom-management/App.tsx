@@ -18,6 +18,7 @@ export interface AppProps {
 
 export interface AppState {
   creationModalOpen: boolean;
+  profileAddressSaving: boolean;
   profileWalletAddress?: EthAddress;
   account?: EthAddress;
   currentNetwork?: string;
@@ -33,6 +34,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     this.civil = getCivil();
     this.state = {
       creationModalOpen: false,
+      profileAddressSaving: false,
     };
   }
 
@@ -79,6 +81,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           currentNetwork={this.state.currentNetwork}
           renderUserSearch={this.renderUserSearch}
           theme={theme}
+          profileAddressSaving={this.state.profileAddressSaving}
           saveAddressToProfile={this.saveAddressToProfile}
           profileWalletAddress={this.state.profileWalletAddress}
         />
@@ -88,7 +91,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   }
 
   private setUserAccount = (address: EthAddress): void => {
-    this.setState({ account: address });
+    this.setState({ account: address && address.toLowerCase() });
   };
 
   private setNetwork = (network: string): void => {
@@ -149,9 +152,14 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   };
 
   private saveAddressToProfile = async () => {
+    this.setState({
+      profileAddressSaving: true,
+    });
+
     await saveAddressToProfile(this.state.account!);
     this.setState({
       profileWalletAddress: this.state.account,
+      profileAddressSaving: false,
     });
   };
 
