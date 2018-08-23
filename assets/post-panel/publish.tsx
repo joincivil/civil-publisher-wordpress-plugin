@@ -37,7 +37,7 @@ const BlockchainPublishPanel = compose([
       if (currentPostLastRevisionId) {
         revisionJson = getRevisionJSON(currentPostLastRevisionId);
         revisionJsonHash = hashContent(revisionJson);
-        revisionUrl = `${window.civilNamespace.wpDomain}/wp-json${apiNamespace}revisions/${currentPostLastRevisionId}`;
+        revisionUrl = `${window.civilNamespace.wpSiteUrl}/wp-json${apiNamespace}revisions/${currentPostLastRevisionId}`;
       }
 
       return {

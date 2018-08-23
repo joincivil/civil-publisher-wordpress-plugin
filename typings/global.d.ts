@@ -8,7 +8,7 @@ interface Window {
   civilNamespace: {
     newsroomAddress: string;
     newsroomTxHash: string;
-    wpDomain: string;
+    wpSiteUrl: string;
   };
   civilImages: {
     metamask_confim_modal: string;

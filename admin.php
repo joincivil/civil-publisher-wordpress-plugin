@@ -17,11 +17,22 @@ function lodash_no_conflict( $script_name ) {
 }
 
 /**
+ * Insert a JS script to define constants to pass to frontend.
+ *
+ * @param string $script_name Name of dependency that will use these constants.
+ */
+function constants_script( $script_name ) {
+	$site_url = get_option("siteurl");
+	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
+	$txhash = get_option( NEWSROOM_TXHASH_OPTION_KEY );
+
+	wp_add_inline_script( $script_name, "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.wpSiteUrl = \"${site_url}\"; window.civilNamespace.newsroomTxHash = \"${txhash}\";" . PHP_EOL, 'before' );
+}
+
+/**
  * Enqueue Gutenberg editor plugin script.
  */
 function enqueue_post_panel() {
-	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
-	$domain = get_option("siteurl");
 	wp_enqueue_script(
 		'civil-newsroom-protocol-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),
@@ -30,7 +41,7 @@ function enqueue_post_panel() {
 		true
 	);
 
-	wp_add_inline_script( 'civil-newsroom-protocol-post-panel', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.wpDomain = \"${domain}\";" . PHP_EOL, 'before' );
+	constants_script( 'civil-newsroom-protocol-post-panel' );
 	lodash_no_conflict( 'civil-newsroom-protocol-post-panel' );
 }
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
@@ -130,8 +141,6 @@ function help_menu_content() {
  * Enqueue Civil Newsroom Management script.
  */
 function contract_management_script() {
-	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
-	$txhash = get_option( NEWSROOM_TXHASH_OPTION_KEY );
 	wp_enqueue_script(
 		'civil-newsroom-protocol-newsroom-management',
 		plugins_url( 'build/newsroom-management.build.js', __FILE__ ),
@@ -140,7 +149,7 @@ function contract_management_script() {
 		ASSETS_VERSION,
 		true
 	);
-	wp_add_inline_script( 'civil-newsroom-protocol-newsroom-management', "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.newsroomTxHash = \"${txhash}\";" . PHP_EOL, 'after' );
+	constants_script( 'civil-newsroom-protocol-newsroom-management' );
 	lodash_no_conflict( 'civil-newsroom-protocol-newsroom-management' );
 }
 add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
