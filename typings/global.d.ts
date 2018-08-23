@@ -9,6 +9,7 @@ interface Window {
     newsroomAddress: string;
     newsroomTxHash: string;
     wpSiteUrl: string;
+    wpAdminUrl: string;
   };
   civilImages: {
     metamask_confim_modal: string;

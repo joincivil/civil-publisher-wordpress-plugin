@@ -23,10 +23,11 @@ function lodash_no_conflict( $script_name ) {
  */
 function constants_script( $script_name ) {
 	$site_url = get_option("siteurl");
+	$admin_url = get_admin_url();
 	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
 	$txhash = get_option( NEWSROOM_TXHASH_OPTION_KEY );
 
-	wp_add_inline_script( $script_name, "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.wpSiteUrl = \"${site_url}\"; window.civilNamespace.newsroomTxHash = \"${txhash}\";" . PHP_EOL, 'before' );
+	wp_add_inline_script( $script_name, "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.wpSiteUrl = \"${site_url}\"; window.civilNamespace.wpAdminUrl = \"${admin_url}\"; window.civilNamespace.newsroomTxHash = \"${txhash}\";" . PHP_EOL, 'before' );
 }
 
 /**

@@ -81,7 +81,9 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           currentNetwork={this.state.currentNetwork}
           renderUserSearch={this.renderUserSearch}
           theme={theme}
-          profileUrl={`${window.civilNamespace.wpSiteUrl}/wp-admin/profile.php`}
+          showWelcome={true}
+          profileUrl={`${window.civilNamespace.wpAdminUrl}profile.php`}
+          helpUrl={`${window.civilNamespace.wpAdminUrl}admin.php?page=civil-newsroom-protocol-help`}
           profileAddressSaving={this.state.profileAddressSaving}
           saveAddressToProfile={this.saveAddressToProfile}
           profileWalletAddress={this.state.profileWalletAddress}
