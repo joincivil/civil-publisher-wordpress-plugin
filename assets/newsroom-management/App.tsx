@@ -81,6 +81,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           currentNetwork={this.state.currentNetwork}
           renderUserSearch={this.renderUserSearch}
           theme={theme}
+          showWalletOnboarding={true}
           showWelcome={true}
           profileUrl={`${window.civilNamespace.wpAdminUrl}profile.php`}
           helpUrl={`${window.civilNamespace.wpAdminUrl}admin.php?page=civil-newsroom-protocol-help`}
