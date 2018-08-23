@@ -23,7 +23,7 @@ export const NETWORK_NICE_NAME = "Rinkeby Test Network";
 export const theme = {
   primaryButtonBackground: "#0085ba",
   primaryButtonColor: "#fff",
-  primaryButtonFontWeight: "bold",
+  primaryButtonFontWeight: "600",
   primaryButtonHoverBackground: "#008ec2",
   primaryButtonDisabledBackground: "#008ec2",
   primaryButtonDisabledColor: "#66c6e4",
@@ -36,4 +36,6 @@ export const theme = {
   linkColor: "#0085ba",
   linkColorHover: "#008ec2",
   sansSerifFont: `-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif`,
+  stepHeaderWeightHeavy: 600,
+  stepHeaderWeightLight: 400,
 };

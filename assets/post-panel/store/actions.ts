@@ -70,7 +70,7 @@ export function setCurrentVersionWasPublished(wasIt: boolean): AnyAction {
   };
 }
 
-export function setLastRevisionId(revisionID: number): AnyAction {
+export function setLastRevisionId(revisionID: number | null): AnyAction {
   return {
     type: actionTypes.SET_LAST_REVISION_ID,
     data: revisionID,

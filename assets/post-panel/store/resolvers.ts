@@ -43,6 +43,9 @@ export async function getLastRevisionId(): Promise<AnyAction> {
 
     return setLastRevisionId(revisionId);
   } catch (err) {
+    if (err.responseJSON && err.responseJSON.code === "no-revision-found") {
+      return setLastRevisionId(null);
+    }
     console.error("Failed to fetch last revision ID:", err);
     throw Error("Failed to fetch last revision ID");
   }
