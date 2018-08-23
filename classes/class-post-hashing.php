@@ -183,6 +183,37 @@ class Post_Hashing {
 			}
 		}
 
+		// Get secondary bylines. No signatures for these guys yet.
+		$secondary_bylines = get_post_meta( $post->post_parent, 'secondary_bylines', true );
+		if ( ! empty( $secondary_bylines ) ) {
+			foreach ( $secondary_bylines as $byline ) {
+				if ( empty( $byline['role'] ) || ( empty( $byline['custom_name'] ) && empty( $byline['id'] ) ) ) {
+					continue;
+				}
+
+				$secondary_contributor = [ 'role' => $byline['role'] ];
+
+				if ( ! empty( $byline['id'] ) ) {
+					$user = get_user_by( 'id', $byline['id'] );
+					if ( $user instanceof \WP_User ) {
+						$secondary_contributor['name'] = $user->display_name;
+					} else if ( function_exists( 'get_coauthors' ) ) {
+						$name = (string) get_post_meta( $byline['id'], 'cap-display_name', true );
+						if ( empty( $name ) ) {
+							continue;
+						}
+						$secondary_contributor['name'] = $name;
+					} else {
+						continue;
+					}
+				} else {
+					$secondary_contributor['name'] = $byline['custom_name'];
+				}
+
+				$contributors[] = $secondary_contributor;
+			}
+		}
+
 		return $contributors;
 	}
 
