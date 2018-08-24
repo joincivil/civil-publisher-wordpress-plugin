@@ -56,12 +56,12 @@ class REST_API {
 			]
 		);
 
-		// Endpoint for setting user ETH address.
+		// Endpoint for setting custom user meta.
 		register_rest_route(
 			REST_API_NAMESPACE, '/users/(?P<user_id>\w+)', [
 				'methods'  => 'POST',
-				'callback' => [ $this, 'set_user_eth_address' ],
-				'permission_callback' => [ $this, 'set_user_eth_address_check' ],
+				'callback' => [ $this, 'set_custom_user_meta' ],
+				'permission_callback' => [ $this, 'set_custom_user_meta_check' ],
 			]
 		);
 	}
@@ -268,16 +268,16 @@ class REST_API {
 	}
 
 	/**
-	 * Permissions check for if user can edit user ETH address.
+	 * Permissions check for if user can edit user meta.
 	 *
 	 * @param \WP_REST_Request $request The current REST API request.
 	 * @return Boolean|\WP_Error True if can access, or an error.
 	 */
-	public function set_user_eth_address_check( \WP_REST_Request $request ) {
+	public function set_custom_user_meta_check( \WP_REST_Request $request ) {
 		$params = $request->get_params();
 		$user_id = $params['user_id'];
 
-		if ( 'me' == $user_id && is_user_logged_in() ) {
+		if ( is_user_logged_in() && ( 'me' === $user_id || get_current_user_id() == $user_id ) ) {
 			return true;
 		}
 
@@ -295,15 +295,17 @@ class REST_API {
 	}
 
 	/**
-	 * Set ETH wallet address for given user.
+	 * Set custom user meta for given user.
 	 *
 	 * @param \WP_REST_Request $request The current REST API request.
 	 * @return \WP_REST_Response|\WP_Error The REST API response or an error.
 	 */
-	public function set_user_eth_address( \WP_REST_Request $request ) {
+	public function set_custom_user_meta( \WP_REST_Request $request ) {
 		$params = $request->get_params();
 		$user_id = $params['user_id'];
-		$addr = $params[ USER_ETH_ADDRESS_META_KEY ];
+
+		$has_addr = isset( $params[ USER_ETH_ADDRESS_META_KEY ] );
+		$has_newsroom_role = isset( $params[ USER_NEWSROOM_ROLE_META_KEY ] );
 
 		if ( empty( $user_id ) ) {
 			return new \WP_Error(
@@ -330,27 +332,36 @@ class REST_API {
 			}
 		}
 
-		if ( empty( $addr ) ) {
+		if ( ! $has_addr && ! $has_newsroom_role ) {
 			return new \WP_Error(
-				'no-addr-found',
-				esc_html__( 'No ETH address provided.' ),
+				'no-meta-found',
+				esc_html__( 'No meta provided.' ),
 				[
 					'status' => 400,
 				]
 			);
 		}
 
-		if ( ! is_valid_eth_address( $addr ) ) {
-			return new \WP_Error(
-				'invalid-eth-address',
-				esc_html__( 'Invalid ETH address provided.' ),
-				[
-					'status' => 400,
-				]
-			);
+		if ( $has_addr ) {
+			$addr = $params[ USER_ETH_ADDRESS_META_KEY ];
+
+			if ( ! empty( $addr ) && ! is_valid_eth_address( $addr ) ) {
+				return new \WP_Error(
+					'invalid-eth-address',
+					esc_html__( 'Invalid ETH address provided.' ),
+					[
+						'status' => 400,
+					]
+				);
+			}
+
+			update_user_meta( $user_id, USER_ETH_ADDRESS_META_KEY, $addr );
 		}
 
-		update_user_meta( $user_id, USER_ETH_ADDRESS_META_KEY, $addr );
+		if ( $has_newsroom_role ) {
+			$newsroom_role = $params[ USER_NEWSROOM_ROLE_META_KEY ];
+			update_user_meta( $user_id, USER_NEWSROOM_ROLE_META_KEY, $newsroom_role );
+		}
 
 		return rest_ensure_response( 'success' );
 	}

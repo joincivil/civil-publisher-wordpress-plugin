@@ -8,11 +8,37 @@
 namespace Civil_Newsroom_Protocol;
 
 /**
+ * Enqueue script for Users page.
+ */
+function users_page_script() {
+	if ( get_current_screen()->id !== 'users' ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'civil-newsroom-protocol-users-page-script',
+		plugins_url( 'build/users-page.build.js', __FILE__ ),
+		array( 'wp-edit-post', 'wp-data' ),
+		ASSETS_VERSION,
+		true
+	);
+	constants_script( 'civil-newsroom-protocol-users-page-script' );
+	lodash_no_conflict( 'civil-newsroom-protocol-users-page-script' );
+}
+add_action( 'admin_print_scripts', __NAMESPACE__ . '\users_page_script' );
+
+/**
  * Add inline style to Users page.
  */
 function users_page_styles() {
 	?>
 	<style>
+		.column-civil_newsroom_protocol_newsroom_role .spinner {
+			background: url(/wp-admin/images/wpspin_light.gif) no-repeat;
+			visibility: visible;
+			float: none;
+			opacity: 0.25;
+		}
 		.column-civil_newsroom_protocol_eth_wallet_address {
 			white-space: nowrap;
 			text-overflow: ellipsis;
@@ -33,6 +59,9 @@ add_action( 'admin_head-users.php', __NAMESPACE__ . '\users_page_styles' );
  * @return array Desired columns.
  */
 function user_columns( $columns ) {
+	if ( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) {
+		$columns[ USER_NEWSROOM_ROLE_META_KEY ] = esc_html( 'Civil Role', 'civil' );
+	}
 	$columns[ USER_ETH_ADDRESS_META_KEY ] = esc_html( 'Wallet Address', 'civil' );
 	return $columns;
 }
@@ -49,12 +78,26 @@ add_filter( 'manage_users_columns', __NAMESPACE__ . '\user_columns' );
  */
 function user_cells( $output, $column_name, $user_id ) {
 	switch ( $column_name ) {
+		case USER_NEWSROOM_ROLE_META_KEY:
+			if ( ! get_option( NEWSROOM_ADDRESS_OPTION_KEY ) || ! get_the_author_meta( USER_ETH_ADDRESS_META_KEY, $user_id ) ) {
+				return null;
+			}
+
+			if ( ! metadata_exists( 'user', $user_id, USER_NEWSROOM_ROLE_META_KEY ) ) {
+				// Yet to have been loaded, so show spinner while frontend fetches role and saves to meta.
+				return '<span class="spinner"></span>';
+			}
+
+			return get_the_author_meta( USER_NEWSROOM_ROLE_META_KEY, $user_id );
+			break;
+
 		case USER_ETH_ADDRESS_META_KEY:
 			$address = get_the_author_meta( USER_ETH_ADDRESS_META_KEY, $user_id );
 			if ( $address ) {
 				return "<code>$address</code>";
 			}
 			break;
+
 		default:
 	}
 	return $output;

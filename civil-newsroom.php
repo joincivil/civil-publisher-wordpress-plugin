@@ -27,6 +27,7 @@ define( __NAMESPACE__ . '\POST_AUTHORS_META_KEY', 'civil_newsroom_protocol_post_
 
 // User meta.
 define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_newsroom_protocol_eth_wallet_address' );
+define( __NAMESPACE__ . '\USER_NEWSROOM_ROLE_META_KEY', 'civil_newsroom_protocol_newsroom_role' );
 
 // Site options.
 define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol_newsroom_address' );

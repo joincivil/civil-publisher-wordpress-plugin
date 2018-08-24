@@ -68,6 +68,16 @@ export async function saveAddressToProfile(address: EthAddress) {
   }
 }
 
+export async function saveNewsroomRoleToProfile(id: number, role: string | null) {
+  await apiRequest({
+    method: "POST",
+    path: apiNamespace + "users/" + id,
+    data: {
+      [userMetaKeys.NEWSROOM_ROLE]: role,
+    },
+  });
+}
+
 export function updatePostMeta(metaUpdates: Object) {
   const unsavedMeta = getPostEdits().meta;
   editPost({

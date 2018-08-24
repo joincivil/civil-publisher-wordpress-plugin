@@ -20,4 +20,5 @@ interface Window {
 declare module "refx";
 declare module "redux-multi";
 declare module "moment"; // included via Gutenberg
+declare module "jquery"; // included on all WordPress pages
 declare module "*.png";

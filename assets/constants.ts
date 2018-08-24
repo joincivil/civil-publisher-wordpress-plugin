@@ -10,6 +10,7 @@ export enum postMetaKeys {
 
 export enum userMetaKeys {
   WALLET_ADDRESS = "civil_newsroom_protocol_eth_wallet_address",
+  NEWSROOM_ROLE = "civil_newsroom_protocol_newsroom_role",
 }
 
 export enum siteOptionKeys {
