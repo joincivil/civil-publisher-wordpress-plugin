@@ -31,10 +31,10 @@ async function init(): Promise<void> {
     }
 
     let role;
-    if (await newsroom.isEditor(addr)) {
-      role = "Civil Member";
-    } else if (await newsroom.isOwner(addr)) {
+    if (await newsroom.isOwner(addr)) {
       role = "Civil Officer";
+    } else if (await newsroom.isEditor(addr)) {
+      role = "Civil Member";
     } else {
       role = "";
     }
