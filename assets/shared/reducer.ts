@@ -1,4 +1,11 @@
-import { newsrooms, newsroomUi, newsroomUsers, newsroomContent, NewsroomState, RevisionAndJson } from "@joincivil/newsroom-manager";
+import {
+  newsrooms,
+  newsroomUi,
+  newsroomUsers,
+  newsroomContent,
+  NewsroomState,
+  RevisionAndJson,
+} from "@joincivil/newsroom-manager";
 import { Map } from "immutable";
 import { combineReducers, AnyAction } from "redux";
 import { managerActions } from "./actions";

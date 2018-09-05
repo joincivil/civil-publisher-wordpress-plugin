@@ -4,6 +4,7 @@ import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage, hashContent 
 import { postMetaKeys, userMetaKeys } from "../../constants";
 import { SignatureData } from "./interfaces";
 import { revisionJsonSansDate } from "../../util";
+import { ArchiveOptions } from "../components/BlockchainPublishPanel";
 
 const { dispatch, select } = window.wp.data;
 
@@ -150,6 +151,19 @@ export function getTxHash(): TxHash | null {
   return txHash;
 }
 
+export function getArchiveOptions(): ArchiveOptions | null {
+  const archive = getPostMeta(postMetaKeys.CIVIL_PUBLISH_ARCHIVE_STATUS);
+  if (archive) {
+    return JSON.parse(archive);
+  } else {
+    return null;
+  }
+}
+
+export function getIpfsPath(): string | null {
+  return getPostMeta(postMetaKeys.CIVIL_PUBLISH_IPFS);
+}
+
 export function getCurrentIsVersionPublished(state: any): boolean {
   const { getLastPublishedRevision, getLatestRevisionJSON, getCurrentVersionWasPublished } = select("civil/blockchain");
   const { setCurrentVersionWasPublished } = dispatch("civil/blockchain");
@@ -165,7 +179,8 @@ export function getCurrentIsVersionPublished(state: any): boolean {
     return getCurrentVersionWasPublished();
   }
 
-  const isPublished = hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash;
+  const isPublished =
+    hashContent(revisionJsonSansDate(revisionJson)) === lastPublishedRevision.revisionJsonSansDateHash;
   setCurrentVersionWasPublished(isPublished);
 
   return isPublished;
@@ -180,6 +195,15 @@ export function getLastPublishedRevision(state: any): any {
   const publishedRevisions = select("civil/blockchain").getPublishedRevisions();
   if (publishedRevisions.length) {
     return publishedRevisions[publishedRevisions.length - 1];
+  }
+}
+
+export function getLastArchivedRevision(state: any): any {
+  const publishedRevisions = select("civil/blockchain").getPublishedRevisions();
+  if (publishedRevisions.length) {
+    return publishedRevisions.reverse().find((item: any) => {
+      return item.archive && item.archive.ipfs;
+    });
   }
 }
 

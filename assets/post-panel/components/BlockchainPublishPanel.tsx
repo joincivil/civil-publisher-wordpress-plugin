@@ -1,13 +1,40 @@
 import * as React from "react";
-import { ArticleIndexPanelIcon, TransactionButtonNoModal, Transaction, Modal, buttonSizes, BorderlessButton, Button, MetaMaskModal } from "@joincivil/components";
+import {
+  ArticleIndexPanelIcon,
+  TransactionButtonNoModal,
+  Transaction,
+  Modal,
+  buttonSizes,
+  BorderlessButton,
+  Button,
+  MetaMaskModal,
+} from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PanelWalletStatus } from "./PanelWalletStatus";
 import { PostStatus } from "./PostStatus";
-import { CreateIndex } from "./CreateIndex";
-import { Wrapper, IconWrap, Heading, MainHeading, IntroSection, Body, BodySection, ModalHeader, ModalP, ModalButtonContainer } from "../styles";
+import {
+  Wrapper,
+  IconWrap,
+  Heading,
+  MainHeading,
+  IntroSection,
+  Body,
+  BodySection,
+  ModalHeader,
+  ModalP,
+  ModalButtonContainer,
+} from "../styles";
 import { IndexTransactionButton, DisabledTransactionProcessingButton } from "./Buttons";
+import { GetStartedPanel } from "./GetStartedPanel";
+import { PublishPanelFirstTime } from "./PublishPanelFirstTime";
+import { PublishPanel } from "./PublishPanel";
 import styled from "styled-components";
+
+export interface ArchiveOptions {
+  ipfs: boolean;
+  transaction: boolean;
+}
 
 export interface BlockchainPublishPanelProps {
   isNewsroomEditor: boolean;
@@ -15,18 +42,29 @@ export interface BlockchainPublishPanelProps {
   civilContentID?: number;
   currentPostLastRevisionId?: number;
   publishedRevisions: any[];
-  revisionJson: string;
+  revisionJson: any;
   revisionJsonHash: string;
   revisionUrl: string;
   isDirty: boolean;
   correctNetwork: boolean;
   txHash?: TxHash;
+  ipfs?: string;
+  archiveOptions?: ArchiveOptions;
+  archive?: { ipfs: boolean; transaction: boolean };
   lastPublishedRevision: any;
+  lastArchivedRevision: any;
   currentIsVersionPublished: boolean;
   userCapabilities: { [capability: string]: boolean };
-  publishContent?(contentId: number, revisionId: number, revisionJson: any, txHash: TxHash): void;
-  updateContent?(revisionId: number, revisionJson: any, txHash: TxHash): void;
-  saveTxHash?(txHash: TxHash): void;
+  publishContent?(
+    contentId: number,
+    revisionId: number,
+    revisionJson: any,
+    txHash: TxHash,
+    ipfs: string,
+    archive: ArchiveOptions,
+  ): void;
+  updateContent?(revisionId: number, revisionJson: any, txHash: TxHash, ipfs: string, archive?: ArchiveOptions): void;
+  saveTxHash?(txHash: TxHash, ipfs: string, archive: ArchiveOptions): void;
 }
 
 export interface BlockchainPublishPanelState {
@@ -36,6 +74,7 @@ export interface BlockchainPublishPanelState {
   isTransactionInProggressModalOpen: boolean;
   isTransactionCompleteModalOpen: boolean;
   isTransactionDeniedModalOpen: boolean;
+  isGetStartedDismissed: boolean;
   startTransaction?(): any;
   cancelTransaction?(): any;
 }
@@ -53,105 +92,40 @@ export class BlockchainPublishPanelComponent extends React.Component<
       isTransactionInProggressModalOpen: false,
       isTransactionCompleteModalOpen: false,
       isTransactionDeniedModalOpen: false,
+      isGetStartedDismissed: false,
     };
   }
 
   public async componentDidMount(): Promise<void> {
-    if (this.props.txHash && this.props.txHash.length > 0) {
+    if (this.props.txHash && this.props.txHash.length > 0 && this.props.ipfs) {
       this.setState({ loadedWithTxHash: true });
       const newsroom = await getNewsroom();
       if (!this.props.civilContentID) {
         const contentId = await newsroom.contentIdFromTxHash(this.props.txHash);
-        await this.props.publishContent!(contentId, this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash);
-        this.props.saveTxHash!("");
+        await this.props.publishContent!(
+          contentId,
+          this.props.currentPostLastRevisionId!,
+          this.props.revisionJson,
+          this.props.txHash,
+          this.props.ipfs,
+          this.props.archiveOptions!,
+        );
         this.setState({ loadedWithTxHash: false });
       } else {
         const revisionId = await newsroom.revisionFromTxHash(this.props.txHash);
-        await this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash);
-        this.props.saveTxHash!("");
+        await this.props.updateContent!(
+          this.props.currentPostLastRevisionId!,
+          this.props.revisionJson,
+          this.props.txHash,
+          this.props.ipfs,
+          this.props.archiveOptions!,
+        );
         this.setState({ loadedWithTxHash: false });
       }
     }
   }
 
-  public renderPreTransactionModal(): JSX.Element | null {
-    if (!this.state.isPreTransactionModalOpen) {
-      return null;
-    }
-    return (
-      <MetaMaskModal
-        waiting={false}
-        cancelTransaction={() => this.cancelTransaction() }
-        startTransaction={() => this.startTransaction() }
-      >
-        <ModalHeader>Open MetaMask to Index This Article on the Blockchain</ModalHeader>
-      </MetaMaskModal>
-    );
-  }
-
-  public renderTransactionRejectedModal(): JSX.Element | null {
-    if (!this.state.isTransactionDeniedModalOpen) {
-      return null;
-    }
-    return (
-      <MetaMaskModal
-        waiting={false}
-        denied={true}
-        denialText={"To index your post on the blockchain, you need to confirm the transaction in your MetaMask wallet."}
-        cancelTransaction={() => this.cancelTransaction()}
-        denialRestartTransactions={this.getTransaction(true)}
-      >
-        <ModalHeader>Your index transaction did not complete</ModalHeader>
-      </MetaMaskModal>
-    );
-  }
-
-  public renderAwaitingTransactionModal(): JSX.Element | null {
-    if (!this.state.isWaitingTransactionModalOpen) {
-      return null;
-    }
-    return (
-      <MetaMaskModal
-        waiting={true}
-        cancelTransaction={() => this.cancelTransaction() }
-        startTransaction={() => this.startTransaction() }
-      >
-        <ModalHeader>Waiting to Confirm in MetaMask</ModalHeader>
-      </MetaMaskModal>
-    );
-  }
-
-  public renderTransactionPendingModal(): JSX.Element | null {
-    if (!this.state.isTransactionInProggressModalOpen) {
-      return null;
-    }
-    return (<Modal>
-      <ModalHeader>Your Post is being indexed</ModalHeader>
-      <ModalP> This can take some time depending on traffic on the Ethereum network.</ModalP>
-      <ModalP> You are welcome to leave this page open while continuing to work, but please note that any changes you make to a post once the blockchain indexing process has begun will not be reflected on that blockchain index unless you re-index.</ModalP>
-      <ModalButtonContainer>
-        <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({isTransactionInProggressModalOpen: false})}>OK</Button>
-      </ModalButtonContainer>
-    </Modal>);
-  }
-
-  public renderTransactionCompleteModal(): JSX.Element | null {
-    if (!this.state.isTransactionCompleteModalOpen) {
-      return null;
-    }
-    return (<Modal>
-      <ModalHeader>Index added!</ModalHeader>
-      <ModalP>Your post was successfully indexed to the Ethereum blockchain.</ModalP>
-      <ModalP>Note that any time you make an update or revision to a post, we recommend you also index that revision to the blockchain</ModalP>
-      <ModalButtonContainer>
-        <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({isTransactionCompleteModalOpen: false})}>OK</Button>
-      </ModalButtonContainer>
-    </Modal>);
-  }
-
-  public render(): JSX.Element {
-    const transactions = this.getTransaction();
-
+  public renderPanelContent(): JSX.Element {
     let insufficientPermissions: boolean | null = false;
     let permissionsMessage;
     if (!this.props.userCapabilities.publish_posts) {
@@ -165,160 +139,57 @@ export class BlockchainPublishPanelComponent extends React.Component<
       permissionsMessage = "You are not listed on your newsroom contract.";
     }
 
-    const buttonDisabled = this.props.publishDisabled || !this.props.correctNetwork || !!insufficientPermissions;
-    const button = this.state.loadedWithTxHash ? (
-      <DisabledTransactionProcessingButton>Transaction In Progress...</DisabledTransactionProcessingButton>
-    ) : (
-      <TransactionButtonNoModal
-        Button={IndexTransactionButton}
-        disabled={buttonDisabled}
-        transactions={transactions}
-      >
-        Index to Blockchain
-      </TransactionButtonNoModal>
-    );
+    if (!this.state.isGetStartedDismissed && !this.props.civilContentID) {
+      return <GetStartedPanel getStarted={this.getStarted} />;
+    } else if (!this.props.civilContentID) {
+      return (
+        <PublishPanelFirstTime
+          revisionUrl={this.props.revisionUrl}
+          revisionJsonHash={this.props.revisionJsonHash}
+          revisionJson={this.props.revisionJson}
+          civilContentID={this.props.civilContentID}
+          currentPostLastRevisionId={this.props.currentPostLastRevisionId}
+          txHash={this.props.txHash}
+          disabled={this.props.publishDisabled || !this.props.correctNetwork || !!insufficientPermissions}
+          saveTxHash={this.props.saveTxHash}
+          publishContent={this.props.publishContent}
+          updateContent={this.props.updateContent}
+        />
+      );
+    }
 
     return (
+      <PublishPanel
+        revisionUrl={this.props.revisionUrl}
+        revisionJsonHash={this.props.revisionJsonHash}
+        revisionJson={this.props.revisionJson}
+        civilContentID={this.props.civilContentID}
+        currentPostLastRevisionId={this.props.currentPostLastRevisionId}
+        txHash={this.props.txHash}
+        disabled={this.props.publishDisabled || !this.props.correctNetwork || !!insufficientPermissions}
+        saveTxHash={this.props.saveTxHash}
+        publishContent={this.props.publishContent}
+        updateContent={this.props.updateContent}
+      />
+    );
+  }
+
+  public render(): JSX.Element {
+    return (
       <Wrapper>
-        <IntroSection>
-          <Heading>Index</Heading>
-          <p>
-            Index this post’s metadata and hash to your newsroom contract on the Ethereum blockchain.{" "}
-            <a href="#TODO">Learn more</a>
-          </p>
-        </IntroSection>
-
-        <Body>
-          <PanelWalletStatus />
-          <PostStatus
-            requirePublish={true}
-            actionString={(this.props.lastPublishedRevision ? "re-" : "") + "indexing"}
-          />
-          <BodySection>
-            <MainHeading>
-              Create Index
-              <IconWrap>
-                <ArticleIndexPanelIcon />
-              </IconWrap>
-            </MainHeading>
-
-            <CreateIndex
-              lastPublishedRevision={this.props.lastPublishedRevision}
-              transactionButton={button}
-              transactionButtonDisabled={buttonDisabled}
-              transactionInProgress={!!this.props.txHash}
-              revisionJson={this.props.revisionJson}
-              insufficientPermissions={insufficientPermissions}
-              permissionsMessage={permissionsMessage}
-              currentIsVersionPublished={this.props.currentIsVersionPublished}
-            />
-          </BodySection>
-        </Body>
-        {this.renderPreTransactionModal()}
-        {this.renderTransactionPendingModal()}
-        {this.renderTransactionCompleteModal()}
-        {this.renderAwaitingTransactionModal()}
-        {this.renderTransactionRejectedModal()}
+        <PostStatus
+          requirePublish={true}
+          actionString={(this.props.lastPublishedRevision ? "re-" : "") + "indexing"}
+          contentId={this.props.civilContentID}
+          lastPublishedRevision={this.props.lastPublishedRevision}
+          lastArchivedRevision={this.props.lastArchivedRevision}
+        />
+        {this.renderPanelContent()}
       </Wrapper>
     );
   }
 
-  private getTransaction = (noPreModal?: boolean): Transaction[] => {
-    if (this.props.civilContentID) {
-      return [
-        {
-          transaction: async () => {
-            this.setState({
-              isTransactionDeniedModalOpen: false,
-              isWaitingTransactionModalOpen: true,
-              isPreTransactionModalOpen: false,
-            });
-            const newsroom = await getNewsroom();
-            return newsroom.updateRevisionURIAndHash(
-              this.props.civilContentID!,
-              this.props.revisionUrl,
-              this.props.revisionJsonHash,
-            );
-          },
-          requireBeforeTransaction: noPreModal ? undefined : this.requireBeforeTransaction,
-          postTransaction: (result: number) => {
-            this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
-            this.props.updateContent!(this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash!);
-            this.props.saveTxHash!("");
-          },
-          handleTransactionHash: this.handleTransactionHash,
-          handleTransactionError: this.handleTransactionError
-        },
-      ];
-    } else {
-      return [
-        {
-          transaction: async () => {
-            this.setState({
-              isTransactionDeniedModalOpen: false,
-              isWaitingTransactionModalOpen: true,
-              isPreTransactionModalOpen: false,
-            });
-            const newsroom = await getNewsroom();
-            return newsroom.publishURIAndHash(this.props.revisionUrl, this.props.revisionJsonHash);
-          },
-          requireBeforeTransaction: noPreModal ? undefined : this.requireBeforeTransaction,
-          postTransaction: (result: number) => {
-            this.setState({isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false});
-            this.props.publishContent!(result, this.props.currentPostLastRevisionId!, this.props.revisionJson, this.props.txHash!);
-            this.props.saveTxHash!("");
-          },
-          handleTransactionHash: this.handleTransactionHash,
-          handleTransactionError: this.handleTransactionError,
-        },
-      ];
-    }
-  }
-
-  private requireBeforeTransaction =  () => {
-    return new Promise((res, rej) => {
-      this.setState({
-        startTransaction: res,
-        cancelTransaction: rej,
-        isPreTransactionModalOpen: true,
-      });
-    });
-  }
-
-  private handleTransactionHash = (txHash: TxHash) => {
-    this.setState({
-      isTransactionInProggressModalOpen: true,
-      isWaitingTransactionModalOpen: false,
-    });
-    this.props.saveTxHash!(txHash);
-  }
-
-  private handleTransactionError = (err: Error) => {
-    this.setState({isWaitingTransactionModalOpen: false});
-    if (err.message === "Error: MetaMask Tx Signature: User denied transaction signature.") {
-      this.setState({isTransactionDeniedModalOpen: true})
-    }
-  }
-
-  private cancelTransaction = () => {
-    if (this.state.cancelTransaction) {
-      this.state.cancelTransaction();
-    }
-    this.setState({
-      cancelTransaction: undefined,
-      startTransaction: undefined,
-      isPreTransactionModalOpen: false,
-      isTransactionDeniedModalOpen: false,
-    });
-  }
-
-  private startTransaction = () => {
-    if (this.state.startTransaction) {
-      this.state.startTransaction();
-    }
-    this.setState({
-      cancelTransaction: undefined,
-      startTransaction: undefined,
-    });
-  }
+  private getStarted = (): void => {
+    this.setState({ isGetStartedDismissed: true });
+  };
 }

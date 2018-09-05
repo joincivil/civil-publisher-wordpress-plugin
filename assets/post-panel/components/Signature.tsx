@@ -46,11 +46,11 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
   let validIndicator;
   let tipText;
   if (!sigData) {
-    tipText = "This user hasn't signed yet"
-    validIndicator = null
+    tipText = "This user hasn't signed yet";
+    validIndicator = null;
   } else if (isValid === null || isSavingPost) {
-    tipText = "Validating signature..."
-    validIndicator = <ClipLoader size={20} />
+    tipText = "Validating signature...";
+    validIndicator = <ClipLoader size={20} />;
   } else if (!isValid) {
     tipText = "This post has been updated since last signed and requires a new signature";
     validIndicator = <HollowRedNoGood />;
@@ -60,24 +60,30 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
     tipText = "Please save this post in order to check signature validity";
     validIndicator = <QuestionToolTip explainerText="" />;
   } else {
-    tipText = `Signed ${moment(sigData.date).format("MMMM DD h:mm a")}`
+    tipText = `Signed ${moment(sigData.date).format("MMMM DD h:mm a")}`;
     validIndicator = <HollowGreenCheck />;
   }
 
   const avatarUrl = userData.avatar_urls && userData.avatar_urls[48];
 
-  const signatureInner = (<WrapperInner>
-    <UserWrap>
-      <Avatar src={avatarUrl} />
-    {/* TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. */}
-      {userData.name}
-    </UserWrap>
-    <IconWrap>{validIndicator}</IconWrap>
-  </WrapperInner>);
+  const signatureInner = (
+    <WrapperInner>
+      <UserWrap>
+        <Avatar src={avatarUrl} />
+        {/* TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. */}
+        {userData.name}
+      </UserWrap>
+      <IconWrap>{validIndicator}</IconWrap>
+    </WrapperInner>
+  );
 
-  return tipText ? (<WrapperOuter><ToolTip explainerText={tipText}>
-      {signatureInner}
-  </ToolTip></WrapperOuter>) : signatureInner;
+  return tipText ? (
+    <WrapperOuter>
+      <ToolTip explainerText={tipText}>{signatureInner}</ToolTip>
+    </WrapperOuter>
+  ) : (
+    signatureInner
+  );
 }
 
 export const Signature = withSelect(

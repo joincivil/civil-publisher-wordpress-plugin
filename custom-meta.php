@@ -111,7 +111,7 @@ add_action( 'edit_user_profile_update', __NAMESPACE__ . '\update_profile_fields'
 function add_user_meta_rest() {
 	register_rest_field(
 		'user',
-		USER_NEWSROOM_ROLE_META_KEY,
+		USER_ETH_ADDRESS_META_KEY,
 		array(
 			'get_callback'      => __NAMESPACE__ . '\user_meta_callback',
 			'update_callback'   => null,
@@ -120,7 +120,7 @@ function add_user_meta_rest() {
 	);
 	register_rest_field(
 		'user',
-		USER_ETH_ADDRESS_META_KEY,
+		USER_NEWSROOM_ROLE_META_KEY,
 		array(
 			'get_callback'      => __NAMESPACE__ . '\user_meta_callback',
 			'update_callback'   => null,
@@ -323,6 +323,20 @@ function expose_article_meta() {
 	);
 	register_meta(
 		'post', TXHASH_META_KEY, array(
+			'show_in_rest' => true,
+			'single' => true,
+			'type' => 'string',
+		)
+	);
+	register_meta(
+		'post', IPFS_META_KEY, array(
+			'show_in_rest' => true,
+			'single' => true,
+			'type' => 'string',
+		)
+	);
+	register_meta(
+		'post', ARCHIVE_STATUS_META_KEY, array(
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',

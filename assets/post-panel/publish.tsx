@@ -1,10 +1,14 @@
 const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
-import { revisionJsonSansDate, updatePostMeta } from "../util";
+import { revisionJsonSansDate, updatePostMeta, createIpfsUrl } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
 import { debounce } from "underscore";
 import { hashContent } from "@joincivil/utils";
-import { BlockchainPublishPanelComponent, BlockchainPublishPanelProps } from "./components/BlockchainPublishPanel";
+import {
+  BlockchainPublishPanelComponent,
+  BlockchainPublishPanelProps,
+  ArchiveOptions,
+} from "./components/BlockchainPublishPanel";
 import { TxHash } from "@joincivil/core";
 
 const BlockchainPublishPanel = compose([
@@ -20,7 +24,10 @@ const BlockchainPublishPanel = compose([
         getRevisionJSON,
         isCorrectNetwork,
         getTxHash,
+        getArchiveOptions,
+        getIpfsPath,
         getLastPublishedRevision,
+        getLastArchivedRevision,
         getCurrentIsVersionPublished,
         getLastRevisionId,
       } = selectStore("civil/blockchain");
@@ -42,6 +49,8 @@ const BlockchainPublishPanel = compose([
 
       return {
         txHash: getTxHash(),
+        archiveOptions: getArchiveOptions(),
+        ipfs: getIpfsPath(),
         isNewsroomEditor: isNewsroomEditor(),
         userCapabilities,
         publishDisabled,
@@ -55,6 +64,7 @@ const BlockchainPublishPanel = compose([
         correctNetwork,
         currentIsVersionPublished: getCurrentIsVersionPublished(),
         lastPublishedRevision: getLastPublishedRevision(),
+        lastArchivedRevision: getLastArchivedRevision(),
       };
     },
   ),
@@ -68,14 +78,33 @@ const BlockchainPublishPanel = compose([
       // savePost fails if post is currently saving, leaving us unexpectedly in dirty state e.g. cause tx hash save happens right after saving updating published revisions data. so debounce.
       const debouncedSave = debounce(savePost, 200);
 
-      const publishArticle = async (contentId: number, revisionId: number, revisionJson: any, txHash: TxHash): Promise<void> => {
+      const saveTxHash = (txHash: TxHash, ipfs: string, archive?: ArchiveOptions): void => {
+        const newPostMeta = {
+          [postMetaKeys.CIVIL_PUBLISH_TXHASH]: `${txHash}`,
+          [postMetaKeys.CIVIL_PUBLISH_IPFS]: ipfs,
+          [postMetaKeys.CIVIL_PUBLISH_ARCHIVE_STATUS]: archive ? JSON.stringify(archive) : undefined,
+        };
+        updatePostMeta(newPostMeta);
+        debouncedSave();
+      };
+
+      const publishArticle = async (
+        contentId: number,
+        revisionId: number,
+        revisionJson: any,
+        txHash: TxHash,
+        ipfs: string,
+        archive?: ArchiveOptions,
+      ): Promise<void> => {
         const publishedDate = new Date();
         const revisionJsonSansDateHash = hashContent(revisionJsonSansDate(revisionJson)); // publishing changes the revision date but nothing else, so publishing invalidates whats published
         const publishedRevisionData = {
           revisionID: revisionId,
           revisionJsonSansDateHash,
           published: publishedDate,
-          txHash
+          ipfsUrl: createIpfsUrl(ipfs),
+          archive,
+          txHash,
         };
         publishedRevisions.push(publishedRevisionData);
 
@@ -88,9 +117,16 @@ const BlockchainPublishPanel = compose([
         updatePostMeta(newPostMeta);
         debouncedSave();
         dispatch(updatePublishedState(publishedRevisionData));
+        saveTxHash("", "");
       };
 
-      const updateArticle = async (revisionId: number, revisionJson: any, txHash: TxHash): Promise<void> => {
+      const updateArticle = async (
+        revisionId: number,
+        revisionJson: any,
+        txHash: TxHash,
+        ipfs: string,
+        archive?: ArchiveOptions,
+      ): Promise<void> => {
         const publishedDate = new Date();
         const revisionJsonSansDateHash = hashContent(revisionJsonSansDate(revisionJson));
         const publishedRevisionData = {
@@ -98,6 +134,8 @@ const BlockchainPublishPanel = compose([
           revisionJsonSansDateHash,
           txHash,
           published: publishedDate,
+          ipfsUrl: createIpfsUrl(ipfs),
+          archive,
         };
         publishedRevisions.push(publishedRevisionData);
 
@@ -108,14 +146,7 @@ const BlockchainPublishPanel = compose([
         updatePostMeta(newPostMeta);
         debouncedSave();
         dispatch(updatePublishedState(publishedRevisionData));
-      };
-
-      const saveTxHash = (txHash: TxHash) => {
-        const newPostMeta = {
-          [postMetaKeys.CIVIL_PUBLISH_TXHASH]: `${txHash}`,
-        };
-        updatePostMeta(newPostMeta);
-        debouncedSave();
+        saveTxHash("", "");
       };
 
       return {

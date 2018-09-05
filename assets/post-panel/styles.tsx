@@ -8,6 +8,7 @@ export const colors = {
 
 export const Wrapper = styled.div`
   overflow-x: hidden;
+  background-color: #edeff0;
 
   // TODO temporary until we separate them into tabs:
   &:first-child {
@@ -95,6 +96,12 @@ export const IntroHeader = styled.div`
 
 export const Body = styled.div`
   padding: 0 18px;
+  background-color: #ffffff;
+  border-bottom: solid 1px #dddddd;
+  border-top: solid 1px #dddddd;
+  &:first-child {
+    border-top: none;
+  }
 `;
 export const BodySection = styled.div`
   padding: 24px 0;

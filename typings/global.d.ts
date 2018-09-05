@@ -22,3 +22,5 @@ declare module "redux-multi";
 declare module "moment"; // included via Gutenberg
 declare module "jquery"; // included on all WordPress pages
 declare module "*.png";
+declare module "ipfs-api";
+declare module "bs58";

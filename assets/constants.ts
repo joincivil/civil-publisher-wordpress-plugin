@@ -5,6 +5,8 @@ export enum postMetaKeys {
   PUBLISHED_REVISIONS = "civil_newsroom_protocol_published_revisions",
   CIVIL_CONTENT_ID = "civil_newsroom_protocol_content_id",
   CIVIL_PUBLISH_TXHASH = "civil_newsroom_protocol_publish_tx_hash",
+  CIVIL_PUBLISH_IPFS = "civil_newsroom_protocol_publish_ipfs",
+  CIVIL_PUBLISH_ARCHIVE_STATUS = "civil_newsroom_protocol_publish_archive_status",
   POST_AUTHORS = "civil_newsroom_protocol_post_authors",
 }
 
@@ -39,4 +41,6 @@ export const theme = {
   sansSerifFont: `-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif`,
   stepHeaderWeightHeavy: 600,
   stepHeaderWeightLight: 400,
+  checkboxInactiveColor: "#72777c",
+  checkboxActiveColor: "#0073af",
 };

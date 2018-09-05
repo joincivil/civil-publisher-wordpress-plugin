@@ -9,21 +9,21 @@ import reducers from "../shared/reducer";
 import App from "./App";
 
 function init(): void {
-    const { newsroomAddress, newsroomTxHash } = window.civilNamespace;
-    const store = createStore(
-        reducers,
-        {
-            user: Map<string, any>({ address: newsroomAddress, txHash: newsroomTxHash }),
-        },
-        applyMiddleware(thunk),
-    );
+  const { newsroomAddress, newsroomTxHash } = window.civilNamespace;
+  const store = createStore(
+    reducers,
+    {
+      user: Map<string, any>({ address: newsroomAddress, txHash: newsroomTxHash }),
+    },
+    applyMiddleware(thunk),
+  );
 
-    ReactDOM.render(
-        <Provider store={store}>
-            <App />
-        </Provider>,
-        document.getElementById("civil-newsroom-content-viewer"),
-    );
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById("civil-newsroom-content-viewer"),
+  );
 }
 
 window.onload = init;

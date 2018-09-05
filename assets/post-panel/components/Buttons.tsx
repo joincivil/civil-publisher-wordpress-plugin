@@ -16,23 +16,29 @@ const ClipL = ClipLoader.extend`
   margin-left: 5px;
 `;
 
-export const IndexTransactionButton: React.StatelessComponent<TransactionButtonInnerProps> = props => {
+export interface IndexTransactionButtonProps extends TransactionButtonInnerProps {
+  archive?: boolean;
+}
+
+export const IndexTransactionButton: React.StatelessComponent<IndexTransactionButtonProps> = props => {
   let buttonComponent = (
     <Button disabled={props.disabled} onClick={props.onClick} size={buttonSizes.MEDIUM_WIDE} fullWidth>
-      Index to Blockchain
+      {props.archive ? "Publish Index and Archive" : "Publish Index"}
     </Button>
   );
   switch (props.step) {
     case 1:
       buttonComponent = (
         <Button disabled={true} size={buttonSizes.MEDIUM_WIDE} fullWidth>
-          Indexing...
+          Awaiting Confirmation
         </Button>
       );
       break;
     case 2:
       buttonComponent = (
-        <DisabledTransactionProcessingButton>Transaction In Progress <ClipL size={15} /></DisabledTransactionProcessingButton>
+        <DisabledTransactionProcessingButton>
+          Transaction In Progress... <ClipL size={15} />
+        </DisabledTransactionProcessingButton>
       );
       break;
   }

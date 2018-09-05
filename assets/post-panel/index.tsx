@@ -16,7 +16,7 @@ import BlockchainPublishPanel from "./publish";
 import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
 
 export interface BlockchainPluginProps {
-  openTab: number,
+  openTab: number;
   onNetworkChange(networkName: string): void;
   onAccountChange(address: EthAddress): void;
   onTabChange(openTabIndex: number): void;
@@ -74,14 +74,16 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
     }
   }
   public render(): JSX.Element {
-    return (<Tabs  activeIndex={this.props.openTab} onActiveTabChange={this.props.onTabChange} TabComponent={StyledLi}>
-      <Tab title="Sign">
-        <BlockchainSignPanel />
-      </Tab>
-      <Tab title="index">
-        <BlockchainPublishPanel />
-      </Tab>
-    </Tabs>);
+    return (
+      <Tabs activeIndex={this.props.openTab} onActiveTabChange={this.props.onTabChange} TabComponent={StyledLi}>
+        <Tab title="Sign">
+          <BlockchainSignPanel />
+        </Tab>
+        <Tab title="Publish">
+          <BlockchainPublishPanel />
+        </Tab>
+      </Tabs>
+    );
   }
 }
 
@@ -101,12 +103,10 @@ const BlockchainPluginInner = compose([
   ),
   withSelect(
     (selectStore: any): Partial<BlockchainPluginProps> => {
-      const {
-        getTabIndex
-      } = selectStore("civil/blockchain");
+      const { getTabIndex } = selectStore("civil/blockchain");
       return {
         openTab: getTabIndex(),
-      }
+      };
     },
   ),
 ])(BlockchainPluginInnerComponent);
@@ -117,10 +117,8 @@ const CivilSidebar = () => {
       <PanelRow>
         <P>
           A newsroom contract has not been set up. Please got to your{" "}
-          <a href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">
-            Civil Newsroom Manager
-          </a>
-          {" "}page to create a Newsroom smart contract.
+          <a href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">Civil Newsroom Manager</a> page to
+          create a Newsroom smart contract.
         </P>
       </PanelRow>
       <PanelRow>
@@ -131,14 +129,12 @@ const CivilSidebar = () => {
     </Wrapper>
   );
   if (window.civilNamespace.newsroomAddress) {
-    panelContent = <BlockchainPluginInner/>;
+    panelContent = <BlockchainPluginInner />;
   }
   return (
     <>
       <PluginSidebar name="civil-sidebar" title="Civil">
-        <ThemeProvider theme={theme}>
-          {panelContent}
-        </ThemeProvider>
+        <ThemeProvider theme={theme}>{panelContent}</ThemeProvider>
       </PluginSidebar>
       <PluginSidebarMoreMenuItem target="civil-sidebar">Civil</PluginSidebarMoreMenuItem>
     </>

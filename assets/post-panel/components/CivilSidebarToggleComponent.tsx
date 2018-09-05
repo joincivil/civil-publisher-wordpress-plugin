@@ -74,12 +74,12 @@ export const CivilSidebarWithComposed = compose([
       const openCivilSidebar = () => {
         openGeneralSidebar("civil-sidebar/civil-sidebar");
         closePublishSidebar();
-      }
+      };
       const setOpenTabDispatch = (index: number) => dispatch(setOpenTab(index));
 
       return {
-          setOpenTab: setOpenTabDispatch,
-          openCivilSidebar,
+        setOpenTab: setOpenTabDispatch,
+        openCivilSidebar,
       };
     },
   ),

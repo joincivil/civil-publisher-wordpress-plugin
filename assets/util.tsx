@@ -1,8 +1,10 @@
 import * as moment from "moment";
+import * as IPFS from "ipfs-api";
+import { promisify } from "@joincivil/utils";
 const { apiRequest } = window.wp;
 const { select, dispatch } = window.wp.data;
-const { getPostEdits } = select('core/editor');
-const { editPost } = dispatch('core/editor');
+const { getPostEdits } = select("core/editor");
+const { editPost } = dispatch("core/editor");
 const { dateI18n, getSettings } = window.wp.date;
 
 import * as Web3 from "web3";
@@ -14,6 +16,23 @@ import { apiNamespace, userMetaKeys } from "./constants";
 export const getCivil = (() => {
   const civil: Civil | undefined = hasInjectedProvider() ? new Civil() : undefined;
   return (): Civil | undefined => civil;
+})();
+
+export interface IpfsObject {
+  add(content: any, options?: { hash: string; pin: boolean }): Promise<[{ path: string; hash: string; size: number }]>;
+}
+
+export const createIpfsUrl = (path: string) => {
+  return `https://ipfs.infura.io/ipfs/${path}`;
+};
+
+export const getIPFS = (() => {
+  const ipfs = new IPFS({ host: "ipfs.infura.io", port: 5001, protocol: "https" });
+  return (): IpfsObject => {
+    return {
+      add: promisify<[{ path: string; hash: string; size: number }]>(ipfs.add),
+    };
+  };
 })();
 
 export function revisionJsonSansDate(revisionJson: any): any {
@@ -81,6 +100,6 @@ export async function saveNewsroomRoleToProfile(id: number, role: string | null)
 export function updatePostMeta(metaUpdates: Object) {
   const unsavedMeta = getPostEdits().meta;
   editPost({
-    meta: { ...unsavedMeta, ...metaUpdates }
+    meta: { ...unsavedMeta, ...metaUpdates },
   });
 }
