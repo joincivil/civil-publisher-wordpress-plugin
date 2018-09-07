@@ -93,7 +93,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
           >
             <CollapsableText>
               <p>
-                Publishing the Index adds this post’s metadata and hash to IPFS and Ethereum Blockchain. It will appear
+                Publishing the index adds this post’s metadata and hash to IPFS and Ethereum Blockchain. It will appear
                 in the Civil network, and provides proof that the contents have not changed since last publish. The
                 metadata will include a record of the post. We recommend updating the index only if there is a
                 signfificant change in your post.

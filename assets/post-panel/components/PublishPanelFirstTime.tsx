@@ -78,7 +78,7 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
             onSelectEthTransaction={this.selectEthTransaction}
           />
           <p>
-            Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. And index will
+            Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index will
             be published to connect this archive to your newsroom.
           </p>
           <p>
