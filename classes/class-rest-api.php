@@ -1,6 +1,6 @@
 <?php
 /**
- * Hanldes all logic related to the REST API.
+ * Handles all logic related to the REST API.
  *
  * @package Civil_Publisher
  */

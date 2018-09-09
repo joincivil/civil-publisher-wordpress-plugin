@@ -54,3 +54,4 @@ require_once dirname( __FILE__ ) . '/users-page.php';
 
 require_once dirname( __FILE__ ) . '/classes/class-post-hashing.php';
 require_once dirname( __FILE__ ) . '/classes/class-rest-api.php';
+require_once dirname( __FILE__ ) . '/classes/class-credibility-indicators.php';
