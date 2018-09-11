@@ -31,29 +31,35 @@ const BodySectionNoPaddingBottom = BodySection.extend`
 `;
 
 export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
-  console.log({ props });
-  let transactionArchive = (
-    <Link
-      href={`https://rinkeby.etherscan.io/tx/${props.lastArchivedRevision.txHash}`}
-      disabled={!props.lastArchivedRevision.archive.transaction}
-    >
-      View on Ethereum{" "}
-    </Link>
-  );
-  if (!props.lastArchivedRevision.archive.transaction) {
-    transactionArchive = <ToolTip explainerText={"Not Archived to Ehereum"}>{transactionArchive}</ToolTip>;
+  let archiveSection;
+
+  if (props.lastArchivedRevision) {
+    let transactionArchive = (
+      <Link
+        href={`https://rinkeby.etherscan.io/tx/${props.lastArchivedRevision.txHash}`}
+        disabled={!props.lastArchivedRevision.archive.transaction}
+      >
+        View on Ethereum{" "}
+      </Link>
+    );
+    if (!props.lastArchivedRevision.archive.transaction) {
+      transactionArchive = <ToolTip explainerText={"Not Archived to Ehereum"}>{transactionArchive}</ToolTip>;
+    }
+
+    archiveSection = (
+      <BodySectionNoPaddingBottom>
+        <P>Archive · {moment(props.lastArchivedRevision.published).format("MMM DD YYYY h:mm a")}</P>
+        <Link href={props.lastArchivedRevision.ipfsUrl}>View on IPFS</Link>
+        {transactionArchive}
+      </BodySectionNoPaddingBottom>
+    );
+  } else {
+    archiveSection = (
+      <BodySectionNoPaddingBottom>
+        <p>Archive · Not Available</p>
+      </BodySectionNoPaddingBottom>
+    );
   }
-  const archiveSection = props.lastArchivedRevision ? (
-    <BodySectionNoPaddingBottom>
-      <P>Archive · {moment(props.lastArchivedRevision.published).format("MMM DD YYYY h:mm a")}</P>
-      <Link href={props.lastArchivedRevision.ipfsUrl}>View on IPFS</Link>
-      {transactionArchive}
-    </BodySectionNoPaddingBottom>
-  ) : (
-    <BodySectionNoPaddingBottom>
-      <p>Archive · Not Available</p>
-    </BodySectionNoPaddingBottom>
-  );
 
   return (
     <div>
