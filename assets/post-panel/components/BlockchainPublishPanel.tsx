@@ -3,6 +3,7 @@ import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PostStatus } from "./PostStatus";
 import { Wrapper } from "../styles";
+import { PanelWalletStatus } from "./PanelWalletStatus";
 import { GetStartedPanel } from "./GetStartedPanel";
 import { PublishPanelFirstTime } from "./PublishPanelFirstTime";
 import { PublishPanel } from "./PublishPanel";
@@ -159,6 +160,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
           lastPublishedRevision={this.props.lastPublishedRevision}
           lastArchivedRevision={this.props.lastArchivedRevision}
         />
+          <PanelWalletStatus />
         {this.renderPanelContent()}
       </Wrapper>
     );
