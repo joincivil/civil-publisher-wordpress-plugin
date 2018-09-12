@@ -65,10 +65,14 @@ export function hasInjectedProvider(): boolean {
 }
 
 const dateSettings = getSettings();
-/* Uses timezone and date format specified in CMS settings to format a Date object or UTC string. */
-export function siteFormatTimeString(utcTimestamp: string | Date): string {
+/* Formats given Date object or UTC string in the timezone specified in CMS settings. If no format is supplied, uses default date format from in CMS settings. */
+export function siteTimezoneFormat(utcTimestamp: string | Date, format?: string): string {
   const timezoned = moment.utc(utcTimestamp).utcOffset(dateSettings.timezone.offset * 60);
-  return dateI18n(dateSettings.formats.datetime, timezoned);
+  if (format) {
+    return moment(timezoned).format(format);
+  } else {
+    return dateI18n(dateSettings.formats.datetime, timezoned);
+  }
 }
 
 export async function saveAddressToProfile(address: EthAddress): Promise<void> {

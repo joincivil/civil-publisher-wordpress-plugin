@@ -1,9 +1,9 @@
 import * as React from "react";
-import * as moment from "moment";
 import styled from "styled-components";
 import { ApprovedRevision } from "@joincivil/core";
 import { HollowGreenCheck, HollowRedNoGood, QuestionToolTip, ToolTip, ClipLoader } from "@joincivil/components";
 const { withSelect } = window.wp.data;
+import { siteTimezoneFormat } from "../../util";
 import { IconWrap } from "../styles";
 
 export interface SignatureProps {
@@ -60,7 +60,7 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
     tipText = "Please save this post in order to check signature validity";
     validIndicator = <QuestionToolTip explainerText="" />;
   } else {
-    tipText = `Signed ${moment(sigData.date).format("MMMM DD h:mm a")}`;
+    tipText = `Signed ${siteTimezoneFormat(sigData.date, "MMMM DD h:mm a")}`;
     validIndicator = <HollowGreenCheck />;
   }
 

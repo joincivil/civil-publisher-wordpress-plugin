@@ -1,7 +1,7 @@
 import * as React from "react";
-import * as moment from "moment";
 import { BorderlessButton, ToolTip } from "@joincivil/components";
 import styled from "styled-components";
+import { siteTimezoneFormat } from "../../util";
 import { BodySection } from "../styles";
 
 export interface RevisionLinksProps {
@@ -48,7 +48,7 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
 
     archiveSection = (
       <BodySectionNoPaddingBottom>
-        <P>Archive · {moment(props.lastArchivedRevision.published).format("MMM DD YYYY h:mm a")}</P>
+        <P>Archive · {siteTimezoneFormat(props.lastArchivedRevision.published, "MMM DD YYYY h:mm a")}</P>
         <Link href={props.lastArchivedRevision.ipfsUrl}>View on IPFS</Link>
         {transactionArchive}
       </BodySectionNoPaddingBottom>
@@ -64,7 +64,7 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
   return (
     <div>
       <BodySection>
-        <P>Index · {moment(props.lastPublishedRevision.published).format("MMM DD YYYY h:mm a")}</P>
+        <P>Index · {siteTimezoneFormat(props.lastPublishedRevision.published, "MMM DD YYYY h:mm a")}</P>
         <Link href={props.lastPublishedRevision.ipfsUrl}>View on IPFS</Link>
         <Link href={`https://rinkeby.etherscan.io/tx/${props.lastPublishedRevision.txHash}`}>View on Ethereum</Link>
       </BodySection>
