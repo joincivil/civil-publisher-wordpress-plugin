@@ -16,7 +16,7 @@ export const Wrapper = styled.div`
   }
 
   p {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     font-size: 13px;
     line-height: 1.31;
     letter-spacing: -0.1px;
@@ -43,6 +43,10 @@ export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTex
   }
 `;
 
+export const ErrorHeadingText = styled.span`
+  color: #f2524a;
+  font-weight: bold;
+`;
 export const ErrorText = styled.p`
   && {
     color: #f2524a;
@@ -50,7 +54,7 @@ export const ErrorText = styled.p`
 `;
 
 export const Heading = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   font-size: 14px;
   letter-spacing: -0.2px;
   color: #23282d;
@@ -75,7 +79,7 @@ export const MainHeading = Heading.extend`
 
 export const Intro = styled.div`
   background-color: #fffef6;
-  padding: 24px 18px;
+  padding: 24px 16px;
   border-bottom: 1px solid #d8d8d8;
 
   ${Heading} {
@@ -95,7 +99,7 @@ export const IntroHeader = styled.div`
 `;
 
 export const Body = styled.div`
-  padding: 0 18px;
+  padding: 0 16px;
   background-color: #ffffff;
   border-bottom: solid 1px #dddddd;
   border-top: solid 1px #dddddd;
@@ -104,7 +108,7 @@ export const Body = styled.div`
   }
 `;
 export const BodySection = styled.div`
-  padding: 24px 0;
+  padding: 20px 0 24px;
   border-bottom: 1px solid #d8d8d8;
   &:last-child {
     border-bottom: 0;

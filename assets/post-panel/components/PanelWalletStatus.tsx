@@ -5,7 +5,7 @@ const { withSelect } = window.wp.data;
 import { EthAddress } from "@joincivil/core";
 import { Button, buttonSizes } from "@joincivil/components";
 import { hasInjectedProvider, saveAddressToProfile } from "../../util";
-import { ErrorText, Heading, BodySection } from "../styles";
+import { ErrorText, Heading, ErrorHeadingText, BodySection } from "../styles";
 import { NETWORK_NICE_NAME } from "../../constants";
 
 export interface PanelWalletStatusProps {
@@ -40,10 +40,10 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
       errorHeading = "Not logged into wallet";
       errorBody = (
         <p>
-          Don’t have a wallet? We recommend installing{" "}
+          Don’t have a wallet? Having a wallet is mandatory and we recommend installing{" "}
           <a href="https://metamask.io/" target="_blank">
             MetaMask
-          </a>, where you can create and set up your wallet. {faqText}
+          </a>, where you can create and set up your wallet and address. {faqText}
         </p>
       );
     } else if (!this.props.web3ProviderAddress) {
@@ -89,7 +89,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
     return (
       <BodySection>
         <Heading>
-          Wallet
+          <ErrorHeadingText>Wallet</ErrorHeadingText>
           {errorHeading && <ErrorText>{errorHeading}</ErrorText>}
         </Heading>
         {errorBody}

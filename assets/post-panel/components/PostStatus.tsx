@@ -1,7 +1,7 @@
 import * as React from "react";
 const { withSelect } = window.wp.data;
 const { dateI18n, getSettings } = window.wp.date;
-import { ErrorText, Heading, Body, BodySection } from "../styles";
+import { ErrorText, Heading, BodySection } from "../styles";
 import { RevisionLinks } from "./RevisionLinks";
 
 export interface PostStatusProps {
@@ -17,10 +17,6 @@ export interface PostStatusProps {
   isSavingPost: boolean;
   contentId?: number;
 }
-
-const Wrapper = Body.extend`
-  margin-bottom: 16px;
-`;
 
 const ErrorHeading = Heading.extend`
   color: #f2524a;
@@ -78,12 +74,10 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
     }
 
     return (
-      <Wrapper>
-        <BodySection>
-          {heading}
-          {content}
-        </BodySection>
-      </Wrapper>
+      <BodySection>
+        {heading}
+        {content}
+      </BodySection>
     );
   }
 }

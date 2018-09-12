@@ -2,8 +2,8 @@ import * as React from "react";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
 import { PostStatus } from "./PostStatus";
-import { Wrapper } from "../styles";
 import { PanelWalletStatus } from "./PanelWalletStatus";
+import { Wrapper, Body } from "../styles";
 import { GetStartedPanel } from "./GetStartedPanel";
 import { PublishPanelFirstTime } from "./PublishPanelFirstTime";
 import { PublishPanel } from "./PublishPanel";
@@ -55,6 +55,10 @@ export interface BlockchainPublishPanelState {
   startTransaction?(): any;
   cancelTransaction?(): any;
 }
+
+const StatusWrapper = Body.extend`
+  margin-bottom: 16px;
+`;
 
 export class BlockchainPublishPanelComponent extends React.Component<
   BlockchainPublishPanelProps,
@@ -153,14 +157,16 @@ export class BlockchainPublishPanelComponent extends React.Component<
   public render(): JSX.Element {
     return (
       <Wrapper>
-        <PostStatus
-          requirePublish={true}
-          actionString={(this.props.lastPublishedRevision ? "re-" : "") + "indexing"}
-          contentId={this.props.civilContentID}
-          lastPublishedRevision={this.props.lastPublishedRevision}
-          lastArchivedRevision={this.props.lastArchivedRevision}
-        />
+        <StatusWrapper>
+          <PostStatus
+            requirePublish={true}
+            actionString={(this.props.lastPublishedRevision ? "re-" : "") + "indexing"}
+            contentId={this.props.civilContentID}
+            lastPublishedRevision={this.props.lastPublishedRevision}
+            lastArchivedRevision={this.props.lastArchivedRevision}
+          />
           <PanelWalletStatus />
+        </StatusWrapper>
         {this.renderPanelContent()}
       </Wrapper>
     );
