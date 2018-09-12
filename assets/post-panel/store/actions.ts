@@ -1,5 +1,5 @@
 const { select } = window.wp.data;
-import { EthAddress, TxHash } from "@joincivil/core";
+import { EthAddress } from "@joincivil/core";
 import { AnyAction } from "redux";
 import { actionTypes } from "./constants";
 import { SignatureData } from "./interfaces";

@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 const { compose } = window.wp.element;
-const { withSelect, withDispatch } = window.wp.data;
+const { withSelect } = window.wp.data;
 import { EthAddress } from "@joincivil/core";
 import { Button, buttonSizes } from "@joincivil/components";
 import { hasInjectedProvider, saveAddressToProfile } from "../../util";
@@ -98,7 +98,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
   }
 
   private saveAddress = async () => {
-    saveAddressToProfile(this.props.web3ProviderAddress!);
+    await saveAddressToProfile(this.props.web3ProviderAddress!);
   };
 }
 

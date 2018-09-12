@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EthAddress, ApprovedRevision } from "@joincivil/core";
+import { ApprovedRevision } from "@joincivil/core";
 import { ArticleSignPanelIcon, Modal, Button, buttonSizes } from "@joincivil/components";
 import { SignatureData } from "../store/interfaces";
 import { PanelWalletStatus } from "./PanelWalletStatus";
@@ -149,7 +149,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
   }
 
   private sign = async () => {
-    this.props.signArticle(() => {
+    await this.props.signArticle(() => {
       this.setState({ isSignSuccessModalOpen: true });
     });
   };

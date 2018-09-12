@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as moment from "moment";
 import styled from "styled-components";
-import { ApprovedRevision, EthAddress, Hex } from "@joincivil/core";
+import { ApprovedRevision } from "@joincivil/core";
 import { HollowGreenCheck, HollowRedNoGood, QuestionToolTip, ToolTip, ClipLoader } from "@joincivil/components";
 const { withSelect } = window.wp.data;
 import { IconWrap } from "../styles";

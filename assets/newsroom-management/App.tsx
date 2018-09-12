@@ -1,12 +1,11 @@
 const { apiRequest } = window.wp;
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
-import { ThemeProvider } from "styled-components";
-import { Newsroom, addUser } from "@joincivil/newsroom-manager";
+import { Newsroom } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "../shared/reducer";
 import { addAddress, addTxHash } from "../shared/actions";
-import { getCivil, hasInjectedProvider, saveAddressToProfile } from "../util";
+import { getCivil, saveAddressToProfile } from "../util";
 import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme } from "../constants";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
 import { SearchUsers } from "./SeachUsers";
@@ -41,7 +40,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   public async componentDidMount(): Promise<void> {
     if (!this.props.address && this.props.txHash && this.civil) {
       const newsroom = await this.civil.newsroomFromFactoryTxHashUntrusted(this.props.txHash);
-      this.onNewsroomCreated(newsroom.address);
+      await this.onNewsroomCreated(newsroom.address);
     }
 
     if (this.civil) {
@@ -133,7 +132,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   };
 
   private onContractDeployStarted = async (txHash: TxHash) => {
-    const settings = await apiRequest({
+    await apiRequest({
       path: "/wp/v2/settings",
       method: "PUT",
       data: {

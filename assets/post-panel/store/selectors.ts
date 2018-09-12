@@ -22,10 +22,8 @@ export function isWpEditor(): boolean {
 }
 
 /** If no id supplied, defaults to current user. */
-export function getUserData(state: any, id?: number | "me"): any {
-  if (!id) {
-    id = select("civil/blockchain").getCurrentUserId() || "me";
-  }
+export function getUserData(state: any, _id?: number | "me"): any {
+  const id = _id || select("civil/blockchain").getCurrentUserId() || "me";
   return state.userData[id!] || {};
 }
 
@@ -68,9 +66,8 @@ export function getRevisionJSON(state: any, revisionID: string): any {
 }
 
 export function getLatestRevisionJSON(): any {
-  const { getLastRevisionId, getRevisionJSON } = select("civil/blockchain");
-  const lastRevisionId = getLastRevisionId();
-  return lastRevisionId && getRevisionJSON(lastRevisionId);
+  const lastRevisionId = select("civil/blockchain").getLastRevisionId();
+  return lastRevisionId && select("civil/blockchain").getRevisionJSON(lastRevisionId);
 }
 
 function getPostMeta(key: string): any {
@@ -165,18 +162,17 @@ export function getIpfsPath(): string | null {
 }
 
 export function getCurrentIsVersionPublished(state: any): boolean {
-  const { getLastPublishedRevision, getLatestRevisionJSON, getCurrentVersionWasPublished } = select("civil/blockchain");
   const { setCurrentVersionWasPublished } = dispatch("civil/blockchain");
 
-  const lastPublishedRevision = getLastPublishedRevision();
+  const lastPublishedRevision = select("civil/blockchain").getLastPublishedRevision();
   if (!lastPublishedRevision) {
     return false;
   }
 
-  const revisionJson = getLatestRevisionJSON();
+  const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
   if (!revisionJson) {
     // Avoid states flashing back and forth by caching value from last time we had revisionJson. We'll have it again in a sec.
-    return getCurrentVersionWasPublished();
+    return select("civil/blockchain").getCurrentVersionWasPublished();
   }
 
   const isPublished =

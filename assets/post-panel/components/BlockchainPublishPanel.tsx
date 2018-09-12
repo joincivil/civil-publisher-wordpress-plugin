@@ -1,35 +1,11 @@
 import * as React from "react";
-import {
-  ArticleIndexPanelIcon,
-  TransactionButtonNoModal,
-  Transaction,
-  Modal,
-  buttonSizes,
-  BorderlessButton,
-  Button,
-  MetaMaskModal,
-} from "@joincivil/components";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
-import { PanelWalletStatus } from "./PanelWalletStatus";
 import { PostStatus } from "./PostStatus";
-import {
-  Wrapper,
-  IconWrap,
-  Heading,
-  MainHeading,
-  IntroSection,
-  Body,
-  BodySection,
-  ModalHeader,
-  ModalP,
-  ModalButtonContainer,
-} from "../styles";
-import { IndexTransactionButton, DisabledTransactionProcessingButton } from "./Buttons";
+import { Wrapper } from "../styles";
 import { GetStartedPanel } from "./GetStartedPanel";
 import { PublishPanelFirstTime } from "./PublishPanelFirstTime";
 import { PublishPanel } from "./PublishPanel";
-import styled from "styled-components";
 
 export interface ArchiveOptions {
   ipfs: boolean;
@@ -112,7 +88,6 @@ export class BlockchainPublishPanelComponent extends React.Component<
         );
         this.setState({ loadedWithTxHash: false });
       } else {
-        const revisionId = await newsroom.revisionFromTxHash(this.props.txHash);
         await this.props.updateContent!(
           this.props.currentPostLastRevisionId!,
           this.props.revisionJson,
@@ -127,16 +102,16 @@ export class BlockchainPublishPanelComponent extends React.Component<
 
   public renderPanelContent(): JSX.Element {
     let insufficientPermissions: boolean | null = false;
-    let permissionsMessage;
+    // let permissionsMessage;
     if (!this.props.userCapabilities.publish_posts) {
       insufficientPermissions = true;
-      permissionsMessage = "Only Editors and Admins have the ability to publish and index posts.";
+      // permissionsMessage = "Only Editors and Admins have the ability to publish and index posts.";
     } else if (this.props.isNewsroomEditor === null) {
       // still loading this from contract
       insufficientPermissions = null;
     } else if (!this.props.isNewsroomEditor) {
       insufficientPermissions = true;
-      permissionsMessage = "You are not listed on your newsroom contract.";
+      // permissionsMessage = "You are not listed on your newsroom contract.";
     }
 
     if (!this.state.isGetStartedDismissed && !this.props.civilContentID) {

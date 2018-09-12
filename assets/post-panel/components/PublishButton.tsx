@@ -4,7 +4,6 @@ import {
   MetaMaskModal,
   Modal,
   buttonSizes,
-  BorderlessButton,
   Button,
   TransactionButtonNoModal,
   TransactionButtonInnerProps,
@@ -15,8 +14,7 @@ import { getNewsroom, getIPFS, getCivil } from "../../util";
 import { ModalHeader, ModalP, ModalButtonContainer, HelpText } from "../styles";
 const { apiRequest } = window.wp;
 import { IndexTransactionButton } from "./Buttons";
-import { toBuffer, bufferToHex } from "ethereumjs-util";
-import { decode } from "bs58";
+import { toBuffer } from "ethereumjs-util";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
 
 export interface PublishButtonProps {
@@ -352,7 +350,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
     });
   };
 
-  private requireBeforeTransaction = () => {
+  private requireBeforeTransaction = async () => {
     return new Promise((res, rej) => {
       this.setState({
         startTransaction: res,

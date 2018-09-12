@@ -1,7 +1,5 @@
 const { withSelect, withDispatch } = window.wp.data;
 const { compose } = window.wp.element;
-import { ApprovedRevision } from "@joincivil/core";
-import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage } from "@joincivil/utils";
 import { createSignatureData, updatePostMeta } from "../util";
 import { postMetaKeys } from "../constants";
 import { SignatureData } from "./store/interfaces";
@@ -14,7 +12,6 @@ const BlockchainSignPanel = compose([
     (selectStore: any, ownProps: Partial<BlockchainSignPanelProps>): Partial<BlockchainSignPanelProps> => {
       const { isEditedPostDirty, isCleanNewPost, isSavingPost } = selectStore("core/editor");
       const {
-        getCurrrentUserId,
         getCurrentUserId,
         getWeb3ProviderAddress,
         getCurrentWpUserAddress,
@@ -79,7 +76,9 @@ const BlockchainSignPanel = compose([
         updatePostMeta({ [postMetaKeys.SIGNATURES]: JSON.stringify(newSignatures) });
         savePost();
         dispatch(updateSignatures(newSignatures));
-        cb && cb();
+        if (cb) {
+          cb();
+        }
       };
 
       return {

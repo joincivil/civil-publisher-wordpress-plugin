@@ -6,7 +6,6 @@ import { ArchiveOptions } from "./BlockchainPublishPanel";
 import { Body, BodySection, Heading } from "../styles";
 import { ArchiveControls } from "./ArchiveControls";
 import { PublishButton } from "./PublishButton";
-import { getNewsroom, getCivil } from "../../util";
 
 export interface PublishPanelState {
   archiveSelected: boolean;

@@ -7,7 +7,6 @@ const { getPostEdits } = select("core/editor");
 const { editPost } = dispatch("core/editor");
 const { dateI18n, getSettings } = window.wp.date;
 
-import * as Web3 from "web3";
 import { Civil, ApprovedRevision, EthAddress } from "@joincivil/core";
 import { Newsroom } from "@joincivil/core/build/src/contracts/newsroom";
 
@@ -48,7 +47,7 @@ export async function createSignatureData(revisionJson: any): Promise<ApprovedRe
     throw Error("Failed to create signature data: revisionJson is falsey");
   }
   const newsroom = await getNewsroom();
-  return await newsroom!.approveByAuthorPersonalSign(revisionJson.revisionContentHash);
+  return newsroom!.approveByAuthorPersonalSign(revisionJson.revisionContentHash);
 }
 
 export async function getNewsroom(): Promise<Newsroom> {
@@ -72,7 +71,7 @@ export function siteFormatTimeString(utcTimestamp: string | Date): string {
   return dateI18n(dateSettings.formats.datetime, timezoned);
 }
 
-export async function saveAddressToProfile(address: EthAddress) {
+export async function saveAddressToProfile(address: EthAddress): Promise<void> {
   await apiRequest({
     method: "POST",
     path: apiNamespace + "users/me",
@@ -87,7 +86,7 @@ export async function saveAddressToProfile(address: EthAddress) {
   }
 }
 
-export async function saveNewsroomRoleToProfile(id: number, role: string | null) {
+export async function saveNewsroomRoleToProfile(id: number, role: string | null): Promise<void> {
   await apiRequest({
     method: "POST",
     path: apiNamespace + "users/" + id,
@@ -97,7 +96,7 @@ export async function saveNewsroomRoleToProfile(id: number, role: string | null)
   });
 }
 
-export function updatePostMeta(metaUpdates: Object) {
+export function updatePostMeta(metaUpdates: object): void {
   const unsavedMeta = getPostEdits().meta;
   editPost({
     meta: { ...unsavedMeta, ...metaUpdates },

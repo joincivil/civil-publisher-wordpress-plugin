@@ -155,7 +155,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
     return this.state.options.length > 0 && !this.state.address.length && this.state.focused;
   };
 
-  private onKeyDown = (ev: any): void => {
+  private onKeyDown = async (ev: any): Promise<void> => {
     if (this.showOptions()) {
       switch (ev.key) {
         case "ArrowDown":
@@ -167,7 +167,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
         case "Enter":
           const selection = this.state.options[this.state.selected];
           this.setState({ value: selection });
-          this.onAddressChange("", selection[userMetaKeys.WALLET_ADDRESS], selection);
+          await this.onAddressChange("", selection[userMetaKeys.WALLET_ADDRESS], selection);
           break;
       }
     }
@@ -201,7 +201,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
       this.props.onSetAddress(value);
       if (this.state.canAddAddress && userValue.id) {
         this.setState({ error: "" });
-        const user = await apiRequest({
+        await apiRequest({
           method: "POST",
           path: apiNamespace + `users/${userValue.id}`,
           data: {

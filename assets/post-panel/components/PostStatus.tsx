@@ -1,8 +1,7 @@
 import * as React from "react";
 const { withSelect } = window.wp.data;
 const { dateI18n, getSettings } = window.wp.date;
-import { siteFormatTimeString } from "../../util";
-import { ErrorText, Heading, Body, BodySection, HelpText } from "../styles";
+import { ErrorText, Heading, Body, BodySection } from "../styles";
 import { RevisionLinks } from "./RevisionLinks";
 
 export interface PostStatusProps {

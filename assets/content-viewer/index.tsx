@@ -1,4 +1,3 @@
-import { ContentViewer } from "@joincivil/newsroom-manager";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";

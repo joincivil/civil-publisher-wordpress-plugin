@@ -1,16 +1,5 @@
 import * as React from "react";
-import {
-  Wrapper,
-  IconWrap,
-  Heading,
-  MainHeading,
-  IntroSection,
-  Body,
-  BodySection,
-  ModalHeader,
-  ModalP,
-  ModalButtonContainer,
-} from "../styles";
+import { Body, BodySection } from "../styles";
 import { Button, buttonSizes } from "@joincivil/components";
 
 export interface GetStartedPanelProps {

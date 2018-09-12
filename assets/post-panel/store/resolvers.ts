@@ -1,6 +1,4 @@
-import { EthAddress } from "@joincivil/core";
-
-import { apiNamespace, userMetaKeys } from "../../constants";
+import { apiNamespace } from "../../constants";
 import { getNewsroom } from "../../util";
 import { setIsNewsroomEditor, setUserData, setCurrentUserId, addOrUpdateRevision } from "./actions";
 import { AnyAction } from "redux";
@@ -14,10 +12,8 @@ export async function isNewsroomEditor(state: any): Promise<AnyAction> {
 }
 
 /** If no id supplied, defaults to current user. */
-export async function getUserData(state: any, id?: number | "me"): Promise<AnyAction> {
-  if (!id) {
-    id = select("civil/blockchain").getCurrentUserId() || "me";
-  }
+export async function getUserData(state: any, _id?: number | "me"): Promise<AnyAction> {
+  const id = _id || select("civil/blockchain").getCurrentUserId() || "me";
 
   try {
     const userData = await apiRequest({ path: "/wp/v2/users/" + id + "?context=edit" });

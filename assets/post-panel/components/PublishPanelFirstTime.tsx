@@ -1,23 +1,7 @@
 import * as React from "react";
-import {
-  IconWrap,
-  Heading,
-  MainHeading,
-  IntroSection,
-  Body,
-  BodySection,
-  ModalHeader,
-  ModalP,
-  ModalButtonContainer,
-  HelpText,
-} from "../styles";
-import { SlideCheckbox, Checkbox } from "@joincivil/components";
+import { Heading, Body, BodySection } from "../styles";
 import { TxHash } from "@joincivil/core";
-import { hashContent } from "@joincivil/utils";
-import styled from "styled-components";
-import { getNewsroom, getCivil } from "../../util";
 import { PublishButton } from "./PublishButton";
-const { apiRequest } = window.wp;
 import { ArchiveOptions } from "./BlockchainPublishPanel";
 import { ArchiveControls } from "./ArchiveControls";
 
@@ -78,8 +62,8 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
             onSelectEthTransaction={this.selectEthTransaction}
           />
           <p>
-            Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index will
-            be published to connect this archive to your newsroom.
+            Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index will be
+            published to connect this archive to your newsroom.
           </p>
           <p>
             When you archive the full text, please make note that the text will be public and will be visible outside of

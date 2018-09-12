@@ -9,7 +9,7 @@ import {
 import { Map } from "immutable";
 import { combineReducers, AnyAction } from "redux";
 import { managerActions } from "./actions";
-import { EthAddress, EthContentHeader } from "@joincivil/core";
+import { EthAddress } from "@joincivil/core";
 
 export function user(state: Map<string, any> = Map(), action: AnyAction): Map<string, any> {
   switch (action.type) {

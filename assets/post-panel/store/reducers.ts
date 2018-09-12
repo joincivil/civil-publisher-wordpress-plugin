@@ -2,7 +2,7 @@ import { actionTypes } from "./constants";
 import { SignatureData } from "./interfaces";
 import { AnyAction } from "redux";
 import { userMetaKeys } from "../../constants";
-import { EthAddress, TxHash } from "@joincivil/core";
+import { EthAddress } from "@joincivil/core";
 
 export const isNewsroomEditor = (state: boolean | null = null, action: AnyAction): boolean | null => {
   switch (action.type) {
@@ -16,11 +16,11 @@ export const isNewsroomEditor = (state: boolean | null = null, action: AnyAction
 export const userData = (state: { [id: number]: any } = {}, action: AnyAction): { [id: number]: any } => {
   switch (action.type) {
     case actionTypes.SET_USER_DATA: {
-      const { id, userData } = action.data;
-      const newState = { ...state, [id]: userData };
+      const { id, userData: _userData } = action.data;
+      const newState = { ...state, [id]: _userData };
       if (id === "me") {
         // also index by actual ID
-        newState[userData.id] = userData;
+        newState[_userData.id] = _userData;
       }
       return newState;
     }
