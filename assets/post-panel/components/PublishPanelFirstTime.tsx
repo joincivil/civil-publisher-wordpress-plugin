@@ -20,6 +20,7 @@ export interface PublishPanelFirstTimeProps {
   currentPostLastRevisionId?: number;
   txHash?: TxHash;
   disabled?: boolean;
+  walletReady?: boolean;
   publishContent?(
     contentId: number,
     revisionId: number,
@@ -81,6 +82,7 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
             currentPostLastRevisionId={this.props.currentPostLastRevisionId}
             txHash={this.props.txHash}
             disabled={this.props.disabled}
+            walletReady={this.props.walletReady}
             saveTxHash={this.props.saveTxHash}
             publishContent={this.props.publishContent}
             updateContent={this.props.updateContent}

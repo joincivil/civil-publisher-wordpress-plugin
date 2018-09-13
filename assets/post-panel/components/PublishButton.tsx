@@ -11,7 +11,7 @@ import {
 import { TxHash } from "@joincivil/core";
 import { hashContent } from "@joincivil/utils";
 import { getNewsroom, getIPFS, getCivil } from "../../util";
-import { ModalHeader, ModalP, ModalButtonContainer, HelpText } from "../styles";
+import { ModalHeader, ModalP, ModalButtonContainer, ErrorText, HelpText } from "../styles";
 const { apiRequest } = window.wp;
 import { IndexTransactionButton } from "./Buttons";
 import { toBuffer } from "ethereumjs-util";
@@ -27,6 +27,7 @@ export interface PublishButtonProps {
   currentPostLastRevisionId?: number;
   txHash?: TxHash;
   disabled?: boolean;
+  walletReady?: boolean;
   publishContent?(
     contentId: number,
     revisionId: number,
@@ -172,6 +173,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
   public render(): JSX.Element {
     return (
       <>
+        {!this.props.walletReady && <ErrorText>Waiting for wallet</ErrorText>}
         <HelpText>This will open a window and you must complete the transacation in MetaMask to publish.</HelpText>
         <p>
           Estimated cost to publish this post <br />

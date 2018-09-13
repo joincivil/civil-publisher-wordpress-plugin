@@ -3,7 +3,7 @@ import { EthAddress, TxHash, ApprovedRevision } from "@joincivil/core";
 import { recoverSignerPersonal, prepareUserFriendlyNewsroomMessage, hashContent } from "@joincivil/utils";
 import { postMetaKeys, userMetaKeys } from "../../constants";
 import { SignatureData } from "./interfaces";
-import { revisionJsonSansDate } from "../../util";
+import { hasInjectedProvider, revisionJsonSansDate } from "../../util";
 import { ArchiveOptions } from "../components/BlockchainPublishPanel";
 
 const { dispatch, select } = window.wp.data;
@@ -240,4 +240,15 @@ export function currentUserIsPostAuthor(): boolean {
 
 export function getTabIndex(state: any): number {
   return state.uiControl.openTabIndex;
+}
+
+export function isWalletReady(): boolean {
+  const web3ProviderAddress = select("civil/blockchain").getWeb3ProviderAddress();
+  const wpUserWalletAddress = select("civil/blockchain").getCurrentWpUserAddress();
+  return (
+    select("civil/blockchain").isCorrectNetwork() &&
+    web3ProviderAddress &&
+    web3ProviderAddress === wpUserWalletAddress &&
+    hasInjectedProvider()
+  );
 }

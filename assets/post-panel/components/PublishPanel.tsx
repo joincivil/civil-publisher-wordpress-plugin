@@ -21,6 +21,7 @@ export interface PublishPanelProps {
   currentPostLastRevisionId?: number;
   txHash?: TxHash;
   disabled?: boolean;
+  walletReady?: boolean;
   publishContent?(
     contentId: number,
     revisionId: number,
@@ -146,6 +147,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
             currentPostLastRevisionId={this.props.currentPostLastRevisionId}
             txHash={this.props.txHash}
             disabled={this.props.disabled}
+            walletReady={this.props.walletReady}
             saveTxHash={this.props.saveTxHash}
             publishContent={this.props.publishContent}
             updateContent={this.props.updateContent}

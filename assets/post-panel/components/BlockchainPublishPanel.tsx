@@ -23,7 +23,7 @@ export interface BlockchainPublishPanelProps {
   revisionJsonHash: string;
   revisionUrl: string;
   isDirty: boolean;
-  correctNetwork: boolean;
+  walletReady: boolean;
   txHash?: TxHash;
   ipfs?: string;
   archiveOptions?: ArchiveOptions;
@@ -130,7 +130,8 @@ export class BlockchainPublishPanelComponent extends React.Component<
           civilContentID={this.props.civilContentID}
           currentPostLastRevisionId={this.props.currentPostLastRevisionId}
           txHash={this.props.txHash}
-          disabled={this.props.publishDisabled || !this.props.correctNetwork || !!insufficientPermissions}
+          walletReady={this.props.walletReady}
+          disabled={this.props.publishDisabled || !this.props.walletReady || !!insufficientPermissions}
           saveTxHash={this.props.saveTxHash}
           publishContent={this.props.publishContent}
           updateContent={this.props.updateContent}
@@ -146,7 +147,8 @@ export class BlockchainPublishPanelComponent extends React.Component<
         civilContentID={this.props.civilContentID}
         currentPostLastRevisionId={this.props.currentPostLastRevisionId}
         txHash={this.props.txHash}
-        disabled={this.props.publishDisabled || !this.props.correctNetwork || !!insufficientPermissions}
+        disabled={this.props.publishDisabled || !this.props.walletReady || !!insufficientPermissions}
+        walletReady={this.props.walletReady}
         saveTxHash={this.props.saveTxHash}
         publishContent={this.props.publishContent}
         updateContent={this.props.updateContent}

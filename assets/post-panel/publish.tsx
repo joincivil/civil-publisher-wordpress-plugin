@@ -22,7 +22,7 @@ const BlockchainPublishPanel = compose([
         getPublishedRevisions,
         isPublishDisabled,
         getRevisionJSON,
-        isCorrectNetwork,
+        isWalletReady,
         getTxHash,
         getArchiveOptions,
         getIpfsPath,
@@ -37,7 +37,7 @@ const BlockchainPublishPanel = compose([
       const publishedRevisions = getPublishedRevisions();
       const civilContentID = getCivilContentID();
       const isDirty = isEditedPostDirty();
-      const correctNetwork = isCorrectNetwork();
+      const walletReady = isWalletReady();
       let revisionJson;
       let revisionJsonHash;
       let revisionUrl;
@@ -61,7 +61,7 @@ const BlockchainPublishPanel = compose([
         revisionJsonHash,
         revisionUrl,
         isDirty,
-        correctNetwork,
+        walletReady,
         currentIsVersionPublished: getCurrentIsVersionPublished(),
         lastPublishedRevision: getLastPublishedRevision(),
         lastArchivedRevision: getLastArchivedRevision(),
