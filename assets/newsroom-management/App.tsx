@@ -93,7 +93,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     );
   }
 
-  private setUserAccount = (address: EthAddress): void => {
+  private setUserAccount = (address?: EthAddress): void => {
     this.setState({ account: address && address.toLowerCase() });
   };
 
