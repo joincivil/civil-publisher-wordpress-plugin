@@ -15,6 +15,7 @@ export interface PostStatusProps {
   timestamp: string;
   url: string;
   isSavingPost: boolean;
+  pluginDataMissing: boolean;
   contentId?: number;
 }
 
@@ -30,7 +31,17 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
   public render(): JSX.Element {
     let content;
     let heading = <Heading>Post Status</Heading>;
-    if (this.props.published) {
+
+    if (this.props.saved && this.props.pluginDataMissing) {
+      heading = <ErrorHeading>Post Status</ErrorHeading>;
+      content = (
+        <ErrorText>
+          This post was {this.props.published ? "published" : "last saved"} before the Civil plugin was activated, and
+          so isn't fully processed. Please{" "}
+          {this.props.published ? 're-publish by hitting the "Update" button' : "save again"} before continuing.
+        </ErrorText>
+      );
+    } else if (this.props.published) {
       content = <p>Your post is published to your site and is ready to be published on the Civil network.</p>;
     } else {
       if (this.props.requirePublish) {
@@ -91,6 +102,7 @@ export const PostStatus = withSelect(
       isCurrentPostPublished,
       isSavingPost,
     } = selectStore("core/editor");
+    const { isPluginDataMissing } = selectStore("civil/blockchain");
 
     const date = getEditedPostAttribute("date_gmt");
     const modifiedDate = getEditedPostAttribute("modified_gmt");
@@ -103,6 +115,7 @@ export const PostStatus = withSelect(
       timestamp: modifiedDate || date,
       url: getEditedPostAttribute("link"),
       isSavingPost: isSavingPost(),
+      pluginDataMissing: isPluginDataMissing(),
     };
   },
 )(PostStatusComponent);

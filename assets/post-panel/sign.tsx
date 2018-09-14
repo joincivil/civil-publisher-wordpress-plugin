@@ -21,20 +21,22 @@ const BlockchainSignPanel = compose([
         getLatestRevisionJSON,
         getPostAuthors,
         currentUserIsPostAuthor,
+        isWalletReady,
+        isPluginDataMissing,
       } = selectStore("civil/blockchain");
 
       const currentUserId = getCurrentUserId();
       const signatures = getSignatures();
 
       const isSignButtonDisabled = (): boolean => {
-        if (!getLatestRevisionJSON()) {
+        const latestRevisionJson = getLatestRevisionJSON();
+        if (!latestRevisionJson) {
           // Validity can't be checked, wait til revision JSON loaded
           return true;
-        }
-
-        const wpUserAddress = getCurrentWpUserAddress();
-        const web3Address = getWeb3ProviderAddress();
-        if (!wpUserAddress || !web3Address || wpUserAddress !== web3Address) {
+        } else if (isPluginDataMissing()) {
+          // Post hasn't been saved while plugin was active
+          return true;
+        } else if (!isWalletReady()) {
           return true;
         }
 

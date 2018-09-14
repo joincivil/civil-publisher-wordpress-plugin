@@ -96,8 +96,9 @@ export function getCivilContentID(store: any): string | null {
 
 export function isPublishDisabled(state: any): boolean {
   const editorStore = select("core/editor");
-  const currentPostLastRevisionId = select("civil/blockchain").getLastRevisionId();
-  const publishedRevisions = select("civil/blockchain").getPublishedRevisions();
+  const civilStore = select("civil/blockchain");
+  const currentPostLastRevisionId = civilStore.getLastRevisionId();
+  const publishedRevisions = civilStore.getPublishedRevisions();
   const latestRevisionPublished = publishedRevisions.length
     ? publishedRevisions[publishedRevisions.length - 1]
     : undefined;
@@ -106,7 +107,11 @@ export function isPublishDisabled(state: any): boolean {
     latestRevisionPublished && latestRevisionPublished.revisionID === currentPostLastRevisionId;
 
   return (
-    !isPostPublished() || editorStore.isCleanNewPost() || editorStore.isEditedPostDirty() || !!isLatestRevisionPublished
+    !isPostPublished() ||
+    editorStore.isCleanNewPost() ||
+    editorStore.isEditedPostDirty() ||
+    !!isLatestRevisionPublished ||
+    civilStore.isPluginDataMissing()
   );
 }
 
@@ -251,4 +256,11 @@ export function isWalletReady(): boolean {
     web3ProviderAddress === wpUserWalletAddress &&
     hasInjectedProvider()
   );
+}
+
+/** Detects the case where post was saved when plugin wasn't active: revision JSON is retrieved from post info but is missing revisionContentHash (and other stuff). */
+export function isPluginDataMissing(): boolean {
+  const latestRevisionJson = select("civil/blockchain").getLatestRevisionJSON();
+
+  return latestRevisionJson && !latestRevisionJson.revisionContentHash;
 }
