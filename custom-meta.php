@@ -108,9 +108,9 @@ function add_user_meta_rest() {
 		'user',
 		USER_ETH_ADDRESS_META_KEY,
 		array(
-			'get_callback'      => __NAMESPACE__ . '\user_meta_callback',
-			'update_callback'   => null,
-			'schema'            => null,
+			'get_callback'    => __NAMESPACE__ . '\user_meta_callback',
+			'update_callback' => null,
+			'schema'          => null,
 		)
 	);
 }
@@ -155,9 +155,9 @@ function newsroom_address_register_setting() {
 		'general',
 		NEWSROOM_ADDRESS_OPTION_KEY,
 		array(
-			'type' => 'string',
-			'single' => true,
-			'show_in_rest' => true,
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
 			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_address',
 		)
 	);
@@ -215,25 +215,31 @@ function validate_newsroom_address( $input ) {
  */
 function expose_article_meta() {
 	register_meta(
-		'post', SIGNATURES_META_KEY, array(
+		'post',
+		SIGNATURES_META_KEY,
+		[
 			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string', // Actually will be stringified JSON.
-		)
+			'single'       => true,
+			'type'         => 'string', // Actually will be stringified JSON.
+		]
 	);
 	register_meta(
-		'post', REVISIONS_META_KEY, array(
+		'post',
+		REVISIONS_META_KEY,
+		[
 			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string', // Actually will be stringified JSON.
-		)
+			'single'       => true,
+			'type'         => 'string', // Actually will be stringified JSON.
+		]
 	);
 	register_meta(
-		'post', CONTENT_ID_META_KEY, array(
+		'post',
+		CONTENT_ID_META_KEY,
+		[
 			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string',
-		)
+			'single'       => true,
+			'type'         => 'string',
+		]
 	);
 }
 add_action( 'admin_init', __NAMESPACE__ . '\expose_article_meta' );
