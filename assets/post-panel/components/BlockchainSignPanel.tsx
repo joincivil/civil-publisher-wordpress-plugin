@@ -82,12 +82,11 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
         <IntroSection>
           <Heading>Sign</Heading>
           <p>
-            We recommend you sign your posts for enhanced credibility.
+            Sign this post, using your public wallet address, to confirm that you are
             {this.props.currentUserIsPostAuthor
-              ? " By signing this post, you are acknowledging that you are its author and are fully aware of its content. "
-              : " By signing this post, you are acknowledging that you are fully aware of its content as a representative of your newsroom. "}
-            {/*TODO confirm this copy*/}
-            <a href="#TODO">Learn more</a>
+              ? " an author of this story and are fully aware of its content. "
+              : " fully aware of its content as a representative of your newsroom. "}
+            Including your signature increases the credibility of this story on the blockchain.
           </p>
         </IntroSection>
         <Body>
@@ -111,7 +110,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
             {ownSig}
 
             <HelpText disabled={this.props.signDisabled}>
-              This will open a MetaMask pop-up that will ask you to sign a statement. Note: this step is optional.
+              This will open a window and you must sign the statement in MetaMask to confirm. There is no fee.
             </HelpText>
             <p>
               <Button size={buttonSizes.MEDIUM_WIDE} fullWidth disabled={this.props.signDisabled} onClick={this.sign}>
