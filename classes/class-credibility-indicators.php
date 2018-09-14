@@ -230,10 +230,13 @@ class Credibility_Indicators {
 			return;
 		}
 
-		$nonce = sanitize_text_field( wp_unslash( $_POST['civil_credibility_indicators_nonce'] ) );
-
 		// Verify that the nonce is valid.
-		if ( ! wp_verify_nonce( $nonce, 'civil_credibility_indicators' ) ) {
+		if (
+			! wp_verify_nonce(
+				sanitize_text_field( wp_unslash( $_POST['civil_credibility_indicators_nonce'] ) ),
+				'civil_credibility_indicators'
+			)
+		) {
 			return;
 		}
 
