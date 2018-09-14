@@ -53,7 +53,6 @@ class Credibility_Indicators {
 		add_action( 'the_content', [ $this, 'append_indicators' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
 		add_action( 'save_post', [ $this, 'save_post' ], 10, 2 );
-
 	}
 
 	/**
