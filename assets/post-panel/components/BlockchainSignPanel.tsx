@@ -18,6 +18,7 @@ import {
   ModalHeader,
   ModalP,
   ModalButtonContainer,
+  PrimaryButtonWrap,
 } from "../styles";
 
 export interface BlockchainSignPanelProps {
@@ -96,7 +97,7 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           <BodySection>
             <MainHeading>
               Signatures
-              <IconWrap style={{ top: 5 }}>
+              <IconWrap style={{ top: 4 }}>
                 <ArticleSignPanelIcon />
               </IconWrap>
             </MainHeading>
@@ -112,11 +113,11 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
             <HelpText disabled={this.props.signDisabled}>
               This will open a window and you must sign the statement in MetaMask to confirm. There is no fee.
             </HelpText>
-            <p>
+            <PrimaryButtonWrap>
               <Button size={buttonSizes.MEDIUM_WIDE} fullWidth disabled={this.props.signDisabled} onClick={this.sign}>
                 {buttonText}
               </Button>
-            </p>
+            </PrimaryButtonWrap>
           </BodySection>
 
           {this.props.isWpEditor && !!othersSigs.length && <BodySection>{othersSigs}</BodySection>}

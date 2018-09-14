@@ -19,14 +19,21 @@ const WrapperInner = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  &:last-child {
-    margin-bottom: 0;
-  }
 `;
 
 const WrapperOuter = styled.div`
   margin: 16px 0;
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  ${ /* This rule is very dumb but I can't find another way to add this style to `ToolTip`. Neither adding styles to `styled(ToolTip)` nor adding `style` attribute to `<ToolTip>` works. */'' }
+  & > div {
+    width: 100%;
+  }
 `;
 
 const UserWrap = styled.span`

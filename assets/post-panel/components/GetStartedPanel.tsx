@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Body, BodySection } from "../styles";
+import { Body, BodySection, PrimaryButtonWrap } from "../styles";
 import { Button, buttonSizes } from "@joincivil/components";
 
 export interface GetStartedPanelProps {
@@ -24,9 +24,11 @@ export class GetStartedPanel extends React.Component<GetStartedPanelProps> {
             index of the post. Your full text will be viewable outside of your paywall. You'll be able to select how you
             want to publish.
           </p>
-          <Button size={buttonSizes.MEDIUM_WIDE} fullWidth onClick={this.props.getStarted}>
-            Get Started
-          </Button>
+          <PrimaryButtonWrap>
+            <Button size={buttonSizes.MEDIUM_WIDE} fullWidth onClick={this.props.getStarted}>
+              Get Started
+            </Button>
+          </PrimaryButtonWrap>
         </BodySection>
       </Body>
     );

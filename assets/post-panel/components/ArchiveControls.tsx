@@ -15,7 +15,7 @@ const HeaderWithFlex = MainHeading.extend`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 `;
 
 const LowerHeader = HeaderWithFlex.extend`

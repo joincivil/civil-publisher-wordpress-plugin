@@ -45,4 +45,4 @@ export const theme = {
   checkboxActiveColor: "#0073af",
 };
 
-export const timestampFormat = "MMM DD, YYYY h:mm a";
+export const timestampFormat = "MMMM DD, YYYY h:mm a";

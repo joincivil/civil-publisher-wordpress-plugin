@@ -5,6 +5,7 @@ import { CivilLogo } from "@joincivil/components";
 export const colors = {
   LINK_BLUE: "#0073AA",
   GRAY: "#D8D8D8",
+  ERROR_RED: "#F2524A",
 };
 
 export const Wrapper = styled.div`
@@ -47,7 +48,7 @@ export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTex
 export const ErrorText = styled.p`
   && {
     font-weight: normal;
-    color: #f2524a;
+    color: ${colors.ERROR_RED};
   }
 `;
 
@@ -76,7 +77,7 @@ export const MainHeading = Heading.extend`
 `;
 export const ErrorHeading = Heading.extend`
   font-weight: 600;
-  color: #f2524a;
+  color: ${colors.ERROR_RED};
 `;
 
 export const Intro = styled.div`
@@ -145,4 +146,8 @@ export const ModalP = styled.p`
 export const ModalButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+`;
+
+export const PrimaryButtonWrap = styled.div`
+  margin-top: 16px;
 `;

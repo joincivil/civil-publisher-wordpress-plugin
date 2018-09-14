@@ -54,25 +54,21 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
     }
 
     if (!this.props.saved && !(this.props.requirePublish && !this.props.published)) {
-      if (this.props.isSavingPost) {
-        content = (
-          <>
-            {content}
-            <ErrorText>Saving post...</ErrorText>
-          </>
-        );
-      } else {
-        heading = <ErrorHeading>Post Status</ErrorHeading>;
-        content = (
-          <>
-            {content}
-            <ErrorText>
-              Please save {this.props.published && "updates to"} this post before{" "}
-              {this.props.actionString || "continuing"}.
-            </ErrorText>
-          </>
-        );
-      }
+      content = (
+        <>
+          {content}
+          <ErrorText>
+            {this.props.isSavingPost ? (
+              "Saving post..."
+            ) : (
+              <>
+                Please save {this.props.published && "updates to"} this post before{" "}
+                {this.props.actionString || "continuing"}.
+              </>
+            )}
+          </ErrorText>
+        </>
+      );
     }
 
     if (this.props.contentId && this.props.lastPublishedRevision) {
