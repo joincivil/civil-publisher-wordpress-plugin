@@ -5,7 +5,7 @@ const { withSelect } = window.wp.data;
 import { EthAddress } from "@joincivil/core";
 import { Button, buttonSizes } from "@joincivil/components";
 import { hasInjectedProvider, saveAddressToProfile } from "../../util";
-import { ErrorText, Heading, ErrorHeadingText, BodySection } from "../styles";
+import { ErrorText, ErrorHeading, BodySection } from "../styles";
 import { NETWORK_NICE_NAME } from "../../constants";
 
 export interface PanelWalletStatusProps {
@@ -88,10 +88,10 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
 
     return (
       <BodySection>
-        <Heading>
-          <ErrorHeadingText>Wallet</ErrorHeadingText>
+        <ErrorHeading>
+          Wallet
           {errorHeading && <ErrorText>{errorHeading}</ErrorText>}
-        </Heading>
+        </ErrorHeading>
         {errorBody}
       </BodySection>
     );

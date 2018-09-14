@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SlideCheckbox, Checkbox } from "@joincivil/components";
-import { Heading } from "../styles";
+import { MainHeading } from "../styles";
 import styled from "styled-components";
 
 export interface ArchiveControlsProps {
@@ -11,7 +11,7 @@ export interface ArchiveControlsProps {
   onSelectEthTransaction(): void;
 }
 
-const HeaderWithFlex = Heading.extend`
+const HeaderWithFlex = MainHeading.extend`
   display: flex;
   justify-content: space-between;
   align-items: center;

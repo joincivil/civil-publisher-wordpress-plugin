@@ -43,12 +43,9 @@ export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTex
   }
 `;
 
-export const ErrorHeadingText = styled.span`
-  color: #f2524a;
-  font-weight: bold;
-`;
 export const ErrorText = styled.p`
   && {
+    font-weight: normal;
     color: #f2524a;
   }
 `;
@@ -75,6 +72,10 @@ export const Heading = styled.div`
 `;
 export const MainHeading = Heading.extend`
   font-weight: 600;
+`;
+export const ErrorHeading = Heading.extend`
+  font-weight: 600;
+  color: #f2524a;
 `;
 
 export const Intro = styled.div`

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { TxHash } from "@joincivil/core";
 import { Collapsable } from "@joincivil/components";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
-import { Body, BodySection, Heading } from "../styles";
+import { Body, BodySection, MainHeading } from "../styles";
 import { ArchiveControls } from "./ArchiveControls";
 import { PublishButton } from "./PublishButton";
 
@@ -83,7 +83,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
     return (
       <Body>
         <BodySection>
-          <Heading>Index</Heading>
+          <MainHeading>Index</MainHeading>
           <p>Update the post’s index metadata and hash to the Civil network.</p>
           <Collapsable
             header={<CollapsableHeader>Read more about Index</CollapsableHeader>}

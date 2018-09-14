@@ -1,7 +1,7 @@
 import * as React from "react";
 const { withSelect } = window.wp.data;
-import { ErrorText, Heading, BodySection } from "../styles";
 import { siteTimezoneFormat } from "../../util";
+import { ErrorText, ErrorHeading, Heading, MainHeading, BodySection } from "../styles";
 import { RevisionLinks } from "./RevisionLinks";
 
 export interface PostStatusProps {
@@ -18,11 +18,7 @@ export interface PostStatusProps {
   contentId?: number;
 }
 
-const ErrorHeading = Heading.extend`
-  color: #f2524a;
-`;
-
-const NoMarginHeading = Heading.extend`
+const NoMarginHeading = MainHeading.extend`
   margin-bottom: 0;
 `;
 
@@ -58,21 +54,25 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
     }
 
     if (!this.props.saved && !(this.props.requirePublish && !this.props.published)) {
-      content = (
-        <>
-          {content}
-          <ErrorText>
-            {this.props.isSavingPost ? (
-              "Saving post..."
-            ) : (
-              <>
-                Please save {this.props.published && "updates to"} this post before{" "}
-                {this.props.actionString || "continuing"}.
-              </>
-            )}
-          </ErrorText>
-        </>
-      );
+      if (this.props.isSavingPost) {
+        content = (
+          <>
+            {content}
+            <ErrorText>Saving post...</ErrorText>
+          </>
+        );
+      } else {
+        heading = <ErrorHeading>Post Status</ErrorHeading>;
+        content = (
+          <>
+            {content}
+            <ErrorText>
+              Please save {this.props.published && "updates to"} this post before{" "}
+              {this.props.actionString || "continuing"}.
+            </ErrorText>
+          </>
+        );
+      }
     }
 
     if (this.props.contentId && this.props.lastPublishedRevision) {

@@ -91,8 +91,8 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
           </p>
         </IntroSection>
         <Body>
-          <PanelWalletStatus />
           <PostStatus actionString="signing" />
+          <PanelWalletStatus />
 
           <BodySection>
             <MainHeading>

@@ -26,7 +26,7 @@ const WrapperInner = styled.div`
 `;
 
 const WrapperOuter = styled.div`
-  margin-bottom: 16px;
+  margin: 16px 0;
 `;
 
 const UserWrap = styled.span`
