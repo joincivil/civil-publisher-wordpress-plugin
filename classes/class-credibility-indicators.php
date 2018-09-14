@@ -13,44 +13,56 @@ namespace Civil_Newsroom_Protocol;
 class Credibility_Indicators {
 	use Singleton;
 
+	/**
+	 * Post types.
+	 *
+	 * @var array
+	 */
+	private $post_types = [ 'post', 'landing-page' ];
+
+	/**
+	 * Credibility indicator values.
+	 *
+	 * @var array
+	 */
 	private $indicators = [];
 
+	/**
+	 * Credibility indicator learn more button text.
+	 *
+	 * @var string
+	 */
 	private $learn_more_text = '';
 
+	/**
+	 * Credibility indicator learn more button link.
+	 *
+	 * @var string
+	 */
 	private $learn_more_link = '';
 
 	/**
 	 * Setup the class.
 	 */
 	public function setup() {
+
+		$this->setup_defaults();
+
 		add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
 		add_action( 'admin_init', [ $this, 'register_settings'] );
 		add_action( 'the_content', [ $this, 'append_indicators' ] );
+		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
+		add_action( 'save_post', [ $this, 'save_post' ], 10, 2 );
 
-		// add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_post_panel' ] );
 	}
-
-	/**
-	 * Enqueue Gutenberg editor plugin script.
-	 */
-	public function enqueue_post_panel() {
-		wp_enqueue_script(
-			'civil-credibility-indicators',
-			plugins_url( 'build/credibility-indicators.build.js', __FILE__ ),
-			array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-edit-post', 'wp-data' ),
-			ASSETS_VERSION,
-			true
-		);
-
-		// Prevent conflict between lodash required by civil packages and underscore used in Gutenberg, see https://github.com/WordPress/gutenberg/issues/4043#issuecomment-361049257.
-		wp_add_inline_script( 'civil-credibility-indicators', 'window.lodash = _.noConflict();', 'after' );
-	}
-
 
 	/**
 	 * Setup default credibility values.
 	 */
 	public function setup_defaults() {
+
+		// Post type.
+		$this->post_types = apply_filters( 'civil_credibility_indicator_post_types', $this->post_types );
 
 		// Add defaults for indicators.
 		$indicators = [
@@ -73,7 +85,7 @@ class Credibility_Indicators {
 		];
 
 		// Filter default credibility indicators.
-		$this->indicators = apply_filters( 'civil_credibility_indicators', $indicators );
+		$this->indicators = apply_filters( 'civil_default_credibility_indicators', $indicators );
 
 		// Filter default value for learn more label.
 		$this->learn_more_text = apply_filters(
@@ -88,8 +100,141 @@ class Credibility_Indicators {
 		);
 	}
 
+	/**
+	 * Append the indicators to the body content.
+	 *
+	 * @todo  Filters to control functionality.
+	 *
+	 * @param  string $content Post content.
+	 * @return string Modified post content.
+	 */
 	public function append_indicators( $content ) {
-		return $content;
+
+		// Get saved indicators.
+		$indicator_statuses = get_post_meta( get_the_ID(), 'civil_credibility_indicators', true );
+		if ( empty( $indicator_statuses ) ) {
+			return $content;
+		}
+
+		// Get learn more button settings.
+		$button_text = get_option( 'civl_ci_learn_more_label' );
+		if ( empty( $button_text ) ) {
+			$button_text = $this->learn_more_text;
+		}
+		$button_link = get_option( 'civl_ci_learn_more_link' );
+		if ( empty( $button_link ) ) {
+			$button_link = $this->learn_more_link;
+		}
+
+		// Output buffer markup for indicators.
+		ob_start();
+		?>
+			<section>
+				<?php foreach ( $indicator_statuses as $status ) :
+
+					// Get the saved description.
+					$description = get_option( "civl_ci_{$status}" );
+
+					// Fall back to the hard-coded default.
+					if (  empty( $description ) ) {
+						$description = $this->indicators[ $status ]['default_value'];
+					}
+					?>
+					<section>
+						<h3><?php echo esc_html( $this->indicators[ $status ]['label'] ); ?></h3>
+						<p><?php echo esc_html( $description ); ?></p>
+					</section>
+				<?php endforeach; ?>
+				<a href="<?php echo esc_url( $button_link ); ?>"><?php echo esc_html( $button_text ); ?></a>
+			</section>
+		<?php
+		$markup = ob_get_clean();
+
+		return $content . $markup;
+	}
+
+	/**
+	 * Add meta box.
+	 */
+	public function add_meta_box() {
+		add_meta_box(
+			'civil-credibility-indicators',
+			__( 'Credibility Indicators', 'civil' ),
+			[ $this, 'meta_box_callback' ],
+			$this->post_types,
+			'side',
+			'high'
+		);
+	}
+
+	/**
+	 * Output indicators as checkboxes in the metabox.
+	 */
+	public function meta_box_callback() {
+		$indicator_statuses = get_post_meta( get_the_ID(), 'civil_credibility_indicators', true );
+		?>
+		<div
+			style="display: flex; flex-direction: column;"
+		/>
+			<?php
+			// Output each indicator as a checkbox toggle.
+			foreach ( $this->indicators as $key => $indicator ) {
+				$this->credibility_checkbox(
+					$indicator['label'],
+					$key,
+					in_array( $key, $indicator_statuses, true )
+				);
+			}
+			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Output the markup for a credibility checkbox input field.
+	 *
+	 * @param  string $label Label string
+	 * @param  string $key   Field key/slug.
+	 * @param  boolean $checked If input is checked.
+	 */
+	public function credibility_checkbox( $label, $key, $checked ) {
+		?>
+		<span
+			style="padding: 4px 0;"
+		>
+			<input
+				type="checkbox"
+				id="<?php echo esc_attr( $key ); ?>"
+				name="indicators[<?php echo esc_attr( $key ); ?>]"
+				value="<?php echo esc_attr( $key ); ?>"
+				<?php echo ( $checked ) ? 'checked' : '' ; ?>
+			>
+			<label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label>
+		</span>
+		<?php
+	}
+
+	/**
+	 * Save indicators on post save.
+	 *
+	 * @param  integer $post_id Post ID.
+	 * @param  WP_Post $post    Post object.
+	 */
+	public function save_post( $post_id, $post ) {
+
+		// Does the post type being saved have credibility indicators?
+		if  ( ! in_array( $post->post_type, $this->post_types, true ) ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['indicators'] ) ) {
+			return;
+		}
+
+		// @todo properly validate this.
+		$indicators = array_map( 'sanitize_text_field', $_POST['indicators'] );
+
+		update_post_meta( $post_id, 'civil_credibility_indicators', array_keys( $indicators ) );
 	}
 
 	/**
@@ -102,102 +247,174 @@ class Credibility_Indicators {
 			__( 'Credibility Indicators', 'civil' ),
 			'manage_options',
 			'civil-credibility-indicators',
-			[ $this, 'menu_content' ]
+			[ $this, 'credibility_indicators_options_page' ]
 		);
 	}
 
-	public function menu_content() {
+	/**
+	 * Output options page.
+	 */
+	public function credibility_indicators_options_page() {
+
+		// Ensure proper user permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
 		}
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Credibility Indicators', 'civil' ); ?></h1>
-			<div id="civil-newsroom-credibility-indicators"></div>
+			<div>This is some helper text about what the Credibility Indicators are, and how to use them.</div>
+			<!-- <div id="civil-newsroom-credibility-indicators"></div> -->
 			<form action="options.php" method="post">
 				<?php
-				// output security fields for the registered setting "civil"
-				settings_fields( 'civil' );
+				// Output security fields.
+				settings_fields( 'civil_credibility_indicators' );
 
-				// output setting sections and their fields
-				// (sections are registered for "civil", each field is registered to a specific section)
-				do_settings_sections( 'civil' );
+				// Output form fields.
+				do_settings_sections( 'credibility-indicators' );
 
-				// output save settings button
+				// Output save button.
 				submit_button( 'Save' );
 				?>
 			 </form>
 		</div>
 		<?php
-
 	}
 
+	/**
+	 * Register settings page interface.
+	 */
 	public function register_settings() {
-		register_setting( 'civil', 'credibility-indicators' );
 
-		// register a new section in the "civil" page
-		add_settings_section(
-			'civil_section_learn_more',
-			__( 'Learn More Call to Action', 'civil' ),
-			null,
-			'civil'
-		);
+		// Prep sections and field building.
+		$sections = [];
+		$fields   = [];
 
-		// register a new section in the "civil" page
-		add_settings_section(
-			'civil_section_indicators',
-			__( 'Indicators', 'civil' ),
-			null,
-			'civil'
-		);
+		// Build fields.
+		foreach ( $this->indicators as $key => $indicator ) {
+			$fields[] = [
+				'field'   => 'textarea',
+				'label'   => $indicator['label'],
+				'slug'    => "civl_ci_{$key}",
+				'default' => $indicator['default_value'],
+			];
+		}
 
-		// register a new field in the "civil_section_developers" section, inside the "civil" page
-		add_settings_field(
-			'civil_section_learn_more_label',
-			__( 'Learn More Label', 'civil' ),
-			'civil_field_pill_cb',
-			'civil',
-			'civil_section_learn_more',
-			[
-				'label_for'         => 'civil_field_pill',
-				'class'             => 'civil_row',
-				'civil_custom_data' => 'custom',
-			]
-		);
+		$fields[] = [
+			'label'   => __( 'Learn More Label', 'civil' ),
+			'slug'    => 'civl_ci_learn_more_label',
+			'default' => $this->learn_more_text,
+		];
+
+		$fields[] = [
+			'label'   => __( 'Learn More Link', 'civil' ),
+			'slug'    => 'civl_ci_learn_more_link',
+			'default' => $this->learn_more_link,
+		];
+
+		$sections[] = [
+			'label'  => __( 'Settings', 'civil' ),
+			'slug'   => 'civl_ci_indicators-section',
+			'page'   => 'credibility-indicators',
+			'fields' => $fields,
+		];
+
+		// Parse sections.
+		foreach ( $sections as $section ) {
+			$section = wp_parse_args(
+				$section,
+				[
+					'label'  => __( 'Settings', 'civil' ),
+					'slug'   => 'settings-section',
+					'page'   => 'credibility-indicators',
+					'fields' => [],
+				]
+			);
+
+			add_settings_section(
+				$section['slug'],
+				$section['label'],
+				null,
+				$section['page']
+			);
+
+			// Parse fields.
+			foreach ( (array) $section['fields'] as $field ) {
+
+				// Setup defaults.
+				$field = wp_parse_args(
+					$field,
+					[
+						'default' => '',
+						'field'   => 'textfield',
+						'label'   => __( 'Field Label', 'civil' ),
+						'slug'    => 'field',
+					]
+				);
+
+				add_settings_field(
+					$field['slug'],
+					$field['label'],
+					[ $this, $field['field'] ],
+					$section['page'],
+					$section['slug'],
+					[
+						'key'     => $field['slug'],
+						'default' => $field['default'],
+					]
+				);
+
+		        register_setting(
+					'civil_credibility_indicators',
+					$field['slug'],
+					function( $value ) {
+						return esc_html( $value );
+					}
+				);
+			}
+		}
 	}
 
-	// field callbacks can accept an $args parameter, which is an array.
-	// $args is defined at the add_settings_field() function.
-	// wordpress has magic interaction with the following keys: label_for, class.
-	// the "label_for" key value is used for the "for" attribute of the <label>.
-	// the "class" key value is used for the "class" attribute of the <tr> containing the field.
-	// you can add custom key value pairs to be used inside your callbacks.
-	function civil_field_pill_cb( $args ) {
-	 // get the value of the setting we've registered with register_setting()
-	 $options = get_option( 'civil' );
-	 // output the field
-	 ?>
-	 <select id="<?php echo esc_attr( $args['label_for'] ); ?>"
-	 data-custom="<?php echo esc_attr( $args['civil_custom_data'] ); ?>"
-	 name="civil_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
-	 >
-	 <option value="red" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'red', false ) ) : ( '' ); ?>>
-	 <?php esc_html_e( 'red pill', 'civil' ); ?>
-	 </option>
-	 <option value="blue" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'blue', false ) ) : ( '' ); ?>>
-	 <?php esc_html_e( 'blue pill', 'civil' ); ?>
-	 </option>
-	 </select>
-	 <p class="description">
-	 <?php esc_html_e( 'You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.', 'civil' ); ?>
-	 </p>
-	 <p class="description">
-	 <?php esc_html_e( 'You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.', 'civil' ); ?>
-	 </p>
-	 <?php
+	/**
+	 * Helper to output a text field.
+	 *
+	 * @param array $args Field args.
+	 */
+	function textfield( $args ) {
+		$value = (string) get_option( $args['key'] );
+		if ( empty( $value ) ) {
+			$value = $args['default'];
+		}
+        ?>
+            <input
+            	type="text"
+            	name="<?php echo esc_attr( $args['key'] ) ;?>"
+            	id="<?php echo esc_attr( $args['key'] ) ;?>"
+            	value="<?php echo esc_attr( $value ); ?>"
+            	style="width: 100%; max-width: 520px;"
+            />
+        <?php
 	}
 
-
+	/**
+	 * Helper to output a textarea.
+	 *
+	 * @param array $args Field args.
+	 */
+	function textarea( $args ) {
+		$value = (string) get_option( $args['key'] );
+		if ( empty( $value ) ) {
+			$value = $args['default'];
+		}
+        ?>
+            <textarea
+            	name="<?php echo esc_attr( $args['key'] ) ;?>"
+            	id="<?php echo esc_attr( $args['key'] ) ;?>"
+            	rows="5"
+            	cols="70"
+            ><?php echo esc_html( $value ); ?></textarea>
+        <?php
+	}
 }
 
 Credibility_Indicators::instance();
