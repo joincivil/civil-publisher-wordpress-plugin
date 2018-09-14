@@ -10,7 +10,7 @@ const { dateI18n, getSettings } = window.wp.date;
 import { Civil, ApprovedRevision, EthAddress } from "@joincivil/core";
 import { Newsroom } from "@joincivil/core/build/src/contracts/newsroom";
 
-import { apiNamespace, userMetaKeys } from "./constants";
+import { apiNamespace, userMetaKeys, timestampFormat } from "./constants";
 
 export const getCivil = (() => {
   const civil: Civil | undefined = hasInjectedProvider() ? new Civil() : undefined;
@@ -65,14 +65,16 @@ export function hasInjectedProvider(): boolean {
 }
 
 const dateSettings = getSettings();
-/* Formats given Date object or UTC string in the timezone specified in CMS settings. If no format is supplied, uses default date format from in CMS settings. */
-export function siteTimezoneFormat(utcTimestamp: string | Date, format?: string): string {
+/* Formats given Date object or UTC string in the timezone specified in CMS settings, in the given foramt or default format specified in constants. */
+export function siteTimezoneFormat(utcTimestamp: string | Date, format: string = timestampFormat): string {
   const timezoned = moment.utc(utcTimestamp).utcOffset(dateSettings.timezone.offset * 60);
-  if (format) {
-    return moment(timezoned).format(format);
-  } else {
-    return dateI18n(dateSettings.formats.datetime, timezoned);
-  }
+  return moment(timezoned).format(format);
+}
+
+/* Formats given Date object or UTC string in the timezone and format specified in CMS settings. */
+export function siteTimezoneSiteFormat(utcTimestamp: string | Date): string {
+  const timezoned = moment.utc(utcTimestamp).utcOffset(dateSettings.timezone.offset * 60);
+  return dateI18n(dateSettings.formats.datetime, timezoned);
 }
 
 export async function saveAddressToProfile(address: EthAddress): Promise<void> {

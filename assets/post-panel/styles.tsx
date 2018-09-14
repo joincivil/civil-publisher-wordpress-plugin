@@ -4,6 +4,8 @@ import { CivilLogo } from "@joincivil/components";
 
 export const colors = {
   LINK_BLUE: "#0073AA",
+  GRAY: "#D8D8D8",
+  ERROR_RED: "#F2524A",
 };
 
 export const Wrapper = styled.div`
@@ -12,7 +14,7 @@ export const Wrapper = styled.div`
 
   // TODO temporary until we separate them into tabs:
   &:first-child {
-    border-bottom: 1px solid #d8d8d8;
+    border-bottom: 1px solid ${colors.GRAY};
   }
 
   p {
@@ -43,13 +45,10 @@ export const HelpText: StyledComponentClass<HelpTextProps, "p"> = styled<HelpTex
   }
 `;
 
-export const ErrorHeadingText = styled.span`
-  color: #f2524a;
-  font-weight: bold;
-`;
 export const ErrorText = styled.p`
   && {
-    color: #f2524a;
+    font-weight: normal;
+    color: ${colors.ERROR_RED};
   }
 `;
 
@@ -76,11 +75,15 @@ export const Heading = styled.div`
 export const MainHeading = Heading.extend`
   font-weight: 600;
 `;
+export const ErrorHeading = Heading.extend`
+  font-weight: 600;
+  color: ${colors.ERROR_RED};
+`;
 
 export const Intro = styled.div`
   background-color: #fffef6;
   padding: 24px 16px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid ${colors.GRAY};
 
   ${Heading} {
     font-size: 16px;
@@ -109,7 +112,7 @@ export const Body = styled.div`
 `;
 export const BodySection = styled.div`
   padding: 20px 0 24px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid ${colors.GRAY};
   &:last-child {
     border-bottom: 0;
   }
@@ -143,4 +146,8 @@ export const ModalP = styled.p`
 export const ModalButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+`;
+
+export const PrimaryButtonWrap = styled.div`
+  margin-top: 16px;
 `;

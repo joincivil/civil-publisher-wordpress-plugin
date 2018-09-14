@@ -1,7 +1,7 @@
 import * as React from "react";
 const { withSelect } = window.wp.data;
-const { dateI18n, getSettings } = window.wp.date;
-import { ErrorText, Heading, BodySection } from "../styles";
+import { siteTimezoneFormat } from "../../util";
+import { ErrorText, ErrorHeading, Heading, MainHeading, BodySection } from "../styles";
 import { RevisionLinks } from "./RevisionLinks";
 
 export interface PostStatusProps {
@@ -19,11 +19,7 @@ export interface PostStatusProps {
   contentId?: number;
 }
 
-const ErrorHeading = Heading.extend`
-  color: #f2524a;
-`;
-
-const NoMarginHeading = Heading.extend`
+const NoMarginHeading = MainHeading.extend`
   margin-bottom: 0;
 `;
 
@@ -41,8 +37,21 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
           {this.props.published ? 're-publish by hitting the "Update" button' : "save again"} before continuing.
         </ErrorText>
       );
-    } else if (this.props.published) {
       content = <p>Your post is published to your site and is ready to be published on the Civil network.</p>;
+    } else if (this.props.published) {
+      if (this.props.requirePublish) {
+        content = <p>Your post is published to your site and is ready to be published on the Civil network.</p>;
+      } else {
+        content = (
+          <p>
+            Post published
+            {this.props.updated && ", last updated"}{" "}
+            <a href={this.props.url} target="_blank" style={{ display: "inline-block" }}>
+              {siteTimezoneFormat(this.props.timestamp)}
+            </a>
+          </p>
+        );
+      }
     } else {
       if (this.props.requirePublish) {
         heading = <ErrorHeading>Post Status</ErrorHeading>;

@@ -48,7 +48,7 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
 
     archiveSection = (
       <BodySectionNoPaddingBottom>
-        <P>Archive · {siteTimezoneFormat(props.lastArchivedRevision.published, "MMM DD YYYY h:mm a")}</P>
+        <P>Archive · {siteTimezoneFormat(props.lastArchivedRevision.published)}</P>
         <Link href={props.lastArchivedRevision.ipfsUrl}>View on IPFS</Link>
         {transactionArchive}
       </BodySectionNoPaddingBottom>
@@ -64,7 +64,7 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
   return (
     <div>
       <BodySection>
-        <P>Index · {siteTimezoneFormat(props.lastPublishedRevision.published, "MMM DD YYYY h:mm a")}</P>
+        <P>Index · {siteTimezoneFormat(props.lastPublishedRevision.published)}</P>
         <Link href={props.lastPublishedRevision.ipfsUrl}>View on IPFS</Link>
         <Link href={`https://rinkeby.etherscan.io/tx/${props.lastPublishedRevision.txHash}`}>View on Ethereum</Link>
       </BodySection>

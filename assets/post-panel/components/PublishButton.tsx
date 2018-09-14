@@ -11,7 +11,7 @@ import {
 import { TxHash } from "@joincivil/core";
 import { hashContent } from "@joincivil/utils";
 import { getNewsroom, getIPFS, getCivil } from "../../util";
-import { ModalHeader, ModalP, ModalButtonContainer, ErrorText, HelpText } from "../styles";
+import { ModalHeader, ModalP, ModalButtonContainer, ErrorText, HelpText, PrimaryButtonWrap } from "../styles";
 const { apiRequest } = window.wp;
 import { IndexTransactionButton } from "./Buttons";
 import { toBuffer } from "ethereumjs-util";
@@ -179,13 +179,15 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
           Estimated cost to publish this post <br />
           {this.state.estimate && "ETH: " + this.state.estimate.toFixed(6)}
         </p>
-        <TransactionButtonNoModal
-          Button={(props: TransactionButtonInnerProps) => (
-            <IndexTransactionButton {...props} archive={this.props.archive} />
-          )}
-          transactions={this.getTransaction()}
-          disabled={this.props.disabled}
-        />
+        <PrimaryButtonWrap>
+          <TransactionButtonNoModal
+            Button={(props: TransactionButtonInnerProps) => (
+              <IndexTransactionButton {...props} archive={this.props.archive} />
+            )}
+            transactions={this.getTransaction()}
+            disabled={this.props.disabled}
+          />
+        </PrimaryButtonWrap>
         {this.renderPreTransactionModal()}
         {this.renderTransactionPendingModal()}
         {this.renderTransactionCompleteModal()}

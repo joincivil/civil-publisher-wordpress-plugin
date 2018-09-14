@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Heading, Body, BodySection } from "../styles";
+import { MainHeading, Body, BodySection } from "../styles";
 import { TxHash } from "@joincivil/core";
 import { PublishButton } from "./PublishButton";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
@@ -47,7 +47,7 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
     return (
       <Body>
         <BodySection>
-          <Heading>Publish Index</Heading>
+          <MainHeading>Publish Index</MainHeading>
           <p>
             Publishing the index adds this post’s metadata and hash to IPFS and Ethereum Blockchain. It will appear in
             the Civil network, and provides proof that the contents have not changed since last publish. The metadata

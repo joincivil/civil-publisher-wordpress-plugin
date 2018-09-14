@@ -17,7 +17,7 @@ import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleCompone
 export interface BlockchainPluginProps {
   openTab: number;
   onNetworkChange(networkName: string): void;
-  onAccountChange(address: EthAddress): void;
+  onAccountChange(address?: EthAddress): void;
   onTabChange(openTabIndex: number): void;
 }
 
@@ -90,7 +90,7 @@ const BlockchainPluginInner = compose([
   withDispatch(
     (dispatch: any): Partial<BlockchainPluginProps> => {
       const { setIsCorrectNetwork, setWeb3ProviderAddress, setOpenTab } = dispatch("civil/blockchain");
-      const onAccountChange = (address: EthAddress) => dispatch(setWeb3ProviderAddress(address));
+      const onAccountChange = (address?: EthAddress) => dispatch(setWeb3ProviderAddress(address));
       const onNetworkChange = (networkName: string) => dispatch(setIsCorrectNetwork(networkName));
       const onTabChange = (openTabIndex: number) => dispatch(setOpenTab(openTabIndex));
       return {

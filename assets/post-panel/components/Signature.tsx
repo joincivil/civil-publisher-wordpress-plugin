@@ -4,7 +4,7 @@ import { ApprovedRevision } from "@joincivil/core";
 import { HollowGreenCheck, HollowRedNoGood, QuestionToolTip, ToolTip, ClipLoader } from "@joincivil/components";
 const { withSelect } = window.wp.data;
 import { siteTimezoneFormat } from "../../util";
-import { IconWrap } from "../styles";
+import { IconWrap, colors } from "../styles";
 
 export interface SignatureProps {
   authorUserId: number;
@@ -19,14 +19,21 @@ const WrapperInner = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  &:last-child {
-    margin-bottom: 0;
-  }
 `;
 
 const WrapperOuter = styled.div`
-  margin-bottom: 16px;
+  margin: 16px 0;
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  ${ /* This rule is very dumb but I can't find another way to add this style to `ToolTip`. Neither adding styles to `styled(ToolTip)` nor adding `style` attribute to `<ToolTip>` works. */'' }
+  & > div {
+    width: 100%;
+  }
 `;
 
 const UserWrap = styled.span`
@@ -41,13 +48,21 @@ const Avatar = styled.img`
   border: 0.5px solid #d5d5d5;
 `;
 
+const Unsigned = styled.span`
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  background: ${colors.GRAY};
+`;
+
 function SignatureComponent(ownProps: SignatureProps): JSX.Element {
   const { sigData, userData, isDirty, isValid, isSavingPost } = ownProps;
   let validIndicator;
   let tipText;
   if (!sigData) {
     tipText = "This user hasn't signed yet";
-    validIndicator = null;
+    validIndicator = <Unsigned />;
   } else if (isValid === null || isSavingPost) {
     tipText = "Validating signature...";
     validIndicator = <ClipLoader size={20} />;
@@ -60,7 +75,7 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
     tipText = "Please save this post in order to check signature validity";
     validIndicator = <QuestionToolTip explainerText="" />;
   } else {
-    tipText = `Signed ${siteTimezoneFormat(sigData.date, "MMMM DD h:mm a")}`;
+    tipText = `Signed ${siteTimezoneFormat(sigData.date)}`;
     validIndicator = <HollowGreenCheck />;
   }
 
