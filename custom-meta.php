@@ -113,9 +113,9 @@ function add_user_meta_rest() {
 		'user',
 		USER_ETH_ADDRESS_META_KEY,
 		array(
-			'get_callback'      => __NAMESPACE__ . '\user_meta_callback',
-			'update_callback'   => null,
-			'schema'            => null,
+			'get_callback'    => __NAMESPACE__ . '\user_meta_callback',
+			'update_callback' => null,
+			'schema'          => null,
 		)
 	);
 	register_rest_field(
@@ -169,9 +169,9 @@ function newsroom_address_register_setting() {
 		'general',
 		NEWSROOM_ADDRESS_OPTION_KEY,
 		array(
-			'type' => 'string',
-			'single' => true,
-			'show_in_rest' => true,
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
 			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_address',
 		)
 	);
@@ -294,53 +294,67 @@ add_action( 'save_post', __NAMESPACE__ . '\save_post_author_data', 200 );
  */
 function expose_article_meta() {
 	register_meta(
-		'post', SIGNATURES_META_KEY, array(
+		'post',
+		SIGNATURES_META_KEY,
+		[
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string', // Actually will be stringified JSON.
+		]
+	);
+	register_meta(
+		'post',
+		REVISIONS_META_KEY,
+		[
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string', // Actually will be stringified JSON.
+		]
+	);
+	register_meta(
+		'post',
+		POST_AUTHORS_META_KEY,
+		[
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string', // Actually will be stringified JSON.
-		)
+		]
 	);
 	register_meta(
-		'post', REVISIONS_META_KEY, array(
+		'post',
+		CONTENT_ID_META_KEY,
+		[
 			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string', // Actually will be stringified JSON.
-		)
+			'single'       => true,
+			'type'         => 'string',
+		]
 	);
 	register_meta(
-		'post', POST_AUTHORS_META_KEY, array(
-			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string', // Actually will be stringified JSON.
-		)
-	);
-	register_meta(
-		'post', CONTENT_ID_META_KEY, array(
+		'post',
+		TXHASH_META_KEY,
+		[
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		)
+		]
 	);
 	register_meta(
-		'post', TXHASH_META_KEY, array(
+		'post',
+		IPFS_META_KEY,
+		[
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		)
+		]
 	);
 	register_meta(
-		'post', IPFS_META_KEY, array(
+		'post',
+		ARCHIVE_STATUS_META_KEY,
+		[
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		)
-	);
-	register_meta(
-		'post', ARCHIVE_STATUS_META_KEY, array(
-			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string',
-		)
+		]
 	);
 }
 add_action( 'admin_init', __NAMESPACE__ . '\expose_article_meta' );

@@ -26,7 +26,9 @@ class REST_API {
 	public function register_endpoint() {
 		// Endpoint for returning revision payload.
 		register_rest_route(
-			REST_API_NAMESPACE, '/revisions/(?P<revisionID>\d+)', [
+			REST_API_NAMESPACE,
+			'/revisions/(?P<revisionID>\d+)',
+			[
 				'methods'  => 'GET',
 				'callback' => [ $this, 'get_revision_payload' ],
 			]
@@ -42,7 +44,9 @@ class REST_API {
 
 		// Endpoint for returning revision content based on hash value.
 		register_rest_route(
-			REST_API_NAMESPACE, '/revisions-content/(?P<hash>\w+)', [
+			REST_API_NAMESPACE,
+			'/revisions-content/(?P<hash>\w+)',
+			[
 				'methods'  => 'GET',
 				'callback' => [ $this, 'get_revision_content_from_hash' ],
 			]
@@ -50,7 +54,9 @@ class REST_API {
 
 		// Endpoint for fetching user by given ETH address.
 		register_rest_route(
-			REST_API_NAMESPACE, '/user-by-eth-address/(?P<address>\w+)', [
+			REST_API_NAMESPACE,
+			'/user-by-eth-address/(?P<address>\w+)',
+			[
 				'methods'  => 'GET',
 				'callback' => [ $this, 'get_user_by_eth_address' ],
 			]
