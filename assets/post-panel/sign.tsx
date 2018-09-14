@@ -13,8 +13,6 @@ const BlockchainSignPanel = compose([
       const { isEditedPostDirty, isCleanNewPost, isSavingPost } = selectStore("core/editor");
       const {
         getCurrentUserId,
-        getWeb3ProviderAddress,
-        getCurrentWpUserAddress,
         getSignatures,
         isValidSignature,
         isWpEditor,

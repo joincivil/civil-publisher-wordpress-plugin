@@ -30,8 +30,7 @@ const WrapperOuter = styled.div`
     margin-bottom: 0;
   }
 
-  ${ /* This rule is very dumb but I can't find another way to add this style to `ToolTip`. Neither adding styles to `styled(ToolTip)` nor adding `style` attribute to `<ToolTip>` works. */'' }
-  & > div {
+  ${/* This rule is very dumb but I can't find another way to add this style to `ToolTip`. Neither adding styles to `styled(ToolTip)` nor adding `style` attribute to `<ToolTip>` works. */ ""} & > div {
     width: 100%;
   }
 `;
