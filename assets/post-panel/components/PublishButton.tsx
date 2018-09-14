@@ -28,6 +28,7 @@ export interface PublishButtonProps {
   txHash?: TxHash;
   disabled?: boolean;
   walletReady?: boolean;
+  isPublished?: boolean;
   publishContent?(
     contentId: number,
     revisionId: number,
@@ -182,7 +183,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
         <PrimaryButtonWrap>
           <TransactionButtonNoModal
             Button={(props: TransactionButtonInnerProps) => (
-              <IndexTransactionButton {...props} archive={this.props.archive} />
+              <IndexTransactionButton {...props} archive={this.props.archive} isPublished={this.props.isPublished} />
             )}
             transactions={this.getTransaction()}
             disabled={this.props.disabled}

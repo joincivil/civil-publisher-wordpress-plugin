@@ -149,6 +149,8 @@ export class BlockchainPublishPanelComponent extends React.Component<
         txHash={this.props.txHash}
         disabled={this.props.publishDisabled || !this.props.walletReady || !!insufficientPermissions}
         walletReady={this.props.walletReady}
+        isPublished={!!this.props.lastPublishedRevision}
+        isArchived={!!this.props.lastArchivedRevision}
         saveTxHash={this.props.saveTxHash}
         publishContent={this.props.publishContent}
         updateContent={this.props.updateContent}
