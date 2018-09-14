@@ -1,5 +1,10 @@
 export const apiNamespace = "/civil-newsroom-protocol/v1/";
 
+export const urls = {
+  PROFILE: `${window.civilNamespace.wpAdminUrl}profile.php`,
+  HELP: `${window.civilNamespace.wpAdminUrl}admin.php?page=civil-newsroom-protocol-help`,
+};
+
 export enum postMetaKeys {
   SIGNATURES = "civil_newsroom_protocol_article_signatures",
   PUBLISHED_REVISIONS = "civil_newsroom_protocol_published_revisions",

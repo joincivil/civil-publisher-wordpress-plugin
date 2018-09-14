@@ -6,7 +6,7 @@ import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "../shared/reducer";
 import { addAddress, addTxHash } from "../shared/actions";
 import { getCivil, saveAddressToProfile } from "../util";
-import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme } from "../constants";
+import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme, urls } from "../constants";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
 import { SearchUsers } from "./SeachUsers";
 
@@ -82,8 +82,8 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           theme={theme}
           showWalletOnboarding={true}
           showWelcome={true}
-          profileUrl={`${window.civilNamespace.wpAdminUrl}profile.php`}
-          helpUrl={`${window.civilNamespace.wpAdminUrl}admin.php?page=civil-newsroom-protocol-help`}
+          profileUrl={urls.PROFILE}
+          helpUrl={urls.HELP}
           profileAddressSaving={this.state.profileAddressSaving}
           saveAddressToProfile={this.saveAddressToProfile}
           profileWalletAddress={this.state.profileWalletAddress}

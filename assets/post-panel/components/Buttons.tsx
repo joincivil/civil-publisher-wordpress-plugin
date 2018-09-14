@@ -24,7 +24,7 @@ export interface IndexTransactionButtonProps extends TransactionButtonInnerProps
 export const IndexTransactionButton: React.StatelessComponent<IndexTransactionButtonProps> = props => {
   let buttonComponent = (
     <Button disabled={props.disabled} onClick={props.onClick} size={buttonSizes.MEDIUM_WIDE} fullWidth>
-      {props.isPublished ? "Update " : "Publish " }
+      {props.isPublished ? "Update " : "Publish "}
       {props.archive ? "Index and Archive" : "Index"}
     </Button>
   );

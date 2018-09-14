@@ -47,7 +47,8 @@ export const ArchiveControls = (props: ArchiveControlsProps): JSX.Element => {
   return (
     <>
       <HeaderWithFlex>
-        {props.isArchived ? "Update" : "Add" } Archive <SlideCheckbox onClick={props.onHeaderClick} checked={props.archiveSelected} />
+        {props.isArchived ? "Update" : "Add"} Archive{" "}
+        <SlideCheckbox onClick={props.onHeaderClick} checked={props.archiveSelected} />
       </HeaderWithFlex>
       {controls}
     </>

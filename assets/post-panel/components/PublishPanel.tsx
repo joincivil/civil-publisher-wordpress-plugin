@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { TxHash } from "@joincivil/core";
 import { Collapsable } from "@joincivil/components";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
-import { Body, BodySection, MainHeading } from "../styles";
+import { Body, BodySection, MainHeading, colors } from "../styles";
 import { ArchiveControls } from "./ArchiveControls";
 import { PublishButton } from "./PublishButton";
 
@@ -65,7 +65,7 @@ const CollapsableText = styled.div`
   font-stretch: normal;
   line-height: 1.42;
   letter-spacing: 0px;
-  color: #5f5f5f;
+  color: ${colors.DARK_GRAY};
   background-color: #fffef6;
   padding: 20px;
   padding-top: 30px;

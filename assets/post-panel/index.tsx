@@ -6,10 +6,11 @@ const { compose } = window.wp.element;
 import * as React from "react";
 import { getCivil } from "../util";
 import { Civil, EthAddress } from "@joincivil/core";
-import { Tabs, Tab, TabComponentProps, Button, buttonSizes } from "@joincivil/components";
+import { Tabs, Tab, TabComponentProps, Button, buttonSizes, CivilLogo, NorthEastArrow } from "@joincivil/components";
 import "./store";
 import styled, { ThemeProvider } from "styled-components";
-import { theme } from "../constants";
+import { theme, urls } from "../constants";
+import { colors, IconWrap } from "./styles";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
@@ -25,11 +26,13 @@ const StyledLi = styled.li`
   border-bottom: ${(props: TabComponentProps) => (props.isActive ? "3px solid #01a0d2" : "none")};
   box-sizing: border-box;
   font-family: ${props => props.theme.sansSerifFont};
-  font-weight: 600;
+  font-weight: ${(props: TabComponentProps) => (props.isActive ? "600" : "400")};
+  color: #000000;
   margin-bottom: 0;
-  padding: 15px 0 18px;
+  padding: 17px 0 14px;
   text-align: center;
   width: 75px;
+  cursor: ${(props: TabComponentProps) => (props.isActive ? "default" : "pointer")};
 
   & a {
     color: inherit;
@@ -48,6 +51,38 @@ const LinkButton = Button.extend`
   width: 100%;
   text-align: center;
 `;
+
+const NavHelp = styled.a`
+  && {
+    color: ${colors.DARK_GRAY};
+  }
+  svg path {
+    fill: ${colors.DARK_GRAY};
+  }
+  text-decoration: none;
+
+  svg {
+    width: 8px;
+    height: auto;
+  }
+`;
+const LogoWrap = IconWrap.extend`
+  top: 1px;
+  svg {
+    height: 12px;
+    width: auto;
+  }
+`;
+const navLogo = (
+  <LogoWrap>
+    <CivilLogo />
+  </LogoWrap>
+);
+const navHelp = (
+  <NavHelp href={`${urls.HELP}#TODO`} target="_blank">
+    Help <NorthEastArrow />
+  </NavHelp>
+);
 
 class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginProps> {
   public civil: Civil | undefined;
@@ -74,7 +109,13 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
   }
   public render(): JSX.Element {
     return (
-      <Tabs activeIndex={this.props.openTab} onActiveTabChange={this.props.onTabChange} TabComponent={StyledLi}>
+      <Tabs
+        activeIndex={this.props.openTab}
+        onActiveTabChange={this.props.onTabChange}
+        TabComponent={StyledLi}
+        TabsNavBefore={navLogo}
+        TabsNavAfter={navHelp}
+      >
         <Tab title="Sign">
           <BlockchainSignPanel />
         </Tab>
