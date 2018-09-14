@@ -4,7 +4,7 @@ import { ApprovedRevision } from "@joincivil/core";
 import { HollowGreenCheck, HollowRedNoGood, QuestionToolTip, ToolTip, ClipLoader } from "@joincivil/components";
 const { withSelect } = window.wp.data;
 import { siteTimezoneFormat } from "../../util";
-import { IconWrap } from "../styles";
+import { IconWrap, colors } from "../styles";
 
 export interface SignatureProps {
   authorUserId: number;
@@ -41,13 +41,21 @@ const Avatar = styled.img`
   border: 0.5px solid #d5d5d5;
 `;
 
+const Unsigned = styled.span`
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  background: ${colors.GRAY};
+`;
+
 function SignatureComponent(ownProps: SignatureProps): JSX.Element {
   const { sigData, userData, isDirty, isValid, isSavingPost } = ownProps;
   let validIndicator;
   let tipText;
   if (!sigData) {
     tipText = "This user hasn't signed yet";
-    validIndicator = null;
+    validIndicator = <Unsigned />;
   } else if (isValid === null || isSavingPost) {
     tipText = "Validating signature...";
     validIndicator = <ClipLoader size={20} />;

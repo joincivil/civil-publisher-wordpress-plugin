@@ -4,6 +4,7 @@ import { CivilLogo } from "@joincivil/components";
 
 export const colors = {
   LINK_BLUE: "#0073AA",
+  GRAY: "#D8D8D8",
 };
 
 export const Wrapper = styled.div`
@@ -12,7 +13,7 @@ export const Wrapper = styled.div`
 
   // TODO temporary until we separate them into tabs:
   &:first-child {
-    border-bottom: 1px solid #d8d8d8;
+    border-bottom: 1px solid ${colors.GRAY};
   }
 
   p {
@@ -81,7 +82,7 @@ export const ErrorHeading = Heading.extend`
 export const Intro = styled.div`
   background-color: #fffef6;
   padding: 24px 16px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid ${colors.GRAY};
 
   ${Heading} {
     font-size: 16px;
@@ -110,7 +111,7 @@ export const Body = styled.div`
 `;
 export const BodySection = styled.div`
   padding: 20px 0 24px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid ${colors.GRAY};
   &:last-child {
     border-bottom: 0;
   }
