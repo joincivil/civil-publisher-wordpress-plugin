@@ -262,5 +262,5 @@ export function isWalletReady(): boolean {
 export function isPluginDataMissing(): boolean {
   const latestRevisionJson = select("civil/blockchain").getLatestRevisionJSON();
 
-  return latestRevisionJson && !latestRevisionJson.revisionContentHash;
+  return !latestRevisionJson || !latestRevisionJson.revisionContentHash;
 }
