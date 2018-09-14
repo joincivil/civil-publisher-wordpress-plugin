@@ -1,7 +1,7 @@
 import * as React from "react";
 const { withSelect } = window.wp.data;
-const { dateI18n, getSettings } = window.wp.date;
 import { ErrorText, Heading, BodySection } from "../styles";
+import { siteTimezoneFormat } from "../../util";
 import { RevisionLinks } from "./RevisionLinks";
 
 export interface PostStatusProps {
@@ -31,7 +31,19 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
     let content;
     let heading = <Heading>Post Status</Heading>;
     if (this.props.published) {
-      content = <p>Your post is published to your site and is ready to be published on the Civil network.</p>;
+      if (this.props.requirePublish) {
+        content = <p>Your post is published to your site and is ready to be published on the Civil network.</p>;
+      } else {
+        content = (
+          <p>
+            Post published
+            {this.props.updated && ", last updated"}{" "}
+            <a href={this.props.url} target="_blank" style={{ display: "inline-block" }}>
+              {siteTimezoneFormat(this.props.timestamp)}
+            </a>
+          </p>
+        );
+      }
     } else {
       if (this.props.requirePublish) {
         heading = <ErrorHeading>Post Status</ErrorHeading>;

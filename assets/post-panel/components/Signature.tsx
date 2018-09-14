@@ -60,7 +60,7 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
     tipText = "Please save this post in order to check signature validity";
     validIndicator = <QuestionToolTip explainerText="" />;
   } else {
-    tipText = `Signed ${siteTimezoneFormat(sigData.date, "MMMM DD h:mm a")}`;
+    tipText = `Signed ${siteTimezoneFormat(sigData.date)}`;
     validIndicator = <HollowGreenCheck />;
   }
 
