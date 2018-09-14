@@ -49,7 +49,7 @@ class Credibility_Indicators {
 		$this->setup_defaults();
 
 		add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
-		add_action( 'admin_init', [ $this, 'register_settings'] );
+		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'the_content', [ $this, 'append_indicators' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
 		add_action( 'save_post', [ $this, 'save_post' ], 10, 2 );
@@ -69,11 +69,11 @@ class Credibility_Indicators {
 				'label'         => __( 'Original Reporting', 'civil' ),
 				'default_value' => __( 'This article contains new, firsthand information uncovered by its reporter(s). This includes directly interviewing sources and research / analysis of primary source documents.', 'civil' ),
 			],
-			'on_the_ground' => [
+			'on_the_ground'      => [
 				'label'         => __( 'On the Ground', 'civil' ),
 				'default_value' => __( 'Indicates that a Newsmaker/Newsmakers was/were physically present to report the article from some/all of the location(s) it concerns.', 'civil' ),
 			],
-			'sources_cited' => [
+			'sources_cited'      => [
 				'label'         => __( 'Sources Cited', 'civil' ),
 				'default_value' => __( 'As a news piece, this article cites verifiable, third-party sources which have all been thoroughly fact-checked and deemed credible by the Newsroom in accordance with the Civil Constitution.', 'civil' ),
 			],
@@ -129,13 +129,14 @@ class Credibility_Indicators {
 		ob_start();
 		?>
 			<section>
-				<?php foreach ( $indicator_statuses as $status ) :
+				<?php
+				foreach ( $indicator_statuses as $status ) :
 
 					// Get the saved description.
 					$description = get_option( "civl_ci_{$status}" );
 
 					// Fall back to the hard-coded default.
-					if (  empty( $description ) ) {
+					if ( empty( $description ) ) {
 						$description = $this->indicators[ $status ]['default_value'];
 					}
 					?>
@@ -171,10 +172,11 @@ class Credibility_Indicators {
 	 */
 	public function meta_box_callback() {
 		$indicator_statuses = get_post_meta( get_the_ID(), 'civil_credibility_indicators', true );
+		wp_nonce_field( 'civil_credibility_indicators', 'civil_credibility_indicators_nonce' );
 		?>
 		<div
 			style="display: flex; flex-direction: column;"
-		/>
+		>
 			<?php
 			// Output each indicator as a checkbox toggle.
 			foreach ( $this->indicators as $key => $indicator ) {
@@ -192,23 +194,25 @@ class Credibility_Indicators {
 	/**
 	 * Output the markup for a credibility checkbox input field.
 	 *
-	 * @param  string $label Label string
-	 * @param  string $key   Field key/slug.
-	 * @param  boolean $checked If input is checked.
+	 * @param string  $label Label string.
+	 * @param string  $key   Field key/slug.
+	 * @param boolean $checked If input is checked.
 	 */
 	public function credibility_checkbox( $label, $key, $checked ) {
 		?>
 		<span
 			style="padding: 4px 0;"
 		>
-			<input
-				type="checkbox"
-				id="<?php echo esc_attr( $key ); ?>"
-				name="indicators[<?php echo esc_attr( $key ); ?>]"
-				value="<?php echo esc_attr( $key ); ?>"
-				<?php echo ( $checked ) ? 'checked' : '' ; ?>
-			>
-			<label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label>
+			<label for="<?php echo esc_attr( $key ); ?>">
+				<input
+					type="checkbox"
+					id="<?php echo esc_attr( $key ); ?>"
+					name="indicators[<?php echo esc_attr( $key ); ?>]"
+					value="<?php echo esc_attr( $key ); ?>"
+					<?php checked( $checked ); ?>
+				>
+				<?php echo esc_html( $label ); ?>
+			</label>
 		</span>
 		<?php
 	}
@@ -221,8 +225,20 @@ class Credibility_Indicators {
 	 */
 	public function save_post( $post_id, $post ) {
 
+		// Check if our nonce is set.
+		if ( ! isset( $_POST['civil_credibility_indicators_nonce'] ) ) {
+			return;
+		}
+
+		$nonce = sanitize_text_field( wp_unslash( $_POST['civil_credibility_indicators_nonce'] ) );
+
+		// Verify that the nonce is valid.
+		if ( ! wp_verify_nonce( $nonce, 'civil_credibility_indicators' ) ) {
+			return;
+		}
+
 		// Does the post type being saved have credibility indicators?
-		if  ( ! in_array( $post->post_type, $this->post_types, true ) ) {
+		if ( ! in_array( $post->post_type, $this->post_types, true ) ) {
 			return;
 		}
 
@@ -230,8 +246,7 @@ class Credibility_Indicators {
 			return;
 		}
 
-		// @todo properly validate this.
-		$indicators = array_map( 'sanitize_text_field', $_POST['indicators'] );
+		$indicators = array_map( 'sanitize_text_field', wp_unslash( $_POST['indicators'] ) );
 
 		update_post_meta( $post_id, 'civil_credibility_indicators', array_keys( $indicators ) );
 	}
@@ -263,7 +278,6 @@ class Credibility_Indicators {
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Credibility Indicators', 'civil' ); ?></h1>
 			<div>This is some helper text about what the Credibility Indicators are, and how to use them.</div>
-			<!-- <div id="civil-newsroom-credibility-indicators"></div> -->
 			<form action="options.php" method="post">
 				<?php
 				// Output security fields.
@@ -273,9 +287,9 @@ class Credibility_Indicators {
 				do_settings_sections( 'credibility-indicators' );
 
 				// Output save button.
-				submit_button( 'Save' );
+				submit_button( __( 'Save', 'civil' ) );
 				?>
-			 </form>
+			</form>
 		</div>
 		<?php
 	}
@@ -363,7 +377,7 @@ class Credibility_Indicators {
 					]
 				);
 
-		        register_setting(
+				register_setting(
 					'civil_credibility_indicators',
 					$field['slug'],
 					function( $value ) {
@@ -379,20 +393,20 @@ class Credibility_Indicators {
 	 *
 	 * @param array $args Field args.
 	 */
-	function textfield( $args ) {
+	public function textfield( $args ) {
 		$value = (string) get_option( $args['key'] );
 		if ( empty( $value ) ) {
 			$value = $args['default'];
 		}
-        ?>
-            <input
-            	type="text"
-            	name="<?php echo esc_attr( $args['key'] ) ;?>"
-            	id="<?php echo esc_attr( $args['key'] ) ;?>"
-            	value="<?php echo esc_attr( $value ); ?>"
-            	style="width: 100%; max-width: 520px;"
-            />
-        <?php
+		?>
+			<input
+				type="text"
+				name="<?php echo esc_attr( $args['key'] ); ?>"
+				id="<?php echo esc_attr( $args['key'] ); ?>"
+				value="<?php echo esc_attr( $value ); ?>"
+				style="width: 100%; max-width: 520px;"
+			/>
+		<?php
 	}
 
 	/**
@@ -400,19 +414,19 @@ class Credibility_Indicators {
 	 *
 	 * @param array $args Field args.
 	 */
-	function textarea( $args ) {
+	public function textarea( $args ) {
 		$value = (string) get_option( $args['key'] );
 		if ( empty( $value ) ) {
 			$value = $args['default'];
 		}
-        ?>
-            <textarea
-            	name="<?php echo esc_attr( $args['key'] ) ;?>"
-            	id="<?php echo esc_attr( $args['key'] ) ;?>"
-            	rows="5"
-            	cols="70"
-            ><?php echo esc_html( $value ); ?></textarea>
-        <?php
+		?>
+			<textarea
+				name="<?php echo esc_attr( $args['key'] ); ?>"
+				id="<?php echo esc_attr( $args['key'] ); ?>"
+				rows="5"
+				cols="70"
+			><?php echo esc_html( $value ); ?></textarea>
+		<?php
 	}
 }
 
