@@ -1,9 +1,10 @@
 import * as React from "react";
 import { getNewsroom } from "../../util";
 import { TxHash } from "@joincivil/core";
+import { ClipLoader } from "@joincivil/components";
 import { PostStatus } from "./PostStatus";
 import { PanelWalletStatus } from "./PanelWalletStatus";
-import { Wrapper, Body } from "../styles";
+import { Wrapper, Body, BodySection, ErrorHeading, ErrorText } from "../styles";
 import { GetStartedPanel } from "./GetStartedPanel";
 import { PublishPanelFirstTime } from "./PublishPanelFirstTime";
 import { PublishPanel } from "./PublishPanel";
@@ -106,17 +107,36 @@ export class BlockchainPublishPanelComponent extends React.Component<
   }
 
   public renderPanelContent(): JSX.Element {
-    let insufficientPermissions: boolean | null = false;
-    // let permissionsMessage;
+    if (this.props.isNewsroomEditor === null) {
+      // Don't know whether to show panel or not til this is loaded from contract
+      return (
+        <Body>
+          <BodySection style={{ textAlign: "center" }}>
+            <ClipLoader size={20} />
+          </BodySection>
+        </Body>
+      );
+    }
+
+    let insufficientPermissions;
+    let permissionsMessage;
     if (!this.props.userCapabilities.publish_posts) {
       insufficientPermissions = true;
-      // permissionsMessage = "Only Editors and Admins have the ability to publish and index posts.";
-    } else if (this.props.isNewsroomEditor === null) {
-      // still loading this from contract
-      insufficientPermissions = null;
+      permissionsMessage = "Your WordPress user does not have the permissions required to publish posts.";
     } else if (!this.props.isNewsroomEditor) {
       insufficientPermissions = true;
-      // permissionsMessage = "You are not listed on your newsroom contract.";
+      permissionsMessage = "Your wallet address is not listed on your newsroom smart contract.";
+    }
+
+    if (insufficientPermissions) {
+      return (
+        <Body>
+          <BodySection>
+            <ErrorHeading>Insufficient Permissions</ErrorHeading>
+            <ErrorText>{permissionsMessage}</ErrorText>
+          </BodySection>
+        </Body>
+      );
     }
 
     if (!this.state.isGetStartedDismissed && !this.props.civilContentID) {
