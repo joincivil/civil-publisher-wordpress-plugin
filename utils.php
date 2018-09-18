@@ -22,6 +22,16 @@ function get_blockchain_post_types() {
 }
 
 /**
+ * Checks if the currently-logged-in-user can sign posts with the plugin.
+ *
+ * @return bool Whether or not tthey can sign.
+ */
+function current_user_can_sign_posts() {
+	// If user can't edit published posts, then they can't sign any updates to their posts, so rather than let them sign drafts and have invalid (and removed) signature on anly published updates, don't let them sign at all (until we have some way to add signatures outside of the edit post context).
+	return current_user_can( 'edit_published_posts' );
+}
+
+/**
  * Check if given string is a valid hex ETH wallet address.
  *
  * @param string $addr Address to check.

@@ -11,6 +11,10 @@ namespace Civil_Newsroom_Protocol;
  * Enqueue Gutenberg editor plugin script.
  */
 function enqueue_post_panel() {
+	if ( ! current_user_can_sign_posts() ) {
+		return;
+	}
+
 	wp_enqueue_script(
 		'civil-newsroom-protocol-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),
@@ -205,7 +209,7 @@ function wallet_address_nag() {
 		return;
 	}
 
-	if ( current_user_can( 'edit_posts' ) && empty( get_user_meta( get_current_user_id(), USER_ETH_ADDRESS_META_KEY ) ) ) {
+	if ( current_user_can_sign_posts() && empty( get_user_meta( get_current_user_id(), USER_ETH_ADDRESS_META_KEY ) ) ) {
 		$edit_profile_url = get_edit_user_link() . '#civil_newsroom_protocol_eth_wallet_address';
 		civil_notice_open();
 		?>

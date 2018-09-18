@@ -12,7 +12,11 @@ namespace Civil_Newsroom_Protocol;
  *
  * @param object $user A WP_User object.
  */
-function show_profile_fields( $user ) {
+function show_wallet_profile_field( $user ) {
+	if ( ! current_user_can_sign_posts() ) {
+		return;
+	}
+
 	$wallet_address = get_the_author_meta( USER_ETH_ADDRESS_META_KEY, $user->ID );
 	wp_nonce_field( 'civil_newsroom_protocol_update_wallet_address_action', 'civil_newsroom_protocol_eth_wallet_address_nonce' );
 	?>
@@ -35,7 +39,7 @@ function show_profile_fields( $user ) {
 					<?php
 						echo sprintf(
 							wp_kses(
-								/* translators: 1: FAQm-age URL */
+								/* translators: 1: FAQ page URL */
 								__( 'This is a your wallet address. Authors need wallet addresses to sign articles, and editors need wallet addresses to sign and index posts to the blockchain. If you change your wallet address, you or your team may <a href="%1$s">lose access to your newsroom</a>, so be sure to verify that this address is correct.', 'civil' ),
 								[ 'a' => [ 'href' => [] ] ]
 							),
@@ -50,8 +54,8 @@ function show_profile_fields( $user ) {
 	</table>
 	<?php
 }
-add_action( 'show_user_profile', __NAMESPACE__ . '\show_profile_fields' );
-add_action( 'edit_user_profile', __NAMESPACE__ . '\show_profile_fields' );
+add_action( 'show_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
+add_action( 'edit_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
 
 /**
  * Print any errors from updating user profile.
