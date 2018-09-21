@@ -28,13 +28,11 @@ const BlockchainSignPanel = compose([
 
       const isSignButtonDisabled = (): boolean => {
         const latestRevisionJson = getLatestRevisionJSON();
-        if (!latestRevisionJson) {
-          // Validity can't be checked, wait til revision JSON loaded
-          return true;
-        } else if (isPluginDataMissing()) {
-          // Post hasn't been saved while plugin was active
-          return true;
-        } else if (!isWalletReady()) {
+        if (
+          !latestRevisionJson || // Validity can't be checked, wait til revision JSON loaded
+          isPluginDataMissing() || // Post hasn't been saved while plugin was active
+          !isWalletReady()
+        ) {
           return true;
         }
 

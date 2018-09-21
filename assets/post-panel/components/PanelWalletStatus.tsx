@@ -98,9 +98,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
     );
   }
 
-  private saveAddress = async () => {
-    await saveAddressToProfile(this.props.web3ProviderAddress!);
-  };
+  private saveAddress = async () => saveAddressToProfile(this.props.web3ProviderAddress!);
 }
 
 export const PanelWalletStatus = compose([

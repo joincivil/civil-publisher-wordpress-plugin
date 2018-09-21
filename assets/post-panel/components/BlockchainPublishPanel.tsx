@@ -39,8 +39,14 @@ export interface BlockchainPublishPanelProps {
     txHash: TxHash,
     ipfs: string,
     archive: ArchiveOptions,
-  ): void;
-  updateContent?(revisionId: number, revisionJson: any, txHash: TxHash, ipfs: string, archive?: ArchiveOptions): void;
+  ): Promise<void>;
+  updateContent?(
+    revisionId: number,
+    revisionJson: any,
+    txHash: TxHash,
+    ipfs: string,
+    archive?: ArchiveOptions,
+  ): Promise<void>;
   saveTxHash?(txHash: TxHash, ipfs: string, archive: ArchiveOptions): void;
 }
 

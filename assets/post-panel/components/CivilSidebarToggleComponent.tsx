@@ -8,7 +8,7 @@ export class CivilSidebarToggleComponent extends React.Component<CivilNavBarButt
   public divRef: HTMLDivElement | null;
   public el: HTMLDivElement;
 
-  constructor(props: any) {
+  constructor(props: CivilNavBarButtonsProps) {
     super(props);
     this.divRef = null;
     this.el = document.createElement("div");

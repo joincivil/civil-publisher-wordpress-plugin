@@ -1,5 +1,9 @@
 export const apiNamespace = "/civil-newsroom-protocol/v1/";
 
+export enum urls {
+  NEWSROOM_MANAGER = "/wp-admin/admin.php?page=civil-newsroom-protocol-management",
+}
+
 export enum postMetaKeys {
   SIGNATURES = "civil_newsroom_protocol_article_signatures",
   PUBLISHED_REVISIONS = "civil_newsroom_protocol_published_revisions",

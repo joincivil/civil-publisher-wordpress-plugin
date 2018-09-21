@@ -49,10 +49,14 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       this.networkStream = this.civil!.networkNameStream.subscribe(this.setNetwork);
     }
 
-    const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
-    this.setState({
-      profileWalletAddress: userInfo[userMetaKeys.WALLET_ADDRESS],
-    });
+    try {
+      const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
+      this.setState({
+        profileWalletAddress: userInfo[userMetaKeys.WALLET_ADDRESS],
+      });
+    } catch (err) {
+      console.error("Failed to fetch user info for profile wallet address:", err);
+    }
   }
 
   public async componentWillUnmount(): Promise<void> {
@@ -102,7 +106,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     this.setState({ currentNetwork: network });
   };
 
-  private renderUserSearch = (onSetAddress: any): JSX.Element => {
+  private renderUserSearch = (onSetAddress: (address: string) => void): JSX.Element => {
     return <SearchUsers onSetAddress={onSetAddress} getOptions={this.fetchUserTypeAhead} />;
   };
 
@@ -133,26 +137,38 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   };
 
   private onContractDeployStarted = async (txHash: TxHash) => {
-    await apiRequest({
-      path: "/wp/v2/settings",
-      method: "PUT",
-      data: {
-        [siteOptionKeys.NEWSROOM_TXHASH]: txHash,
-      },
-    });
+    try {
+      await apiRequest({
+        path: "/wp/v2/settings",
+        method: "PUT",
+        data: {
+          [siteOptionKeys.NEWSROOM_TXHASH]: txHash,
+        },
+      });
+    } catch (err) {
+      const errText = "Failed to save newsroom creation tx hash to WP settings";
+      console.error(errText, err);
+      throw Error(errText);
+    }
     this.props.dispatch!(addTxHash(txHash));
   };
 
   private onNewsroomCreated = async (address: EthAddress) => {
-    const settings = await apiRequest({
-      path: "/wp/v2/settings",
-      method: "PUT",
-      data: {
-        [siteOptionKeys.NEWSROOM_ADDRESS]: address,
-      },
-    });
-    this.setState({ creationModalOpen: true });
-    this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
+    try {
+      const settings = await apiRequest({
+        path: "/wp/v2/settings",
+        method: "PUT",
+        data: {
+          [siteOptionKeys.NEWSROOM_ADDRESS]: address,
+        },
+      });
+      this.setState({ creationModalOpen: true });
+      this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
+    } catch (err) {
+      const errText = "Failed to save newly created newsroom address WP settings";
+      console.error(errText, err);
+      throw Error(errText);
+    }
   };
 
   private saveAddressToProfile = async () => {
@@ -160,7 +176,13 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       profileAddressSaving: true,
     });
 
-    await saveAddressToProfile(this.state.account!);
+    try {
+      await saveAddressToProfile(this.state.account!);
+    } catch (err) {
+      const errText = "Failed to save wallet address to WP user profile";
+      console.error(errText, err);
+      throw Error(errText);
+    }
     this.setState({
       profileWalletAddress: this.state.account,
       profileAddressSaving: false,

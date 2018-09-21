@@ -10,7 +10,7 @@ import { getCivil } from "../util";
 import { ErrorBoundary } from "../shared/components/ErrorBoundary";
 import "./store";
 import styled, { ThemeProvider } from "styled-components";
-import { theme } from "../constants";
+import { urls, theme } from "../constants";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
@@ -117,12 +117,11 @@ const CivilSidebar = () => {
       <PanelRow>
         <P>
           A newsroom contract has not been set up. Please got to your{" "}
-          <a href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">Civil Newsroom Manager</a> page to
-          create a Newsroom smart contract.
+          <a href={urls.NEWSROOM_MANAGER}>Civil Newsroom Manager</a> page to create a Newsroom smart contract.
         </P>
       </PanelRow>
       <PanelRow>
-        <LinkButton size={buttonSizes.MEDIUM_WIDE} href="/wp-admin/admin.php?page=civil-newsroom-protocol-management">
+        <LinkButton size={buttonSizes.MEDIUM_WIDE} href={urls.NEWSROOM_MANAGER}>
           Newsroom Manager
         </LinkButton>
       </PanelRow>
