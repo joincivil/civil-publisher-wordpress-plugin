@@ -25,7 +25,7 @@ async function init(): Promise<void> {
         .find(`.column-${userMetaKeys.WALLET_ADDRESS} code`)
         .text();
       const $role = $(el).find(`.column-${userMetaKeys.NEWSROOM_ROLE}`);
-      const currentRole = $role.text();
+      const currentRole = $role.html();
 
       if (isNaN(id) || !addr || !$role) {
         return;

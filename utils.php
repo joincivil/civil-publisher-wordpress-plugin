@@ -54,7 +54,6 @@ function get_user_data( $user ) {
 	if ( ! empty( $user->linked_account ) ) {
 		// From co-authors plus.
 		$actual_user = get_user_by( 'login', $user->linked_account );
-		// TODO See if we can get guest author avatar from here (it's not in the guest user object though). Might be able to get it from "post meta" on the guest user ID.
 		if ( ! empty( $actual_user ) ) {
 			$data = $actual_user->data;
 			if ( ! empty( $user->display_name ) ) {
@@ -88,7 +87,7 @@ function get_post_authors_data( $post_id ) {
 		$post = get_post( $post_id );
 		$author = get_user_by( 'id', $post->post_author );
 		if ( ! empty( $author ) ) {
-			$authors[] = $author;
+			$authors = [ $author ];
 		}
 	}
 	return array_map( __NAMESPACE__ . '\get_user_data', $authors );
@@ -109,10 +108,12 @@ function lodash_no_conflict( $script_name ) {
  * @param string $script_name Name of dependency that will use these constants.
  */
 function constants_script( $script_name ) {
-	$site_url = get_option( 'siteurl' );
-	$admin_url = get_admin_url();
-	$address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
-	$txhash = get_option( NEWSROOM_TXHASH_OPTION_KEY );
+	$constants_json = json_encode( [
+		'newsroomAddress' => get_option( NEWSROOM_ADDRESS_OPTION_KEY ),
+		'wpSiteUrl' => site_url(),
+		'wpAdminUrl' => get_admin_url(),
+		'newsroomTxHash' => get_option( NEWSROOM_TXHASH_OPTION_KEY ),
+	] );
 
-	wp_add_inline_script( $script_name, "window.civilNamespace = window.civilNamespace || {}; window.civilNamespace.newsroomAddress = \"${address}\"; window.civilNamespace.wpSiteUrl = \"${site_url}\"; window.civilNamespace.wpAdminUrl = \"${admin_url}\"; window.civilNamespace.newsroomTxHash = \"${txhash}\";" . PHP_EOL, 'before' );
+	wp_add_inline_script( $script_name, "window.civilNamespace = $constants_json;" . PHP_EOL, 'before' );
 }

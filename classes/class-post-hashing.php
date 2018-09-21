@@ -166,12 +166,25 @@ class Post_Hashing {
 
 		// Handle non-author signatures. For now we will assume that anybody who is not an author but who signed did so in an editorial capacity.
 		if ( ! empty( $signatures ) ) {
+			// Since these aren't explicitly authors on the post we can't use `get_coauthors` to get them, we just have WP user IDs, so we need to fetch coauthor (if any) to get the right name.
+			global $coauthors_plus;
+
 			foreach ( $signatures as $signer_id => $sig_data ) {
-				$signer = get_user_by( 'id', $signer_id );
+				$signer_display_name = null;
+				if ( isset( $coauthors_plus ) ) {
+					$coauthor = $coauthors_plus->get_coauthor_by( 'id', $signer_id );
+					if ( $coauthor ) {
+						$signer_display_name = $coauthor->display_name;
+					}
+				}
+				if ( ! $signer_display_name ) {
+					$signer = get_user_by( 'id', $signer_id );
+					$signer_display_name = $signer->display_name;
+				}
+
 				$signer_data = [
-					// TODO If co-authors-plus is installed, this won't match the display name set in any linked Guest Author profile. How do we go from WP User to Guest author? There's `coauthors_wp_list_authors` but that lists all authors, must be a better way. There's `get_coauthor_by` but it's private, we can't get it from here.
 					'role' => 'editor',
-					'name' => $signer->display_name,
+					'name' => $signer_display_name,
 				];
 
 				if ( $this->sig_valid_for_post( $sig_data ) ) {
@@ -225,7 +238,8 @@ class Post_Hashing {
 	 */
 	public function sig_valid_for_post( $sig_data ) {
 		$newsroom_address = get_option( NEWSROOM_ADDRESS_OPTION_KEY );
-		return $sig_data['newsroomAddress'] == $newsroom_address && $sig_data['contentHash'] == $this->revision_hash;
+		return ( $sig_data['newsroomAddress'] === $newsroom_address )
+			&& ( $sig_data['contentHash'] === $this->revision_hash );
 	}
 
 	/**
