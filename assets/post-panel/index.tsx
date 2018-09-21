@@ -4,9 +4,10 @@ const { PanelRow } = window.wp.components;
 const { withDispatch, withSelect } = window.wp.data;
 const { compose } = window.wp.element;
 import * as React from "react";
-import { getCivil } from "../util";
 import { Civil, EthAddress } from "@joincivil/core";
 import { Tabs, Tab, TabComponentProps, Button, buttonSizes } from "@joincivil/components";
+import { getCivil } from "../util";
+import { ErrorBoundary } from "../shared/components/ErrorBoundary";
 import "./store";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "../constants";
@@ -131,12 +132,12 @@ const CivilSidebar = () => {
     panelContent = <BlockchainPluginInner />;
   }
   return (
-    <>
+    <ErrorBoundary section="post-panel">
       <PluginSidebar name="civil-sidebar" title="Civil">
         <ThemeProvider theme={theme}>{panelContent}</ThemeProvider>
       </PluginSidebar>
       <PluginSidebarMoreMenuItem target="civil-sidebar">Civil</PluginSidebarMoreMenuItem>
-    </>
+    </ErrorBoundary>
   );
 };
 
