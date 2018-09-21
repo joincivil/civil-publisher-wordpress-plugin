@@ -11,6 +11,10 @@ namespace Civil_Newsroom_Protocol;
  * Enqueue Gutenberg editor plugin script.
  */
 function enqueue_post_panel() {
+	if ( ! in_array( get_post_type(), get_civil_post_types(), true ) ) {
+		return;
+	}
+
 	wp_enqueue_script(
 		'civil-newsroom-protocol-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),

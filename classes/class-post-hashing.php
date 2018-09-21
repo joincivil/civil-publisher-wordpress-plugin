@@ -49,7 +49,7 @@ class Post_Hashing {
 		$can_hash = true;
 
 		// Only save hashes for supported post types.
-		if ( ! in_array( get_post_type( $post_id ), get_blockchain_post_types(), true ) ) {
+		if ( ! in_array( get_post_type( $post_id ), get_civil_post_types(), true ) ) {
 			$can_hash = false;
 		}
 

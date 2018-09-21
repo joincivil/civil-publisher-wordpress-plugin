@@ -8,17 +8,17 @@
 namespace Civil_Newsroom_Protocol;
 
 /**
- * Gets the blockchain enabled post types.
+ * Gets the post types for which to support publishing on Civil.
  *
  * @return array The supported post types.
  */
-function get_blockchain_post_types() {
+function get_civil_post_types() {
 	/**
 	 * Filters the post types available for blockchain support
 	 *
 	 * @param $post_types The supported post types.
 	 */
-	return apply_filters( 'get_blockchain_post_types', [ 'post' ] );
+	return apply_filters( 'civil_newsroom_post_types', [ 'post', 'page' ] );
 }
 
 /**
