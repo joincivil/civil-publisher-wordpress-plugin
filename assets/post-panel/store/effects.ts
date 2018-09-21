@@ -1,4 +1,4 @@
-/** What we're really trying to do is add middleware to listen for certain actions being dispatched in gutenberg stores, but I'm not sure if that's possible, so subscribing andd checking state will have to be close enough. */
+/** What we're really trying to do is add middleware to listen for certain actions being dispatched in gutenberg stores, but I'm not sure if that's possible, so subscribing and checking state will have to be close enough. */
 
 const { select, dispatch, subscribe } = window.wp.data;
 import { getLastRevisionId } from "./resolvers";

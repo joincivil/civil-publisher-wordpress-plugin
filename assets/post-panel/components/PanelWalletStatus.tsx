@@ -4,7 +4,8 @@ const { compose } = window.wp.element;
 const { withSelect } = window.wp.data;
 import { EthAddress } from "@joincivil/core";
 import { Button, buttonSizes } from "@joincivil/components";
-import { hasInjectedProvider, saveAddressToProfile } from "../../util";
+import { hasInjectedProvider } from "../../util";
+import { saveAddressToProfile } from "../../api-helpers";
 import { ErrorText, ErrorHeading, BodySection } from "../styles";
 import { NETWORK_NICE_NAME } from "../../constants";
 

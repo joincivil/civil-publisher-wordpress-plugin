@@ -5,10 +5,11 @@ import { Newsroom } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "../shared/reducer";
 import { addAddress, addTxHash } from "../shared/actions";
-import { getCivil, saveAddressToProfile } from "../util";
+import { getCivil } from "../util";
+import { saveAddressToProfile } from "../api-helpers";
 import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme } from "../constants";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
-import { SearchUsers } from "./SeachUsers";
+import { SearchUsers } from "./SearchUsers";
 
 export interface AppProps {
   address?: EthAddress;
@@ -54,7 +55,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     });
   }
 
-  public async componentWillMount(): Promise<void> {
+  public async componentWillUnmount(): Promise<void> {
     if (this.accountStream) {
       this.accountStream.unsubscribe();
     }

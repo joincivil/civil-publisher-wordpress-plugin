@@ -155,7 +155,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
     return this.state.options.length > 0 && !this.state.address.length && this.state.focused;
   };
 
-  private onKeyDown = async (ev: any): Promise<void> => {
+  private onKeyDown = async (ev: { key: string }): Promise<void> => {
     if (this.showOptions()) {
       switch (ev.key) {
         case "ArrowDown":

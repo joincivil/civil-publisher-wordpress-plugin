@@ -1,6 +1,7 @@
 import * as $ from "jquery";
 const { apiRequest } = window.wp;
-import { getCivil, saveNewsroomRoleToProfile } from "./util";
+import { getCivil } from "./util";
+import { saveNewsroomRoleToProfile } from "./api-helpers";
 import { userMetaKeys } from "./constants";
 
 async function init(): Promise<void> {
