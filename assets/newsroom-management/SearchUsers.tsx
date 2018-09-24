@@ -130,7 +130,6 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
   }
 
   public render(): JSX.Element {
-    const error = this.state.error ? <ErrorP>{this.state.error}</ErrorP> : null;
     return (
       <Wrapper>
         <NameInputWrapper
@@ -145,7 +144,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
         <AddressInputWrapper>
           <label>Wallet Address</label>
           <TextInput value={this.state.address} onChange={this.onAddressChange} name={"address"} />
-          {error}
+          {this.state.error && <ErrorP>{this.state.error}</ErrorP>}
         </AddressInputWrapper>
       </Wrapper>
     );
@@ -155,7 +154,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
     return this.state.options.length > 0 && !this.state.address.length && this.state.focused;
   };
 
-  private onKeyDown = async (ev: any): Promise<void> => {
+  private onKeyDown = async (ev: { key: string }): Promise<void> => {
     if (this.showOptions()) {
       switch (ev.key) {
         case "ArrowDown":
@@ -174,16 +173,22 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
   };
 
   private setOptions = async (str: string): Promise<void> => {
-    const options = await this.props.getOptions(str);
-    const selected = this.state.options.length !== options.length ? 0 : this.state.selected;
-    this.setState({ options, selected });
+    try {
+      const options = await this.props.getOptions(str);
+      const selected = this.state.options.length !== options.length ? 0 : this.state.selected;
+      this.setState({ options, selected });
+    } catch (err) {
+      const errText = "Failed to load options for user search";
+      console.error(errText, err);
+      throw Error(errText);
+    }
   };
 
   private onChange = async (name: string, value: string): Promise<void> => {
-    if (value === "") {
-      this.setState({ error: "" });
-    }
-    this.setState({ value: { name: value } });
+    this.setState({
+      error: value === "" ? "" : this.state.error,
+      value: { name: value },
+    });
     if (value.length > 1) {
       await this.setOptions(value);
     } else {
@@ -192,10 +197,10 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
   };
 
   private onAddressChange = async (name: string, value: string, user?: SearchUsersStateValue): Promise<void> => {
-    if (value === "") {
-      this.setState({ error: "" });
-    }
-    this.setState({ address: value });
+    this.setState({
+      error: value === "" ? "" : this.state.error,
+      address: value,
+    });
     const userValue = user || this.state.value;
     if (isWellFormattedAddress(value)) {
       this.props.onSetAddress(value);

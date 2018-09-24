@@ -2,9 +2,11 @@ import * as React from "react";
 import styled from "styled-components";
 const { compose } = window.wp.element;
 const { withSelect } = window.wp.data;
+import { SelectType } from "../../../typings/gutenberg";
 import { EthAddress } from "@joincivil/core";
 import { fonts, Button, buttonSizes, AddressWithMetaMaskIcon } from "@joincivil/components";
-import { hasInjectedProvider, saveAddressToProfile } from "../../util";
+import { hasInjectedProvider } from "../../util";
+import { saveAddressToProfile } from "../../api-helpers";
 import { ErrorText, ErrorHeading, BodySection } from "../styles";
 import { NETWORK_NICE_NAME } from "../../constants";
 
@@ -108,14 +110,12 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
     );
   }
 
-  private saveAddress = async () => {
-    await saveAddressToProfile(this.props.web3ProviderAddress!);
-  };
+  private saveAddress = async () => saveAddressToProfile(this.props.web3ProviderAddress!);
 }
 
 export const PanelWalletStatus = compose([
   withSelect(
-    (select: any, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
+    (select: SelectType, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
       const { isCorrectNetwork, getWeb3ProviderAddress, getCurrentWpUserAddress } = select("civil/blockchain");
       return {
         noProvider: !hasInjectedProvider(),

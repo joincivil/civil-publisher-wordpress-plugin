@@ -35,8 +35,14 @@ export interface PublishButtonProps {
     txHash: TxHash,
     ipfs: string,
     archive: ArchiveOptions,
-  ): void;
-  updateContent?(revisionId: number, revisionJson: any, txHash: TxHash, ipfs: string, archive?: ArchiveOptions): void;
+  ): Promise<void>;
+  updateContent?(
+    revisionId: number,
+    revisionJson: any,
+    txHash: TxHash,
+    ipfs: string,
+    archive?: ArchiveOptions,
+  ): Promise<void>;
   saveTxHash?(txHash: TxHash, ipfs: string, archive: ArchiveOptions): void;
 }
 
@@ -198,37 +204,42 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
   }
 
   private getTransaction = (noPreModal?: boolean): Transaction[] => {
-    if (this.props.civilContentID) {
-      return [
-        {
-          transaction: async () => {
-            this.setState({
-              isTransactionDeniedModalOpen: false,
-              isWaitingTransactionModalOpen: true,
-              isPreTransactionModalOpen: false,
+    const isUpdate = !!this.props.civilContentID;
+    return [
+      {
+        transaction: async () => {
+          this.setState({
+            isTransactionDeniedModalOpen: false,
+            isWaitingTransactionModalOpen: true,
+            isPreTransactionModalOpen: false,
+          });
+          const newsroom = await getNewsroom();
+          const ipfs = getIPFS();
+          if (!this.props.archive) {
+            const files = await ipfs.add(toBuffer(JSON.stringify(this.props.revisionJson)), {
+              hash: "keccak-256",
+              pin: true,
             });
-            const newsroom = await getNewsroom();
-            const ipfs = getIPFS();
-            if (!this.props.archive) {
-              const files = await ipfs.add(toBuffer(JSON.stringify(this.props.revisionJson)), {
-                hash: "keccak-256",
-                pin: true,
-              });
-              this.setState({ ipfsPath: files[0].path });
+            this.setState({ ipfsPath: files[0].path });
+            if (isUpdate) {
               return newsroom.updateRevisionURIAndHash(
                 this.props.civilContentID!,
                 this.props.revisionUrl,
                 this.props.revisionJsonHash,
               );
             } else {
-              const content = await apiRequest({
-                method: "GET",
-                path: `/civil-newsroom-protocol/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
-              });
-              const revision = { ...this.props.revisionJson, content };
-              const revisionHash = hashContent(revision);
-              const files = await ipfs.add(toBuffer(JSON.stringify(revision)), { hash: "keccak-256", pin: true });
-              this.setState({ ipfsPath: files[0].path });
+              return newsroom.publishURIAndHash(this.props.revisionUrl, this.props.revisionJsonHash);
+            }
+          } else {
+            const content = await apiRequest({
+              method: "GET",
+              path: `/civil-newsroom-protocol/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
+            });
+            const revision = { ...this.props.revisionJson, content };
+            const revisionHash = hashContent(revision);
+            const files = await ipfs.add(toBuffer(JSON.stringify(revision)), { hash: "keccak-256", pin: true });
+            this.setState({ ipfsPath: files[0].path });
+            if (isUpdate) {
               if (this.props.archiveTx) {
                 return newsroom.updateRevisionURIAndHashWithArchive(this.props.civilContentID!, revision, revisionHash);
               } else {
@@ -238,61 +249,28 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
                   this.props.revisionJsonHash,
                 );
               }
-            }
-          },
-          requireBeforeTransaction: noPreModal ? undefined : this.requireBeforeTransaction,
-          postTransaction: (result: number) => {
-            this.setState({ isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false });
-            this.props.updateContent!(
-              this.props.currentPostLastRevisionId!,
-              this.props.revisionJson,
-              this.props.txHash!,
-              this.state.ipfsPath!,
-              { ipfs: this.props.archive, transaction: this.props.archiveTx },
-            );
-          },
-          handleTransactionHash: this.handleTransactionHash,
-          handleTransactionError: this.handleTransactionError,
-        },
-      ];
-    } else {
-      return [
-        {
-          transaction: async () => {
-            this.setState({
-              isTransactionDeniedModalOpen: false,
-              isWaitingTransactionModalOpen: true,
-              isPreTransactionModalOpen: false,
-            });
-            const newsroom = await getNewsroom();
-            const ipfs = getIPFS();
-            if (!this.props.archive) {
-              const files = await ipfs.add(toBuffer(JSON.stringify(this.props.revisionJson)), {
-                hash: "keccak-256",
-                pin: true,
-              });
-              this.setState({ ipfsPath: files[0].path });
-              return newsroom.publishURIAndHash(this.props.revisionUrl, this.props.revisionJsonHash);
             } else {
-              const content = await apiRequest({
-                method: "GET",
-                path: `/civil-newsroom-protocol/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
-              });
-              const revision = { ...this.props.revisionJson, content };
-              const revisionHash = hashContent(revision);
-              const files = await ipfs.add(toBuffer(JSON.stringify(revision)), { hash: "keccak-256", pin: true });
-              this.setState({ ipfsPath: files[0].path });
               if (this.props.archiveTx) {
                 return newsroom.publishWithArchive(revision, revisionHash);
               } else {
                 return newsroom.publishURIAndHash(`ipfs://${files[0].path}`, revisionHash);
               }
             }
-          },
-          requireBeforeTransaction: noPreModal ? undefined : this.requireBeforeTransaction,
-          postTransaction: (result: number) => {
-            this.setState({ isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false });
-            this.props.publishContent!(
+          }
+        },
+        requireBeforeTransaction: noPreModal ? undefined : this.requireBeforeTransaction,
+        postTransaction: async (result: number) => {
+          this.setState({ isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false });
+          if (isUpdate) {
+            await this.props.updateContent!(
+              this.props.currentPostLastRevisionId!,
+              this.props.revisionJson,
+              this.props.txHash!,
+              this.state.ipfsPath!,
+              { ipfs: this.props.archive, transaction: this.props.archiveTx },
+            );
+          } else {
+            await this.props.publishContent!(
               result,
               this.props.currentPostLastRevisionId!,
               this.props.revisionJson,
@@ -300,12 +278,12 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
               this.state.ipfsPath!,
               { ipfs: this.props.archive, transaction: this.props.archiveTx },
             );
-          },
-          handleTransactionHash: this.handleTransactionHash,
-          handleTransactionError: this.handleTransactionError,
+          }
         },
-      ];
-    }
+        handleTransactionHash: this.handleTransactionHash,
+        handleTransactionError: this.handleTransactionError,
+      },
+    ];
   };
 
   private calculateCost = async (): Promise<void> => {
@@ -369,7 +347,6 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
       isTransactionInProggressModalOpen: true,
       isWaitingTransactionModalOpen: false,
     });
-    console.log({ ipfs: this.props.archive, transaction: this.props.archiveTx });
     this.props.saveTxHash!(txHash, this.state.ipfsPath!, {
       ipfs: this.props.archive,
       transaction: this.props.archiveTx,

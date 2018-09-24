@@ -1,4 +1,5 @@
 const { withSelect, withDispatch } = window.wp.data;
+import { SelectType, DispatchType } from "../../typings/gutenberg";
 const { compose } = window.wp.element;
 import { createSignatureData, updatePostMeta } from "../util";
 import { postMetaKeys } from "../constants";
@@ -9,7 +10,7 @@ export type signatureStatusType = "unsigned" | "valid" | "invalid";
 
 const BlockchainSignPanel = compose([
   withSelect(
-    (selectStore: any, ownProps: Partial<BlockchainSignPanelProps>): Partial<BlockchainSignPanelProps> => {
+    (selectStore: SelectType, ownProps: Partial<BlockchainSignPanelProps>): Partial<BlockchainSignPanelProps> => {
       const { isEditedPostDirty, isCleanNewPost, isSavingPost } = selectStore("core/editor");
       const {
         getCurrentUserId,
@@ -28,13 +29,11 @@ const BlockchainSignPanel = compose([
 
       const isSignButtonDisabled = (): boolean => {
         const latestRevisionJson = getLatestRevisionJSON();
-        if (!latestRevisionJson) {
-          // Validity can't be checked, wait til revision JSON loaded
-          return true;
-        } else if (isPluginDataMissing()) {
-          // Post hasn't been saved while plugin was active
-          return true;
-        } else if (!isWalletReady()) {
+        if (
+          !latestRevisionJson || // Validity can't be checked, wait til revision JSON loaded
+          isPluginDataMissing() || // Post hasn't been saved while plugin was active
+          !isWalletReady()
+        ) {
           return true;
         }
 
@@ -65,7 +64,7 @@ const BlockchainSignPanel = compose([
   ),
 
   withDispatch(
-    (dispatch: any, ownProps: BlockchainSignPanelProps): Partial<BlockchainSignPanelProps> => {
+    (dispatch: DispatchType, ownProps: BlockchainSignPanelProps): Partial<BlockchainSignPanelProps> => {
       const { savePost } = dispatch("core/editor");
       const { updateSignatures } = dispatch("civil/blockchain");
       const { currentUserId, signatures } = ownProps;
@@ -75,7 +74,7 @@ const BlockchainSignPanel = compose([
         const newSignatures = { ...signatures, [currentUserId]: signature };
         updatePostMeta({ [postMetaKeys.SIGNATURES]: JSON.stringify(newSignatures) });
         savePost();
-        dispatch(updateSignatures(newSignatures));
+        updateSignatures(newSignatures);
         if (cb) {
           cb();
         }

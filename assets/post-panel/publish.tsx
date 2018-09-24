@@ -1,8 +1,8 @@
 const { withSelect, withDispatch } = window.wp.data;
+import { SelectType, DispatchType } from "../../typings/gutenberg";
 const { compose } = window.wp.element;
 import { revisionJsonSansDate, updatePostMeta, createIpfsUrl } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
-import { debounce } from "underscore";
 import { hashContent } from "@joincivil/utils";
 import {
   BlockchainPublishPanelComponent,
@@ -13,7 +13,7 @@ import { TxHash } from "@joincivil/core";
 
 const BlockchainPublishPanel = compose([
   withSelect(
-    (selectStore: any, ownProps: Partial<BlockchainPublishPanelProps>): Partial<BlockchainPublishPanelProps> => {
+    (selectStore: SelectType, ownProps: Partial<BlockchainPublishPanelProps>): Partial<BlockchainPublishPanelProps> => {
       const { isEditedPostDirty } = selectStore("core/editor");
       const {
         isNewsroomEditor,
@@ -70,22 +70,20 @@ const BlockchainPublishPanel = compose([
   ),
 
   withDispatch(
-    (dispatch: any, ownProps: BlockchainPublishPanelProps): Partial<BlockchainPublishPanelProps> => {
+    (dispatch: DispatchType, ownProps: BlockchainPublishPanelProps): Partial<BlockchainPublishPanelProps> => {
       const { savePost } = dispatch("core/editor");
       const { setCivilContentID, updatePublishedState } = dispatch("civil/blockchain");
       const { publishedRevisions } = ownProps;
 
-      // savePost fails if post is currently saving, leaving us unexpectedly in dirty state e.g. cause tx hash save happens right after saving updating published revisions data. so debounce.
-      const debouncedSave = debounce(savePost, 200);
-
-      const saveTxHash = (txHash: TxHash, ipfs: string, archive?: ArchiveOptions): void => {
+      // Note: the reason we're explicitly bunding savePost into this function is because it gets called by publish/update functions, which also need to trigger a save, but Gutenberg's savePost fails if post is currently saving, so we want to only call it once during publish/update.
+      const updateTxHashAndSavePost = (txHash: TxHash, ipfs: string, archive?: ArchiveOptions): void => {
         const newPostMeta = {
           [postMetaKeys.CIVIL_PUBLISH_TXHASH]: `${txHash}`,
           [postMetaKeys.CIVIL_PUBLISH_IPFS]: ipfs,
           [postMetaKeys.CIVIL_PUBLISH_ARCHIVE_STATUS]: archive ? JSON.stringify(archive) : undefined,
         };
         updatePostMeta(newPostMeta);
-        debouncedSave();
+        savePost();
       };
 
       const publishArticle = async (
@@ -115,9 +113,8 @@ const BlockchainPublishPanel = compose([
           [postMetaKeys.PUBLISHED_REVISIONS]: updatedPublishedRevisions,
         };
         updatePostMeta(newPostMeta);
-        debouncedSave();
-        dispatch(updatePublishedState(publishedRevisionData));
-        saveTxHash("", "");
+        updatePublishedState(publishedRevisionData);
+        updateTxHashAndSavePost("", "");
       };
 
       const updateArticle = async (
@@ -144,15 +141,14 @@ const BlockchainPublishPanel = compose([
           [postMetaKeys.PUBLISHED_REVISIONS]: updatedPublishedRevisions,
         };
         updatePostMeta(newPostMeta);
-        debouncedSave();
-        dispatch(updatePublishedState(publishedRevisionData));
-        saveTxHash("", "");
+        updatePublishedState(publishedRevisionData);
+        updateTxHashAndSavePost("", "");
       };
 
       return {
         publishContent: publishArticle,
         updateContent: updateArticle,
-        saveTxHash,
+        saveTxHash: updateTxHashAndSavePost,
       };
     },
   ),

@@ -1,16 +1,15 @@
 import * as moment from "moment";
 import * as IPFS from "ipfs-api";
 import { promisify } from "@joincivil/utils";
-const { apiRequest } = window.wp;
 const { select, dispatch } = window.wp.data;
 const { getPostEdits } = select("core/editor");
 const { editPost } = dispatch("core/editor");
 const { dateI18n, getSettings } = window.wp.date;
 
-import { Civil, ApprovedRevision, EthAddress } from "@joincivil/core";
+import { Civil, ApprovedRevision } from "@joincivil/core";
 import { Newsroom } from "@joincivil/core/build/src/contracts/newsroom";
 
-import { apiNamespace, userMetaKeys, timestampFormat } from "./constants";
+import { timestampFormat } from "./constants";
 
 export const getCivil = (() => {
   const civil: Civil | undefined = hasInjectedProvider() ? new Civil() : undefined;
@@ -75,31 +74,6 @@ export function siteTimezoneFormat(utcTimestamp: string | Date, format: string =
 export function siteTimezoneSiteFormat(utcTimestamp: string | Date): string {
   const timezoned = moment.utc(utcTimestamp).utcOffset(dateSettings.timezone.offset * 60);
   return dateI18n(dateSettings.formats.datetime, timezoned);
-}
-
-export async function saveAddressToProfile(address: EthAddress): Promise<void> {
-  await apiRequest({
-    method: "POST",
-    path: apiNamespace + "users/me",
-    data: {
-      [userMetaKeys.WALLET_ADDRESS]: address,
-    },
-  });
-
-  const civilDispatch = dispatch("civil/blockchain");
-  if (civilDispatch) {
-    civilDispatch.setWpUserAddress(address);
-  }
-}
-
-export async function saveNewsroomRoleToProfile(id: number, role: string | null): Promise<void> {
-  await apiRequest({
-    method: "POST",
-    path: apiNamespace + "users/" + id,
-    data: {
-      [userMetaKeys.NEWSROOM_ROLE]: role,
-    },
-  });
 }
 
 export function updatePostMeta(metaUpdates: object): void {

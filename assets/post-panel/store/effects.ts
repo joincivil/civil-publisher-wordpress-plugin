@@ -1,6 +1,6 @@
-/** What we're really trying to do is add middleware to listen for certain actions being dispatched in gutenberg stores, but I'm not sure if that's possible, so subscribing andd checking state will have to be close enough. */
+/** What we're really trying to do is add middleware to listen for certain actions being dispatched in gutenberg stores, but I'm not sure if that's possible, so subscribing and checking state will have to be close enough. */
 
-const { select, dispatch, subscribe } = window.wp.data;
+const { select, subscribe } = window.wp.data;
 import { getLastRevisionId } from "./resolvers";
 
 let wasSavingPost = select("core/editor").isSavingPost();
@@ -11,7 +11,8 @@ subscribe(async () => {
   const isSavingMeta = select("core/edit-post").isSavingMetaBoxes();
 
   if ((wasSavingMeta && !isSavingMeta) || (wasSavingPost && !isSavingPost)) {
-    dispatch(await getLastRevisionId());
+    // Forces a fetch from API and updates value in store.
+    await getLastRevisionId();
   }
 
   wasSavingPost = isSavingPost;

@@ -1,6 +1,7 @@
 import * as $ from "jquery";
 const { apiRequest } = window.wp;
-import { getCivil, saveNewsroomRoleToProfile } from "./util";
+import { getCivil } from "./util";
+import { saveNewsroomRoleToProfile } from "./api-helpers";
 import { userMetaKeys } from "./constants";
 
 async function init(): Promise<void> {
@@ -25,7 +26,7 @@ async function init(): Promise<void> {
         .find(`.column-${userMetaKeys.WALLET_ADDRESS} code`)
         .text();
       const $role = $(el).find(`.column-${userMetaKeys.NEWSROOM_ROLE}`);
-      const currentRole = $role.text();
+      const currentRole = $role.html();
 
       if (isNaN(id) || !addr || !$role) {
         return;
