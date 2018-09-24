@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { ApprovedRevision } from "@joincivil/core";
 import { HollowGreenCheck, HollowRedNoGood, QuestionToolTip, ToolTip, ClipLoader } from "@joincivil/components";
 const { withSelect } = window.wp.data;
+import { SelectType } from "../../../typings/gutenberg";
 import { siteTimezoneFormat } from "../../util";
 import { IconWrap, colors } from "../styles";
 
@@ -101,7 +102,7 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
 }
 
 export const Signature = withSelect(
-  (selectStore: any, ownProps: Partial<SignatureProps>): Partial<SignatureProps> => {
+  (selectStore: SelectType, ownProps: Partial<SignatureProps>): Partial<SignatureProps> => {
     const { isEditedPostDirty, isSavingPost } = selectStore("core/editor");
     const { getUserData } = selectStore("civil/blockchain");
 

@@ -2,6 +2,7 @@ const { PluginSidebar, PluginSidebarMoreMenuItem } = window.wp.editPost;
 const { registerPlugin } = window.wp.plugins;
 const { PanelRow } = window.wp.components;
 const { withDispatch, withSelect } = window.wp.data;
+import { SelectType, DispatchType } from "../../typings/gutenberg";
 const { compose } = window.wp.element;
 import * as React from "react";
 import { Civil, EthAddress } from "@joincivil/core";
@@ -89,20 +90,17 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
 
 const BlockchainPluginInner = compose([
   withDispatch(
-    (dispatch: any): Partial<BlockchainPluginProps> => {
+    (dispatch: DispatchType): Partial<BlockchainPluginProps> => {
       const { setIsCorrectNetwork, setWeb3ProviderAddress, setOpenTab } = dispatch("civil/blockchain");
-      const onAccountChange = (address?: EthAddress) => dispatch(setWeb3ProviderAddress(address));
-      const onNetworkChange = (networkName: string) => dispatch(setIsCorrectNetwork(networkName));
-      const onTabChange = (openTabIndex: number) => dispatch(setOpenTab(openTabIndex));
       return {
-        onAccountChange,
-        onNetworkChange,
-        onTabChange,
+        onAccountChange: setWeb3ProviderAddress,
+        onNetworkChange: setIsCorrectNetwork,
+        onTabChange: setOpenTab,
       };
     },
   ),
   withSelect(
-    (selectStore: any): Partial<BlockchainPluginProps> => {
+    (selectStore: SelectType): Partial<BlockchainPluginProps> => {
       const { getTabIndex } = selectStore("civil/blockchain");
       return {
         openTab: getTabIndex(),

@@ -2,9 +2,26 @@
 // declare module '*';
 
 interface Window {
-  wp: any;
-  web3: any;
+  wp: {
+    apiRequest: (conf: any) => Promise<any>;
+    data: {
+      withSelect: any;
+      withDispatch: any;
+      select: import("./gutenberg").SelectType;
+      dispatch: import("./gutenberg").DispatchType;
+      subscribe: (listener: (...args: any[]) => any) => any;
+      registerStore: (reducerKey: string, conf: any) => any;
+      combineReducers: (reducers: any) => any;
+    };
+    components: any;
+    date: any;
+    editPost: any;
+    element: any;
+    plugins: any;
+  };
   _wpGutenbergPost: any;
+
+  web3: any;
   civilNamespace: {
     newsroomAddress: string;
     newsroomTxHash: string;

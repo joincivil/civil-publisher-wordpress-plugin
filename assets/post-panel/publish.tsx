@@ -1,4 +1,5 @@
 const { withSelect, withDispatch } = window.wp.data;
+import { SelectType, DispatchType } from "../../typings/gutenberg";
 const { compose } = window.wp.element;
 import { revisionJsonSansDate, updatePostMeta, createIpfsUrl } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
@@ -12,7 +13,7 @@ import { TxHash } from "@joincivil/core";
 
 const BlockchainPublishPanel = compose([
   withSelect(
-    (selectStore: any, ownProps: Partial<BlockchainPublishPanelProps>): Partial<BlockchainPublishPanelProps> => {
+    (selectStore: SelectType, ownProps: Partial<BlockchainPublishPanelProps>): Partial<BlockchainPublishPanelProps> => {
       const { isEditedPostDirty } = selectStore("core/editor");
       const {
         isNewsroomEditor,
@@ -69,7 +70,7 @@ const BlockchainPublishPanel = compose([
   ),
 
   withDispatch(
-    (dispatch: any, ownProps: BlockchainPublishPanelProps): Partial<BlockchainPublishPanelProps> => {
+    (dispatch: DispatchType, ownProps: BlockchainPublishPanelProps): Partial<BlockchainPublishPanelProps> => {
       const { savePost } = dispatch("core/editor");
       const { setCivilContentID, updatePublishedState } = dispatch("civil/blockchain");
       const { publishedRevisions } = ownProps;
@@ -112,7 +113,7 @@ const BlockchainPublishPanel = compose([
           [postMetaKeys.PUBLISHED_REVISIONS]: updatedPublishedRevisions,
         };
         updatePostMeta(newPostMeta);
-        dispatch(updatePublishedState(publishedRevisionData));
+        updatePublishedState(publishedRevisionData);
         updateTxHashAndSavePost("", "");
       };
 
@@ -140,7 +141,7 @@ const BlockchainPublishPanel = compose([
           [postMetaKeys.PUBLISHED_REVISIONS]: updatedPublishedRevisions,
         };
         updatePostMeta(newPostMeta);
-        dispatch(updatePublishedState(publishedRevisionData));
+        updatePublishedState(publishedRevisionData);
         updateTxHashAndSavePost("", "");
       };
 

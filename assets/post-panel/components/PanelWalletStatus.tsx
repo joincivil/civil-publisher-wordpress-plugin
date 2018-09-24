@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 const { compose } = window.wp.element;
 const { withSelect } = window.wp.data;
+import { SelectType } from "../../../typings/gutenberg";
 import { EthAddress } from "@joincivil/core";
 import { Button, buttonSizes } from "@joincivil/components";
 import { hasInjectedProvider } from "../../util";
@@ -103,7 +104,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
 
 export const PanelWalletStatus = compose([
   withSelect(
-    (select: any, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
+    (select: SelectType, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
       const { isCorrectNetwork, getWeb3ProviderAddress, getCurrentWpUserAddress } = select("civil/blockchain");
       return {
         noProvider: !hasInjectedProvider(),
