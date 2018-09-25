@@ -14,9 +14,11 @@ interface Window {
       combineReducers: (reducers: any) => any;
     };
     components: any;
+    compose: {
+      compose: any;
+    };
     date: any;
     editPost: any;
-    element: any;
     plugins: any;
   };
   _wpGutenbergPost: any;

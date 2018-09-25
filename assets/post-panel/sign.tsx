@@ -1,6 +1,6 @@
 const { withSelect, withDispatch } = window.wp.data;
 import { SelectType, DispatchType } from "../../typings/gutenberg";
-const { compose } = window.wp.element;
+const { compose } = window.wp.compose;
 import { createSignatureData, updatePostMeta } from "../util";
 import { postMetaKeys } from "../constants";
 import { SignatureData } from "./store/interfaces";

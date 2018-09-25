@@ -1,6 +1,6 @@
 const { withSelect, withDispatch } = window.wp.data;
 import { SelectType, DispatchType } from "../../typings/gutenberg";
-const { compose } = window.wp.element;
+const { compose } = window.wp.compose;
 import { revisionJsonSansDate, updatePostMeta, createIpfsUrl } from "../util";
 import { apiNamespace, postMetaKeys } from "../constants";
 import { hashContent } from "@joincivil/utils";

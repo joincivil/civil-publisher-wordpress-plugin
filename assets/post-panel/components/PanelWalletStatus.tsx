@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-const { compose } = window.wp.element;
+const { compose } = window.wp.compose;
 const { withSelect } = window.wp.data;
 import { SelectType } from "../../../typings/gutenberg";
 import { EthAddress } from "@joincivil/core";

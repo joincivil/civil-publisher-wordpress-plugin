@@ -3,7 +3,7 @@ const { registerPlugin } = window.wp.plugins;
 const { PanelRow } = window.wp.components;
 const { withDispatch, withSelect } = window.wp.data;
 import { SelectType, DispatchType } from "../../typings/gutenberg";
-const { compose } = window.wp.element;
+const { compose } = window.wp.compose;
 import * as React from "react";
 import { Civil, EthAddress } from "@joincivil/core";
 import { Tabs, Tab, TabComponentProps, Button, buttonSizes } from "@joincivil/components";

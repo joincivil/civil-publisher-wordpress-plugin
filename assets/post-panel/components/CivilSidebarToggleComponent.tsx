@@ -3,7 +3,7 @@ import * as ReactDom from "react-dom";
 import { CivilNavBarButtons, CivilNavBarButtonsProps } from "./CivilNavBarButtons";
 const { withDispatch, withSelect } = window.wp.data;
 import { SelectType, DispatchType } from "../../../typings/gutenberg";
-const { compose } = window.wp.element;
+const { compose } = window.wp.compose;
 
 export class CivilSidebarToggleComponent extends React.Component<CivilNavBarButtonsProps> {
   public divRef: HTMLDivElement | null;
