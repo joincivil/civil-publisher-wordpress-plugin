@@ -23,7 +23,6 @@ function users_page_script() {
 		true
 	);
 	constants_script( 'civil-newsroom-protocol-users-page-script' );
-	lodash_no_conflict( 'civil-newsroom-protocol-users-page-script' );
 }
 add_action( 'admin_print_scripts', __NAMESPACE__ . '\users_page_script' );
 
