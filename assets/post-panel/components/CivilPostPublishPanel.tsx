@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import { DispatchType } from "../../../typings/gutenberg";
 const { PluginPostPublishPanel } = window.wp.editPost;
 const { withDispatch } = window.wp.data;
 const { compose } = window.wp.compose;
@@ -51,7 +52,7 @@ export class CivilPostPublishPanelComponent extends React.Component<CivilPostPub
 
 export const CivilPostPublishPanel = compose([
   withDispatch(
-    (dispatch: any): CivilPostPublishPanelProps => {
+    (dispatch: DispatchType): CivilPostPublishPanelProps => {
       const { openGeneralSidebar, closePublishSidebar } = dispatch("core/edit-post");
 
       function openCivilSidebar(): void {
