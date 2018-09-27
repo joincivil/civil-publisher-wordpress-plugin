@@ -16,6 +16,7 @@ import styled, { ThemeProvider } from "styled-components";
 import BlockchainSignPanel from "./sign";
 import BlockchainPublishPanel from "./publish";
 import { CivilSidebarWithComposed } from "./components/CivilSidebarToggleComponent";
+import { CivilPostPublishPanel } from "./components/CivilPostPublishPanel";
 
 export interface BlockchainPluginProps {
   openTab: number;
@@ -189,3 +190,7 @@ registerPlugin("civil-sidebar", {
   icon: CivilSidebarToggle,
   render: CivilSidebar,
 });
+
+registerPlugin("civil-post-pub", {
+  render: CivilPostPublishPanel,
+})
