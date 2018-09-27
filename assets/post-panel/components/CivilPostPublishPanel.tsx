@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 const { PluginPostPublishPanel } = window.wp.editPost;
 const { withDispatch } = window.wp.data;
-const { compose } = window.wp.element;
+const { compose } = window.wp.compose;
 const { Button } = window.wp.components;
 import { CivilLogo } from "@joincivil/components";
 
@@ -10,7 +10,6 @@ export interface CivilPostPublishPanelProps {
   openCivilSidebar(): void;
 }
 
-// TODO Is this a common usage? Should we put in @joincivil/components?
 const LogoWrapOuter = styled.div`
   display: table;
   width: 100px;
@@ -30,16 +29,21 @@ const LogoWrapInner = styled.div`
 `;
 
 export class CivilPostPublishPanelComponent extends React.Component<CivilPostPublishPanelProps> {
-
   public render(): JSX.Element {
     return (
-      <PluginPostPublishPanel
-        title="Civil Newsroom"
-        initialOpen={ true }
-      >
-        <LogoWrapOuter><LogoWrapInner><CivilLogo /></LogoWrapInner></LogoWrapOuter>
-        <p>You can now sign and index your post to your newsroom smart contract on the blockchain.</p>
-        <Button isPrimary={true} onClick={this.props.openCivilSidebar}>Open Civil Panel</Button>
+      <PluginPostPublishPanel title="Civil Newsroom" initialOpen={true}>
+        <LogoWrapOuter>
+          <LogoWrapInner>
+            <CivilLogo />
+          </LogoWrapInner>
+        </LogoWrapOuter>
+        <p>
+          Your post is live on your website. You can now sign, publish, and archive your post to your newsroom smart
+          contract on the blockchain.
+        </p>
+        <Button isPrimary={true} onClick={this.props.openCivilSidebar}>
+          Open Civil Panel
+        </Button>
       </PluginPostPublishPanel>
     );
   }
@@ -48,15 +52,15 @@ export class CivilPostPublishPanelComponent extends React.Component<CivilPostPub
 export const CivilPostPublishPanel = compose([
   withDispatch(
     (dispatch: any): CivilPostPublishPanelProps => {
-      const { openGeneralSidebar, closePublishSidebar } = dispatch('core/edit-post')
+      const { openGeneralSidebar, closePublishSidebar } = dispatch("core/edit-post");
 
-      function openCivilSidebar() {
+      function openCivilSidebar(): void {
         openGeneralSidebar("civil-sidebar/civil-sidebar");
         closePublishSidebar();
       }
 
       return {
-        openCivilSidebar
+        openCivilSidebar,
       };
     },
   ),
