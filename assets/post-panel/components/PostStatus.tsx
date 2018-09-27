@@ -1,5 +1,6 @@
 import * as React from "react";
 const { withSelect } = window.wp.data;
+import { SelectType } from "../../../typings/gutenberg";
 import { siteTimezoneFormat } from "../../util";
 import { ErrorText, ErrorHeading, Heading, MainHeading, BodySection } from "../styles";
 import { RevisionLinks } from "./RevisionLinks";
@@ -103,7 +104,7 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
 }
 
 export const PostStatus = withSelect(
-  (selectStore: any, ownProps: Partial<PostStatusProps>): Partial<PostStatusProps> => {
+  (selectStore: SelectType, ownProps: Partial<PostStatusProps>): Partial<PostStatusProps> => {
     const {
       getEditedPostAttribute,
       isEditedPostDirty,

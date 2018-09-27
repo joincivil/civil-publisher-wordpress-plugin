@@ -3,6 +3,7 @@ export const apiNamespace = "/civil-newsroom-protocol/v1/";
 export const urls = {
   PROFILE: `${window.civilNamespace.wpAdminUrl}profile.php`,
   HELP: `${window.civilNamespace.wpAdminUrl}admin.php?page=civil-newsroom-protocol-help`,
+  NEWSROOM_MANAGER: "/wp-admin/admin.php?page=civil-newsroom-protocol-management",
 };
 
 export enum postMetaKeys {
@@ -48,6 +49,12 @@ export const theme = {
   stepHeaderWeightLight: 400,
   checkboxInactiveColor: "#72777c",
   checkboxActiveColor: "#0073af",
+  stepProccessTopNavCurrentColor: "#0085ba",
+  stepProccessTopNavActiveColor: "#000000",
+  stepProccessTopNavFutureColor: "#72777c",
+  stepProcessDotActiveColor: "#0085ba",
+  stepProcessDotFutureColor: "#72777c",
+  stepProccessCompleteDotBorderColor: "#f1f1f1",
 };
 
 export const timestampFormat = "MMMM DD, YYYY h:mm a";

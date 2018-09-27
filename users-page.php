@@ -83,8 +83,8 @@ function user_cells( $output, $column_name, $user_id ) {
 				return null;
 			}
 
+			// Explicitly check if this meta exists to differentiate from the case where the meta exists but is null, which indicates we've looked up this user on newsroom contract and they don't have a role there. If meta is not set at all, that indicates we haven't yet looked it up, so show spinner while frontend fetches role and saves to meta.
 			if ( ! metadata_exists( 'user', $user_id, USER_NEWSROOM_ROLE_META_KEY ) ) {
-				// Yet to have been loaded, so show spinner while frontend fetches role and saves to meta.
 				return '<span class="spinner"></span>';
 			}
 
@@ -94,7 +94,7 @@ function user_cells( $output, $column_name, $user_id ) {
 		case USER_ETH_ADDRESS_META_KEY:
 			$address = get_the_author_meta( USER_ETH_ADDRESS_META_KEY, $user_id );
 			if ( $address ) {
-				return "<code>$address</code>";
+				return sprintf( '<code>%1$s</code>', esc_html( $address ) );
 			}
 			break;
 

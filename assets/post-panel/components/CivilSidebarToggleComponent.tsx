@@ -2,13 +2,14 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 import { CivilNavBarButtons, CivilNavBarButtonsProps } from "./CivilNavBarButtons";
 const { withDispatch, withSelect } = window.wp.data;
-const { compose } = window.wp.element;
+import { SelectType, DispatchType } from "../../../typings/gutenberg";
+const { compose } = window.wp.compose;
 
 export class CivilSidebarToggleComponent extends React.Component<CivilNavBarButtonsProps> {
   public divRef: HTMLDivElement | null;
   public el: HTMLDivElement;
 
-  constructor(props: any) {
+  constructor(props: CivilNavBarButtonsProps) {
     super(props);
     this.divRef = null;
     this.el = document.createElement("div");
@@ -37,7 +38,7 @@ export class CivilSidebarToggleComponent extends React.Component<CivilNavBarButt
 
 export const CivilSidebarWithComposed = compose([
   withSelect(
-    (selectStore: any): Partial<CivilNavBarButtonsProps> => {
+    (selectStore: SelectType): Partial<CivilNavBarButtonsProps> => {
       const { isPluginSidebarOpened } = selectStore("core/edit-post");
       const {
         getTxHash,
@@ -67,7 +68,7 @@ export const CivilSidebarWithComposed = compose([
     },
   ),
   withDispatch(
-    (dispatch: any): Partial<CivilNavBarButtonsProps> => {
+    (dispatch: DispatchType): Partial<CivilNavBarButtonsProps> => {
       const { setOpenTab } = dispatch("civil/blockchain");
       const { openGeneralSidebar, closePublishSidebar } = dispatch("core/edit-post");
 
@@ -75,10 +76,9 @@ export const CivilSidebarWithComposed = compose([
         openGeneralSidebar("civil-sidebar/civil-sidebar");
         closePublishSidebar();
       };
-      const setOpenTabDispatch = (index: number) => dispatch(setOpenTab(index));
 
       return {
-        setOpenTab: setOpenTabDispatch,
+        setOpenTab,
         openCivilSidebar,
       };
     },

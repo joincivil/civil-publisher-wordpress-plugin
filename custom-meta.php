@@ -32,7 +32,7 @@ function show_profile_fields( $user ) {
 						class="regular-text"
 					/>
 					<p>
-					<?php
+						<?php
 						echo sprintf(
 							wp_kses(
 								/* translators: 1: FAQm-age URL */
@@ -41,7 +41,7 @@ function show_profile_fields( $user ) {
 							),
 							esc_url( menu_page_url( HELP_PAGE, false ) . '#TODO' )
 						);
-					?>
+						?>
 					</p>
 					<p><a href="<?php esc_url( menu_page_url( HELP_PAGE ) ); ?>#TODO"><?php esc_html_e( 'Learn more about wallet addresses' ); ?></a>.</p>
 				</div>
@@ -113,9 +113,9 @@ function add_user_meta_rest() {
 		'user',
 		USER_ETH_ADDRESS_META_KEY,
 		array(
-			'get_callback'      => __NAMESPACE__ . '\user_meta_callback',
-			'update_callback'   => null,
-			'schema'            => null,
+			'get_callback'    => __NAMESPACE__ . '\user_meta_callback',
+			'update_callback' => null,
+			'schema'          => null,
 		)
 	);
 	register_rest_field(
@@ -169,10 +169,10 @@ function newsroom_address_register_setting() {
 		'general',
 		NEWSROOM_ADDRESS_OPTION_KEY,
 		array(
-			'type' => 'string',
-			'single' => true,
-			'show_in_rest' => true,
-			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_address',
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'sanitize_callback' => __NAMESPACE__ . '\sanitize_newsroom_address',
 		)
 	);
 }
@@ -189,7 +189,7 @@ function newsroom_txhash_register_setting() {
 			'type' => 'string',
 			'single' => true,
 			'show_in_rest' => true,
-			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_txhash',
+			'sanitize_callback' => __NAMESPACE__ . '\sanitize_newsroom_txhash',
 		)
 	);
 }
@@ -212,12 +212,12 @@ function newsroom_address_input() {
 }
 
 /**
- * Validate newsroom address.
+ * Sanitize/validate newsroom address.
  *
  * @param string $input Newsroom address to validate.
- * @return string Validated/sanitized newsroom address.
+ * @return string Sanitized newsroom address, or empty string to delete value and we register an error with `add_settings_error`.
  */
-function validate_newsroom_address( $input ) {
+function sanitize_newsroom_address( $input ) {
 	if ( ! $input ) {
 		return;
 	}
@@ -242,12 +242,12 @@ function validate_newsroom_address( $input ) {
 }
 
 /**
- * Validate newsroom txhash.
+ * Sanitize/validate newsroom txhash.
  *
  * @param string $input Newsroom txhash to validate.
- * @return string Validated/sanitized newsroom address.
+ * @return string Sanitized newsroom address, or empty string to delete value and we register an error with `add_settings_error`.
  */
-function validate_newsroom_txhash( $input ) {
+function sanitize_newsroom_txhash( $input ) {
 	if ( ! $input ) {
 		return;
 	}
@@ -294,53 +294,67 @@ add_action( 'save_post', __NAMESPACE__ . '\save_post_author_data', 200 );
  */
 function expose_article_meta() {
 	register_meta(
-		'post', SIGNATURES_META_KEY, array(
+		'post',
+		SIGNATURES_META_KEY,
+		[
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string', // Actually will be stringified JSON.
+		]
+	);
+	register_meta(
+		'post',
+		REVISIONS_META_KEY,
+		[
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string', // Actually will be stringified JSON.
+		]
+	);
+	register_meta(
+		'post',
+		POST_AUTHORS_META_KEY,
+		[
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string', // Actually will be stringified JSON.
-		)
+		]
 	);
 	register_meta(
-		'post', REVISIONS_META_KEY, array(
+		'post',
+		CONTENT_ID_META_KEY,
+		[
 			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string', // Actually will be stringified JSON.
-		)
+			'single'       => true,
+			'type'         => 'string',
+		]
 	);
 	register_meta(
-		'post', POST_AUTHORS_META_KEY, array(
-			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string', // Actually will be stringified JSON.
-		)
-	);
-	register_meta(
-		'post', CONTENT_ID_META_KEY, array(
+		'post',
+		TXHASH_META_KEY,
+		[
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		)
+		]
 	);
 	register_meta(
-		'post', TXHASH_META_KEY, array(
+		'post',
+		IPFS_META_KEY,
+		[
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		)
+		]
 	);
 	register_meta(
-		'post', IPFS_META_KEY, array(
+		'post',
+		ARCHIVE_STATUS_META_KEY,
+		[
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		)
-	);
-	register_meta(
-		'post', ARCHIVE_STATUS_META_KEY, array(
-			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string',
-		)
+		]
 	);
 }
 add_action( 'admin_init', __NAMESPACE__ . '\expose_article_meta' );
