@@ -1,10 +1,12 @@
 import * as React from "react";
 import styled from "styled-components";
-const { compose } = window.wp.element;
+const { compose } = window.wp.compose;
 const { withSelect } = window.wp.data;
+import { SelectType } from "../../../typings/gutenberg";
 import { EthAddress } from "@joincivil/core";
-import { Button, buttonSizes } from "@joincivil/components";
-import { hasInjectedProvider, saveAddressToProfile } from "../../util";
+import { fonts, Button, buttonSizes, AddressWithMetaMaskIcon } from "@joincivil/components";
+import { hasInjectedProvider } from "../../util";
+import { saveAddressToProfile } from "../../api-helpers";
 import { ErrorText, ErrorHeading, BodySection } from "../styles";
 import { NETWORK_NICE_NAME } from "../../constants";
 
@@ -20,8 +22,15 @@ export interface PanelWalletStatusState {
   profileWalletAddress?: EthAddress;
 }
 
-const Address = styled.code`
+const ProfileWalletAddress = styled.div`
   word-wrap: break-word;
+  font-family: ${fonts.MONOSPACE};
+  margin-top: -4px;
+  margin-bottom: 8px;
+`;
+const WalletAddressLabel = styled.div`
+  font-weight: 500;
+  margin-bottom: 8px;
 `;
 
 class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps, PanelWalletStatusState> {
@@ -62,6 +71,8 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
       errorBody = (
         <>
           <p>You must save your wallet address to your WordPress user profile before continuing.</p>
+          <WalletAddressLabel>Public wallet address</WalletAddressLabel>
+          <AddressWithMetaMaskIcon address={this.props.web3ProviderAddress} />
           <Button size={buttonSizes.MEDIUM_WIDE} onClick={this.saveAddress}>
             Save to Your Profile
           </Button>
@@ -71,14 +82,13 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
       errorHeading = "Wallet address mismatch";
       errorBody = (
         <>
-          <p>
-            Your wallet address in MetaMask (<Address>{this.props.web3ProviderAddress}</Address>) does not match the
-            wallet address saved to your WordPress user profile (<Address>{this.props.wpUserWalletAddress}</Address>).
-            Please either log in to MetaMask with the correct wallet address, or change the wallet address saved in your
-            profile.
-          </p>
+          <p>Your WordPress user profile wallet address does not match your MetaMask wallet address.</p>
+          <WalletAddressLabel>Profile wallet address</WalletAddressLabel>
+          <ProfileWalletAddress>{this.props.wpUserWalletAddress}</ProfileWalletAddress>
+          <WalletAddressLabel>Connected wallet address</WalletAddressLabel>
+          <AddressWithMetaMaskIcon address={this.props.web3ProviderAddress} />
           <Button size={buttonSizes.MEDIUM_WIDE} onClick={this.saveAddress}>
-            Save MetaMask Address to Your Profile
+            Update Profile Address
           </Button>
         </>
       );
@@ -97,14 +107,12 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
     );
   }
 
-  private saveAddress = async () => {
-    await saveAddressToProfile(this.props.web3ProviderAddress!);
-  };
+  private saveAddress = async () => saveAddressToProfile(this.props.web3ProviderAddress!);
 }
 
 export const PanelWalletStatus = compose([
   withSelect(
-    (select: any, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
+    (select: SelectType, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
       const { isCorrectNetwork, getWeb3ProviderAddress, getCurrentWpUserAddress } = select("civil/blockchain");
       return {
         noProvider: !hasInjectedProvider(),

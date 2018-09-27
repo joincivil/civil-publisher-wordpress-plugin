@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Civil Newsroom
  * Description: Manage your newsroom smart contract, apply to the Civil token-curated registry of ethical newsrooms, and use the Civil protocol to publish content on the Ethereum blockchain.
- * Version: 0.1
+ * Version: 0.2
  * Author: Civil
  * Author URI: https://civil.co
  *
@@ -14,7 +14,7 @@ namespace Civil_Newsroom_Protocol;
 define( __NAMESPACE__ . '\PATH', dirname( __FILE__ ) );
 define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil-newsroom-protocol/v1' );
 define( __NAMESPACE__ . '\SCHEMA_VERSION', '0.0.1' );
-define( __NAMESPACE__ . '\ASSETS_VERSION', '1.1.27' );
+define( __NAMESPACE__ . '\ASSETS_VERSION', '1.2.0' );
 
 // Post meta.
 define( __NAMESPACE__ . '\REVISION_HASH_META_KEY', 'civil_newsroom_protocol_revision_hash' );

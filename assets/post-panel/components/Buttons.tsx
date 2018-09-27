@@ -17,13 +17,15 @@ const ClipL = ClipLoader.extend`
 `;
 
 export interface IndexTransactionButtonProps extends TransactionButtonInnerProps {
+  isPublished?: boolean;
   archive?: boolean;
 }
 
 export const IndexTransactionButton: React.StatelessComponent<IndexTransactionButtonProps> = props => {
   let buttonComponent = (
     <Button disabled={props.disabled} onClick={props.onClick} size={buttonSizes.MEDIUM_WIDE} fullWidth>
-      {props.archive ? "Publish Index and Archive" : "Publish Index"}
+      {props.isPublished ? "Update " : "Publish "}
+      {props.archive ? "Index and Archive" : "Index"}
     </Button>
   );
   switch (props.step) {

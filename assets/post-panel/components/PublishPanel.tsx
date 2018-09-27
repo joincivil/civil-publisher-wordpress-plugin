@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { TxHash } from "@joincivil/core";
 import { Collapsable } from "@joincivil/components";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
-import { Body, BodySection, MainHeading } from "../styles";
+import { Body, BodySection, MainHeading, colors } from "../styles";
 import { ArchiveControls } from "./ArchiveControls";
 import { PublishButton } from "./PublishButton";
 
@@ -17,6 +17,8 @@ export interface PublishPanelProps {
   revisionUrl: string;
   revisionJsonHash: string;
   revisionJson: any;
+  isPublished: boolean;
+  isArchived: boolean;
   civilContentID?: number;
   currentPostLastRevisionId?: number;
   txHash?: TxHash;
@@ -29,8 +31,14 @@ export interface PublishPanelProps {
     txHash: TxHash,
     ipfs: string,
     archive: ArchiveOptions,
-  ): void;
-  updateContent?(revisionId: number, revisionJson: any, txHash: TxHash, ipfs: string, archive?: ArchiveOptions): void;
+  ): Promise<void>;
+  updateContent?(
+    revisionId: number,
+    revisionJson: any,
+    txHash: TxHash,
+    ipfs: string,
+    archive?: ArchiveOptions,
+  ): Promise<void>;
   saveTxHash?(txHash: TxHash, ipfs: string, archive: ArchiveOptions): void;
 }
 
@@ -38,6 +46,7 @@ const CollapsableHeader = styled.span`
   color: #0073af;
   vertical-align: middle;
   margin-bottom: 10px;
+  cursor: pointer;
 `;
 
 const CollapsableHeaderOpen = CollapsableHeader.extend`
@@ -62,12 +71,12 @@ const CollapsableText = styled.div`
   font-stretch: normal;
   line-height: 1.42;
   letter-spacing: 0px;
-  color: #5f5f5f;
+  color: ${colors.DARK_GRAY};
   background-color: #fffef6;
   padding: 20px;
   padding-top: 30px;
   margin: -20px;
-  margin-top: -30px;
+  margin-top: -25px;
 `;
 
 export class PublishPanel extends React.Component<PublishPanelProps, PublishPanelState> {
@@ -83,7 +92,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
     return (
       <Body>
         <BodySection>
-          <MainHeading>Index</MainHeading>
+          <MainHeading>Update Index</MainHeading>
           <p>Update the post’s index metadata and hash to the Civil network.</p>
           <Collapsable
             header={<CollapsableHeader>Read more about Index</CollapsableHeader>}
@@ -96,7 +105,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
                 Publishing the index adds this post’s metadata and hash to IPFS and Ethereum Blockchain. It will appear
                 in the Civil network, and provides proof that the contents have not changed since last publish. The
                 metadata will include a record of the post. We recommend updating the index only if there is a
-                signfificant change in your post.
+                significant change in your post.
               </p>
               <p>
                 If this post is behind a paywall and you don't want the full text to be public, we recommend you only
@@ -107,6 +116,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
         </BodySection>
         <BodySection>
           <ArchiveControls
+            isArchived={this.props.isArchived}
             archiveSelected={this.state.archiveSelected}
             ethTransaction={this.state.ethTransaction}
             ipfsSelected={this.state.ipfsSelected}
@@ -148,6 +158,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
             txHash={this.props.txHash}
             disabled={this.props.disabled}
             walletReady={this.props.walletReady}
+            isPublished={this.props.isPublished}
             saveTxHash={this.props.saveTxHash}
             publishContent={this.props.publishContent}
             updateContent={this.props.updateContent}

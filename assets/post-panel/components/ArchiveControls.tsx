@@ -7,6 +7,7 @@ export interface ArchiveControlsProps {
   archiveSelected: boolean;
   ethTransaction: boolean;
   ipfsSelected: boolean;
+  isArchived?: boolean;
   onHeaderClick(): void;
   onSelectEthTransaction(): void;
 }
@@ -46,7 +47,8 @@ export const ArchiveControls = (props: ArchiveControlsProps): JSX.Element => {
   return (
     <>
       <HeaderWithFlex>
-        Add Archive <SlideCheckbox onClick={props.onHeaderClick} checked={props.archiveSelected} />
+        {props.isArchived ? "Update" : "Add"} Archive{" "}
+        <SlideCheckbox onClick={props.onHeaderClick} checked={props.archiveSelected} />
       </HeaderWithFlex>
       {controls}
     </>

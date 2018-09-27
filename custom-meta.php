@@ -36,7 +36,7 @@ function show_wallet_profile_field( $user ) {
 						class="regular-text"
 					/>
 					<p>
-					<?php
+						<?php
 						echo sprintf(
 							wp_kses(
 								/* translators: 1: FAQ page URL */
@@ -45,7 +45,7 @@ function show_wallet_profile_field( $user ) {
 							),
 							esc_url( menu_page_url( HELP_PAGE, false ) . '#TODO' )
 						);
-					?>
+						?>
 					</p>
 					<p><a href="<?php esc_url( menu_page_url( HELP_PAGE ) ); ?>#TODO"><?php esc_html_e( 'Learn more about wallet addresses' ); ?></a>.</p>
 				</div>
@@ -176,7 +176,7 @@ function newsroom_address_register_setting() {
 			'type'              => 'string',
 			'single'            => true,
 			'show_in_rest'      => true,
-			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_address',
+			'sanitize_callback' => __NAMESPACE__ . '\sanitize_newsroom_address',
 		)
 	);
 }
@@ -193,7 +193,7 @@ function newsroom_txhash_register_setting() {
 			'type' => 'string',
 			'single' => true,
 			'show_in_rest' => true,
-			'sanitize_callback' => __NAMESPACE__ . '\validate_newsroom_txhash',
+			'sanitize_callback' => __NAMESPACE__ . '\sanitize_newsroom_txhash',
 		)
 	);
 }
@@ -216,12 +216,12 @@ function newsroom_address_input() {
 }
 
 /**
- * Validate newsroom address.
+ * Sanitize/validate newsroom address.
  *
  * @param string $input Newsroom address to validate.
- * @return string Validated/sanitized newsroom address.
+ * @return string Sanitized newsroom address, or empty string to delete value and we register an error with `add_settings_error`.
  */
-function validate_newsroom_address( $input ) {
+function sanitize_newsroom_address( $input ) {
 	if ( ! $input ) {
 		return;
 	}
@@ -246,12 +246,12 @@ function validate_newsroom_address( $input ) {
 }
 
 /**
- * Validate newsroom txhash.
+ * Sanitize/validate newsroom txhash.
  *
  * @param string $input Newsroom txhash to validate.
- * @return string Validated/sanitized newsroom address.
+ * @return string Sanitized newsroom address, or empty string to delete value and we register an error with `add_settings_error`.
  */
-function validate_newsroom_txhash( $input ) {
+function sanitize_newsroom_txhash( $input ) {
 	if ( ! $input ) {
 		return;
 	}

@@ -40,8 +40,14 @@ export interface BlockchainPublishPanelProps {
     txHash: TxHash,
     ipfs: string,
     archive: ArchiveOptions,
-  ): void;
-  updateContent?(revisionId: number, revisionJson: any, txHash: TxHash, ipfs: string, archive?: ArchiveOptions): void;
+  ): Promise<void>;
+  updateContent?(
+    revisionId: number,
+    revisionJson: any,
+    txHash: TxHash,
+    ipfs: string,
+    archive?: ArchiveOptions,
+  ): Promise<void>;
   saveTxHash?(txHash: TxHash, ipfs: string, archive: ArchiveOptions): void;
 }
 
@@ -169,6 +175,8 @@ export class BlockchainPublishPanelComponent extends React.Component<
         txHash={this.props.txHash}
         disabled={this.props.publishDisabled || !this.props.walletReady || !!insufficientPermissions}
         walletReady={this.props.walletReady}
+        isPublished={!!this.props.lastPublishedRevision}
+        isArchived={!!this.props.lastArchivedRevision}
         saveTxHash={this.props.saveTxHash}
         publishContent={this.props.publishContent}
         updateContent={this.props.updateContent}

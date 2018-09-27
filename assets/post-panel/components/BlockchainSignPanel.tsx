@@ -10,7 +10,7 @@ import {
   IconWrap,
   Heading,
   MainHeading,
-  IntroSection,
+  Intro,
   Body,
   BodySection,
   ErrorText,
@@ -80,16 +80,16 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
 
     return (
       <Wrapper>
-        <IntroSection>
+        <Intro>
           <Heading>Sign</Heading>
           <p>
             Sign this post, using your public wallet address, to confirm that you are
             {this.props.currentUserIsPostAuthor
               ? " an author of this story and are fully aware of its content. "
               : " fully aware of its content as a representative of your newsroom. "}
-            Including your signature increases the credibility of this story on the blockchain.
+            Including your signature increases the credibility of this story on the blockchain, but it is optional.
           </p>
-        </IntroSection>
+        </Intro>
         <Body>
           <PostStatus actionString="signing" />
           <PanelWalletStatus />
