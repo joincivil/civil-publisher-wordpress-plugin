@@ -193,4 +193,4 @@ registerPlugin("civil-sidebar", {
 
 registerPlugin("civil-post-pub", {
   render: CivilPostPublishPanel,
-})
+});
