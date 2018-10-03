@@ -48,7 +48,6 @@ class Credibility_Indicators {
 
 		$this->setup_defaults();
 
-		add_action( 'admin_menu', [ $this, 'add_admin_menu' ] );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'the_content', [ $this, 'append_indicators' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
