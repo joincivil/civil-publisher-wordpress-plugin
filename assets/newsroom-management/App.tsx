@@ -1,13 +1,13 @@
 const { apiRequest } = window.wp;
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
-import { Newsroom, CmsUserData } from "@joincivil/newsroom-manager";
+import { Newsroom, CmsUserData, IpfsObject } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "../shared/reducer";
 import { addAddress, addTxHash } from "../shared/actions";
-import { getCivil } from "../util";
 import { saveAddressToProfile } from "../api-helpers";
 import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme, urls } from "../constants";
+import { getCivil, getIPFS } from "../util";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
 import { SearchUsers } from "./SearchUsers";
 
@@ -26,12 +26,14 @@ export interface AppState {
 
 class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   public civil: Civil | undefined;
+  public ipfs: IpfsObject | undefined;
   public accountStream: any;
   public networkStream: any;
 
   constructor(props: AppProps & DispatchProp<any>) {
     super(props);
     this.civil = getCivil();
+    this.ipfs = getIPFS();
     this.state = {
       creationModalOpen: false,
       profileAddressSaving: false,
@@ -74,6 +76,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
         <Newsroom
           disabled={this.state.account !== this.state.profileWalletAddress}
           civil={this.civil}
+          ipfs={this.ipfs}
           address={this.props.address}
           txHash={this.props.txHash}
           account={this.state.account}

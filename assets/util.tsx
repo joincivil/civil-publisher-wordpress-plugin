@@ -1,6 +1,8 @@
 import * as moment from "moment";
 import * as IPFS from "ipfs-api";
 import { promisify } from "@joincivil/utils";
+import { IpfsObject } from "@joincivil/newsroom-manager";
+const { apiRequest } = window.wp;
 const { select, dispatch } = window.wp.data;
 const { getPostEdits } = select("core/editor");
 const { editPost } = dispatch("core/editor");
@@ -15,10 +17,6 @@ export const getCivil = (() => {
   const civil: Civil | undefined = hasInjectedProvider() ? new Civil() : undefined;
   return (): Civil | undefined => civil;
 })();
-
-export interface IpfsObject {
-  add(content: any, options?: { hash: string; pin: boolean }): Promise<[{ path: string; hash: string; size: number }]>;
-}
 
 export const createIpfsUrl = (path: string) => {
   return `https://ipfs.infura.io/ipfs/${path}`;

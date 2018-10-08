@@ -3,6 +3,7 @@ import {
   newsroomUi,
   newsroomUsers,
   newsroomContent,
+  newsroomGovernment,
   NewsroomState,
   RevisionAndJson,
 } from "@joincivil/newsroom-manager";
@@ -27,6 +28,7 @@ export interface ManagerState {
   newsroomUi: Map<string, any>;
   newsroomUsers: Map<EthAddress, string>;
   newsroomContent: Map<number, Map<number, RevisionAndJson>>;
+  newsroomGovernment: Map<string, string>;
   user: Map<string, any>;
 }
 
@@ -35,5 +37,6 @@ export default combineReducers<ManagerState>({
   newsroomUi,
   newsroomUsers,
   newsroomContent,
+  newsroomGovernment,
   user,
 });
