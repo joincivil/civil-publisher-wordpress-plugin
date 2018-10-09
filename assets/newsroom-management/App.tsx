@@ -1,7 +1,7 @@
 const { apiRequest } = window.wp;
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
-import { Newsroom } from "@joincivil/newsroom-manager";
+import { Newsroom, CmsUserData } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash } from "@joincivil/core";
 import { ManagerState } from "../shared/reducer";
 import { addAddress, addTxHash } from "../shared/actions";
@@ -189,14 +189,18 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     });
   };
 
-  private getNameForAddress = async (address: EthAddress) => {
+  private getNameForAddress = async (address: EthAddress): Promise<CmsUserData> => {
     try {
       const user = await apiRequest({
         path: apiNamespace + `user-by-eth-address/${address}`,
       });
-      return user.display_name;
+      return {
+        displayName: user.display_name,
+        username: user.user_login,
+        avatarUrl: user.avatar_url,
+      };
     } catch (e) {
-      return "Could not find a user with that address.";
+      return undefined;
     }
   };
 }

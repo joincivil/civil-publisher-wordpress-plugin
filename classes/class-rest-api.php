@@ -269,6 +269,7 @@ class REST_API {
 				'ID' => $users[0]->data->ID,
 				'user_login' => $users[0]->data->user_login,
 				'display_name' => $users[0]->data->display_name,
+				'avatar_url' => get_avatar_url( $users[0]->data->ID ),
 			]
 		);
 	}
