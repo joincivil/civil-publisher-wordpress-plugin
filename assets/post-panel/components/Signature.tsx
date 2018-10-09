@@ -23,7 +23,7 @@ const WrapperInner = styled.div`
 `;
 
 const WrapperOuter = styled.div`
-  margin: 16px 0;
+  margin: 16px 0 12px;
   &:first-child {
     margin-top: 0;
   }
