@@ -40,7 +40,6 @@ define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-newsroom-protocol-menu' );
 define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-newsroom-protocol-management' );
 define( __NAMESPACE__ . '\WALLET_PAGE', 'civil-newsroom-protocol-wallets' );
 define( __NAMESPACE__ . '\CONTENT_VIEWER', 'civil-newsroom-protocol-content' );
-define( __NAMESPACE__ . '\HELP_PAGE', 'civil-newsroom-protocol-help' );
 
 require_once dirname( __FILE__ ) . '/utils.php';
 

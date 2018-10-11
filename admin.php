@@ -67,19 +67,16 @@ function add_menus() {
 		__NAMESPACE__ . '\wallet_menu_content'
 	);
 
-	add_submenu_page(
-		TOP_LEVEL_MENU,
-		__( 'FAQ and Help', 'civil' ),
-		__( 'FAQ and Help', 'civil' ),
-		'edit_posts',
-		HELP_PAGE,
-		__NAMESPACE__ . '\help_menu_content'
-	);
-
 	// Remove unneeded "Civil" submenu.
 	remove_submenu_page( TOP_LEVEL_MENU, TOP_LEVEL_MENU );
 }
 add_action( 'admin_menu', __NAMESPACE__ . '\add_menus' );
+
+function add_faq_link() {
+	global $submenu;
+	$submenu[TOP_LEVEL_MENU][] = array('FAQ and Help', 'edit_posts', "https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists");
+}
+add_action('admin_menu', __NAMESPACE__ . '\add_faq_link');
 
 /**
  * Civil Newsroom Management page content.
