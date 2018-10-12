@@ -22,7 +22,6 @@ export interface AppState {
   profileWalletAddress?: EthAddress;
   account?: EthAddress;
   currentNetwork?: string;
-  persistedCharter?: Partial<CharterData> | false;
 }
 
 class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
@@ -39,10 +38,6 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       creationModalOpen: false,
       profileAddressSaving: false,
     };
-
-    this.loadCharter().then(charter => {
-      this.setState({ persistedCharter: charter || false });
-    });
   }
 
   public async componentDidMount(): Promise<void> {
@@ -101,7 +96,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           saveAddressToProfile={this.saveAddressToProfile}
           profileWalletAddress={this.state.profileWalletAddress}
           persistCharter={this.persistCharter}
-          persistedCharter={this.state.persistedCharter}
+          getPersistedCharter={this.loadCharter}
         />
         {this.renderCreationModal()}
       </>
@@ -214,9 +209,9 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     }
   };
 
-  private persistCharter = (charter: Partial<CharterData>): void => {
+  private persistCharter = async (charter: Partial<CharterData>): Promise<void> => {
     try {
-      apiRequest({
+      await apiRequest({
         path: "/wp/v2/settings",
         method: "PUT",
         data: {
@@ -230,7 +225,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     }
   };
 
-  private loadCharter = async (): Promise<Partial<CharterData> | undefined> => {
+  private loadCharter = async (): Promise<Partial<CharterData> | void> => {
     try {
       const settings = await apiRequest({
         path: "/wp/v2/settings",
@@ -244,7 +239,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       console.error(errText, err);
       throw Error(errText);
     }
-  }
+  };
 }
 
 const mapStateToProps = (state: ManagerState): AppProps => {
