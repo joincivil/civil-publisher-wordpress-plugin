@@ -114,7 +114,10 @@ function common_scripts( $script_name ) {
 	if ( WP_DEBUG ) {
 		wp_enqueue_script(
 			'civil-newsroom-protocol-live-reload',
-			'http://localhost:35729/livereload.js'
+			'http://localhost:35729/livereload.js',
+			[],
+			'1.0',
+			true
 		);
 	}
 }
