@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack --config ./webpack.config.js --env.watch",
+    "dev:reload": "webpack --config ./webpack.config.js --env.watch --env.reload",
     "dev:vm": "webpack --config ./webpack.config.js --env.watch --env.vm --info-verbosity verbose",
     "build": "webpack --config ./webpack.config.js --env.production",
     "phpcs": "phpcs -p -s ./ --standard=phpcs.xml --extensions=php",

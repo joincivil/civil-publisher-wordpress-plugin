@@ -62,8 +62,8 @@ module.exports = env => {
       "react-dom": "ReactDOM",
     },
     plugins: [
-      new LiveReloadPlugin(),
-    ],
+      env.reload ? new LiveReloadPlugin() : false,
+    ].filter(Boolean),
 
     devtool: env.production ? undefined : "source-map",
     watch: env.watch,
