@@ -7,6 +7,8 @@
     "dev": "webpack --config ./webpack.config.js --env.watch",
     "dev:vm": "webpack --config ./webpack.config.js --env.watch --env.vm --info-verbosity verbose",
     "build": "webpack --config ./webpack.config.js --env.production",
+    "phpcs": "phpcs -p -s ./ --standard=phpcs.xml --extensions=php",
+    "phpcbf": "phpcbf -p -s ./ --standard=phpcs.xml --extensions=php",
     "lint": "tslint --project ./",
     "prettier": "prettier --config ./.prettierrc.yaml --write --list-different './**/*.{ts,tsx,json,md}'"
   },
