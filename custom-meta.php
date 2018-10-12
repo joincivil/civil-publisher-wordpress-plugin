@@ -200,6 +200,33 @@ function newsroom_txhash_register_setting() {
 add_action( 'rest_api_init', __NAMESPACE__ . '\newsroom_txhash_register_setting' );
 
 /**
+ * Sanitize charter.
+ *
+ * @param string $input Newsroom charter (stringified JSON) to sanitize.
+ * @return string Sanitized charter.
+ */
+function sanitize_newsroom_charter( $input ) {
+	return json_decode(json_encode($input));
+}
+
+/**
+ * Register newsroom contract charter.
+ */
+function newsroom_charter_register_setting() {
+	register_setting(
+		'general',
+		NEWSROOM_CHARTER_OPTION_KEY,
+		array(
+			'type' => 'string', // stringified JSON
+			'single' => true,
+			'show_in_rest' => true,
+			'sanitize_callback' => __NAMESPACE__ . '\sanitize_newsroom_charter',
+		)
+	);
+}
+add_action( 'rest_api_init', __NAMESPACE__ . '\newsroom_charter_register_setting' );
+
+/**
  * Output form for capturing newsroom address.
  */
 function newsroom_address_input() {

@@ -24,6 +24,7 @@ export enum userMetaKeys {
 export enum siteOptionKeys {
   NEWSROOM_ADDRESS = "civil_newsroom_protocol_newsroom_address",
   NEWSROOM_TXHASH = "civil_newsroom_protocol_newsroom_txhash",
+  NEWSROOM_CHARTER = "civil_newsroom_protocol_newsroom_charter",
 }
 
 export const NETWORK_NAME = "rinkeby";

@@ -34,6 +34,7 @@ define( __NAMESPACE__ . '\USER_NEWSROOM_ROLE_META_KEY', 'civil_newsroom_protocol
 // Site options.
 define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol_newsroom_address' );
 define( __NAMESPACE__ . '\NEWSROOM_TXHASH_OPTION_KEY', 'civil_newsroom_protocol_newsroom_txhash' );
+define( __NAMESPACE__ . '\NEWSROOM_CHARTER_OPTION_KEY', 'civil_newsroom_protocol_newsroom_charter' );
 
 // Menus.
 define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-newsroom-protocol-menu' );

@@ -2,7 +2,6 @@ import * as moment from "moment";
 import * as IPFS from "ipfs-api";
 import { promisify } from "@joincivil/utils";
 import { IpfsObject } from "@joincivil/newsroom-manager";
-const { apiRequest } = window.wp;
 const { select, dispatch } = window.wp.data;
 const { getPostEdits } = select("core/editor");
 const { editPost } = dispatch("core/editor");

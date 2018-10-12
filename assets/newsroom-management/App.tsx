@@ -2,7 +2,7 @@ const { apiRequest } = window.wp;
 import * as React from "react";
 import { connect, DispatchProp } from "react-redux";
 import { Newsroom, CmsUserData, IpfsObject } from "@joincivil/newsroom-manager";
-import { Civil, EthAddress, TxHash } from "@joincivil/core";
+import { Civil, EthAddress, TxHash, CharterData } from "@joincivil/core";
 import { ManagerState } from "../shared/reducer";
 import { addAddress, addTxHash } from "../shared/actions";
 import { saveAddressToProfile } from "../api-helpers";
@@ -95,6 +95,8 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           profileAddressSaving={this.state.profileAddressSaving}
           saveAddressToProfile={this.saveAddressToProfile}
           profileWalletAddress={this.state.profileWalletAddress}
+          persistCharter={this.persistCharter}
+          getPersistedCharter={this.loadCharter}
         />
         {this.renderCreationModal()}
       </>
@@ -204,6 +206,38 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
       };
     } catch (e) {
       return undefined;
+    }
+  };
+
+  private persistCharter = async (charter: Partial<CharterData>): Promise<void> => {
+    try {
+      await apiRequest({
+        path: "/wp/v2/settings",
+        method: "PUT",
+        data: {
+          [siteOptionKeys.NEWSROOM_CHARTER]: JSON.stringify(charter),
+        },
+      });
+    } catch (err) {
+      const errText = "Failed to save newsroom charter to WP settings";
+      console.error(errText, err);
+      throw Error(errText);
+    }
+  };
+
+  private loadCharter = async (): Promise<Partial<CharterData> | void> => {
+    try {
+      const settings = await apiRequest({
+        path: "/wp/v2/settings",
+      });
+      const charter = settings[siteOptionKeys.NEWSROOM_CHARTER];
+      if (charter) {
+        return JSON.parse(charter);
+      }
+    } catch (err) {
+      const errText = "Failed to load newsroom charter from WP settings";
+      console.error(errText, err);
+      throw Error(errText);
     }
   };
 }
