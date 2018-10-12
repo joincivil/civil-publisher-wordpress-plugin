@@ -1,5 +1,7 @@
 const path = require( "path" );
 
+const LiveReloadPlugin = require('webpack-livereload-plugin');
+
 module.exports = env => {
   return {
     mode: env.production ? "production" : "development",
@@ -59,6 +61,9 @@ module.exports = env => {
       react: "React",
       "react-dom": "ReactDOM",
     },
+    plugins: [
+      new LiveReloadPlugin(),
+    ],
 
     devtool: env.production ? undefined : "source-map",
     watch: env.watch,
