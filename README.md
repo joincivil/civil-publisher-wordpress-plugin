@@ -1,5 +1,9 @@
 This plugin lets you create a newsroom smart contract; apply to the Civil network; and sign, publish, and archive your WordPress content using the Civil protocol.
 
+[Learn more about Civil](https://civil.co)
+
+[Read the plugin FAQ](https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists)
+
 # Requirements
 
 Latest version of WordPress, with Gutenberg.
