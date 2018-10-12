@@ -113,6 +113,7 @@ function constants_script( $script_name ) {
 		'newsroomAddress' => get_option( NEWSROOM_ADDRESS_OPTION_KEY ),
 		'wpSiteUrl' => site_url(),
 		'wpAdminUrl' => get_admin_url(),
+		'logoUrl' => get_site_icon_url(),
 		'newsroomTxHash' => get_option( NEWSROOM_TXHASH_OPTION_KEY ),
 	] );
 
