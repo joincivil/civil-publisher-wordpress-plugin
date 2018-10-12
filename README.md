@@ -28,7 +28,7 @@ Then enable the plugin from the Plugins screen in the WordPress admin dashboard.
 
 #### PHP Coding Standards
 
-This plugin follows Automattic's coding standards for WordPress. To check these this you will need to install [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos) and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer#composer).
+This plugin follows Automattic's coding standards for WordPress. To run these you will need to install [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos) and [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer#composer).
 
 You also have to install WP coding standards and add them to phpcs config paths:
 
