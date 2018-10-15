@@ -104,6 +104,25 @@ function get_post_authors_data( $post_id ) {
 }
 
 /**
+ * Scripts used for all our plugin scripts.
+ *
+ * @param string $script_name Name of dependency that will use these constants.
+ */
+function common_scripts( $script_name ) {
+	constants_script( $script_name );
+
+	if ( WP_DEBUG ) {
+		wp_enqueue_script(
+			'civil-newsroom-protocol-live-reload',
+			'http://localhost:35729/livereload.js',
+			[],
+			'1.0',
+			true
+		);
+	}
+}
+
+/**
  * Insert a JS script to define constants to pass to frontend.
  *
  * @param string $script_name Name of dependency that will use these constants.

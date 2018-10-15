@@ -22,7 +22,7 @@ function users_page_script() {
 		ASSETS_VERSION,
 		true
 	);
-	constants_script( 'civil-newsroom-protocol-users-page-script' );
+	common_scripts( 'civil-newsroom-protocol-users-page-script' );
 }
 add_action( 'admin_print_scripts', __NAMESPACE__ . '\users_page_script' );
 

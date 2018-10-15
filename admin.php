@@ -23,7 +23,7 @@ function enqueue_post_panel() {
 		true
 	);
 
-	constants_script( 'civil-newsroom-protocol-post-panel' );
+	common_scripts( 'civil-newsroom-protocol-post-panel' );
 }
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
 
@@ -130,7 +130,7 @@ function contract_management_script() {
 		ASSETS_VERSION,
 		true
 	);
-	constants_script( 'civil-newsroom-protocol-newsroom-management' );
+	common_scripts( 'civil-newsroom-protocol-newsroom-management' );
 }
 add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
 
@@ -146,7 +146,7 @@ function content_viewer_script() {
 		ASSETS_VERSION,
 		true
 	);
-	constants_script( 'civil-newsroom-protocol-content-viewer' );
+	common_scripts( 'civil-newsroom-protocol-content-viewer' );
 }
 add_action( 'admin_print_scripts-civil_page_' . CONTENT_VIEWER, __NAMESPACE__ . '\content_viewer_script' );
 
