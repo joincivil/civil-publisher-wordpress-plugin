@@ -1,6 +1,8 @@
 export const apiNamespace = "/civil-newsroom-protocol/v1/";
 
 export const urls = {
+  HOMEPAGE: window.civilNamespace.wpSiteUrl,
+  LOGO: window.civilNamespace.logoUrl,
   PROFILE: `${window.civilNamespace.wpAdminUrl}profile.php`,
   HELP: `${window.civilNamespace.wpAdminUrl}admin.php?page=civil-newsroom-protocol-help`,
   NEWSROOM_MANAGER: "/wp-admin/admin.php?page=civil-newsroom-protocol-management",

@@ -2,7 +2,7 @@ const { withSelect, withDispatch } = window.wp.data;
 import { SelectType, DispatchType } from "../../typings/gutenberg";
 const { compose } = window.wp.compose;
 import { revisionJsonSansDate, updatePostMeta, createIpfsUrl } from "../util";
-import { apiNamespace, postMetaKeys } from "../constants";
+import { urls, apiNamespace, postMetaKeys } from "../constants";
 import { hashContent } from "@joincivil/utils";
 import {
   BlockchainPublishPanelComponent,
@@ -44,7 +44,7 @@ const BlockchainPublishPanel = compose([
       if (currentPostLastRevisionId) {
         revisionJson = getRevisionJSON(currentPostLastRevisionId);
         revisionJsonHash = hashContent(revisionJson);
-        revisionUrl = `${window.civilNamespace.wpSiteUrl}/wp-json${apiNamespace}revisions/${currentPostLastRevisionId}`;
+        revisionUrl = `${urls.HOMEPAGE}/wp-json${apiNamespace}revisions/${currentPostLastRevisionId}`;
       }
 
       return {

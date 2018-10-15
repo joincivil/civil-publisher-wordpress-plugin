@@ -92,6 +92,8 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           showWelcome={true}
           profileUrl={urls.PROFILE}
           helpUrl={urls.HELP}
+          newsroomUrl={urls.HOMEPAGE}
+          logoUrl={urls.LOGO}
           profileAddressSaving={this.state.profileAddressSaving}
           saveAddressToProfile={this.saveAddressToProfile}
           profileWalletAddress={this.state.profileWalletAddress}
