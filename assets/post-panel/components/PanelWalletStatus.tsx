@@ -40,7 +40,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
         <a href="#TODO" target="_blank">
           Read our FAQ
         </a>{" "}
-        for more help.
+        for help.
       </>
     );
     let errorHeading = null;
@@ -49,17 +49,17 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
       errorHeading = "Not logged into wallet";
       errorBody = (
         <p>
-          Don’t have a wallet? Having a wallet is mandatory and we recommend installing{" "}
+          Don’t have a wallet? Having a wallet is mandatory and we recommend{" "}
           <a href="https://metamask.io/" target="_blank">
             MetaMask
-          </a>, where you can create and set up your wallet and address. {faqText}
+          </a>, which you can use to create and set up your wallet and address. {faqText}
         </p>
       );
     } else if (!this.props.web3ProviderAddress) {
       errorHeading = "Wallet locked";
       errorBody = <p>Please log in to your wallet to continue. {faqText}</p>;
     } else if (!this.props.isCorrectNetwork) {
-      errorHeading = "Change your network";
+      errorHeading = "Change network";
       errorBody = (
         <p>
           Looks like you’re using an unsupported Ethereum network. Make sure you're using the {NETWORK_NICE_NAME}.{" "}
