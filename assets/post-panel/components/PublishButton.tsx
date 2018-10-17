@@ -181,11 +181,11 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
     return (
       <>
         {!this.props.walletReady && <ErrorText>Waiting for wallet</ErrorText>}
-        <HelpText>This will open a window and you must complete the transacation in MetaMask to publish.</HelpText>
         <p>
           Estimated cost to publish this post <br />
           {this.state.estimate && "ETH: " + this.state.estimate.toFixed(6)}
         </p>
+        <HelpText>This will open a window and you must complete the transacation in MetaMask to publish.</HelpText>
         <PrimaryButtonWrap>
           <TransactionButtonNoModal
             Button={(props: TransactionButtonInnerProps) => (
