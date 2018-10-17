@@ -264,12 +264,23 @@ class REST_API {
 			);
 		}
 
+		$avatar_url = get_avatar_url( $users[0]->data->ID );
+
+		global $coauthors_plus;
+		if ( isset( $coauthors_plus ) ) {
+			$coauthor = $coauthors_plus->get_coauthor_by( 'id', $users[0]->data->ID );
+			$avatar_attachment_id = get_post_thumbnail_id( $coauthor->ID );
+			if ( $avatar_attachment_id ) {
+				$avatar_url = wp_get_attachment_url( $avatar_attachment_id );
+			}
+		}
+
 		return rest_ensure_response(
 			[
 				'ID' => $users[0]->data->ID,
 				'user_login' => $users[0]->data->user_login,
 				'display_name' => $users[0]->data->display_name,
-				'avatar_url' => get_avatar_url( $users[0]->data->ID ),
+				'avatar_url' => $avatar_url,
 			]
 		);
 	}
