@@ -6,7 +6,7 @@ import { SelectType, DispatchType } from "../../typings/gutenberg";
 const { compose } = window.wp.compose;
 import * as React from "react";
 import { Civil, EthAddress } from "@joincivil/core";
-import { colors, IconWrap } from "./styles";
+import { colors, IconWrap, Wrapper, Body, BodySection } from "./styles";
 import { Tabs, Tab, TabComponentProps, Button, buttonSizes, CivilLogo, NorthEastArrow } from "@joincivil/components";
 import { theme, urls } from "../constants";
 import { getCivil } from "../util";
@@ -42,17 +42,10 @@ const StyledLi = styled.li`
   }
 `;
 
-const Wrapper = styled.div`
-  padding: 30px 20px;
-`;
-
-const P = styled.p`
-  margin-bottom: 0;
-`;
-
-const LinkButton = Button.extend`
+const LinkButton = styled(Button)`
   width: 100%;
   text-align: center;
+  margin-top: 15px;
 `;
 
 const NavHelp = styled.a`
@@ -69,7 +62,7 @@ const NavHelp = styled.a`
     height: auto;
   }
 `;
-const LogoWrap = IconWrap.extend`
+const LogoWrap = styled(IconWrap)`
   top: 1px;
   svg {
     height: 12px;
@@ -86,6 +79,11 @@ const navHelp = (
     Help <NorthEastArrow />
   </NavHelp>
 );
+
+const NoContractNav = styled(PanelRow)`
+  padding: 16px;
+  border-bottom: 1px solid #dddddd;
+`;
 
 class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginProps> {
   public civil: Civil | undefined;
@@ -152,23 +150,41 @@ const BlockchainPluginInner = compose([
 ])(BlockchainPluginInnerComponent);
 
 const CivilSidebar = () => {
-  let panelContent = (
-    <Wrapper>
-      <PanelRow>
-        <P>
-          A newsroom contract has not been set up. Please got to your{" "}
-          <a href={urls.NEWSROOM_MANAGER}>Civil Newsroom Manager</a> page to create a Newsroom smart contract.
-        </P>
-      </PanelRow>
-      <PanelRow>
-        <LinkButton size={buttonSizes.MEDIUM_WIDE} href={urls.NEWSROOM_MANAGER}>
-          Newsroom Manager
-        </LinkButton>
-      </PanelRow>
-    </Wrapper>
-  );
+  let panelContent;
   if (window.civilNamespace.newsroomAddress) {
     panelContent = <BlockchainPluginInner />;
+  } else {
+    panelContent = (
+      <>
+        <NoContractNav>
+          {navLogo}
+          {navHelp}
+        </NoContractNav>
+        <Wrapper>
+          <Body>
+            <BodySection>
+              <p>A newsroom contract has not been set up.</p>
+              <p>
+                Without a newsroom smart contract you are not able to use Civil’s publishing tools. Please open your
+                Civil Newsroom Manager page to create a newsroom smart contract.
+              </p>
+              <LinkButton size={buttonSizes.MEDIUM_WIDE} href={urls.NEWSROOM_MANAGER}>
+                Open Newsroom Manager
+              </LinkButton>
+            </BodySection>
+          </Body>
+          <Body style={{ marginTop: 16 }}>
+            <BodySection>
+              <p>
+                If you feel this is an error, contact your{" "}
+                <a href={`mailto:${window.civilNamespace.adminEmail}`}>Adminstrator</a> to see if they have made any
+                changes to the newsroom smart contract.
+              </p>
+            </BodySection>
+          </Body>
+        </Wrapper>
+      </>
+    );
   }
   return (
     <ErrorBoundary section="post-panel">
