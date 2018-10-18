@@ -37,7 +37,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
   public render(): JSX.Element | null {
     const faqText = (
       <>
-        <a href="#TODO" target="_blank">
+        <a href="https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists" target="_blank">
           Read our FAQ
         </a>{" "}
         for more help.

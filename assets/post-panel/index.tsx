@@ -82,7 +82,7 @@ const navLogo = (
   </LogoWrap>
 );
 const navHelp = (
-  <NavHelp href={`${urls.HELP}#TODO`} target="_blank">
+  <NavHelp href="https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists" target="_blank">
     Help <NorthEastArrow />
   </NavHelp>
 );

@@ -10,3 +10,5 @@ build/post-panel.build.js.map
 build/users-page.build.js
 build/users-page.build.js.map
 build/content-viewer.build.js.map
+build/post-panel.build.js
+build/post-panel.build.js.map
