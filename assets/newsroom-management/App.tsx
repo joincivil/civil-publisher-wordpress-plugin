@@ -22,6 +22,7 @@ export interface AppState {
   profileWalletAddress?: EthAddress;
   account?: EthAddress;
   currentNetwork?: string;
+  metamaskEnabled?: boolean;
 }
 
 class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
@@ -41,6 +42,12 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   }
 
   public async componentDidMount(): Promise<void> {
+    if ((window as any).ethereum) {
+      const metamaskEnabled = await (window as any).ethereum.isEnabled();
+      this.setState({metamaskEnabled});
+    } else {
+      this.setState({metamaskEnabled: true});
+    }
     if (!this.props.address && this.props.txHash && this.civil) {
       const newsroom = await this.civil.newsroomFromFactoryTxHashUntrusted(this.props.txHash);
       await this.onNewsroomCreated(newsroom.address);
@@ -86,6 +93,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           requiredNetwork={NETWORK_NAME}
           requiredNetworkNiceName={NETWORK_NICE_NAME}
           currentNetwork={this.state.currentNetwork}
+          metamaskEnabled={this.state.metamaskEnabled}
           renderUserSearch={this.renderUserSearch}
           theme={theme}
           showWalletOnboarding={true}
@@ -94,6 +102,13 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           helpUrl={urls.HELP}
           newsroomUrl={urls.HOMEPAGE}
           logoUrl={urls.LOGO}
+          enable={async () => {
+            if ((window as any).ethereum) {
+              await (window as any).ethereum.enable();
+              console.log("here");
+              this.setState({metamaskEnabled: true});
+            }
+          }}
           profileAddressSaving={this.state.profileAddressSaving}
           saveAddressToProfile={this.saveAddressToProfile}
           profileWalletAddress={this.state.profileWalletAddress}
