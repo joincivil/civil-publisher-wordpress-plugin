@@ -11,11 +11,6 @@ export const Wrapper = styled.div`
   overflow-x: hidden;
   background-color: #edeff0;
 
-  // TODO temporary until we separate them into tabs:
-  &:first-child {
-    border-bottom: 1px solid ${colors.GRAY};
-  }
-
   p {
     margin-bottom: 10px;
     font-size: 13px;

@@ -151,12 +151,47 @@ function content_viewer_script() {
 add_action( 'admin_print_scripts-civil_page_' . CONTENT_VIEWER, __NAMESPACE__ . '\content_viewer_script' );
 
 /**
+ * Alert user that Gutenberg plugin is needed if they don't have it activated.
+ */
+function gutenberg_nag() {
+	if ( is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
+		return;
+	}
+
+	civil_notice_open();
+	?>
+	<h3><?php esc_html_e( 'Gutenberg plugin missing', 'civil' ); ?></h3>
+	<p>
+	<?php
+		echo sprintf(
+			wp_kses(
+				/* translators: 1: Install Guteenberg plugin URL */
+				__( 'The Civil Newsroom Manager requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg plugin</a> to be installed and activated.', 'civil' ),
+				[
+					'a' => [
+						'href' => [],
+						'target' => [],
+					],
+				]
+			),
+			esc_url( admin_url( '/plugin-install.php?tab=plugin-information&plugin=gutenberg' ) )
+		);
+	?>
+	</p>
+	<?php
+	civil_notice_close();
+}
+add_action( 'admin_notices', __NAMESPACE__ . '\gutenberg_nag' );
+
+/**
  * If necessary, alert user that they need to set up newsroom to use plugin.
  */
 function newsroom_setup_nag() {
-	// Don't show on newsroom manager page.
+	// Don't show on newsroom manager page or if missing Gutenberg.
 	$page_id = get_current_screen()->id ?? '';
-	if ( 'civil_page_' . MANAGEMENT_PAGE === $page_id ) {
+	if ( 'civil_page_' . MANAGEMENT_PAGE === $page_id
+		|| ! is_plugin_active( 'gutenberg/gutenberg.php' )
+	) {
 		return;
 	}
 
@@ -191,14 +226,12 @@ add_action( 'admin_notices', __NAMESPACE__ . '\newsroom_setup_nag' );
  * If necessary, alert user that they need to fill in their ETH wallet address.
  */
 function wallet_address_nag() {
-	// Don't show on newsroom manager page.
+	// Don't show on newsroom manager page, or newsroom setup nag is showing, or if missing Gutenberg.
 	$page_id = get_current_screen()->id ?? '';
-	if ( 'civil_page_' . MANAGEMENT_PAGE === $page_id ) {
-		return;
-	}
-
-	// Don't show both newsroom setup nag and wallet address nag.
-	if ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) ) {
+	if ( 'civil_page_' . MANAGEMENT_PAGE === $page_id
+		|| ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) )
+		|| ! is_plugin_active( 'gutenberg/gutenberg.php' )
+	) {
 		return;
 	}
 

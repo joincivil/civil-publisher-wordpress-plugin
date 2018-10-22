@@ -133,6 +133,7 @@ function constants_script( $script_name ) {
 		'wpSiteUrl' => site_url(),
 		'wpAdminUrl' => get_admin_url(),
 		'logoUrl' => get_site_icon_url(),
+		'adminEmail' => get_bloginfo( 'admin_email' ),
 		'newsroomTxHash' => get_option( NEWSROOM_TXHASH_OPTION_KEY ),
 	] );
 

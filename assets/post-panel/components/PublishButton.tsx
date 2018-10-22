@@ -88,7 +88,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
         cancelTransaction={() => this.cancelTransaction()}
         startTransaction={() => this.startTransaction()}
       >
-        <ModalHeader>Open MetaMask to confirm and complete publishing your post</ModalHeader>
+        <ModalHeader>Open MetaMask to confirm and publish your post</ModalHeader>
       </MetaMaskModal>
     );
   }
@@ -133,13 +133,11 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
     }
     return (
       <Modal>
-        <ModalHeader>Your Post is being indexed</ModalHeader>
+        <ModalHeader>Your post is being published</ModalHeader>
         <ModalP> This can take some time depending on traffic on the Ethereum network.</ModalP>
         <ModalP>
-          {" "}
-          You are welcome to leave this page open while continuing to work, but please note that any changes you make to
-          a post once the blockchain indexing process has begun will not be reflected on that blockchain index unless
-          you re-index.
+          You can leave this page, but please note that any changes you make to a post once the blockchain publishing
+          process has begun will not be reflected on the blockchain unless you re-publish.
         </ModalP>
         <ModalButtonContainer>
           <Button
@@ -159,11 +157,11 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
     }
     return (
       <Modal>
-        <ModalHeader>Index added!</ModalHeader>
-        <ModalP>Your post was successfully indexed to the Ethereum blockchain.</ModalP>
+        <ModalHeader>Post published!</ModalHeader>
+        <ModalP>Your post was successfully published to the Civil network.</ModalP>
         <ModalP>
-          Note that any time you make an update or revision to a post, we recommend you also index that revision to the
-          blockchain
+          Note that any time you make a significant update or revision to your post on your site, we recommend you also
+          index and archive that revision.
         </ModalP>
         <ModalButtonContainer>
           <Button
@@ -181,11 +179,11 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
     return (
       <>
         {!this.props.walletReady && <ErrorText>Waiting for wallet</ErrorText>}
-        <HelpText>This will open a window and you must complete the transacation in MetaMask to publish.</HelpText>
         <p>
           Estimated cost to publish this post <br />
           {this.state.estimate && "ETH: " + this.state.estimate.toFixed(6)}
         </p>
+        <HelpText>This will open a window and you must complete the transacation in MetaMask to publish.</HelpText>
         <PrimaryButtonWrap>
           <TransactionButtonNoModal
             Button={(props: TransactionButtonInnerProps) => (

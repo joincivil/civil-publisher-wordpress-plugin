@@ -104,7 +104,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
               <p>
                 Publishing the index adds this post’s metadata and hash to IPFS and Ethereum Blockchain. It will appear
                 in the Civil network, and provides proof that the contents have not changed since last publish. The
-                metadata will include a record of the post. We recommend updating the index only if there is a
+                metadata will include a link and record of the post. We recommend updating the index only if there is a
                 significant change in your post.
               </p>
               <p>
@@ -135,13 +135,13 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
           >
             <CollapsableText>
               <p>
-                Archive will save the full text of this post to IPFS and, opptionally, the Ethererum network. An index
+                Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index
                 will be published to connect this archive to your newsroom to provide proof that it’s contents have not
                 changed.
               </p>
               <p>
-                When you archive, please make note that the text from this post will be public and visible even if this
-                post is behind a paywall. You can always archive at a later date.
+                When you archive the full text, please make note that the text will be public and will be visible
+                outside of your paywall. You can always archive at a later date.
               </p>
             </CollapsableText>
           </Collapsable>

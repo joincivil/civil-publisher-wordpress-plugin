@@ -22,6 +22,7 @@ export interface AppState {
   profileWalletAddress?: EthAddress;
   account?: EthAddress;
   currentNetwork?: string;
+  metamaskEnabled?: boolean;
 }
 
 class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
@@ -41,6 +42,12 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   }
 
   public async componentDidMount(): Promise<void> {
+    if ((window as any).ethereum) {
+      const metamaskEnabled = await (window as any).ethereum.isEnabled();
+      this.setState({metamaskEnabled});
+    } else {
+      this.setState({metamaskEnabled: true});
+    }
     if (!this.props.address && this.props.txHash && this.civil) {
       const newsroom = await this.civil.newsroomFromFactoryTxHashUntrusted(this.props.txHash);
       await this.onNewsroomCreated(newsroom.address);
@@ -86,6 +93,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           requiredNetwork={NETWORK_NAME}
           requiredNetworkNiceName={NETWORK_NICE_NAME}
           currentNetwork={this.state.currentNetwork}
+          metamaskEnabled={this.state.metamaskEnabled}
           renderUserSearch={this.renderUserSearch}
           theme={theme}
           showWalletOnboarding={true}
@@ -95,6 +103,13 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           helpUrlBase={urls.HELP_BASE}
           newsroomUrl={urls.HOMEPAGE}
           logoUrl={urls.LOGO}
+          enable={async () => {
+            if ((window as any).ethereum) {
+              await (window as any).ethereum.enable();
+              console.log("here");
+              this.setState({metamaskEnabled: true});
+            }
+          }}
           profileAddressSaving={this.state.profileAddressSaving}
           saveAddressToProfile={this.saveAddressToProfile}
           profileWalletAddress={this.state.profileWalletAddress}
@@ -131,14 +146,11 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     }
     return (
       <Modal>
-        <h2>Congratulations!</h2>
-        <p>You've created a newsroom.</p>
-        <p>
-          Now you can add additional officers and editors to help you manage your newsroom and publish content on the
-          blockchain.
-        </p>
+        <h2>You created a newsroom smart contract!</h2>
+        <p>Congratulations, your Newsroom smart contract processed successfully.</p>
+        <p>Next, let's add additional accounts to your Newsroom smart contract.</p>
         <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({ creationModalOpen: false })}>
-          Close
+          OK
         </Button>
       </Modal>
     );
