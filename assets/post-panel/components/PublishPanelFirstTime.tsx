@@ -57,7 +57,12 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
           <p>
             Publishing the index adds this post’s metadata and hash to IPFS and Ethereum Blockchain. It will appear in
             the Civil network, and provides proof that the contents have not changed since last publish. The metadata
-            will include a record and the link to the post.
+            will include a link and record of the post. We recommend updating the index only if there is a significant
+            change in your post.
+          </p>
+          <p>
+            If this post is behind a paywall and you don't want the full text to be public, we recommend you only index
+            instead of archiving.
           </p>
         </BodySection>
         <BodySection>
@@ -70,11 +75,11 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
           />
           <p>
             Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index will be
-            published to connect this archive to your newsroom.
+            published to connect this archive to your newsroom to provide proof that it’s contents have not changed.
           </p>
           <p>
             When you archive the full text, please make note that the text will be public and will be visible outside of
-            your paywall.
+            your paywall. You can always archive at a later date.
           </p>
         </BodySection>
         <BodySection>

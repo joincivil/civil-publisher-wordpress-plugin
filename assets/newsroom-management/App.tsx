@@ -145,14 +145,11 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     }
     return (
       <Modal>
-        <h2>Congratulations!</h2>
-        <p>You've created a newsroom.</p>
-        <p>
-          Now you can add additional officers and editors to help you manage your newsroom and publish content on the
-          blockchain.
-        </p>
+        <h2>You created a newsroom smart contract!</h2>
+        <p>Congratulations, your Newsroom smart contract processed successfully.</p>
+        <p>Next, let's add additional accounts to your Newsroom smart contract.</p>
         <Button size={buttonSizes.MEDIUM_WIDE} onClick={() => this.setState({ creationModalOpen: false })}>
-          Close
+          OK
         </Button>
       </Modal>
     );

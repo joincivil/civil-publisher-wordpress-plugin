@@ -138,7 +138,13 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
           onBlur={() => this.setState({ focused: false })}
         >
           <label>Name</label>
-          <TextInput value={this.state.value.name} onChange={this.onChange} name={"username"} />
+          <TextInput
+            value={this.state.value.name}
+            onChange={this.onChange}
+            name={"username"}
+            placeholder="Search for a user"
+            noLabel
+          />
           {this.renderOptions()}
         </NameInputWrapper>
         <AddressInputWrapper>

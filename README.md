@@ -33,7 +33,7 @@ This plugin follows Automattic's coding standards for WordPress. To run these yo
 You also have to install WP coding standards and add them to phpcs config paths:
 
     composer global require automattic/vipwpcs
-  phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/automattic/vipwpcs
+    phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/automattic/vipwpcs
 
 (Note that your default global composer path might not be `$HOME/.composer/`, it may be `$HOME/.config/composer/` or something else - you can check with `composer global config bin-dir --absolute`)
 
@@ -41,4 +41,3 @@ You can then run linting from package.json scripts:
 
     yarn phpcs # checks and outputs errors
     yarn phpcbf # automatically fixes some errors
-
