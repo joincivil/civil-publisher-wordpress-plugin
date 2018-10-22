@@ -1,0 +1,3 @@
+node_modules
+build/**/*.ts
+!build/**/*.build.js
