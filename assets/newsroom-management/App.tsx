@@ -92,7 +92,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           showWelcome={true}
           profileUrl={urls.PROFILE}
           helpUrl={urls.FAQ_HOME}
-          baseUrl={urls.HELP_BASE}
+          helpUrlBase={urls.HELP_BASE}
           newsroomUrl={urls.HOMEPAGE}
           logoUrl={urls.LOGO}
           profileAddressSaving={this.state.profileAddressSaving}
