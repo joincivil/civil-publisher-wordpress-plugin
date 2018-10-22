@@ -8,7 +8,7 @@ import { fonts, Button, buttonSizes, AddressWithMetaMaskIcon } from "@joincivil/
 import { hasInjectedProvider } from "../../util";
 import { saveAddressToProfile } from "../../api-helpers";
 import { ErrorText, ErrorHeading, BodySection } from "../styles";
-import { NETWORK_NICE_NAME } from "../../constants";
+import { NETWORK_NICE_NAME, urls } from "../../constants";
 
 export interface PanelWalletStatusProps {
   noProvider: boolean;
@@ -37,7 +37,7 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
   public render(): JSX.Element | null {
     const faqText = (
       <>
-        <a href="#TODO" target="_blank">
+        <a href={`${urls.FAQ_HOME}`} target="_blank">
           Read our FAQ
         </a>{" "}
         for help.

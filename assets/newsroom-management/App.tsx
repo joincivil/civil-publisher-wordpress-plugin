@@ -99,7 +99,8 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           showWalletOnboarding={true}
           showWelcome={true}
           profileUrl={urls.PROFILE}
-          helpUrl={urls.HELP}
+          helpUrl={urls.FAQ_HOME}
+          helpUrlBase={urls.HELP_BASE}
           newsroomUrl={urls.HOMEPAGE}
           logoUrl={urls.LOGO}
           enable={async () => {

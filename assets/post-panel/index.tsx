@@ -75,7 +75,7 @@ const navLogo = (
   </LogoWrap>
 );
 const navHelp = (
-  <NavHelp href={`${urls.HELP}#TODO`} target="_blank">
+  <NavHelp href={`${urls.FAQ_HOME}`} target="_blank">
     Help <NorthEastArrow />
   </NavHelp>
 );
