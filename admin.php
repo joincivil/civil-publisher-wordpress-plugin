@@ -58,15 +58,6 @@ function add_menus() {
 		__NAMESPACE__ . '\content_viewer_content'
 	);
 
-	add_submenu_page(
-		TOP_LEVEL_MENU,
-		__( 'Wallet Addresses', 'civil' ),
-		__( 'Wallet Addresses', 'civil' ),
-		'edit_posts',
-		WALLET_PAGE,
-		__NAMESPACE__ . '\wallet_menu_content'
-	);
-
 	// Remove unneeded "Civil" submenu.
 	remove_submenu_page( TOP_LEVEL_MENU, TOP_LEVEL_MENU );
 }
@@ -96,16 +87,6 @@ function content_viewer_content() {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
 	}
 	require_once dirname( __FILE__ ) . '/content-viewer.php';
-}
-
-/**
- * Wallet Addresses page content.
- */
-function wallet_menu_content() {
-	if ( ! current_user_can( 'edit_posts' ) ) {
-		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
-	}
-	require_once dirname( __FILE__ ) . '/wallet-addresses.php';
 }
 
 /**
