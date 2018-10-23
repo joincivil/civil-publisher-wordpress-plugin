@@ -135,6 +135,7 @@ function constants_script( $script_name ) {
 		'logoUrl' => get_site_icon_url(),
 		'adminEmail' => get_bloginfo( 'admin_email' ),
 		'newsroomTxHash' => get_option( NEWSROOM_TXHASH_OPTION_KEY ),
+		'networkName' => get_option( NETWORK_NAME_OPTION_KEY ),
 	] );
 
 	wp_add_inline_script( $script_name, "window.civilNamespace = $constants_json;" . PHP_EOL, 'before' );
