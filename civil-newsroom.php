@@ -39,7 +39,6 @@ define( __NAMESPACE__ . '\NEWSROOM_CHARTER_OPTION_KEY', 'civil_newsroom_protocol
 // Menus.
 define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-newsroom-protocol-menu' );
 define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-newsroom-protocol-management' );
-define( __NAMESPACE__ . '\WALLET_PAGE', 'civil-newsroom-protocol-wallets' );
 define( __NAMESPACE__ . '\CONTENT_VIEWER', 'civil-newsroom-protocol-content' );
 
 require_once dirname( __FILE__ ) . '/utils.php';
