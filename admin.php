@@ -63,11 +63,16 @@ function add_menus() {
 }
 add_action( 'admin_menu', __NAMESPACE__ . '\add_menus' );
 
+/**
+ * Add FAQ link to plugin menu.
+ */
 function add_faq_link() {
+	// phpcs:disable WordPress.WP.GlobalVariablesOverride.OverrideProhibited -- can't find any other way to get external link submenu except redirect headers or crazy url filter shit
 	global $submenu;
-	$submenu[TOP_LEVEL_MENU][] = array('FAQ and Help', 'edit_posts', "https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists");
+	$submenu[ TOP_LEVEL_MENU ][] = array( 'FAQ and Help', 'edit_posts', 'https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists' );
+	// phpcs:enable
 }
-add_action('admin_menu', __NAMESPACE__ . '\add_faq_link');
+add_action( 'admin_menu', __NAMESPACE__ . '\add_faq_link' );
 
 /**
  * Civil Newsroom Management page content.

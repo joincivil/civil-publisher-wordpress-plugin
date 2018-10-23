@@ -129,12 +129,14 @@ function common_scripts( $script_name ) {
  */
 function constants_script( $script_name ) {
 	$constants_json = json_encode( [
+		'wpDebug' => WP_DEBUG,
 		'newsroomAddress' => get_option( NEWSROOM_ADDRESS_OPTION_KEY ),
 		'wpSiteUrl' => site_url(),
 		'wpAdminUrl' => get_admin_url(),
 		'logoUrl' => get_site_icon_url(),
 		'adminEmail' => get_bloginfo( 'admin_email' ),
 		'newsroomTxHash' => get_option( NEWSROOM_TXHASH_OPTION_KEY ),
+		'networkName' => get_option( NETWORK_NAME_OPTION_KEY ),
 	] );
 
 	wp_add_inline_script( $script_name, "window.civilNamespace = $constants_json;" . PHP_EOL, 'before' );

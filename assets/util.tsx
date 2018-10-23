@@ -10,7 +10,7 @@ const { dateI18n, getSettings } = window.wp.date;
 import { Civil, ApprovedRevision } from "@joincivil/core";
 import { Newsroom } from "@joincivil/core/build/src/contracts/newsroom";
 
-import { timestampFormat } from "./constants";
+import { timestampFormat, NETWORK_NAME } from "./constants";
 
 export const getCivil = (() => {
   const civil: Civil | undefined = hasInjectedProvider() ? new Civil() : undefined;
@@ -53,7 +53,7 @@ export async function getNewsroom(): Promise<Newsroom> {
 }
 
 export function isCorrectNetwork(networkName: string): boolean {
-  return networkName === "rinkeby"; // just hard code it for now
+  return networkName === NETWORK_NAME;
 }
 
 export function hasInjectedProvider(): boolean {
