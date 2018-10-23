@@ -106,7 +106,6 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           enable={async () => {
             if ((window as any).ethereum) {
               await (window as any).ethereum.enable();
-              console.log("here");
               this.setState({metamaskEnabled: true});
             }
           }}

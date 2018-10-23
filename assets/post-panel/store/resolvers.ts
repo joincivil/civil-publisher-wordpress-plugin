@@ -1,6 +1,6 @@
 import { apiNamespace } from "../../constants";
 import { getNewsroom } from "../../util";
-import { setIsNewsroomEditor, setUserData, setCurrentUserId, addOrUpdateRevision } from "./actions";
+import { setIsNewsroomEditor, setUserData, setCurrentUserId, addOrUpdateRevision, setMetamaskIsEnabled } from "./actions";
 import { AnyAction } from "redux";
 
 const { apiRequest } = window.wp;
@@ -61,4 +61,12 @@ export async function getRevisionJSON(state: any, revisionID: string): Promise<A
 export async function getCurrentUserId(state: any): Promise<AnyAction> {
   const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
   return setCurrentUserId(userInfo.id);
+}
+
+export async function getMetaMaskEnabled(state: any): Promise<AnyAction> {
+  let enabled = true;
+  if ((window as any).ethereum) {
+    enabled = await (window as any).ethereum.isEnabled();
+  }
+  return setMetamaskIsEnabled(enabled);
 }

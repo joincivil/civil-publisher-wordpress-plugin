@@ -113,3 +113,12 @@ export const setOpenTab = (openTabIndex: number): AnyAction => {
     },
   };
 };
+
+export const setMetamaskIsEnabled = (metaMaskEnabled: boolean): AnyAction => {
+  return {
+    type: actionTypes.SET_METAMASK_ENABLED,
+    data: {
+      metaMaskEnabled,
+    },
+  };
+};
