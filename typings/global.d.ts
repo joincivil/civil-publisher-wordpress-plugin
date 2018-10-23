@@ -31,6 +31,7 @@ interface Window {
     wpAdminUrl: string;
     logoUrl?: string;
     adminEmail?: boolean;
+    networkName?: string;
   };
   civilImages: {
     metamask_confim_modal: string;

@@ -30,8 +30,8 @@ export enum siteOptionKeys {
   NEWSROOM_CHARTER = "civil_newsroom_protocol_newsroom_charter",
 }
 
-export const NETWORK_NAME = "rinkeby";
-export const NETWORK_NICE_NAME = "Rinkeby Test Network";
+export const NETWORK_NAME = window.civilNamespace.networkName || "main";
+export const NETWORK_NICE_NAME = NETWORK_NAME === "main" ? "Main Ethereum Network" : (NETWORK_NAME[0].toUpperCase() + NETWORK_NAME.substr(1) + " Test Network");
 
 export const theme = {
   primaryButtonBackground: "#0085ba",
