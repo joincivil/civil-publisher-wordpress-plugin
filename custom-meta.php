@@ -317,7 +317,7 @@ function network_name_input() {
 		size="42"
 		id="<?php echo esc_attr( NETWORK_NAME_OPTION_KEY ); ?>"
 		name="<?php echo esc_attr( NETWORK_NAME_OPTION_KEY ); ?>"
-		placeholder="main"
+		placeholder="<?php echo esc_attr( WP_DEBUG ? 'rinkeby' : 'main' ); ?>"
 		value="<?php echo esc_attr( $value ); ?>"
 	/>
 	<p class="description"><code>"main" | "morden" | "ropsten" | "rinkeby" | "ganache"</code></p>

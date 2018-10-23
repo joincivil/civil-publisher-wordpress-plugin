@@ -129,6 +129,7 @@ function common_scripts( $script_name ) {
  */
 function constants_script( $script_name ) {
 	$constants_json = json_encode( [
+		'wpDebug' => WP_DEBUG,
 		'newsroomAddress' => get_option( NEWSROOM_ADDRESS_OPTION_KEY ),
 		'wpSiteUrl' => site_url(),
 		'wpAdminUrl' => get_admin_url(),

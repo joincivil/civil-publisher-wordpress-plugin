@@ -25,6 +25,7 @@ interface Window {
 
   web3: any;
   civilNamespace: {
+    wpDebug: boolean;
     newsroomAddress: string;
     newsroomTxHash: string;
     wpSiteUrl: string;
