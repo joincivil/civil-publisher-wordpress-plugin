@@ -1,8 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
 const { compose } = window.wp.compose;
-const { withSelect } = window.wp.data;
-import { SelectType } from "../../../typings/gutenberg";
+const { withSelect, withDispatch } = window.wp.data;
+import { SelectType, DispatchType } from "../../../typings/gutenberg";
 import { EthAddress } from "@joincivil/core";
 import { fonts, Button, buttonSizes, AddressWithMetaMaskIcon } from "@joincivil/components";
 import { hasInjectedProvider } from "../../util";
@@ -15,6 +15,8 @@ export interface PanelWalletStatusProps {
   isCorrectNetwork: boolean;
   wpUserWalletAddress?: EthAddress;
   web3ProviderAddress?: EthAddress;
+  metaMaskEnabled?: boolean;
+  enableMetamask(): Promise<void>
 }
 
 export interface PanelWalletStatusState {
@@ -53,6 +55,15 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
           <a href="https://metamask.io/" target="_blank">
             MetaMask
           </a>, which you can use to create and set up your wallet and address. {faqText}
+        </p>
+      );
+    } else if (!this.props.metaMaskEnabled) {
+      errorHeading = "Wallet not enabled";
+      errorBody = (
+        <p>
+          <Button size={buttonSizes.MEDIUM_WIDE} onClick={this.enableMetamask}>
+            Enable Wallet
+          </Button>
         </p>
       );
     } else if (!this.props.web3ProviderAddress) {
@@ -107,18 +118,37 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
     );
   }
 
+  private enableMetamask = async () => this.props.enableMetamask();
+
   private saveAddress = async () => saveAddressToProfile(this.props.web3ProviderAddress!);
 }
 
 export const PanelWalletStatus = compose([
   withSelect(
     (select: SelectType, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
-      const { isCorrectNetwork, getWeb3ProviderAddress, getCurrentWpUserAddress } = select("civil/blockchain");
+      const { isCorrectNetwork, getWeb3ProviderAddress, getCurrentWpUserAddress, getMetaMaskEnabled } = select("civil/blockchain");
       return {
+        metaMaskEnabled: getMetaMaskEnabled(),
         noProvider: !hasInjectedProvider(),
         isCorrectNetwork: isCorrectNetwork(),
         web3ProviderAddress: getWeb3ProviderAddress(),
         wpUserWalletAddress: getCurrentWpUserAddress(),
+      };
+    },
+  ),
+  withDispatch(
+    (dispatch: DispatchType, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
+      const { setMetamaskIsEnabled } = dispatch("civil/blockchain");
+
+      const enableMetamask = async (): Promise<void> => {
+        if ((window as any).ethereum) {
+          await (window as any).ethereum.enable();
+          setMetamaskIsEnabled(true);
+        }
+      }
+
+      return {
+        enableMetamask,
       };
     },
   ),

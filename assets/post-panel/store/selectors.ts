@@ -264,3 +264,7 @@ export function isPluginDataMissing(): boolean {
 
   return !latestRevisionJson || !latestRevisionJson.revisionContentHash;
 }
+
+export function getMetaMaskEnabled(state: any): boolean {
+  return state.network.metaMaskEnabled;
+}
