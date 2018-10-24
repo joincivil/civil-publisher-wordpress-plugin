@@ -2,6 +2,7 @@ import * as React from "react";
 import { BorderlessButton, ToolTip } from "@joincivil/components";
 import styled from "styled-components";
 import { siteTimezoneFormat } from "../../util";
+import { urls } from "../../constants";
 import { BodySection } from "../styles";
 
 export interface RevisionLinksProps {
@@ -36,7 +37,7 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
   if (props.lastArchivedRevision) {
     let transactionArchive = (
       <Link
-        href={`https://rinkeby.etherscan.io/tx/${props.lastArchivedRevision.txHash}`}
+        href={`https://${urls.ETHERSCAN_DOMAIN}/tx/${props.lastArchivedRevision.txHash}`}
         disabled={!props.lastArchivedRevision.archive.transaction}
       >
         View on Ethereum{" "}
@@ -66,7 +67,7 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
       <BodySection>
         <P>Index · {siteTimezoneFormat(props.lastPublishedRevision.published)}</P>
         <Link href={props.lastPublishedRevision.ipfsUrl}>View on IPFS</Link>
-        <Link href={`https://rinkeby.etherscan.io/tx/${props.lastPublishedRevision.txHash}`}>View on Ethereum</Link>
+        <Link href={`https://${urls.ETHERSCAN_DOMAIN}/tx/${props.lastPublishedRevision.txHash}`}>View on Ethereum</Link>
       </BodySection>
       {archiveSection}
     </div>

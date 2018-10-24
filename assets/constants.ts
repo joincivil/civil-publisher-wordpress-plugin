@@ -7,6 +7,7 @@ export const urls = {
   HELP_BASE: "https://cvlconsensys.zendesk.com/hc/en-us/",
   FAQ_HOME: "https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists",
   NEWSROOM_MANAGER: "/wp-admin/admin.php?page=civil-newsroom-protocol-management",
+  ETHERSCAN_DOMAIN: "etherscan.io",
 };
 
 export enum postMetaKeys {
@@ -30,8 +31,14 @@ export enum siteOptionKeys {
   NEWSROOM_CHARTER = "civil_newsroom_protocol_newsroom_charter",
 }
 
-export const NETWORK_NAME = "rinkeby";
-export const NETWORK_NICE_NAME = "Rinkeby Test Network";
+export const NETWORK_NAME = window.civilNamespace.networkName || (window.civilNamespace.wpDebug ? "rinkeby" : "main");
+export const NETWORK_NICE_NAME =
+  NETWORK_NAME === "main"
+    ? "Main Ethereum Network"
+    : NETWORK_NAME[0].toUpperCase() + NETWORK_NAME.substr(1) + " Test Network";
+if (NETWORK_NAME !== "main") {
+  urls.ETHERSCAN_DOMAIN = `${NETWORK_NAME}.etherscan.io`;
+}
 
 export const theme = {
   primaryButtonBackground: "#0085ba",

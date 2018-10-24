@@ -35,11 +35,11 @@ define( __NAMESPACE__ . '\USER_NEWSROOM_ROLE_META_KEY', 'civil_newsroom_protocol
 define( __NAMESPACE__ . '\NEWSROOM_ADDRESS_OPTION_KEY', 'civil_newsroom_protocol_newsroom_address' );
 define( __NAMESPACE__ . '\NEWSROOM_TXHASH_OPTION_KEY', 'civil_newsroom_protocol_newsroom_txhash' );
 define( __NAMESPACE__ . '\NEWSROOM_CHARTER_OPTION_KEY', 'civil_newsroom_protocol_newsroom_charter' );
+define( __NAMESPACE__ . '\NETWORK_NAME_OPTION_KEY', 'civil_newsroom_protocol_network_name' );
 
 // Menus.
 define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-newsroom-protocol-menu' );
 define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-newsroom-protocol-management' );
-define( __NAMESPACE__ . '\WALLET_PAGE', 'civil-newsroom-protocol-wallets' );
 define( __NAMESPACE__ . '\CONTENT_VIEWER', 'civil-newsroom-protocol-content' );
 
 require_once dirname( __FILE__ ) . '/utils.php';

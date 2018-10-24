@@ -44,9 +44,9 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   public async componentDidMount(): Promise<void> {
     if ((window as any).ethereum) {
       const metamaskEnabled = await (window as any).ethereum.isEnabled();
-      this.setState({metamaskEnabled});
+      this.setState({ metamaskEnabled });
     } else {
-      this.setState({metamaskEnabled: true});
+      this.setState({ metamaskEnabled: true });
     }
     if (!this.props.address && this.props.txHash && this.civil) {
       const newsroom = await this.civil.newsroomFromFactoryTxHashUntrusted(this.props.txHash);
@@ -106,7 +106,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           enable={async () => {
             if ((window as any).ethereum) {
               await (window as any).ethereum.enable();
-              this.setState({metamaskEnabled: true});
+              this.setState({ metamaskEnabled: true });
             }
           }}
           profileAddressSaving={this.state.profileAddressSaving}
