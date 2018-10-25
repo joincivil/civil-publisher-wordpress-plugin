@@ -65,7 +65,7 @@ export async function getCurrentUserId(state: any): Promise<AnyAction> {
 
 export async function getMetaMaskEnabled(state: any): Promise<AnyAction> {
   let enabled = true;
-  if ((window as any).ethereum) {
+  if ((window as any).ethereum && (window as any).ethereum.isEnabled) {
     enabled = await (window as any).ethereum.isEnabled();
   }
   return setMetamaskIsEnabled(enabled);

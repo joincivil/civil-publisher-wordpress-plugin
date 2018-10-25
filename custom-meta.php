@@ -152,8 +152,7 @@ function user_meta_callback( $user, $field_name ) {
 function newsroom_address_init() {
 	newsroom_address_register_setting();
 
-	// Just for debugging by superadmins - non-superadmins have to go through the dedicated Newsroom Management page.
-	if ( is_super_admin() ) {
+	if ( current_user_can( 'manage_options' ) ) {
 		add_settings_field(
 			NEWSROOM_ADDRESS_OPTION_KEY,
 			__( 'Newsroom Contract Address', 'civil' ),
@@ -206,7 +205,7 @@ add_action( 'rest_api_init', __NAMESPACE__ . '\newsroom_txhash_register_setting'
  * @return string Sanitized charter.
  */
 function sanitize_newsroom_charter( $input ) {
-	return json_decode(json_encode($input));
+	return json_decode( json_encode( $input ) );
 }
 
 /**
@@ -217,7 +216,7 @@ function newsroom_charter_register_setting() {
 		'general',
 		NEWSROOM_CHARTER_OPTION_KEY,
 		array(
-			'type' => 'string', // stringified JSON
+			'type' => 'string', // stringified JSON.
 			'single' => true,
 			'show_in_rest' => true,
 			'sanitize_callback' => __NAMESPACE__ . '\sanitize_newsroom_charter',
@@ -239,6 +238,7 @@ function newsroom_address_input() {
 		placeholder="0x123abc"
 		value="<?php echo esc_attr( $value ); ?>"
 	/>
+	<p class="description"><strong>Warning:</strong> Don't change this unless you know what you're doing. Your newsroom should be set up via the <a href="<?php echo esc_url( menu_page_url( MANAGEMENT_PAGE, false ) ); ?>">Newsroom Manager</a> instead.</p>
 	<?php
 }
 
@@ -270,6 +270,58 @@ function sanitize_newsroom_address( $input ) {
 	}
 
 	return $addr;
+}
+
+/**
+ * Register and add network name field.
+ */
+function network_name_init() {
+	network_name_register_setting();
+
+	if ( current_user_can( 'manage_options' ) ) {
+		add_settings_field(
+			NETWORK_NAME_OPTION_KEY,
+			__( 'Ethereum Network Name', 'civil' ),
+			__NAMESPACE__ . '\network_name_input',
+			'general',
+			'default'
+		);
+	}
+}
+add_action( 'admin_init', __NAMESPACE__ . '\network_name_init' );
+
+/**
+ * Register network name setting.
+ */
+function network_name_register_setting() {
+	register_setting(
+		'general',
+		NETWORK_NAME_OPTION_KEY,
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'sanitize_callback' => 'sanitize_text_field',
+		)
+	);
+}
+add_action( 'rest_api_init', __NAMESPACE__ . '\network_name_register_setting' );
+
+/**
+ * Output form for capturing network name.
+ */
+function network_name_input() {
+	$value = get_option( NETWORK_NAME_OPTION_KEY );
+	?>
+	<input type="text"
+		size="42"
+		id="<?php echo esc_attr( NETWORK_NAME_OPTION_KEY ); ?>"
+		name="<?php echo esc_attr( NETWORK_NAME_OPTION_KEY ); ?>"
+		placeholder="<?php echo esc_attr( WP_DEBUG ? 'rinkeby' : 'main' ); ?>"
+		value="<?php echo esc_attr( $value ); ?>"
+	/>
+	<p class="description"><code>"main" | "morden" | "ropsten" | "rinkeby" | "ganache"</code></p>
+	<?php
 }
 
 /**
