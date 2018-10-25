@@ -40,14 +40,13 @@ function show_wallet_profile_field( $user ) {
 						echo sprintf(
 							wp_kses(
 								/* translators: 1: FAQ page URL */
-								__( 'This is a your wallet address. Authors need wallet addresses to sign articles, and editors need wallet addresses to sign and index posts to the blockchain. If you change your wallet address, you or your team may <a href="%1$s">lose access to your newsroom</a>, so be sure to verify that this address is correct.', 'civil' ),
+								__( 'This wallet address will be used to determine and grant you access to your newsroom smart contract. If you later change to a new wallet you will lose that access unless your new wallet has been added to the contract. If you lose access to this wallet, you or your team may lose access to your newsroom smart contract. <a href="%1$s">Learn more</a>', 'civil' ),
 								[ 'a' => [ 'href' => [] ] ]
 							),
-							esc_url( menu_page_url( HELP_PAGE, false ) . '#TODO' )
+							esc_url( FAQ_HOME )
 						);
 						?>
 					</p>
-					<p><a href="<?php esc_url( menu_page_url( HELP_PAGE ) ); ?>#TODO"><?php esc_html_e( 'Learn more about wallet addresses' ); ?></a>.</p>
 				</div>
 			</td>
 		</tr>

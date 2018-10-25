@@ -200,7 +200,7 @@ function newsroom_setup_nag() {
 		</p>
 		<p class="civil-buttons-wrap">
 			<a href="<?php echo esc_url( $management_page_url ); ?>" class="button button-primary"><?php esc_html_e( 'Set Up Newsroom', 'civil' ); ?></a>
-			<a href="<?php echo esc_url( menu_page_url( 'TODO', false ) ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
+			<a href="<?php echo esc_url( FAQ_HOME ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
 		</p>
 		<?php
 		civil_notice_close();
@@ -240,7 +240,7 @@ function wallet_address_nag() {
 		</p>
 		<p class="civil-buttons-wrap">
 			<a href="<?php echo esc_url( $edit_profile_url ); ?>" class="button button-primary"><?php esc_html_e( 'Add Wallet Address', 'civil' ); ?></a>
-			<a href="<?php echo esc_url( menu_page_url( 'TODO', false ) ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
+			<a href="<?php echo esc_url( FAQ_HOME ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
 		</p>
 		<?php
 		civil_notice_close();
