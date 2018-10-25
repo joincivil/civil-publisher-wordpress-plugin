@@ -2,10 +2,10 @@
 /**
  * Handles hooks and enqueueing for admin page and Gutenberg plugin scripts
  *
- * @package Civil_Newsroom_Protocol
+ * @package Civil_Publisher
  */
 
-namespace Civil_Newsroom_Protocol;
+namespace Civil_Publisher;
 
 /**
  * Enqueue Gutenberg editor plugin script.
@@ -16,14 +16,14 @@ function enqueue_post_panel() {
 	}
 
 	wp_enqueue_script(
-		'civil-newsroom-protocol-post-panel',
+		'civil-publisher-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),
 		array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
 		true
 	);
 
-	common_scripts( 'civil-newsroom-protocol-post-panel' );
+	common_scripts( 'civil-publisher-post-panel' );
 }
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
 
@@ -109,14 +109,14 @@ function help_menu_content() {
  */
 function contract_management_script() {
 	wp_enqueue_script(
-		'civil-newsroom-protocol-newsroom-management',
+		'civil-publisher-newsroom-management',
 		plugins_url( 'build/newsroom-management.build.js', __FILE__ ),
 		// Need these deps in order to expose React and wp.apiRequest.
 		array( 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
 		true
 	);
-	common_scripts( 'civil-newsroom-protocol-newsroom-management' );
+	common_scripts( 'civil-publisher-newsroom-management' );
 }
 add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
 
@@ -125,14 +125,14 @@ add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ .
  */
 function content_viewer_script() {
 	wp_enqueue_script(
-		'civil-newsroom-protocol-content-viewer',
+		'civil-publisher-content-viewer',
 		plugins_url( 'build/content-viewer.build.js', __FILE__ ),
 		// Need these deps in order to expose React and wp.apiRequest.
 		array( 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
 		true
 	);
-	common_scripts( 'civil-newsroom-protocol-content-viewer' );
+	common_scripts( 'civil-publisher-content-viewer' );
 }
 add_action( 'admin_print_scripts-civil_page_' . CONTENT_VIEWER, __NAMESPACE__ . '\content_viewer_script' );
 
@@ -222,7 +222,7 @@ function wallet_address_nag() {
 	}
 
 	if ( current_user_can_sign_posts() && empty( get_user_meta( get_current_user_id(), USER_ETH_ADDRESS_META_KEY ) ) ) {
-		$edit_profile_url = get_edit_user_link() . '#civil_newsroom_protocol_eth_wallet_address';
+		$edit_profile_url = get_edit_user_link() . '#civil_publisher_eth_wallet_address';
 		civil_notice_open();
 		?>
 		<h3><?php esc_html_e( 'Civil Newsroom Manager', 'civil' ); ?></h3>

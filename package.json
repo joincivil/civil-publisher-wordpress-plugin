@@ -1,6 +1,6 @@
 {
-  "name": "civil-newsroom-wordpress-plugin",
-  "description": "Civil Newsroom WordPress Plugin",
+  "name": "civil-publisher-wordpress-plugin",
+  "description": "Civil Publisher WordPress Plugin",
   "version": "0.1.0",
   "private": true,
   "scripts": {

@@ -24,7 +24,7 @@ function init(): void {
         <App />
       </Provider>
     </ErrorBoundary>,
-    document.getElementById("civil-newsroom-management"),
+    document.getElementById("civil-publisher-newsroom-management"),
   );
 }
 

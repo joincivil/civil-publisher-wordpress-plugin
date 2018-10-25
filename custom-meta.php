@@ -2,10 +2,10 @@
 /**
  * Handles custom user and site meta
  *
- * @package Civil_Newsroom_Protocol
+ * @package Civil_Publisher
  */
 
-namespace Civil_Newsroom_Protocol;
+namespace Civil_Publisher;
 
 /**
  * Output custom fields for user profile.
@@ -18,7 +18,7 @@ function show_wallet_profile_field( $user ) {
 	}
 
 	$wallet_address = get_the_author_meta( USER_ETH_ADDRESS_META_KEY, $user->ID );
-	wp_nonce_field( 'civil_newsroom_protocol_update_wallet_address_action', 'civil_newsroom_protocol_eth_wallet_address_nonce' );
+	wp_nonce_field( 'civil_publisher_update_wallet_address_action', 'civil_publisher_eth_wallet_address_nonce' );
 	?>
 	<h3><?php esc_html_e( 'Civil Newsroom Manager - Wallet Address', 'civil' ); ?></h3>
 
@@ -66,8 +66,8 @@ add_action( 'edit_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
  */
 function user_profile_update_errors( $errors, $update, $user ) {
 	if (
-		isset( $_POST[ USER_ETH_ADDRESS_META_KEY ], $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] )
-		&& wp_verify_nonce( sanitize_key( $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] ), 'civil_newsroom_protocol_update_wallet_address_action' )
+		isset( $_POST[ USER_ETH_ADDRESS_META_KEY ], $_POST['civil_publisher_eth_wallet_address_nonce'] )
+		&& wp_verify_nonce( sanitize_key( $_POST['civil_publisher_eth_wallet_address_nonce'] ), 'civil_publisher_update_wallet_address_action' )
 	) {
 		$addr = sanitize_text_field( wp_unslash( $_POST[ USER_ETH_ADDRESS_META_KEY ] ) );
 		if ( ! empty( $addr ) && ! is_valid_eth_address( $addr ) ) {
@@ -95,8 +95,8 @@ function update_profile_fields( $user_id ) {
 	}
 
 	if (
-		isset( $_POST[ USER_ETH_ADDRESS_META_KEY ], $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] )
-		&& wp_verify_nonce( sanitize_key( $_POST['civil_newsroom_protocol_eth_wallet_address_nonce'] ), 'civil_newsroom_protocol_update_wallet_address_action' )
+		isset( $_POST[ USER_ETH_ADDRESS_META_KEY ], $_POST['civil_publisher_eth_wallet_address_nonce'] )
+		&& wp_verify_nonce( sanitize_key( $_POST['civil_publisher_eth_wallet_address_nonce'] ), 'civil_publisher_update_wallet_address_action' )
 	) {
 		$addr = sanitize_text_field( wp_unslash( $_POST[ USER_ETH_ADDRESS_META_KEY ] ) );
 		if ( is_valid_eth_address( $addr ) ) {
@@ -258,7 +258,7 @@ function sanitize_newsroom_address( $input ) {
 	if ( ! is_valid_eth_address( $addr ) ) {
 		add_settings_error(
 			NEWSROOM_ADDRESS_OPTION_KEY,
-			'civil_newsroom_protocol_newsroom_address_err',
+			'civil_publisher_newsroom_address_err',
 			sprintf(
 				/* translators: %1 is ETH contract address e.g. "0xabc123..." */
 				__( 'Newsroom Contract Address "%1$s" is not a valid ETH address', 'civil' ),
@@ -340,7 +340,7 @@ function sanitize_newsroom_txhash( $input ) {
 	if ( ! is_valid_txhash( $txhash ) ) {
 		add_settings_error(
 			NEWSROOM_TXHASH_OPTION_KEY,
-			'civil_newsroom_protocol_newsroom_txhash_err',
+			'civil_publisher_newsroom_txhash_err',
 			sprintf(
 				/* translators: %1 is ETH contract address e.g. "0xabc123..." */
 				__( 'Newsroom Contract txhash "%1$s" is not a valid ETH transaction hash', 'civil' ),
