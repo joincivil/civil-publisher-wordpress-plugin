@@ -45,7 +45,7 @@ module.exports = env => {
               loader: 'file-loader',
               options: {
                 name: "[name].[ext]",
-                publicPath: "/wp-content/plugins/civil-newsroom/images/",
+                publicPath: "/wp-content/plugins/civil-publisher/images/",
                 outputPath: 'images/'
               }
             }
