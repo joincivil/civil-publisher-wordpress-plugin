@@ -1,6 +1,12 @@
 import { apiNamespace } from "../../constants";
 import { getNewsroom } from "../../util";
-import { setIsNewsroomEditor, setUserData, setCurrentUserId, addOrUpdateRevision, setMetamaskIsEnabled } from "./actions";
+import {
+  setIsNewsroomEditor,
+  setUserData,
+  setCurrentUserId,
+  addOrUpdateRevision,
+  setMetamaskIsEnabled,
+} from "./actions";
 import { AnyAction } from "redux";
 
 const { apiRequest } = window.wp;

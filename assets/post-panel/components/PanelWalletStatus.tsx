@@ -16,7 +16,7 @@ export interface PanelWalletStatusProps {
   wpUserWalletAddress?: EthAddress;
   web3ProviderAddress?: EthAddress;
   metaMaskEnabled?: boolean;
-  enableMetamask(): Promise<void>
+  enableMetamask(): Promise<void>;
 }
 
 export interface PanelWalletStatusState {
@@ -126,7 +126,9 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
 export const PanelWalletStatus = compose([
   withSelect(
     (select: SelectType, ownProps: Partial<PanelWalletStatusProps>): Partial<PanelWalletStatusProps> => {
-      const { isCorrectNetwork, getWeb3ProviderAddress, getCurrentWpUserAddress, getMetaMaskEnabled } = select("civil/blockchain");
+      const { isCorrectNetwork, getWeb3ProviderAddress, getCurrentWpUserAddress, getMetaMaskEnabled } = select(
+        "civil/blockchain",
+      );
       return {
         metaMaskEnabled: getMetaMaskEnabled(),
         noProvider: !hasInjectedProvider(),
@@ -145,7 +147,7 @@ export const PanelWalletStatus = compose([
           await (window as any).ethereum.enable();
           setMetamaskIsEnabled(true);
         }
-      }
+      };
 
       return {
         enableMetamask,

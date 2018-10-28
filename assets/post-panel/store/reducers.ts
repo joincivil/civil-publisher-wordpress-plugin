@@ -121,11 +121,14 @@ export const signatures = (state: SignatureData = {}, action: AnyAction): Signat
   }
 };
 
-export const network = (state: { isCorrectNetwork: boolean, metaMaskEnabled: boolean } = { isCorrectNetwork: true, metaMaskEnabled: true }, action: AnyAction) => {
+export const network = (
+  state: { isCorrectNetwork: boolean; metaMaskEnabled: boolean } = { isCorrectNetwork: true, metaMaskEnabled: true },
+  action: AnyAction,
+) => {
   switch (action.type) {
     case actionTypes.CHANGE_NETWORK:
     case actionTypes.SET_METAMASK_ENABLED:
-      return {...state, ...action.data};
+      return { ...state, ...action.data };
     default:
       return state;
   }
