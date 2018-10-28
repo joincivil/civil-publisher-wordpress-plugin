@@ -75,7 +75,7 @@ function add_faq_link() {
 add_action( 'admin_menu', __NAMESPACE__ . '\add_faq_link' );
 
 /**
- * Civil Newsroom Management page content.
+ * Civil Newsroom Manager page content.
  */
 function newsroom_manager_content() {
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -105,7 +105,7 @@ function help_menu_content() {
 }
 
 /**
- * Enqueue Civil Newsroom Management script.
+ * Enqueue Civil Newsroom Manager script.
  */
 function contract_management_script() {
 	wp_enqueue_script(
@@ -152,7 +152,7 @@ function gutenberg_nag() {
 		echo sprintf(
 			wp_kses(
 				/* translators: 1: Install Guteenberg plugin URL */
-				__( 'The Civil Newsroom Manager requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg plugin</a> to be installed and activated.', 'civil' ),
+				__( 'The Civil Publisher requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg plugin</a> to be installed and activated.', 'civil' ),
 				[
 					'a' => [
 						'href' => [],
@@ -185,7 +185,7 @@ function newsroom_setup_nag() {
 		$management_page_url = menu_page_url( MANAGEMENT_PAGE, false );
 		civil_notice_open();
 		?>
-		<h3><?php esc_html_e( 'Civil Newsroom Manager Installed!', 'civil' ); ?></h3>
+		<h3><?php esc_html_e( 'Civil Publisher Installed!', 'civil' ); ?></h3>
 		<p>
 		<?php
 			echo sprintf(
@@ -225,7 +225,7 @@ function wallet_address_nag() {
 		$edit_profile_url = get_edit_user_link() . '#civil_publisher_eth_wallet_address';
 		civil_notice_open();
 		?>
-		<h3><?php esc_html_e( 'Civil Newsroom Manager', 'civil' ); ?></h3>
+		<h3><?php esc_html_e( 'Civil Publisher', 'civil' ); ?></h3>
 		<p>
 		<?php
 			echo sprintf(

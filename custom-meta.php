@@ -20,7 +20,7 @@ function show_wallet_profile_field( $user ) {
 	$wallet_address = get_the_author_meta( USER_ETH_ADDRESS_META_KEY, $user->ID );
 	wp_nonce_field( 'civil_publisher_update_wallet_address_action', 'civil_publisher_eth_wallet_address_nonce' );
 	?>
-	<h3><?php esc_html_e( 'Civil Newsroom Manager - Wallet Address', 'civil' ); ?></h3>
+	<h3><?php esc_html_e( 'Civil Publisher - Wallet Address', 'civil' ); ?></h3>
 
 	<table class="form-table">
 		<tr>
