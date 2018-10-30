@@ -2,10 +2,10 @@
 /**
  * Handles added functionality to Users page.
  *
- * @package Civil_Newsroom_Protocol
+ * @package Civil_Publisher
  */
 
-namespace Civil_Newsroom_Protocol;
+namespace Civil_Publisher;
 
 /**
  * Enqueue script for Users page.
@@ -16,13 +16,13 @@ function users_page_script() {
 	}
 
 	wp_enqueue_script(
-		'civil-newsroom-protocol-users-page-script',
+		'civil-publisher-users-page-script',
 		plugins_url( 'build/users-page.build.js', __FILE__ ),
 		array( 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
 		true
 	);
-	common_scripts( 'civil-newsroom-protocol-users-page-script' );
+	common_scripts( 'civil-publisher-users-page-script' );
 }
 add_action( 'admin_print_scripts', __NAMESPACE__ . '\users_page_script' );
 
@@ -32,18 +32,18 @@ add_action( 'admin_print_scripts', __NAMESPACE__ . '\users_page_script' );
 function users_page_styles() {
 	?>
 	<style>
-		.column-civil_newsroom_protocol_newsroom_role .spinner {
+		.column-civil_publisher_newsroom_role .spinner {
 			background: url(/wp-admin/images/wpspin_light.gif) no-repeat;
 			visibility: visible;
 			float: none;
 			opacity: 0.25;
 		}
-		.column-civil_newsroom_protocol_eth_wallet_address {
+		.column-civil_publisher_eth_wallet_address {
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
 		}
-		.column-civil_newsroom_protocol_eth_wallet_address:hover {
+		.column-civil_publisher_eth_wallet_address:hover {
 			white-space: normal;
 		}
 	</style>

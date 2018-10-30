@@ -1,4 +1,4 @@
-export const apiNamespace = "/civil-newsroom-protocol/v1/";
+export const apiNamespace = "/civil-publisher/v1/";
 
 export const urls = {
   HOMEPAGE: window.civilNamespace.wpSiteUrl,
@@ -6,29 +6,29 @@ export const urls = {
   PROFILE: `${window.civilNamespace.wpAdminUrl}profile.php`,
   HELP_BASE: "https://cvlconsensys.zendesk.com/hc/en-us/",
   FAQ_HOME: "https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists",
-  NEWSROOM_MANAGER: "/wp-admin/admin.php?page=civil-newsroom-protocol-management",
+  NEWSROOM_MANAGER: "/wp-admin/admin.php?page=civil-publisher-newsroom-management",
   ETHERSCAN_DOMAIN: "etherscan.io",
 };
 
 export enum postMetaKeys {
-  SIGNATURES = "civil_newsroom_protocol_article_signatures",
-  PUBLISHED_REVISIONS = "civil_newsroom_protocol_published_revisions",
-  CIVIL_CONTENT_ID = "civil_newsroom_protocol_content_id",
-  CIVIL_PUBLISH_TXHASH = "civil_newsroom_protocol_publish_tx_hash",
-  CIVIL_PUBLISH_IPFS = "civil_newsroom_protocol_publish_ipfs",
-  CIVIL_PUBLISH_ARCHIVE_STATUS = "civil_newsroom_protocol_publish_archive_status",
-  POST_AUTHORS = "civil_newsroom_protocol_post_authors",
+  SIGNATURES = "civil_publisher_article_signatures",
+  PUBLISHED_REVISIONS = "civil_publisher_published_revisions",
+  CIVIL_CONTENT_ID = "civil_publisher_content_id",
+  CIVIL_PUBLISH_TXHASH = "civil_publisher_publish_tx_hash",
+  CIVIL_PUBLISH_IPFS = "civil_publisher_publish_ipfs",
+  CIVIL_PUBLISH_ARCHIVE_STATUS = "civil_publisher_publish_archive_status",
+  POST_AUTHORS = "civil_publisher_post_authors",
 }
 
 export enum userMetaKeys {
-  WALLET_ADDRESS = "civil_newsroom_protocol_eth_wallet_address",
-  NEWSROOM_ROLE = "civil_newsroom_protocol_newsroom_role",
+  WALLET_ADDRESS = "civil_publisher_eth_wallet_address",
+  NEWSROOM_ROLE = "civil_publisher_newsroom_role",
 }
 
 export enum siteOptionKeys {
-  NEWSROOM_ADDRESS = "civil_newsroom_protocol_newsroom_address",
-  NEWSROOM_TXHASH = "civil_newsroom_protocol_newsroom_txhash",
-  NEWSROOM_CHARTER = "civil_newsroom_protocol_newsroom_charter",
+  NEWSROOM_ADDRESS = "civil_publisher_newsroom_address",
+  NEWSROOM_TXHASH = "civil_publisher_newsroom_txhash",
+  NEWSROOM_CHARTER = "civil_publisher_newsroom_charter",
 }
 
 export const NETWORK_NAME = window.civilNamespace.networkName || (window.civilNamespace.wpDebug ? "rinkeby" : "main");

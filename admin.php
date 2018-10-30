@@ -2,10 +2,10 @@
 /**
  * Handles hooks and enqueueing for admin page and Gutenberg plugin scripts
  *
- * @package Civil_Newsroom_Protocol
+ * @package Civil_Publisher
  */
 
-namespace Civil_Newsroom_Protocol;
+namespace Civil_Publisher;
 
 /**
  * Enqueue Gutenberg editor plugin script.
@@ -16,14 +16,14 @@ function enqueue_post_panel() {
 	}
 
 	wp_enqueue_script(
-		'civil-newsroom-protocol-post-panel',
+		'civil-publisher-post-panel',
 		plugins_url( 'build/post-panel.build.js', __FILE__ ),
 		array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
 		true
 	);
 
-	common_scripts( 'civil-newsroom-protocol-post-panel' );
+	common_scripts( 'civil-publisher-post-panel' );
 }
 add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
 
@@ -75,7 +75,7 @@ function add_faq_link() {
 add_action( 'admin_menu', __NAMESPACE__ . '\add_faq_link' );
 
 /**
- * Civil Newsroom Management page content.
+ * Civil Newsroom Manager page content.
  */
 function newsroom_manager_content() {
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -105,18 +105,18 @@ function help_menu_content() {
 }
 
 /**
- * Enqueue Civil Newsroom Management script.
+ * Enqueue Civil Newsroom Manager script.
  */
 function contract_management_script() {
 	wp_enqueue_script(
-		'civil-newsroom-protocol-newsroom-management',
+		'civil-publisher-newsroom-management',
 		plugins_url( 'build/newsroom-management.build.js', __FILE__ ),
 		// Need these deps in order to expose React and wp.apiRequest.
 		array( 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
 		true
 	);
-	common_scripts( 'civil-newsroom-protocol-newsroom-management' );
+	common_scripts( 'civil-publisher-newsroom-management' );
 }
 add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ . '\contract_management_script' );
 
@@ -125,14 +125,14 @@ add_action( 'admin_print_scripts-civil_page_' . MANAGEMENT_PAGE, __NAMESPACE__ .
  */
 function content_viewer_script() {
 	wp_enqueue_script(
-		'civil-newsroom-protocol-content-viewer',
+		'civil-publisher-content-viewer',
 		plugins_url( 'build/content-viewer.build.js', __FILE__ ),
 		// Need these deps in order to expose React and wp.apiRequest.
 		array( 'wp-edit-post', 'wp-data' ),
 		ASSETS_VERSION,
 		true
 	);
-	common_scripts( 'civil-newsroom-protocol-content-viewer' );
+	common_scripts( 'civil-publisher-content-viewer' );
 }
 add_action( 'admin_print_scripts-civil_page_' . CONTENT_VIEWER, __NAMESPACE__ . '\content_viewer_script' );
 
@@ -152,7 +152,7 @@ function gutenberg_nag() {
 		echo sprintf(
 			wp_kses(
 				/* translators: 1: Install Guteenberg plugin URL */
-				__( 'The Civil Newsroom Manager requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg plugin</a> to be installed and activated.', 'civil' ),
+				__( 'The Civil Publisher requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg plugin</a> to be installed and activated.', 'civil' ),
 				[
 					'a' => [
 						'href' => [],
@@ -185,7 +185,7 @@ function newsroom_setup_nag() {
 		$management_page_url = menu_page_url( MANAGEMENT_PAGE, false );
 		civil_notice_open();
 		?>
-		<h3><?php esc_html_e( 'Civil Newsroom Manager Installed!', 'civil' ); ?></h3>
+		<h3><?php esc_html_e( 'Civil Publisher Installed!', 'civil' ); ?></h3>
 		<p>
 		<?php
 			echo sprintf(
@@ -200,7 +200,7 @@ function newsroom_setup_nag() {
 		</p>
 		<p class="civil-buttons-wrap">
 			<a href="<?php echo esc_url( $management_page_url ); ?>" class="button button-primary"><?php esc_html_e( 'Set Up Newsroom', 'civil' ); ?></a>
-			<a href="<?php echo esc_url( menu_page_url( 'TODO', false ) ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
+			<a href="<?php echo esc_url( FAQ_HOME ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
 		</p>
 		<?php
 		civil_notice_close();
@@ -222,10 +222,10 @@ function wallet_address_nag() {
 	}
 
 	if ( current_user_can_sign_posts() && empty( get_user_meta( get_current_user_id(), USER_ETH_ADDRESS_META_KEY ) ) ) {
-		$edit_profile_url = get_edit_user_link() . '#civil_newsroom_protocol_eth_wallet_address';
+		$edit_profile_url = get_edit_user_link() . '#civil_publisher_eth_wallet_address';
 		civil_notice_open();
 		?>
-		<h3><?php esc_html_e( 'Civil Newsroom Manager', 'civil' ); ?></h3>
+		<h3><?php esc_html_e( 'Civil Publisher', 'civil' ); ?></h3>
 		<p>
 		<?php
 			echo sprintf(
@@ -240,7 +240,7 @@ function wallet_address_nag() {
 		</p>
 		<p class="civil-buttons-wrap">
 			<a href="<?php echo esc_url( $edit_profile_url ); ?>" class="button button-primary"><?php esc_html_e( 'Add Wallet Address', 'civil' ); ?></a>
-			<a href="<?php echo esc_url( menu_page_url( 'TODO', false ) ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
+			<a href="<?php echo esc_url( FAQ_HOME ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'civil' ); ?></a>
 		</p>
 		<?php
 		civil_notice_close();

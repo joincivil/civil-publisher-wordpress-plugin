@@ -2,7 +2,7 @@
 /**
  * FAQ and Help admin page.
  *
- * @package Civil_Newsroom_Protocol
+ * @package Civil_Publisher
  */
 ?>
 

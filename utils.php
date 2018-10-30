@@ -2,10 +2,10 @@
 /**
  * Miscellaneous utility functions.
  *
- * @package Civil_Newsroom_Protocol
+ * @package Civil_Publisher
  */
 
-namespace Civil_Newsroom_Protocol;
+namespace Civil_Publisher;
 
 /**
  * Gets the post types for which to support publishing on Civil.
@@ -18,7 +18,7 @@ function get_civil_post_types() {
 	 *
 	 * @param $post_types The supported post types.
 	 */
-	return apply_filters( 'civil_newsroom_post_types', [ 'post', 'page' ] );
+	return apply_filters( 'civil_publisher_post_types', [ 'post', 'page' ] );
 }
 
 /**
@@ -113,7 +113,7 @@ function common_scripts( $script_name ) {
 
 	if ( WP_DEBUG ) {
 		wp_enqueue_script(
-			'civil-newsroom-protocol-live-reload',
+			'civil-publisher-live-reload',
 			'http://localhost:35729/livereload.js',
 			[],
 			'1.0',

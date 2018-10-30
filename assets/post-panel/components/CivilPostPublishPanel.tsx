@@ -32,7 +32,7 @@ const LogoWrapInner = styled.div`
 export class CivilPostPublishPanelComponent extends React.Component<CivilPostPublishPanelProps> {
   public render(): JSX.Element {
     return (
-      <PluginPostPublishPanel title="Civil Newsroom" initialOpen={true}>
+      <PluginPostPublishPanel title="Civil Publisher" initialOpen={true}>
         <LogoWrapOuter>
           <LogoWrapInner>
             <CivilLogo />

@@ -42,7 +42,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
       return (
         <Body>
           <BodySection>
-            <ErrorHeading>The Civil Newsroom Manager has encountered an unexpected error.</ErrorHeading>
+            <ErrorHeading>The Civil Publisher has encountered an unexpected error.</ErrorHeading>
             {this.state.error && (
               <>
                 <Pre>{this.state.error.toString()}</Pre>

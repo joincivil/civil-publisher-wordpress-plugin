@@ -2,10 +2,10 @@
 /**
  * Hanldes all logic related to hasing a post.
  *
- * @package Civil_Newsroom_Protocol
+ * @package Civil_Publisher
  */
 
-namespace Civil_Newsroom_Protocol;
+namespace Civil_Publisher;
 
 /**
  * The Post_Hashing class.

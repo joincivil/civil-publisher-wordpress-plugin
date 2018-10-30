@@ -232,7 +232,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
           } else {
             const content = await apiRequest({
               method: "GET",
-              path: `/civil-newsroom-protocol/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
+              path: `/civil-publisher/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
             });
             const revision = { ...this.props.revisionJson, content };
             const revisionHash = hashContent(revision);
@@ -293,7 +293,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
       if (this.props.archiveTx) {
         const content = await apiRequest({
           method: "GET",
-          path: `/civil-newsroom-protocol/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
+          path: `/civil-publisher/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
         });
         const revision = { ...this.props.revisionJson, content };
         gas = await newsroom.estimatePublishURIAndHash(revision, hashContent(revision), "", "", true);
@@ -304,7 +304,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
       if (this.props.archiveTx) {
         const content = await apiRequest({
           method: "GET",
-          path: `/civil-newsroom-protocol/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
+          path: `/civil-publisher/v1/revisions-content/${this.props.revisionJson.revisionContentHash}`,
         });
         const revision = { ...this.props.revisionJson, content };
         gas = await newsroom.estimateUpdateURIAndHash(

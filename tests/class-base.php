@@ -2,9 +2,9 @@
 /**
  * Class CivilTestCase
  *
- * The base Civil Newsroom phpunit test class.
+ * The base Civil Publisher phpunit test class.
  *
- * @package Civil_Newsroom_Protocol
+ * @package Civil_Publisher
  */
 class CivilTestCase extends WP_UnitTestCase {
 	/**
