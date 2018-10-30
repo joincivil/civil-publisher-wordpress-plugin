@@ -54,7 +54,8 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
           Don’t have a wallet? Having a wallet is mandatory and we recommend{" "}
           <a href="https://metamask.io/" target="_blank">
             MetaMask
-          </a>, which you can use to create and set up your wallet and address. {faqText}
+          </a>
+          , which you can use to create and set up your wallet and address. {faqText}
         </p>
       );
     } else if (!this.props.metaMaskEnabled) {
