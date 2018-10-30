@@ -145,7 +145,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
       );
     }
 
-    if (!this.state.isGetStartedDismissed && !this.props.civilContentID) {
+    if (!this.state.isGetStartedDismissed && !this.props.civilContentID && !this.props.txHash) {
       return <GetStartedPanel getStarted={this.getStarted} />;
     } else if (!this.props.civilContentID) {
       return (
