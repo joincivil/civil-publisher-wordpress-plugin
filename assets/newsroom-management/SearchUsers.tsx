@@ -220,7 +220,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(addUser(value, userValue.name!));
+        this.props.dispatch(addUser(value, { displayName: userValue.name! }));
       } else {
         try {
           const userFromWallet = await apiRequest({

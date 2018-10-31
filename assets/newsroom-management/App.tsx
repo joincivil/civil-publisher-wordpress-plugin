@@ -88,7 +88,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           txHash={this.props.txHash}
           account={this.state.account}
           onNewsroomCreated={this.onNewsroomCreated}
-          getNameForAddress={this.getNameForAddress}
+          getCmsUserDataForAddress={this.getCmsUserDataForAddress}
           onContractDeployStarted={this.onContractDeployStarted}
           requiredNetwork={NETWORK_NAME}
           requiredNetworkNiceName={NETWORK_NICE_NAME}
@@ -210,7 +210,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     });
   };
 
-  private getNameForAddress = async (address: EthAddress): Promise<CmsUserData> => {
+  private getCmsUserDataForAddress = async (address: EthAddress): Promise<CmsUserData> => {
     try {
       const user = await apiRequest({
         path: apiNamespace + `user-by-eth-address/${address}`,
