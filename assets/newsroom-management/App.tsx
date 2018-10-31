@@ -259,8 +259,10 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
 const mapStateToProps = (state: ManagerState): AppProps => {
   const { user } = state;
   const address = user.get("address");
+  const txHash = user.get("txHash");
   return {
     address,
+    txHash,
   };
 };
 
