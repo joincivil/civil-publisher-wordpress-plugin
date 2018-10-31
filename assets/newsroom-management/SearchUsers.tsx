@@ -236,7 +236,12 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             error: "",
           });
         } catch {
-          this.setState({ error: noUserError, value: {} });
+          this.setState({
+            error: noUserError,
+            value: {
+              name: "",
+            },
+          });
         }
       }
     }
