@@ -13,7 +13,7 @@ import { hashContent } from "@joincivil/utils";
 import { getNewsroom, getIPFS, getCivil } from "../../util";
 import { ModalHeader, ModalP, ModalButtonContainer, ErrorText, HelpText, PrimaryButtonWrap } from "../styles";
 const { apiRequest } = window.wp;
-import { IndexTransactionButton } from "./Buttons";
+import { IndexTransactionButton, WaitingButton } from "./Buttons";
 import { toBuffer } from "ethereumjs-util";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
 
@@ -185,13 +185,17 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
         </p>
         <HelpText>This will open a window and you must complete the transacation in MetaMask to publish.</HelpText>
         <PrimaryButtonWrap>
-          <TransactionButtonNoModal
-            Button={(props: TransactionButtonInnerProps) => (
-              <IndexTransactionButton {...props} archive={this.props.archive} isPublished={this.props.isPublished} />
-            )}
-            transactions={this.getTransaction()}
-            disabled={this.props.disabled}
-          />
+          {this.props.txHash ? (
+            <WaitingButton />
+          ) : (
+            <TransactionButtonNoModal
+              Button={(props: TransactionButtonInnerProps) => (
+                <IndexTransactionButton {...props} archive={this.props.archive} isPublished={this.props.isPublished} />
+              )}
+              transactions={this.getTransaction()}
+              disabled={this.props.disabled}
+            />
+          )}
         </PrimaryButtonWrap>
         {this.renderPreTransactionModal()}
         {this.renderTransactionPendingModal()}

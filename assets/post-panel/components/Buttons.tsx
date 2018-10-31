@@ -21,6 +21,14 @@ export interface IndexTransactionButtonProps extends TransactionButtonInnerProps
   archive?: boolean;
 }
 
+export const WaitingButton = (): JSX.Element => {
+  return (
+    <DisabledTransactionProcessingButton>
+      Transaction In Progress... <ClipL size={15} />
+    </DisabledTransactionProcessingButton>
+  );
+};
+
 export const IndexTransactionButton: React.StatelessComponent<IndexTransactionButtonProps> = props => {
   let buttonComponent = (
     <Button disabled={props.disabled} onClick={props.onClick} size={buttonSizes.MEDIUM_WIDE} fullWidth>
@@ -37,11 +45,7 @@ export const IndexTransactionButton: React.StatelessComponent<IndexTransactionBu
       );
       break;
     case 2:
-      buttonComponent = (
-        <DisabledTransactionProcessingButton>
-          Transaction In Progress... <ClipL size={15} />
-        </DisabledTransactionProcessingButton>
-      );
+      buttonComponent = <WaitingButton />;
       break;
   }
   return buttonComponent;
