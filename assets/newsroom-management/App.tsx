@@ -179,10 +179,12 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
         method: "PUT",
         data: {
           [siteOptionKeys.NEWSROOM_ADDRESS]: address,
+          [siteOptionKeys.NEWSROOM_TXHASH]: "",
         },
       });
       this.setState({ creationModalOpen: true });
       this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
+      this.props.dispatch!(addTxHash(""));
     } catch (err) {
       const errText = "Failed to save newly created newsroom address WP settings";
       console.error(errText, err);
