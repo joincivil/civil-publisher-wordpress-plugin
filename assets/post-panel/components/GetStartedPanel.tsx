@@ -12,17 +12,13 @@ export class GetStartedPanel extends React.Component<GetStartedPanelProps> {
       <Body>
         <BodySection>
           <p>
-            To publish your post to the Civil network, you'll need to select if you want to create an index of your post
-            or additionally archive its content.
+            To publish your post to the Civil network, you'll need to create an index and select if you want to additionally archive its content.
           </p>
           <p>
-            Index will publish a permanent record of the post’s metadata to the Civil network, and provides proof that
-            its contents have not changed since since the last publish date.
+            Index will publish a permanent record of the post’s metadata to the Civil network, which means that anyone who finds that index can track it back to your site where the story will continue to be hosted on your servers. The index provides proof that its contents have not changed since the last publish date.
           </p>
           <p>
-            Archive will backup your content and make the full text public by creating a permanent record as well as an
-            index of the post. Your full text will be viewable outside of your paywall. You'll be able to select how you
-            want to publish.
+          The benefits of archiving your full story are that you will permanently save a copy of your content that will live on regardless of what happens to your servers over time. Note that if you choose to archive your full text it will make it public, which will mean it’s viewable outside of any paywall that might be in place. You'll also be asked to pay more in transaction fees (or gas) in order to upload the full text in addition to the index.You’ll be given the option each time you publish a story to select whether to publish the index or the full archive.
           </p>
           <PrimaryButtonWrap>
             <Button size={buttonSizes.MEDIUM_WIDE} fullWidth onClick={this.props.getStarted}>
