@@ -6,6 +6,7 @@ import {
   newsroomGovernment,
   NewsroomState,
   RevisionAndJson,
+  CmsUserData,
 } from "@joincivil/newsroom-manager";
 import { Map } from "immutable";
 import { combineReducers, AnyAction } from "redux";
@@ -26,7 +27,7 @@ export function user(state: Map<string, any> = Map(), action: AnyAction): Map<st
 export interface ManagerState {
   newsrooms: Map<string, NewsroomState>;
   newsroomUi: Map<string, any>;
-  newsroomUsers: Map<EthAddress, string>;
+  newsroomUsers: Map<EthAddress, CmsUserData>;
   newsroomContent: Map<number, Map<number, RevisionAndJson>>;
   newsroomGovernment: Map<string, string>;
   user: Map<string, any>;
