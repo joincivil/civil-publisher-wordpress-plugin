@@ -49,15 +49,6 @@ function add_menus() {
 		__NAMESPACE__ . '\newsroom_manager_content'
 	);
 
-	add_submenu_page(
-		TOP_LEVEL_MENU,
-		__( 'Content Viewer', 'civil' ),
-		__( 'Content Viewer', 'civil' ),
-		'edit_posts',
-		CONTENT_VIEWER,
-		__NAMESPACE__ . '\content_viewer_content'
-	);
-
 	// Remove unneeded "Civil" submenu.
 	remove_submenu_page( TOP_LEVEL_MENU, TOP_LEVEL_MENU );
 }
