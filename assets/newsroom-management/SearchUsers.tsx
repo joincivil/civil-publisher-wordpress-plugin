@@ -74,9 +74,9 @@ const ErrorP = styled.p`
 `;
 
 const noAddressError =
-  "No wallet address is associated with this account. You can add one here or have the user add their address to their profile.";
+  "No wallet address is associated with this account. If you enter one above, it will be saved to their profile. You can instead have the user add their address to their profile themselves, and then you can come back to add them here.";
 const noUserError =
-  "No user matches this address. Make sure the address is correct and that all your newsroom members have added their addresses";
+  "No user profile was found with this address. Make sure the address is correct and that all your newsroom members have added their addresses.";
 
 export class SearchUsersComponent extends React.Component<SearchUserProps & DispatchProp<any>, SearchUserState> {
   constructor(props: SearchUserProps & DispatchProp<any>) {
@@ -144,6 +144,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             name={"username"}
             placeholder="Search for a user"
             noLabel
+            autocomplete="off"
           />
           {this.renderOptions()}
         </NameInputWrapper>
@@ -219,7 +220,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(addUser(value, userValue.name!));
+        this.props.dispatch(addUser(value, { displayName: userValue.name! }));
       } else {
         try {
           const userFromWallet = await apiRequest({
@@ -235,7 +236,12 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             error: "",
           });
         } catch {
-          this.setState({ error: noUserError, value: {} });
+          this.setState({
+            error: noUserError,
+            value: {
+              name: "",
+            },
+          });
         }
       }
     }

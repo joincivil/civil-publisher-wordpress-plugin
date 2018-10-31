@@ -88,7 +88,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           txHash={this.props.txHash}
           account={this.state.account}
           onNewsroomCreated={this.onNewsroomCreated}
-          getNameForAddress={this.getNameForAddress}
+          getCmsUserDataForAddress={this.getCmsUserDataForAddress}
           onContractDeployStarted={this.onContractDeployStarted}
           requiredNetwork={NETWORK_NAME}
           requiredNetworkNiceName={NETWORK_NICE_NAME}
@@ -179,10 +179,12 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
         method: "PUT",
         data: {
           [siteOptionKeys.NEWSROOM_ADDRESS]: address,
+          [siteOptionKeys.NEWSROOM_TXHASH]: "",
         },
       });
       this.setState({ creationModalOpen: true });
       this.props.dispatch(addAddress(settings[siteOptionKeys.NEWSROOM_ADDRESS]));
+      this.props.dispatch!(addTxHash(""));
     } catch (err) {
       const errText = "Failed to save newly created newsroom address WP settings";
       console.error(errText, err);
@@ -208,7 +210,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     });
   };
 
-  private getNameForAddress = async (address: EthAddress): Promise<CmsUserData> => {
+  private getCmsUserDataForAddress = async (address: EthAddress): Promise<CmsUserData> => {
     try {
       const user = await apiRequest({
         path: apiNamespace + `user-by-eth-address/${address}`,
