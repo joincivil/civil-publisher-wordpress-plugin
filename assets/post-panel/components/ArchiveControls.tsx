@@ -37,7 +37,6 @@ const Wrapper = styled.div`
 `;
 
 export class ArchiveControls extends React.Component<ArchiveControlsProps> {
-
   public render(): JSX.Element {
     const controls = this.props.archiveSelected ? (
       <>
@@ -49,7 +48,10 @@ export class ArchiveControls extends React.Component<ArchiveControlsProps> {
             </span>
             <Checkbox checked={this.props.ipfsSelected} onClick={() => {}} locked={true} />
           </LowerHeader>
-          <p>Archive to a peer-to-peer distribution network where members of the network pin content to provide a permanent archive of your post. Cost: Free</p>
+          <p>
+            Archive to a peer-to-peer distribution network where members of the network pin content to provide a
+            permanent archive of your post. Cost: Free
+          </p>
         </Wrapper>
         <Wrapper>
           <LowerHeader>
@@ -73,5 +75,4 @@ export class ArchiveControls extends React.Component<ArchiveControlsProps> {
       </>
     );
   }
-
-};
+}
