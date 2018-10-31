@@ -144,6 +144,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             name={"username"}
             placeholder="Search for a user"
             noLabel
+            autocomplete="off"
           />
           {this.renderOptions()}
         </NameInputWrapper>
