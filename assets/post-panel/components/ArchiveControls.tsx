@@ -1,14 +1,5 @@
 import * as React from "react";
-import {
-  SlideCheckbox,
-  Checkbox,
-  QuestionToolTip,
-  BorderlessButton,
-  Button,
-  buttonSizes,
-  Modal,
-  ModalHeading,
-} from "@joincivil/components";
+import { SlideCheckbox, Checkbox, QuestionToolTip } from "@joincivil/components";
 import { MainHeading } from "../styles";
 import styled from "styled-components";
 
