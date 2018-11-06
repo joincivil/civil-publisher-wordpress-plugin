@@ -102,17 +102,20 @@ export const PostStatus = withSelect(
       isSavingPost,
       hasAutosave,
     } = selectStore("core/editor");
+    const { isSavingMetaBoxes } = selectStore("core/edit-post");
     const { isPluginDataMissing } = selectStore("civil/blockchain");
 
     const pluginDataMissing = isPluginDataMissing();
     const onlyAutosaved = pluginDataMissing && hasAutosave();
+    const savingPost = isSavingPost() || isSavingMetaBoxes();
+    const saved = !isEditedPostDirty() && !isCleanNewPost() && !onlyAutosaved && !savingPost;
 
     return {
       requirePublish: ownProps.requirePublish,
-      saved: !isEditedPostDirty() && !isCleanNewPost() && !onlyAutosaved,
+      saved,
       published: isCurrentPostPublished(),
       url: getEditedPostAttribute("link"),
-      isSavingPost: isSavingPost(),
+      isSavingPost: savingPost,
       pluginDataMissing,
     };
   },
