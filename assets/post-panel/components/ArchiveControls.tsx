@@ -59,7 +59,7 @@ export class ArchiveControls extends React.Component<ArchiveControlsProps> {
     return (
       <>
         <HeaderWithFlex>
-          {this.props.isArchived ? "Update" : "Add"} Archive{" "}
+          {this.props.isArchived ? "Update" : "Add"} Full Text Archive{" "}
           <SlideCheckbox onClick={this.props.onHeaderClick} checked={this.props.archiveSelected} />
         </HeaderWithFlex>
         {controls}
