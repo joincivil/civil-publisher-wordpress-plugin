@@ -219,6 +219,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
         displayName: user.display_name,
         username: user.user_login,
         avatarUrl: user.avatar_url,
+        bio: user.bio,
       };
     } catch (e) {
       return undefined;
