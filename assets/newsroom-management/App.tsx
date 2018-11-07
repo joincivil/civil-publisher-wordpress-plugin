@@ -129,7 +129,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   };
 
   private renderUserSearch = (onSetAddress: (address: string) => void): JSX.Element => {
-    return <SearchUsers onSetAddress={onSetAddress} getOptions={this.fetchUserTypeAhead} />;
+    return <SearchUsers onSetAddress={onSetAddress} getOptions={this.fetchUserTypeAhead} newsroomAddress={this.props.address!} />;
   };
 
   private fetchUserTypeAhead = async (str: string): Promise<any[]> => {

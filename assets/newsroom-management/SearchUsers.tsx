@@ -1,5 +1,6 @@
 import * as React from "react";
 const { apiRequest } = window.wp;
+import { EthAddress } from "@joincivil/core";
 import { TextInput } from "@joincivil/components";
 import { isWellFormattedAddress } from "@joincivil/utils";
 import { debounce } from "lodash";
@@ -10,6 +11,7 @@ import { addUser } from "@joincivil/newsroom-manager";
 import { ManagerState } from "../shared/reducer";
 
 export interface SearchUserProps {
+  newsroomAddress: EthAddress;
   getOptions(str: string): Promise<any[]>;
   onSetAddress(address: string): void;
 }
@@ -222,7 +224,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(addUser(value, { displayName: userValue.name! }));
+        this.props.dispatch(addUser(this.props.newsroomAddress, value, { displayName: userValue.name! }));
       } else {
         try {
           const userFromWallet = await apiRequest({
