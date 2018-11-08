@@ -1,51 +1,48 @@
 import * as React from "react";
-import { ArticleIndexIcon, ArticleSignIcon } from "@joincivil/components";
+import { ArticleIndexIcon, ArticleSignIcon, CivilLogo } from "@joincivil/components";
 import { TxHash } from "@joincivil/core";
 import { CircleIndicator, indicatorColors } from "./CircleIndicator";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  border: 1px solid #dddddd;
   border-radius: 4px;
   padding: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
-  cursor: pointer;
-  box-shadow: 0 1px 0 #ccc;
-  &:hover {
-    border: 1px solid #888888;
-  }
 `;
 
 const CivilButton = styled.span`
   color: #0073af;
   padding: 7px 13px;
   margin: 0;
-  border-right: 1px solid #dddddd;
+  top: 1px;
+  svg {
+    height: 12px;
+    width: auto;
+  }
 `;
 
 const IconSection = styled.span`
   display: flex;
   align-items: center;
-  background-color: ${(props: Partial<CivilNavBarButtonsProps>): string => (props.isOpen ? "#555d65" : "transparent")};
-  color: ${(props: Partial<CivilNavBarButtonsProps>): string => (props.isOpen ? "#ffffff" : "#444444")};
-  padding: 5px 13px;
+  background-color: "transparent";
+  color: #444444;
   border-radius: 0 4px 4px 0;
 `;
 
-const DividingLine = styled.div`
-  border-right: 1px solid ${(props: Partial<CivilNavBarButtonsProps>): string => (props.isOpen ? "#ffffff" : "#444444")};
-  height: 17px;
-  width: 0;
-  margin: 0 13px;
-  opacity: 0.5;
-`;
-
-const Span = styled.span`
+const PanelButtonSign = styled<{open: boolean}, "span">("span")`
   display: flex;
   align-items: center;
+  background-color: ${props => props.open ? "#555D65" : "#EAEAEA" };
+  border-radius: 4px 0px 0px 4px;
+  padding: 5px 10px;
+`;
+
+const PanelButtonPublish = styled(PanelButtonSign)`
+  border-radius: 0px 4px 4px 0px;
+  margin-left: 1px;
 `;
 
 export interface CivilNavBarButtonsProps {
@@ -55,26 +52,25 @@ export interface CivilNavBarButtonsProps {
   currentIsVersionPublished?: boolean;
   isSignaturePresent?: boolean;
   isSignatureValid?: boolean;
+  openTab: number;
   setOpenTab(index: number): void;
   openCivilSidebar(): void;
 }
 
 export class CivilNavBarButtons extends React.Component<CivilNavBarButtonsProps> {
   public render(): JSX.Element {
-    const color = this.props.isOpen ? "#ffffff" : "#444444";
     return (
       <Wrapper>
-        <CivilButton> Civil </CivilButton>
-        <IconSection onClick={ev => ev.stopPropagation()} isOpen={this.props.isOpen}>
-          <Span onClick={ev => this.onClickIcon(ev, 0)}>
-            <ArticleSignIcon color={color} />
-            <CircleIndicator border={!this.props.isOpen!} indicatorColor={this.signIndicatorColor()} />
-          </Span>
-          <DividingLine isOpen={this.props.isOpen} />
-          <Span onClick={ev => this.onClickIcon(ev, 1)}>
-            <ArticleIndexIcon color={color} />
-            <CircleIndicator border={!this.props.isOpen!} indicatorColor={this.indexIndicatorColor()} />
-          </Span>
+        <CivilButton><CivilLogo/></CivilButton>
+        <IconSection>
+          <PanelButtonSign open={this.props.isOpen! && this.props.openTab === 0} onClick={ev => this.onClickIcon(ev, 0)}>
+            <ArticleSignIcon color={this.props.isOpen! && this.props.openTab === 0 ? "#ffffff" : "#444444"} />
+            <CircleIndicator border={!this.props.isOpen! || this.props.openTab !== 0} indicatorColor={this.signIndicatorColor()} />
+          </PanelButtonSign>
+          <PanelButtonPublish open={this.props.isOpen! && this.props.openTab === 1} onClick={ev => this.onClickIcon(ev, 1)}>
+            <ArticleIndexIcon color={this.props.isOpen! && this.props.openTab === 1 ? "#ffffff" : "#444444"} />
+            <CircleIndicator border={!this.props.isOpen! || this.props.openTab !== 1} indicatorColor={this.indexIndicatorColor()} />
+          </PanelButtonPublish>
         </IconSection>
       </Wrapper>
     );
