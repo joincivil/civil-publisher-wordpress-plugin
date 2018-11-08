@@ -47,6 +47,7 @@ export const CivilSidebarWithComposed = compose([
         getCurrentUserId,
         getSignatures,
         isValidSignature,
+        getTabIndex,
       } = selectStore("civil/blockchain");
 
       const userId = getCurrentUserId();
@@ -58,6 +59,7 @@ export const CivilSidebarWithComposed = compose([
       }
 
       return {
+        openTab: getTabIndex(),
         isOpen: isPluginSidebarOpened(),
         txHash: getTxHash(),
         lastpublishedRevision: getLastPublishedRevision(),
