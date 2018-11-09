@@ -9,7 +9,7 @@ export interface GetStartedPanelProps {
 
 const TextArea = styled("div")`
   overflow-y: scroll;
-  height: 50vh;
+  height: 35vh;
 `;
 
 export class GetStartedPanel extends React.Component<GetStartedPanelProps> {
