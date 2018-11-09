@@ -79,7 +79,7 @@ const noAddressError =
   "No wallet address is associated with this account. If you enter one above, it will be saved to their profile. You can instead have the user add their address to their profile themselves, and then you can come back to add them here.";
 const noUserError =
   "No user profile was found with this address. Make sure the address is correct and that all your newsroom members have added their addresses.";
-const badAddressError = 
+const badAddressError =
   "The address you entered is invalid. A wallet address needs at least 42 characters and starts with 0x. please check that it is entered correctly.";
 
 export class SearchUsersComponent extends React.Component<SearchUserProps & DispatchProp<any>, SearchUserState> {
