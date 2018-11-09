@@ -136,7 +136,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
             <CollapsableText>
               <p>
                 Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index
-                will be published to connect this archive to your newsroom to provide proof that it’s contents have not
+                will be published to connect this archive to your newsroom to provide proof that its contents have not
                 changed.
               </p>
               <p>

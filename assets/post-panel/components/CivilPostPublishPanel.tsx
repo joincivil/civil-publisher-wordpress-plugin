@@ -38,12 +38,9 @@ export class CivilPostPublishPanelComponent extends React.Component<CivilPostPub
             <CivilLogo />
           </LogoWrapInner>
         </LogoWrapOuter>
-        <p>
-          Your post is live on your website. You can now sign, publish, and archive your post to your newsroom smart
-          contract on the blockchain.
-        </p>
+        <p>This post is live on your website. You can now sign, publish, and archive it to the Civil network.</p>
         <Button isPrimary={true} onClick={this.props.openCivilSidebar}>
-          Open Civil Panel
+          Open Civil Publisher
         </Button>
       </PluginPostPublishPanel>
     );

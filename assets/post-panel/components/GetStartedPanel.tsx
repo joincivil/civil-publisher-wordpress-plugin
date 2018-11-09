@@ -10,7 +10,7 @@ export interface GetStartedPanelProps {
 const TextArea = styled("div")`
   overflow-y: scroll;
   height: 35vh;
-`
+`;
 
 export class GetStartedPanel extends React.Component<GetStartedPanelProps> {
   public render(): JSX.Element {
@@ -32,8 +32,8 @@ export class GetStartedPanel extends React.Component<GetStartedPanelProps> {
               will live on regardless of what happens to your servers over time. Note that if you choose to archive your
               full text it will make it public, which will mean it’s viewable outside of any paywall that might be in
               place. You'll also be asked to pay more in transaction fees (or gas) in order to upload the full text in
-              addition to the index.You’ll be given the option each time you publish a story to select whether to publish
-              the index or the full archive.
+              addition to the index.You’ll be given the option each time you publish a story to select whether to
+              publish the index or the full archive.
             </p>
           </TextArea>
           <PrimaryButtonWrap>

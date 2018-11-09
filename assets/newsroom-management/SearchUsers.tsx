@@ -1,5 +1,6 @@
 import * as React from "react";
 const { apiRequest } = window.wp;
+import { EthAddress } from "@joincivil/core";
 import { TextInput } from "@joincivil/components";
 import { isWellFormattedAddress } from "@joincivil/utils";
 import { debounce } from "lodash";
@@ -10,6 +11,7 @@ import { addUser } from "@joincivil/newsroom-manager";
 import { ManagerState } from "../shared/reducer";
 
 export interface SearchUserProps {
+  newsroomAddress: EthAddress;
   getOptions(str: string): Promise<any[]>;
   onSetAddress(address: string): void;
 }
@@ -77,7 +79,7 @@ const noAddressError =
   "No wallet address is associated with this account. If you enter one above, it will be saved to their profile. You can instead have the user add their address to their profile themselves, and then you can come back to add them here.";
 const noUserError =
   "No user profile was found with this address. Make sure the address is correct and that all your newsroom members have added their addresses.";
-const badAddressError = 
+const badAddressError =
   "The address you entered is invalid. A wallet address needs at least 42 characters and starts with 0x. please check that it is entered correctly.";
 
 export class SearchUsersComponent extends React.Component<SearchUserProps & DispatchProp<any>, SearchUserState> {
@@ -222,7 +224,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(addUser(value, { displayName: userValue.name! }));
+        this.props.dispatch(addUser(this.props.newsroomAddress, value, { displayName: userValue.name! }));
       } else {
         try {
           const userFromWallet = await apiRequest({

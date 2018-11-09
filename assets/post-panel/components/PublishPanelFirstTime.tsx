@@ -120,14 +120,14 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
           />
           <p>
             Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index will be
-            published to connect this archive to your newsroom to provide proof that it’s contents have not changed.
+            published to connect this archive to your newsroom to provide proof that its contents have not changed.
           </p>
           <p>
             When you archive the full text, please make note that the text will be public and will be visible outside of
             any paywalls that might be in place. You can always archive at a later date.
           </p>
           <WhatsTheDifference onClick={() => this.setState({ modalOpen: true })} size={buttonSizes.SMALL}>
-            Whats the difference?
+            What’s the difference?
           </WhatsTheDifference>
         </BodySection>
         <BodySection>
