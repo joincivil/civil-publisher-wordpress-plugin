@@ -13,6 +13,15 @@ export const isNewsroomEditor = (state: boolean | null = null, action: AnyAction
   }
 };
 
+export const newsroomName = (state: string | null = null, action: AnyAction): string | null => {
+  switch (action.type) {
+    case actionTypes.SET_NAME:
+      return action.data;
+    default:
+      return state;
+  }
+};
+
 export const userData = (state: { [id: number]: any } = {}, action: AnyAction): { [id: number]: any } => {
   switch (action.type) {
     case actionTypes.SET_USER_DATA: {
