@@ -94,7 +94,7 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
 
   return tipText ? (
     <WrapperOuter>
-      <ToolTip explainerText={tipText}>{signatureInner}</ToolTip>
+      <ToolTip explainerText={tipText} positionXCenter={true}>{signatureInner}</ToolTip>
     </WrapperOuter>
   ) : (
     signatureInner
