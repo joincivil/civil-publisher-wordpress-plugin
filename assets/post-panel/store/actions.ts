@@ -12,6 +12,13 @@ export function setIsNewsroomEditor(isEditor: boolean): AnyAction {
   };
 }
 
+export function setName(name: string): AnyAction {
+  return {
+    type: actionTypes.SET_NAME,
+    data: name,
+  };
+}
+
 export function setUserData(id: number | "me", userData: any): AnyAction {
   return {
     type: actionTypes.SET_USER_DATA,

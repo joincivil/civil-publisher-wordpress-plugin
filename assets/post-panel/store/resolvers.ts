@@ -6,6 +6,7 @@ import {
   setCurrentUserId,
   addOrUpdateRevision,
   setMetamaskIsEnabled,
+  setName,
 } from "./actions";
 import { AnyAction } from "redux";
 
@@ -15,6 +16,12 @@ const { select, dispatch } = window.wp.data;
 export async function isNewsroomEditor(state: any): Promise<AnyAction> {
   const newsroom = await getNewsroom();
   return setIsNewsroomEditor(await newsroom.hasEditorCapabilities());
+}
+
+export async function getName(state: any): Promise<AnyAction> {
+  const newsroom = await getNewsroom();
+  const name = await newsroom.getName();
+  return setName(name);
 }
 
 /** If no id supplied, defaults to current user. */

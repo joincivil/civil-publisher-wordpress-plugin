@@ -17,6 +17,9 @@ function isResolving(selectorName: string, ...args: any[]): boolean {
 export function isNewsroomEditor(state: any): boolean {
   return state.isNewsroomEditor;
 }
+export function getName(state: any): boolean {
+  return state.newsroomName;
+}
 export function isWpEditor(): boolean {
   return select("civil/blockchain").getUserCapabilities().edit_others_posts;
 }
@@ -212,7 +215,7 @@ export function getLastArchivedRevision(state: any): any {
 export function isValidSignature(state: any, signature: ApprovedRevision): boolean | null {
   const newsroomAddress = window.civilNamespace && window.civilNamespace.newsroomAddress;
   const revisionJson = select("civil/blockchain").getLatestRevisionJSON();
-
+  const newsroomName = select("civil/blockchain").getName();
   if (!revisionJson) {
     return null;
   }
@@ -224,7 +227,7 @@ export function isValidSignature(state: any, signature: ApprovedRevision): boole
   }
   if (
     recoverSignerPersonal({
-      message: prepareUserFriendlyNewsroomMessage(signature.newsroomAddress, signature.contentHash),
+      message: prepareUserFriendlyNewsroomMessage(signature.newsroomAddress, signature.contentHash, newsroomName),
       signature: signature.signature,
     }) !== signature.author
   ) {
