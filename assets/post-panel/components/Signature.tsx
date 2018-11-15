@@ -30,10 +30,10 @@ const WrapperOuter = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
 
-  ${/* This rule is very dumb but I can't find another way to add this style to `ToolTip`. Neither adding styles to `styled(ToolTip)` nor adding `style` attribute to `<ToolTip>` works. */ ""} & > div {
-    width: 100%;
-  }
+const Tip = styled(ToolTip)`
+  width: 100%;
 `;
 
 const UserWrap = styled.span`
@@ -94,7 +94,9 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
 
   return tipText ? (
     <WrapperOuter>
-      <ToolTip explainerText={tipText} positionXCenter={true}>{signatureInner}</ToolTip>
+      <Tip explainerText={tipText} positionXCenter={true}>
+        {signatureInner}
+      </Tip>
     </WrapperOuter>
   ) : (
     signatureInner
