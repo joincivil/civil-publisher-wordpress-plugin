@@ -288,7 +288,7 @@ class REST_API {
 				'user_login' => $users[0]->data->user_login,
 				'display_name' => $users[0]->data->display_name,
 				'avatar_url' => $avatar_url,
-				'bio' => $bio,
+				'bio' => strip_tags( $bio ),
 			]
 		);
 	}
