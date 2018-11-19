@@ -4,7 +4,7 @@ import { connect, DispatchProp } from "react-redux";
 import { Newsroom, CmsUserData, IpfsObject } from "@joincivil/newsroom-manager";
 import { Civil, EthAddress, TxHash, CharterData } from "@joincivil/core";
 import { ManagerState } from "../shared/reducer";
-import { addAddress, addTxHash } from "../shared/actions";
+import { addAddress, addTxHash, setMetaMaskEnabled } from "../shared/actions";
 import { saveAddressToProfile } from "../api-helpers";
 import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme, urls } from "../constants";
 import { getCivil, getIPFS } from "../util";
@@ -14,6 +14,7 @@ import { SearchUsers } from "./SearchUsers";
 export interface AppProps {
   address?: EthAddress;
   txHash?: TxHash;
+  metamaskEnabled?: boolean;
 }
 
 export interface AppState {
@@ -22,7 +23,6 @@ export interface AppState {
   profileWalletAddress?: EthAddress;
   account?: EthAddress;
   currentNetwork?: string;
-  metamaskEnabled?: boolean;
 }
 
 class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
@@ -42,12 +42,6 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   }
 
   public async componentDidMount(): Promise<void> {
-    if ((window as any).ethereum && (window as any).ethereum.isEnabled) {
-      const metamaskEnabled = await (window as any).ethereum.isEnabled();
-      this.setState({ metamaskEnabled });
-    } else {
-      this.setState({ metamaskEnabled: true });
-    }
     if (!this.props.address && this.props.txHash && this.civil) {
       const newsroom = await this.civil.newsroomFromFactoryTxHashUntrusted(this.props.txHash);
       await this.onNewsroomCreated(newsroom.address);
@@ -93,7 +87,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           requiredNetwork={NETWORK_NAME}
           requiredNetworkNiceName={NETWORK_NICE_NAME}
           currentNetwork={this.state.currentNetwork}
-          metamaskEnabled={this.state.metamaskEnabled}
+          metamaskEnabled={this.props.metamaskEnabled}
           renderUserSearch={this.renderUserSearch}
           theme={theme}
           showWalletOnboarding={true}
@@ -105,8 +99,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           logoUrl={urls.LOGO}
           enable={async () => {
             if ((window as any).ethereum) {
-              await (window as any).ethereum.enable();
-              this.setState({ metamaskEnabled: true });
+              this.props.dispatch(setMetaMaskEnabled(!!(await (window as any).ethereum.enable())));
             }
           }}
           profileAddressSaving={this.state.profileAddressSaving}
@@ -269,8 +262,10 @@ const mapStateToProps = (state: ManagerState): AppProps => {
   const { user } = state;
   const address = user.get("address");
   const txHash = user.get("txHash");
+  const metamaskEnabled = user.get("metamaskEnabled");
   return {
     address,
+    metamaskEnabled,
     txHash,
   };
 };

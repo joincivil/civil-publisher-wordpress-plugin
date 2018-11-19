@@ -79,3 +79,15 @@ export function updatePostMeta(metaUpdates: object): void {
     meta: { ...unsavedMeta, ...metaUpdates },
   });
 }
+
+export async function getMetaMaskEnabled(): Promise<boolean> {
+  if ((window as any).ethereum) {
+    try {
+      return !!(await (window as any).ethereum.enable());
+    } catch (e) {
+      return false;
+    }
+  } else {
+    return true;
+  }
+}

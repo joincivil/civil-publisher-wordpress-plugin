@@ -19,6 +19,8 @@ export function user(state: Map<string, any> = Map(), action: AnyAction): Map<st
       return state.set("address", action.data.address);
     case managerActions.ADD_TXHASH:
       return state.set("txHash", action.data.txHash);
+    case managerActions.SET_METAMASK_ENABLED:
+      return state.set("metamaskEnabled", action.data.enabled);
     default:
       return state;
   }
