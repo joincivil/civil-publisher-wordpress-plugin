@@ -60,7 +60,7 @@ add_action( 'admin_menu', __NAMESPACE__ . '\add_menus' );
 function add_faq_link() {
 	// phpcs:disable WordPress.WP.GlobalVariablesOverride.OverrideProhibited -- can't find any other way to get external link submenu except redirect headers or crazy url filter shit
 	global $submenu;
-	$submenu[ TOP_LEVEL_MENU ][] = array( 'FAQ and Help', 'edit_posts', 'https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists' );
+	$submenu[ TOP_LEVEL_MENU ][] = array( 'Help 🡭', 'edit_posts', 'https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists' );
 	// phpcs:enable
 }
 add_action( 'admin_menu', __NAMESPACE__ . '\add_faq_link' );
@@ -290,3 +290,16 @@ function civil_notice_close() {
 	</div>
 	<?php
 }
+
+/**
+ * Dumb script to ensure external help menu link opens in a new tab.
+ */
+function help_menu_new_tab() {
+	?>
+	<script>
+		var submenu = document.querySelector(".toplevel_page_<?php echo esc_attr( 'TOP_LEVEL_MENU' ); ?> .wp-submenu a[href*=zendesk]");
+		submenu && submenu.setAttribute("target", "_blank");
+	</script>
+	<?php
+}
+add_action( 'admin_print_footer_scripts', __NAMESPACE__ . '\help_menu_new_tab' );
