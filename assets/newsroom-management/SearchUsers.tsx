@@ -78,7 +78,7 @@ const ErrorP = styled.p`
 const noAddressError =
   "No wallet address is associated with this account. If you enter one above, it will be saved to their profile. You can instead have the user add their address to their profile themselves, and then you can come back to add them here.";
 const noUserError =
-  "No user profile was found with this address. Make sure the address is correct and that all your newsroom members have added their addresses.";
+  "No WordPress user was found with this address. Make sure the address is correct and that all your newsroom members have added their addresses. You may instead add this address to your contract without associating it with a WordPress user.";
 const badAddressError =
   "The address you entered is invalid. A wallet address needs at least 42 characters and starts with 0x. please check that it is entered correctly.";
 
@@ -146,7 +146,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             value={this.state.value.name}
             onChange={this.onChange}
             name={"username"}
-            placeholder="Search for a user"
+            placeholder="Search for a WordPress user"
             noLabel
             autocomplete="off"
           />
