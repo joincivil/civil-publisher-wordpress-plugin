@@ -7,7 +7,7 @@ import { debounce } from "lodash";
 import styled from "styled-components";
 import { userMetaKeys, apiNamespace } from "../constants";
 import { connect, DispatchProp } from "react-redux";
-import { addUser } from "@joincivil/newsroom-manager";
+import { storeUserData } from "@joincivil/newsroom-manager";
 import { ManagerState } from "../shared/reducer";
 
 export interface SearchUserProps {
@@ -144,7 +144,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
           <label>Name</label>
           <TextInput
             value={this.state.value.name}
-            onChange={this.onChange}
+            onChange={this.onNameChange}
             name={"username"}
             placeholder="Search for a WordPress user"
             noLabel
@@ -195,7 +195,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
     }
   };
 
-  private onChange = async (name: string, value: string): Promise<void> => {
+  private onNameChange = async (name: string, value: string): Promise<void> => {
     this.setState({
       error: value === "" ? "" : this.state.error,
       value: { name: value },
@@ -224,7 +224,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(addUser(this.props.newsroomAddress, value, { displayName: userValue.name! }));
+        this.props.dispatch(storeUserData(this.props.newsroomAddress, value, { displayName: userValue.name! }));
       } else {
         try {
           const userFromWallet = await apiRequest({
