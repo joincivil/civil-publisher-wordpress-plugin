@@ -7,13 +7,14 @@ import { debounce } from "lodash";
 import styled from "styled-components";
 import { userMetaKeys, apiNamespace } from "../constants";
 import { connect, DispatchProp } from "react-redux";
-import { storeUserData } from "@joincivil/newsroom-manager";
+import { storeUserData, CmsUserData } from "@joincivil/newsroom-manager";
 import { ManagerState } from "../shared/reducer";
 
 export interface SearchUserProps {
   newsroomAddress: EthAddress;
   getOptions(str: string): Promise<any[]>;
   onSetAddress(address: string): void;
+  getUserDataForAddress(adderss: string): Promise<CmsUserData>;
 }
 
 export interface SearchUsersStateValue {
@@ -224,7 +225,10 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(storeUserData(this.props.newsroomAddress, value, { displayName: userValue.name! }));
+
+        // Search users endpoint doesn't return stuff like bio and avatar - now that address is saved for this user, we can it fetch by address
+        const userData = (await this.props.getUserDataForAddress(value)) || { displayName: userValue.name! };
+        this.props.dispatch(storeUserData(this.props.newsroomAddress, value, userData));
       } else {
         try {
           const userFromWallet = await apiRequest({
