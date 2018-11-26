@@ -131,7 +131,7 @@ export const signatures = (state: SignatureData = {}, action: AnyAction): Signat
 };
 
 export const network = (
-  state: { isCorrectNetwork: boolean; metaMaskEnabled: boolean } = { isCorrectNetwork: true, metaMaskEnabled: true },
+  state: { isCorrectNetwork: boolean; metaMaskEnabled: boolean } = { isCorrectNetwork: true, metaMaskEnabled: false },
   action: AnyAction,
 ) => {
   switch (action.type) {

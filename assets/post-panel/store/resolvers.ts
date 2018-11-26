@@ -1,5 +1,5 @@
 import { apiNamespace } from "../../constants";
-import { getNewsroom } from "../../util";
+import { getNewsroom, getMetaMaskEnabled as metaMaskEnabled } from "../../util";
 import {
   setIsNewsroomEditor,
   setUserData,
@@ -77,9 +77,6 @@ export async function getCurrentUserId(state: any): Promise<AnyAction> {
 }
 
 export async function getMetaMaskEnabled(state: any): Promise<AnyAction> {
-  let enabled = true;
-  if ((window as any).ethereum && (window as any).ethereum.isEnabled) {
-    enabled = await (window as any).ethereum.isEnabled();
-  }
+  const enabled = await metaMaskEnabled();
   return setMetamaskIsEnabled(enabled);
 }

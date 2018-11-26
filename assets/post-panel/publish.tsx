@@ -17,6 +17,7 @@ const BlockchainPublishPanel = compose([
       const { isEditedPostDirty } = selectStore("core/editor");
       const {
         isNewsroomEditor,
+        getMetaMaskEnabled,
         getUserCapabilities,
         getCivilContentID,
         getPublishedRevisions,
@@ -31,6 +32,7 @@ const BlockchainPublishPanel = compose([
         getCurrentIsVersionPublished,
         getLastRevisionId,
       } = selectStore("civil/blockchain");
+      const metaMaskEnabled = getMetaMaskEnabled();
       const userCapabilities = getUserCapabilities();
       const publishDisabled = isPublishDisabled();
       const currentPostLastRevisionId = getLastRevisionId();
@@ -46,12 +48,12 @@ const BlockchainPublishPanel = compose([
         revisionJsonHash = hashContent(revisionJson);
         revisionUrl = `${urls.HOMEPAGE}/wp-json${apiNamespace}revisions/${currentPostLastRevisionId}`;
       }
-
       return {
+        metaMaskEnabled,
         txHash: getTxHash(),
         archiveOptions: getArchiveOptions(),
         ipfs: getIpfsPath(),
-        isNewsroomEditor: isNewsroomEditor(),
+        isNewsroomEditor: metaMaskEnabled ? isNewsroomEditor() : null,
         userCapabilities,
         publishDisabled,
         civilContentID,
