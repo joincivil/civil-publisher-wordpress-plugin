@@ -7,13 +7,14 @@ import { debounce } from "lodash";
 import styled from "styled-components";
 import { userMetaKeys, apiNamespace } from "../constants";
 import { connect, DispatchProp } from "react-redux";
-import { addUser } from "@joincivil/newsroom-manager";
+import { storeUserData, CmsUserData } from "@joincivil/newsroom-manager";
 import { ManagerState } from "../shared/reducer";
 
 export interface SearchUserProps {
   newsroomAddress: EthAddress;
   getOptions(str: string): Promise<any[]>;
   onSetAddress(address: string): void;
+  getUserDataForAddress(adderss: string): Promise<CmsUserData>;
 }
 
 export interface SearchUsersStateValue {
@@ -78,7 +79,7 @@ const ErrorP = styled.p`
 const noAddressError =
   "No wallet address is associated with this account. If you enter one above, it will be saved to their profile. You can instead have the user add their address to their profile themselves, and then you can come back to add them here.";
 const noUserError =
-  "No WordPress user was found with this address. Make sure the address is correct and that all your newsroom members have added their addresses. You may instead add this address to your contract without associating it with a WordPress user.";
+  "No WordPress user was found with this address. Make sure the address is correct and that all your newsroom members have added their addresses. You may continue if you wish to add this address to your contract without associating it with a WordPress user.";
 const badAddressError =
   "The address you entered is invalid. A wallet address needs at least 42 characters and starts with 0x. please check that it is entered correctly.";
 
@@ -144,7 +145,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
           <label>Name</label>
           <TextInput
             value={this.state.value.name}
-            onChange={this.onChange}
+            onChange={this.onNameChange}
             name={"username"}
             placeholder="Search for a WordPress user"
             noLabel
@@ -199,7 +200,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
     }
   };
 
-  private onChange = async (name: string, value: string): Promise<void> => {
+  private onNameChange = async (name: string, value: string): Promise<void> => {
     this.setState({
       error: value === "" ? "" : this.state.error,
       value: { name: value },
@@ -228,7 +229,10 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
             [userMetaKeys.WALLET_ADDRESS]: value,
           },
         });
-        this.props.dispatch(addUser(this.props.newsroomAddress, value, { displayName: userValue.name! }));
+
+        // Search users endpoint doesn't return stuff like bio and avatar - now that address is saved for this user, we can it fetch by address
+        const userData = (await this.props.getUserDataForAddress(value)) || { displayName: userValue.name! };
+        this.props.dispatch(storeUserData(this.props.newsroomAddress, value, userData));
       } else {
         try {
           const userFromWallet = await apiRequest({

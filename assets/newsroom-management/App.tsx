@@ -124,6 +124,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
   private renderUserSearch = (onSetAddress: (address: string) => void): JSX.Element => {
     return (
       <SearchUsers
+        getUserDataForAddress={this.getCmsUserDataForAddress}
         onSetAddress={onSetAddress}
         getOptions={this.fetchUserTypeAhead}
         newsroomAddress={this.props.address!}

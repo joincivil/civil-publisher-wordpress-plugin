@@ -1,15 +1,14 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { createStore, applyMiddleware, Store, AnyAction } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { Map } from "immutable";
 import { ErrorBoundary } from "../shared/components/ErrorBoundary";
 import { setMetaMaskEnabled } from "../shared/actions";
-import reducers, { ManagerState } from "../shared/reducer";
+import reducers from "../shared/reducer";
 import { getMetaMaskEnabled } from "../util";
 import App from "./App";
-
 
 async function init(): Promise<void> {
   const { newsroomAddress, newsroomTxHash } = window.civilNamespace;
