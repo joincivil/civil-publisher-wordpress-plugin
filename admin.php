@@ -49,14 +49,16 @@ function add_menus() {
 		__NAMESPACE__ . '\newsroom_manager_content'
 	);
 
-	add_submenu_page(
-		TOP_LEVEL_MENU,
-		__( 'Credibility Indicators', 'civil' ),
-		__( 'Credibility Indicators', 'civil' ),
-		'manage_options',
-		CREDIBILITY_INDICATORS,
-		__NAMESPACE__ . '\credibililty_indicators_content'
-	);
+	if ( apply_filters( 'civil_enable_credibility_indicators', true ) ) {
+		add_submenu_page(
+			TOP_LEVEL_MENU,
+			__( 'Credibility Indicators', 'civil' ),
+			__( 'Credibility Indicators', 'civil' ),
+			'manage_options',
+			CREDIBILITY_INDICATORS,
+			__NAMESPACE__ . '\credibililty_indicators_content'
+		);
+	}
 
 	// Remove unneeded "Civil" submenu.
 	remove_submenu_page( TOP_LEVEL_MENU, TOP_LEVEL_MENU );

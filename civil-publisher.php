@@ -43,6 +43,7 @@ define( __NAMESPACE__ . '\FAQ_HOME', 'https://cvlconsensys.zendesk.com/hc/en-us/
 define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-publisher-menu' );
 define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-publisher-newsroom-management' );
 define( __NAMESPACE__ . '\CONTENT_VIEWER', 'civil-publisher-content' );
+define( __NAMESPACE__ . '\CREDIBILITY_INDICATORS', 'civil-newsroom-credibiity-indicators' );
 
 require_once dirname( __FILE__ ) . '/utils.php';
 

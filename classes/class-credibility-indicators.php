@@ -128,6 +128,7 @@ class Credibility_Indicators {
 		ob_start();
 		?>
 			<section>
+				<h3><?php esc_html_e( 'Credibility Indicators', 'civil' ); ?></h3>
 				<?php
 				foreach ( $indicator_statuses as $status ) :
 
@@ -140,7 +141,7 @@ class Credibility_Indicators {
 					}
 					?>
 					<section>
-						<h3><?php echo esc_html( $this->indicators[ $status ]['label'] ); ?></h3>
+						<h4><?php echo esc_html( $this->indicators[ $status ]['label'] ); ?></h4>
 						<p><?php echo esc_html( $description ); ?></p>
 					</section>
 				<?php endforeach; ?>
@@ -251,49 +252,6 @@ class Credibility_Indicators {
 		$indicators = array_map( 'sanitize_text_field', wp_unslash( $_POST['indicators'] ) );
 
 		update_post_meta( $post_id, 'civil_credibility_indicators', array_keys( $indicators ) );
-	}
-
-	/**
-	 * Add Credibility Indicators page.
-	 */
-	public function add_admin_menu() {
-		add_submenu_page(
-			MANAGEMENT_PAGE,
-			__( 'Credibility Indicators', 'civil' ),
-			__( 'Credibility Indicators', 'civil' ),
-			'manage_options',
-			'civil-credibility-indicators',
-			[ $this, 'credibility_indicators_options_page' ]
-		);
-	}
-
-	/**
-	 * Output options page.
-	 */
-	public function credibility_indicators_options_page() {
-
-		// Ensure proper user permissions.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
-		}
-		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Credibility Indicators', 'civil' ); ?></h1>
-			<div>This is some helper text about what the Credibility Indicators are, and how to use them.</div>
-			<form action="options.php" method="post">
-				<?php
-				// Output security fields.
-				settings_fields( 'civil_credibility_indicators' );
-
-				// Output form fields.
-				do_settings_sections( 'credibility-indicators' );
-
-				// Output save button.
-				submit_button( __( 'Save', 'civil' ) );
-				?>
-			</form>
-		</div>
-		<?php
 	}
 
 	/**
@@ -432,4 +390,11 @@ class Credibility_Indicators {
 	}
 }
 
-Credibility_Indicators::instance();
+add_action(
+	'init',
+	function() {
+		if ( apply_filters( 'civil_enable_credibility_indicators', true ) ) {
+			Credibility_Indicators::instance();
+		}
+	}
+);
