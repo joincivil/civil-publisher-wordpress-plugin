@@ -5,7 +5,7 @@ const { withSelect, withDispatch } = window.wp.data;
 import { SelectType, DispatchType } from "../../../typings/gutenberg";
 import { EthAddress } from "@joincivil/core";
 import { fonts, Button, buttonSizes, AddressWithMetaMaskIcon } from "@joincivil/components";
-import { hasInjectedProvider } from "../../util";
+import { hasInjectedProvider, getMetaMaskEnabled as isMetaMaskEnabled } from "../../util";
 import { saveAddressToProfile } from "../../api-helpers";
 import { ErrorText, ErrorHeading, BodySection } from "../styles";
 import { NETWORK_NICE_NAME, urls } from "../../constants";
@@ -144,10 +144,7 @@ export const PanelWalletStatus = compose([
       const { setMetamaskIsEnabled } = dispatch("civil/blockchain");
 
       const enableMetamask = async (): Promise<void> => {
-        if ((window as any).ethereum) {
-          await (window as any).ethereum.enable();
-          setMetamaskIsEnabled(true);
-        }
+        setMetamaskIsEnabled(await isMetaMaskEnabled());
       };
 
       return {

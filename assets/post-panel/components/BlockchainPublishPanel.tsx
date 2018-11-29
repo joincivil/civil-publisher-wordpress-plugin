@@ -15,6 +15,7 @@ export interface ArchiveOptions {
 }
 
 export interface BlockchainPublishPanelProps {
+  metaMaskEnabled: boolean;
   isNewsroomEditor: boolean;
   publishDisabled?: boolean;
   civilContentID?: number;
