@@ -13,19 +13,19 @@ import { AnyAction } from "redux";
 const { apiRequest } = window.wp;
 const { select, dispatch } = window.wp.data;
 
-export async function isNewsroomEditor(state: any): Promise<AnyAction> {
+export async function isNewsroomEditor(): Promise<AnyAction> {
   const newsroom = await getNewsroom();
   return setIsNewsroomEditor(await newsroom.hasEditorCapabilities());
 }
 
-export async function getName(state: any): Promise<AnyAction> {
+export async function getName(): Promise<AnyAction> {
   const newsroom = await getNewsroom();
   const name = await newsroom.getName();
   return setName(name);
 }
 
 /** If no id supplied, defaults to current user. */
-export async function getUserData(state: any, _id?: number | "me"): Promise<AnyAction> {
+export async function getUserData(_id?: number | "me"): Promise<AnyAction> {
   const id = _id || select("civil/blockchain").getCurrentUserId() || "me";
 
   try {
@@ -60,7 +60,7 @@ export async function getLastRevisionId(): Promise<AnyAction> {
   }
 }
 
-export async function getRevisionJSON(state: any, revisionID: string): Promise<AnyAction | void> {
+export async function getRevisionJSON(revisionID: string): Promise<AnyAction | void> {
   try {
     const response = await apiRequest({ path: apiNamespace + "revisions/" + revisionID });
     return addOrUpdateRevision(revisionID, response);
@@ -71,12 +71,12 @@ export async function getRevisionJSON(state: any, revisionID: string): Promise<A
   }
 }
 
-export async function getCurrentUserId(state: any): Promise<AnyAction> {
+export async function getCurrentUserId(): Promise<AnyAction> {
   const userInfo = await apiRequest({ path: "/wp/v2/users/me" });
   return setCurrentUserId(userInfo.id);
 }
 
-export async function getMetaMaskEnabled(state: any): Promise<AnyAction> {
+export async function getMetaMaskEnabled(): Promise<AnyAction> {
   const enabled = await metaMaskEnabled();
   return setMetamaskIsEnabled(enabled);
 }
