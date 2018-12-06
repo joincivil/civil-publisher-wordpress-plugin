@@ -183,7 +183,7 @@ class Credibility_Indicators {
 				$this->credibility_checkbox(
 					$indicator['label'],
 					$key,
-					in_array( $key, $indicator_statuses, true )
+					! empty( $indicator_statuses ) && in_array( $key, $indicator_statuses, true )
 				);
 			}
 			?>
