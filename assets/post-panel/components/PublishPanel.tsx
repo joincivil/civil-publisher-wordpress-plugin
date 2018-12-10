@@ -116,6 +116,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
         </BodySection>
         <BodySection>
           <ArchiveControls
+            pendingTransaction={!!this.props.txHash}
             isArchived={this.props.isArchived}
             archiveSelected={this.state.archiveSelected}
             ethTransaction={this.state.ethTransaction}

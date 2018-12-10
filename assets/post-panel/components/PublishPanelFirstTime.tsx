@@ -112,6 +112,7 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
         </BodySection>
         <BodySection>
           <ArchiveControls
+            pendingTransaction={!!this.props.txHash}
             archiveSelected={this.state.archiveSelected}
             ethTransaction={this.state.ethTransaction}
             ipfsSelected={this.state.ipfsSelected}
