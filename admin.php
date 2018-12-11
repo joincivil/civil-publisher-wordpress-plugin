@@ -49,6 +49,17 @@ function add_menus() {
 		__NAMESPACE__ . '\newsroom_manager_content'
 	);
 
+	if ( apply_filters( 'civil_enable_credibility_indicators', true ) ) {
+		add_submenu_page(
+			TOP_LEVEL_MENU,
+			__( 'Credibility Indicators', 'civil' ),
+			__( 'Credibility Indicators', 'civil' ),
+			'manage_options',
+			CREDIBILITY_INDICATORS,
+			__NAMESPACE__ . '\credibililty_indicators_content'
+		);
+	}
+
 	// Remove unneeded "Civil" submenu.
 	remove_submenu_page( TOP_LEVEL_MENU, TOP_LEVEL_MENU );
 }
@@ -93,6 +104,16 @@ function help_menu_content() {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
 	}
 	require_once dirname( __FILE__ ) . '/faq-help.php';
+}
+
+/**
+ * Credibiity Indicators content.
+ */
+function credibililty_indicators_content() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
+	}
+	require_once dirname( __FILE__ ) . '/credibililty-indicators.php';
 }
 
 /**

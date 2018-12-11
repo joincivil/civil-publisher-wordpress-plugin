@@ -43,6 +43,7 @@ define( __NAMESPACE__ . '\FAQ_HOME', 'https://cvlconsensys.zendesk.com/hc/en-us/
 define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-publisher-menu' );
 define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-publisher-newsroom-management' );
 define( __NAMESPACE__ . '\CONTENT_VIEWER', 'civil-publisher-content' );
+define( __NAMESPACE__ . '\CREDIBILITY_INDICATORS', 'civil-publisher-credibiity-indicators' );
 
 require_once dirname( __FILE__ ) . '/utils.php';
 
@@ -54,3 +55,4 @@ require_once dirname( __FILE__ ) . '/users-page.php';
 
 require_once dirname( __FILE__ ) . '/classes/class-post-hashing.php';
 require_once dirname( __FILE__ ) . '/classes/class-rest-api.php';
+require_once dirname( __FILE__ ) . '/classes/class-credibility-indicators.php';
