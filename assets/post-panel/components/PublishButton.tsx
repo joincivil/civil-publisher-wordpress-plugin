@@ -1,4 +1,5 @@
 import * as React from "react";
+import styled from "styled-components";
 import {
   Transaction,
   MetaMaskModal,
@@ -61,6 +62,10 @@ export interface PublishButtonState {
   startTransaction?(): any;
   cancelTransaction?(): any;
 }
+
+const Estimate = styled.p`
+  font-weight: 600;
+`;
 
 export class PublishButton extends React.Component<PublishButtonProps, PublishButtonState> {
   constructor(props: PublishButtonProps) {
@@ -198,11 +203,11 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
     return (
       <>
         {!this.props.walletReady && <ErrorText>Waiting for wallet</ErrorText>}
-        <p>
+        <Estimate>
           Estimated cost to publish this post <br />
           {this.state.estimate && "ETH: " + this.state.estimate.toFixed(6)}
           <QuestionToolTip explainerText={costExplainer} />
-        </p>
+        </Estimate>
         <HelpText>This will open a window and you must complete the transacation in MetaMask to publish.</HelpText>
         <PrimaryButtonWrap>
           {this.props.txHash ? (
