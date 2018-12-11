@@ -155,11 +155,7 @@ export class SearchUsersComponent extends React.Component<SearchUserProps & Disp
         </NameInputWrapper>
         <AddressInputWrapper>
           <label>Wallet Address</label>
-          <TextInput
-            value={this.state.address}
-            onChange={this.onAddressChange}
-            name="ethAddress"
-          />
+          <TextInput value={this.state.address} onChange={this.onAddressChange} name="ethAddress" />
           {this.state.error && <ErrorP>{this.state.error}</ErrorP>}
         </AddressInputWrapper>
       </Wrapper>

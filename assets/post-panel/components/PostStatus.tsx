@@ -47,7 +47,7 @@ class PostStatusComponent extends React.Component<PostStatusProps> {
         heading = <ErrorHeading>WordPress Post Status</ErrorHeading>;
         content = (
           <ErrorText>
-            Waiting for this post to be published on your site before you can publish to the Civil network.
+            Waiting for this post to be published on your WordPress site before you can publish to the Civil network.
           </ErrorText>
         );
       } else if (this.props.saved) {

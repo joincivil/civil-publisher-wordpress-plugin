@@ -79,10 +79,10 @@ class PanelWalletStatusComponent extends React.Component<PanelWalletStatusProps,
         </p>
       );
     } else if (!this.props.wpUserWalletAddress) {
-      errorHeading = "Not saved to profile";
+      errorHeading = "Missing wallet address";
       errorBody = (
         <>
-          <p>You must save your wallet address to your WordPress user profile before continuing.</p>
+          <p>Please save your wallet address from your connected MetaMask wallet to your WordPress user profile.</p>
           <WalletAddressLabel>Public wallet address</WalletAddressLabel>
           <AddressWithMetaMaskIcon address={this.props.web3ProviderAddress} />
           <Button size={buttonSizes.MEDIUM_WIDE} onClick={this.saveAddress}>

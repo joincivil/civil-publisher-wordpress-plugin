@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BorderlessButton, ToolTip } from "@joincivil/components";
+import { BorderlessButton } from "@joincivil/components";
 import styled from "styled-components";
 import { siteTimezoneFormat } from "../../util";
 import { urls } from "../../constants";
@@ -35,29 +35,29 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
   let archiveSection;
 
   if (props.lastArchivedRevision) {
-    let transactionArchive = (
+    const transactionArchive = (
       <Link
         href={`https://${urls.ETHERSCAN_DOMAIN}/tx/${props.lastArchivedRevision.txHash}`}
         disabled={!props.lastArchivedRevision.archive.transaction}
+        target="_blank"
       >
-        View on Ethereum{" "}
+        {props.lastArchivedRevision.archive.transaction ? "View on Ethereum" : "Not Archived to Ethereum"}{" "}
       </Link>
     );
-    if (!props.lastArchivedRevision.archive.transaction) {
-      transactionArchive = <ToolTip explainerText={"Not Archived to Ehereum"}>{transactionArchive}</ToolTip>;
-    }
 
     archiveSection = (
       <BodySectionNoPaddingBottom>
         <P>Archive · {siteTimezoneFormat(props.lastArchivedRevision.published)}</P>
-        <Link href={props.lastArchivedRevision.ipfsUrl}>View on IPFS</Link>
+        <Link href={props.lastArchivedRevision.ipfsUrl} target="_blank">
+          View on IPFS
+        </Link>
         {transactionArchive}
       </BodySectionNoPaddingBottom>
     );
   } else {
     archiveSection = (
       <BodySectionNoPaddingBottom>
-        <p>Archive · Not Available</p>
+        <p>Archive · Not Archived</p>
       </BodySectionNoPaddingBottom>
     );
   }
@@ -66,8 +66,12 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
     <div>
       <BodySection>
         <P>Index · {siteTimezoneFormat(props.lastPublishedRevision.published)}</P>
-        <Link href={props.lastPublishedRevision.ipfsUrl}>View on IPFS</Link>
-        <Link href={`https://${urls.ETHERSCAN_DOMAIN}/tx/${props.lastPublishedRevision.txHash}`}>View on Ethereum</Link>
+        <Link href={props.lastPublishedRevision.ipfsUrl} target="_blank">
+          View on IPFS
+        </Link>
+        <Link href={`https://${urls.ETHERSCAN_DOMAIN}/tx/${props.lastPublishedRevision.txHash}`} target="_blank">
+          View on Ethereum
+        </Link>
       </BodySection>
       {archiveSection}
     </div>

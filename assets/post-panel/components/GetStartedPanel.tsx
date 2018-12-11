@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Body, BodySection, PrimaryButtonWrap } from "../styles";
+import { urls } from "../../constants";
 import { Button, buttonSizes } from "@joincivil/components";
 import styled from "styled-components";
 
@@ -19,21 +20,31 @@ export class GetStartedPanel extends React.Component<GetStartedPanelProps> {
         <BodySection>
           <TextArea>
             <p>
-              To publish your post to the Civil network, you'll need to create an index and select if you want to
-              additionally archive its content.
+              To publish your post to the{" "}
+              <a href={`${urls.HELP_BASE}articles/360017702211-What-is-the-Civil-network-`} target="_blank">
+                Civil network
+              </a>
+              , you'll need to create an <strong>index</strong> and select if you want to additionally{" "}
+              <strong>archive</strong> your full text.
             </p>
             <p>
-              Index will publish a permanent record of the post’s metadata to the Civil network, which means that anyone
-              who finds that index can track it back to your site where the story will continue to be hosted on your
-              servers. The index provides proof that its contents have not changed since the last publish date.
+              <strong>Index:</strong> this publishes a permanent record of your post to the{" "}
+              <a href={`${urls.HELP_BASE}articles/360017702211-What-is-the-Civil-network-`} target="_blank">
+                Civil network
+              </a>
+              . The index points back to your site where the story is hosted on your servers. The benefit of indexing is
+              you have proof that the story hasn't changed since its last publish date. This feature is always on by
+              default.
             </p>
             <p>
-              The benefits of archiving your full story are that you will permanently save a copy of your content that
-              will live on regardless of what happens to your servers over time. Note that if you choose to archive your
-              full text it will make it public, which will mean it’s viewable outside of any paywall that might be in
-              place. You'll also be asked to pay more in transaction fees (or gas) in order to upload the full text in
-              addition to the index.You’ll be given the option each time you publish a story to select whether to
-              publish the index or the full archive.
+              <strong>Full-Text Archive</strong>: this adds the full text of your story to your index on the{" "}
+              <a href={`${urls.HELP_BASE}articles/360017702211-What-is-the-Civil-network-`} target="_blank">
+                Civil network
+              </a>
+              . The benefit of archiving is that the story lives on regardless of what happens to your servers over
+              time. <strong>Note:</strong> if you choose this option it will make your story public, which makes it
+              viewable outside a paywall. This option also adds slightly more in fees (gas) to your transaction. This
+              feature is optional.
             </p>
           </TextArea>
           <PrimaryButtonWrap>

@@ -163,10 +163,10 @@ const CivilSidebar = () => {
         <Wrapper>
           <Body>
             <BodySection>
-              <p>A newsroom contract has not been set up.</p>
+              <p>A newsroom smart contract has not been set up.</p>
               <p>
                 Without a newsroom smart contract you are not able to use Civil’s publishing tools. Please open your
-                Civil Newsroom Manager page to create a newsroom smart contract.
+                Newsroom Manager page to create a newsroom smart contract.5
               </p>
               <LinkButton size={buttonSizes.MEDIUM_WIDE} href={urls.NEWSROOM_MANAGER}>
                 Open Newsroom Manager
