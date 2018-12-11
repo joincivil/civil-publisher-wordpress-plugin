@@ -8,6 +8,7 @@ export interface ArchiveControlsProps {
   ethTransaction: boolean;
   ipfsSelected: boolean;
   isArchived?: boolean;
+  pendingTransaction?: boolean;
   onHeaderClick(): void;
   onSelectEthTransaction(): void;
 }
@@ -50,7 +51,7 @@ export class ArchiveControls extends React.Component<ArchiveControlsProps> {
               Ethereum blockchain
               <QuestionToolTip explainerText="This option lets you archive your post to the Ethereum blockchain. It will include the full text of your post. Since the blockchain is a public ledger, people will be able to find and see your article text from the transaction log." />
             </span>
-            <Checkbox checked={this.props.ethTransaction} onClick={this.props.onSelectEthTransaction} />
+            <Checkbox locked={this.props.pendingTransaction} checked={this.props.ethTransaction} onClick={this.props.onSelectEthTransaction} />
           </LowerHeader>
           <p>Archive to the Ethereum blockchain network to provide a permanent archive of your post. Cost: Varies</p>
         </Wrapper>
@@ -60,7 +61,7 @@ export class ArchiveControls extends React.Component<ArchiveControlsProps> {
       <>
         <HeaderWithFlex>
           {this.props.isArchived ? "Update" : "Add"} Full Text Archive{" "}
-          <SlideCheckbox onClick={this.props.onHeaderClick} checked={this.props.archiveSelected} />
+          <SlideCheckbox locked={this.props.pendingTransaction} onClick={this.props.onHeaderClick} checked={this.props.archiveSelected} />
         </HeaderWithFlex>
         {controls}
       </>
