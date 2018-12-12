@@ -80,20 +80,19 @@ export class BlockchainSignPanelComponent extends React.Component<BlockchainSign
 
     return (
       <Wrapper>
-        <Intro>
-          <Heading>Sign</Heading>
-          <p>
-            Sign this post, using your public wallet address, to confirm that you are
-            {this.props.currentUserIsPostAuthor
-              ? " an author of this story and are fully aware of its content. "
-              : " fully aware of its content as a representative of your newsroom. "}
-            Including your signature increases the credibility of this story on the blockchain, but it is optional.
-          </p>
-        </Intro>
         <Body>
           <PostStatus actionString="signing" />
+          <Intro>
+            <Heading>Sign</Heading>
+            <p>
+              Sign this post, using your public wallet address, to confirm that you are
+              {this.props.currentUserIsPostAuthor
+                ? " an author of this story and are fully aware of its content. "
+                : " fully aware of its content as a representative of your newsroom. "}
+              Including your signature increases the credibility of this story on the blockchain, but it is optional.
+            </p>
+          </Intro>
           <PanelWalletStatus />
-
           <BodySection>
             <MainHeading>
               Signatures
