@@ -93,6 +93,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
     return (
       <MetaMaskModal
         waiting={false}
+        bodyText={this.props.modalBodyText}
         cancelTransaction={() => this.cancelTransaction()}
         startTransaction={() => this.startTransaction()}
       >
