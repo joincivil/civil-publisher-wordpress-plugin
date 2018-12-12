@@ -75,8 +75,8 @@ export const ErrorHeading = Heading.extend`
 `;
 
 export const Intro = styled.div`
-  background-color: #fffef6;
-  padding: 20px 16px;
+  background-color: #fff;
+  padding: 20px 0px;
   border-bottom: 1px solid ${colors.GRAY};
 
   ${Heading} {
@@ -95,8 +95,9 @@ export const Body = styled.div`
   }
 `;
 export const BodySection = styled.div`
-  padding: 20px 0 24px;
+  padding: 20px 17px;
   border-bottom: 1px solid ${colors.GRAY};
+  margin: 0 -20px;
   &:last-child {
     border-bottom: 0;
   }
