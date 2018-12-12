@@ -1,4 +1,5 @@
 import * as React from "react";
+import styled from "styled-components";
 import {
   Transaction,
   MetaMaskModal,
@@ -7,6 +8,7 @@ import {
   Button,
   TransactionButtonNoModal,
   TransactionButtonInnerProps,
+  QuestionToolTip,
 } from "@joincivil/components";
 import { TxHash } from "@joincivil/core";
 import { hashContent } from "@joincivil/utils";
@@ -16,6 +18,7 @@ const { apiRequest } = window.wp;
 import { IndexTransactionButton, WaitingButton } from "./Buttons";
 import { toBuffer } from "ethereumjs-util";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
+import { urls } from "../../constants";
 
 export interface PublishButtonProps {
   archive: boolean;
@@ -29,6 +32,7 @@ export interface PublishButtonProps {
   disabled?: boolean;
   walletReady?: boolean;
   isPublished?: boolean;
+  modalBodyText?: string;
   publishContent?(
     contentId: number,
     revisionId: number,
@@ -51,7 +55,7 @@ export interface PublishButtonState {
   ipfsPath?: string;
   isPreTransactionModalOpen: boolean;
   isWaitingTransactionModalOpen: boolean;
-  isTransactionInProggressModalOpen: boolean;
+  isTransactionInProgressModalOpen: boolean;
   isTransactionCompleteModalOpen: boolean;
   isTransactionDeniedModalOpen: boolean;
   estimate?: number;
@@ -59,13 +63,17 @@ export interface PublishButtonState {
   cancelTransaction?(): any;
 }
 
+const Estimate = styled.p`
+  font-weight: 600;
+`;
+
 export class PublishButton extends React.Component<PublishButtonProps, PublishButtonState> {
   constructor(props: PublishButtonProps) {
     super(props);
     this.state = {
       isPreTransactionModalOpen: false,
       isWaitingTransactionModalOpen: false,
-      isTransactionInProggressModalOpen: false,
+      isTransactionInProgressModalOpen: false,
       isTransactionCompleteModalOpen: false,
       isTransactionDeniedModalOpen: false,
     };
@@ -85,6 +93,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
     return (
       <MetaMaskModal
         waiting={false}
+        bodyText={this.props.modalBodyText}
         cancelTransaction={() => this.cancelTransaction()}
         startTransaction={() => this.startTransaction()}
       >
@@ -128,21 +137,22 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
   }
 
   public renderTransactionPendingModal(): JSX.Element | null {
-    if (!this.state.isTransactionInProggressModalOpen) {
+    if (!this.state.isTransactionInProgressModalOpen) {
       return null;
     }
     return (
       <Modal>
         <ModalHeader>Your post is being published</ModalHeader>
-        <ModalP> This can take some time depending on traffic on the Ethereum network.</ModalP>
+        <ModalP>This can take some time depending on traffic on the Ethereum network.</ModalP>
         <ModalP>
-          You can leave this page, but please note that any changes you make to a post once the blockchain publishing
-          process has begun will not be reflected on the blockchain unless you re-publish.
+          You can continue editing or close out of this post and the publish transaction will continue to process.
+          However, this publish transaction won't reflect any further changes you make to the post unless you
+          re-publish.
         </ModalP>
         <ModalButtonContainer>
           <Button
             size={buttonSizes.MEDIUM_WIDE}
-            onClick={() => this.setState({ isTransactionInProggressModalOpen: false })}
+            onClick={() => this.setState({ isTransactionInProgressModalOpen: false })}
           >
             OK
           </Button>
@@ -168,7 +178,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
             size={buttonSizes.MEDIUM_WIDE}
             onClick={() => this.setState({ isTransactionCompleteModalOpen: false })}
           >
-            OK
+            Great!
           </Button>
         </ModalButtonContainer>
       </Modal>
@@ -176,13 +186,28 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
   }
 
   public render(): JSX.Element {
+    const costExplainer = (
+      <>
+        Current Prices based on{" "}
+        <a href="https://ethgasstation.info" target="_blank">
+          {"https://ethgasstation.info"}
+        </a>
+        . More information about gas prices and the blockchain can be found{" "}
+        <a href={`${urls.HELP_BASE}sections/360002451451-Funding-and-ETH`} target="_blank">
+          here
+        </a>
+        .
+      </>
+    );
+
     return (
       <>
         {!this.props.walletReady && <ErrorText>Waiting for wallet</ErrorText>}
-        <p>
+        <Estimate>
           Estimated cost to publish this post <br />
           {this.state.estimate && "ETH: " + this.state.estimate.toFixed(6)}
-        </p>
+          <QuestionToolTip explainerText={costExplainer} />
+        </Estimate>
         <HelpText>This will open a window and you must complete the transacation in MetaMask to publish.</HelpText>
         <PrimaryButtonWrap>
           {this.props.txHash ? (
@@ -263,7 +288,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
         },
         requireBeforeTransaction: noPreModal ? undefined : this.requireBeforeTransaction,
         postTransaction: async (result: number) => {
-          this.setState({ isTransactionCompleteModalOpen: true, isTransactionInProggressModalOpen: false });
+          this.setState({ isTransactionCompleteModalOpen: true, isTransactionInProgressModalOpen: false });
           if (isUpdate) {
             await this.props.updateContent!(
               this.props.currentPostLastRevisionId!,
@@ -347,7 +372,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
 
   private handleTransactionHash = (txHash: TxHash) => {
     this.setState({
-      isTransactionInProggressModalOpen: true,
+      isTransactionInProgressModalOpen: true,
       isWaitingTransactionModalOpen: false,
     });
     this.props.saveTxHash!(txHash, this.state.ipfsPath!, {

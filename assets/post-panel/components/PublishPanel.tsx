@@ -4,6 +4,7 @@ import { TxHash } from "@joincivil/core";
 import { Collapsable } from "@joincivil/components";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
 import { Body, BodySection, MainHeading, colors } from "../styles";
+import { urls } from "../../constants";
 import { ArchiveControls } from "./ArchiveControls";
 import { PublishButton } from "./PublishButton";
 
@@ -93,7 +94,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
       <Body>
         <BodySection>
           <MainHeading>Update Index</MainHeading>
-          <p>Update the post’s index metadata and hash to the Civil network.</p>
+          <p>Update the record and link to your post on the Civil network.</p>
           <Collapsable
             header={<CollapsableHeader>Read more about Index</CollapsableHeader>}
             headerOpen={<CollapsableHeaderOpen>Hide</CollapsableHeaderOpen>}
@@ -102,14 +103,24 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
           >
             <CollapsableText>
               <p>
-                Publishing the index adds this post’s metadata and hash to IPFS and Ethereum Blockchain. It will appear
-                in the Civil network, and provides proof that the contents have not changed since last publish. The
-                metadata will include a link and record of the post. We recommend updating the index only if there is a
-                significant change in your post.
+                This publishes a permanent record of your post to the{" "}
+                <a href={`${urls.HELP_BASE}articles/360017702211-What-is-the-Civil-network-`} target="_blank">
+                  Civil network
+                </a>{" "}
+                by putting a link and record of the post onto{" "}
+                <a href={`${urls.HELP_BASE}articles/360017702191-What-is-IPFS-`} target="_blank">
+                  IPFS
+                </a>{" "}
+                and the{" "}
+                <a href={`${urls.HELP_BASE}articles/360017428692-What-is-the-Ethereum-blockchain-`} target="_blank">
+                  Ethereum Blockchain
+                </a>
+                . The index points back to your site where the story is hosted on your servers. Indexing provides proof
+                that the story hasn't changed since its last publish date.
               </p>
               <p>
-                If this post is behind a paywall and you don't want the full text to be public, we recommend you only
-                index instead of archiving.
+                We recommend updatting this only if there is a significant change in the story. This feature is always
+                on by default.
               </p>
             </CollapsableText>
           </Collapsable>
@@ -123,29 +134,53 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
             ipfsSelected={this.state.ipfsSelected}
             onHeaderClick={this.selectArchive}
             onSelectEthTransaction={this.onSelectEthTransaction}
+            intro={
+              <>
+                {this.props.isArchived ? (
+                  <p>
+                    Include an updated archive of the full text of your post to the Civil network. Text will be public
+                    even if this post is behind a paywall.
+                  </p>
+                ) : (
+                  <p>
+                    This will add the full text of this post to the index you publish to{" "}
+                    <a href={`${urls.HELP_BASE}articles/360017702191-What-is-IPFS-`} target="_blank">
+                      IPFS
+                    </a>{" "}
+                    and/or the{" "}
+                    <a href={`${urls.HELP_BASE}articles/360017428692-What-is-the-Ethereum-blockchain-`} target="_blank">
+                      Ethereum Blockchain
+                    </a>
+                    . <strong>Tip:</strong> If this post is behind a paywall and you don't want the full text to be
+                    public, we recommend you only index instead of archiving.
+                  </p>
+                )}
+
+                <Collapsable
+                  header={<CollapsableHeader>Read more about Archive</CollapsableHeader>}
+                  headerOpen={<CollapsableHeaderOpen>Hide</CollapsableHeaderOpen>}
+                  ArrowComponent={Arrow}
+                  open={false}
+                >
+                  <CollapsableText>
+                    <p>
+                      This adds the full text of your story to your index on the{" "}
+                      <a href={`${urls.HELP_BASE}articles/360017702211-What-is-the-Civil-network-`} target="_blank">
+                        Civil network
+                      </a>
+                      . The benefit of archiving is that the story lives on regardless of what happens to your servers
+                      over time.
+                    </p>
+                    <p>
+                      <strong>Note:</strong> If you choose this option it will make your story public, which makes it
+                      viewable outside a paywall. This option also adds slightly more in fees (gas) to your transaction.
+                      This feature is optional and you can always archive at a later date.
+                    </p>
+                  </CollapsableText>
+                </Collapsable>
+              </>
+            }
           />
-          <p>
-            Include an updated archive of the full text of your post to the permanent record. Text will be public even
-            if this post is behind a paywall.
-          </p>
-          <Collapsable
-            header={<CollapsableHeader>Read more about Archive</CollapsableHeader>}
-            headerOpen={<CollapsableHeaderOpen>Hide</CollapsableHeaderOpen>}
-            ArrowComponent={Arrow}
-            open={false}
-          >
-            <CollapsableText>
-              <p>
-                Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index
-                will be published to connect this archive to your newsroom to provide proof that its contents have not
-                changed.
-              </p>
-              <p>
-                When you archive the full text, please make note that the text will be public and will be visible
-                outside of your paywall. You can always archive at a later date.
-              </p>
-            </CollapsableText>
-          </Collapsable>
         </BodySection>
         <BodySection>
           <PublishButton
@@ -163,6 +198,7 @@ export class PublishPanel extends React.Component<PublishPanelProps, PublishPane
             saveTxHash={this.props.saveTxHash}
             publishContent={this.props.publishContent}
             updateContent={this.props.updateContent}
+            modalBodyText="You will use MetaMask to confirm this transaction and publish your post."
           />
         </BodySection>
       </Body>

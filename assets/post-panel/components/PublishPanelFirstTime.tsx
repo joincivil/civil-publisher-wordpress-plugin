@@ -1,18 +1,16 @@
 import * as React from "react";
 import { MainHeading, Body, BodySection } from "../styles";
-import { BorderlessButton, Modal, ModalHeading, buttonSizes, Button } from "@joincivil/components";
 import { TxHash } from "@joincivil/core";
 import { PublishButton } from "./PublishButton";
 import { ArchiveOptions } from "./BlockchainPublishPanel";
 import { ArchiveControls } from "./ArchiveControls";
-import styled from "styled-components";
+import { urls } from "../../constants";
 
 export interface PublishPanelFirstTimeState {
   archiveSelected: boolean;
   ipfsSelected: boolean;
   ethTransaction: boolean;
   estimate?: number;
-  modalOpen?: boolean;
 }
 
 export interface PublishPanelFirstTimeProps {
@@ -42,14 +40,6 @@ export interface PublishPanelFirstTimeProps {
   saveTxHash?(txHash: TxHash, ipfs: string, archive: ArchiveOptions): void;
 }
 
-const WhatsTheDifference = styled(BorderlessButton)`
-  padding-left: 0;
-  margin-left: 0;
-  font-size: 13px;
-  font-weight: 400;
-  text-decoration: underline;
-`;
-
 export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTimeProps, PublishPanelFirstTimeState> {
   constructor(props: PublishPanelFirstTimeProps) {
     super(props);
@@ -57,57 +47,26 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
       archiveSelected: false,
       ipfsSelected: true,
       ethTransaction: false,
-      modalOpen: false,
     };
-  }
-
-  public renderModal(): JSX.Element | null {
-    if (!this.state.modalOpen) {
-      return null;
-    }
-    return (
-      <Modal>
-        <ModalHeading>What's ths difference?</ModalHeading>
-        <p>
-          <strong>IPFS (InterPlanetary File System)</strong> is a peer-to-peer file sharing protocol that lets you save
-          your posts across a distributed network that tracks changes to these files over time. It creates a new
-          resilient decentralized archive. Every article indexed or archived to the blockchain on the Civil Publisher
-          will also by default be indexed or archived onto IPFS. The benefits of IPFS are that it’s free and can host
-          multimedia content. However, like other peer-to-peer systems, the content on IPFS is as permanent as the
-          number of people willing to host or store it. We currently use Infura as our IPFS provider. Eventually, other
-          users and nodes may also pin the content as well.
-        </p>
-        <p>
-          <strong>Ethereum blockchain</strong> is an open platform where data is replicated accross all computers using
-          the network. All information on this network is public can't be shut down as long as all the computers are
-          contributing to the network. Since the records are all shared, there is no one central location of the data
-          which allows for redundancy, limits on censorship or attempts to remove posts and a place for permanent
-          archiving. The Ethereum blockchain option requires users to pay a transaction fee (also known as gas) to post
-          content and can only include text at this time.
-        </p>
-        <div>
-          <Button size={buttonSizes.SMALL} onClick={() => this.setState({ modalOpen: false })}>
-            Close
-          </Button>
-        </div>
-      </Modal>
-    );
   }
 
   public render(): JSX.Element {
     return (
       <Body>
         <BodySection>
-          <MainHeading>Publish Index</MainHeading>
+          <MainHeading>Index</MainHeading>
           <p>
-            Publishing the index adds this post’s metadata and hash to IPFS and Ethereum Blockchain. It will appear in
-            the Civil network, and provides proof that the contents have not changed since last publish. The metadata
-            will include a link and record of the post. We recommend updating the index only if there is a significant
-            change in your post.
-          </p>
-          <p>
-            <strong>Tip:</strong> If this post is behind a paywall and you don't want the full text to be public, we
-            recommend you only index instead of archiving.
+            This publishes a permanent record of your post to the Civil network by putting a link and record of the post
+            onto{" "}
+            <a href={`${urls.HELP_BASE}articles/360017702191-What-is-IPFS-`} target="_blank">
+              IPFS
+            </a>{" "}
+            and the{" "}
+            <a href={`${urls.HELP_BASE}articles/360017428692-What-is-the-Ethereum-blockchain-`} target="_blank">
+              Ethereum Blockchain
+            </a>
+            . The index points back to your site where the story is hosted on your servers. Indexing provides proof that
+            the story hasn't changed since its last publish date.
           </p>
         </BodySection>
         <BodySection>
@@ -118,18 +77,21 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
             ipfsSelected={this.state.ipfsSelected}
             onHeaderClick={this.selectArchive}
             onSelectEthTransaction={this.selectEthTransaction}
+            intro={
+              <p>
+                This will add the full text of this post to the index you publish to{" "}
+                <a href={`${urls.HELP_BASE}articles/360017702191-What-is-IPFS-`} target="_blank">
+                  IPFS
+                </a>{" "}
+                and/or the{" "}
+                <a href={`${urls.HELP_BASE}articles/360017428692-What-is-the-Ethereum-blockchain-`} target="_blank">
+                  Ethereum Blockchain
+                </a>
+                . <strong>Tip:</strong> If this post is behind a paywall and you don't want the full text to be public,
+                we recommend you only index instead of archiving.
+              </p>
+            }
           />
-          <p>
-            Archive will save the full text of this post to IPFS and, optionally, the Ethereum network. An index will be
-            published to connect this archive to your newsroom to provide proof that its contents have not changed.
-          </p>
-          <p>
-            When you archive the full text, please make note that the text will be public and will be visible outside of
-            any paywalls that might be in place. You can always archive at a later date.
-          </p>
-          <WhatsTheDifference onClick={() => this.setState({ modalOpen: true })} size={buttonSizes.SMALL}>
-            What’s the difference?
-          </WhatsTheDifference>
         </BodySection>
         <BodySection>
           <PublishButton
@@ -146,9 +108,9 @@ export class PublishPanelFirstTime extends React.Component<PublishPanelFirstTime
             saveTxHash={this.props.saveTxHash}
             publishContent={this.props.publishContent}
             updateContent={this.props.updateContent}
+            modalBodyText="You will use MetaMask to confirm this transaction and publish your post."
           />
         </BodySection>
-        {this.renderModal()}
       </Body>
     );
   }

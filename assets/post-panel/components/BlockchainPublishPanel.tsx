@@ -56,7 +56,7 @@ export interface BlockchainPublishPanelState {
   loadedWithTxHash: boolean;
   isPreTransactionModalOpen: boolean;
   isWaitingTransactionModalOpen: boolean;
-  isTransactionInProggressModalOpen: boolean;
+  isTransactionInProgressModalOpen: boolean;
   isTransactionCompleteModalOpen: boolean;
   isTransactionDeniedModalOpen: boolean;
   isGetStartedDismissed: boolean;
@@ -78,7 +78,7 @@ export class BlockchainPublishPanelComponent extends React.Component<
       loadedWithTxHash: false,
       isWaitingTransactionModalOpen: false,
       isPreTransactionModalOpen: false,
-      isTransactionInProggressModalOpen: false,
+      isTransactionInProgressModalOpen: false,
       isTransactionCompleteModalOpen: false,
       isTransactionDeniedModalOpen: false,
       isGetStartedDismissed: false,

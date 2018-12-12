@@ -32,10 +32,10 @@ const IconSection = styled.span`
   border-radius: 0 4px 4px 0;
 `;
 
-const PanelButtonSign = styled<{open: boolean}, "span">("span")`
+const PanelButtonSign = styled<{ open: boolean }, "span">("span")`
   display: flex;
   align-items: center;
-  background-color: ${props => props.open ? "#555D65" : "#EAEAEA" };
+  background-color: ${props => (props.open ? "#555D65" : "#EAEAEA")};
   border-radius: 4px 0px 0px 4px;
   padding: 5px 10px;
 `;
@@ -61,15 +61,29 @@ export class CivilNavBarButtons extends React.Component<CivilNavBarButtonsProps>
   public render(): JSX.Element {
     return (
       <Wrapper>
-        <CivilButton><CivilLogo/></CivilButton>
+        <CivilButton>
+          <CivilLogo />
+        </CivilButton>
         <IconSection>
-          <PanelButtonSign open={this.props.isOpen! && this.props.openTab === 0} onClick={ev => this.onClickIcon(ev, 0)}>
+          <PanelButtonSign
+            open={this.props.isOpen! && this.props.openTab === 0}
+            onClick={ev => this.onClickIcon(ev, 0)}
+          >
             <ArticleSignIcon color={this.props.isOpen! && this.props.openTab === 0 ? "#ffffff" : "#444444"} />
-            <CircleIndicator border={!this.props.isOpen! || this.props.openTab !== 0} indicatorColor={this.signIndicatorColor()} />
+            <CircleIndicator
+              border={!this.props.isOpen! || this.props.openTab !== 0}
+              indicatorColor={this.signIndicatorColor()}
+            />
           </PanelButtonSign>
-          <PanelButtonPublish open={this.props.isOpen! && this.props.openTab === 1} onClick={ev => this.onClickIcon(ev, 1)}>
+          <PanelButtonPublish
+            open={this.props.isOpen! && this.props.openTab === 1}
+            onClick={ev => this.onClickIcon(ev, 1)}
+          >
             <ArticleIndexIcon color={this.props.isOpen! && this.props.openTab === 1 ? "#ffffff" : "#444444"} />
-            <CircleIndicator border={!this.props.isOpen! || this.props.openTab !== 1} indicatorColor={this.indexIndicatorColor()} />
+            <CircleIndicator
+              border={!this.props.isOpen! || this.props.openTab !== 1}
+              indicatorColor={this.indexIndicatorColor()}
+            />
           </PanelButtonPublish>
         </IconSection>
       </Wrapper>
