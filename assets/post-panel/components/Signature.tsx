@@ -32,10 +32,6 @@ const WrapperOuter = styled.div`
   }
 `;
 
-const Tip = styled(ToolTip)`
-  width: 100%;
-`;
-
 const UserWrap = styled.span`
   display: flex;
   align-items: center;
@@ -94,9 +90,9 @@ function SignatureComponent(ownProps: SignatureProps): JSX.Element {
 
   return tipText ? (
     <WrapperOuter>
-      <Tip explainerText={tipText} positionXCenter={true}>
+      <ToolTip explainerText={tipText} width={160}>
         {signatureInner}
-      </Tip>
+      </ToolTip>
     </WrapperOuter>
   ) : (
     signatureInner

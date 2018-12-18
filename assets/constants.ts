@@ -66,6 +66,8 @@ export const theme = {
   stepProcessDotActiveColor: "#0085ba",
   stepProcessDotFutureColor: "#72777c",
   stepProccessCompleteDotBorderColor: "#f1f1f1",
+  toolTipTextAlign: "center",
+  toolTipDefaultWidth: 210,
 };
 
 export const timestampFormat = "MMMM DD, YYYY h:mm a";
