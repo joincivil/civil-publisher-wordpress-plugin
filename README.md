@@ -41,3 +41,7 @@ You can then run linting from package.json scripts:
 
     yarn phpcs # checks and outputs errors
     yarn phpcbf # automatically fixes some errors
+
+To update these there is an additional dependency you need to manually update:
+
+    composer global update wp-coding-standards/wpcs automattic/vipwpcs
