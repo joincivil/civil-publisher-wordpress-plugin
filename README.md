@@ -10,16 +10,22 @@ Latest version of WordPress, with Gutenberg.
 
 # Installation
 
-Copy, checkout, or submodule this repo into `wp-content/plugins`. Then, from this repo,
+Copy, checkout, or submodule this repo into `wp-content/plugins`, then enable the plugin from the Plugins screen in the WordPress admin dashboard and you're ready to go.
+
+# Development
+
+Built JS bundles are included in this repo, but if you want to build fresh you can do so:
 
     yarn install
     yarn build
 
-Then enable the plugin from the Plugins screen in the WordPress admin dashboard.
-
-# Development
+To build and watch:
 
     yarn dev
+
+(LiveReload is supported if `WP_DEBUG` is true and you `yarn dev:reload` instead.)
+
+If you are simultaneously working on [Civil libraries](https://github.com/joincivil/Civil), you can use [`yarn link`](https://yarnpkg.com/lang/en/docs/cli/link/) to connect the dependencies in this plugin to your local versions of @joincivil packages.
 
 ### Linting etc.
 
