@@ -5,6 +5,13 @@ export const colors = {
   DARK_GRAY: "#5F5F5F",
   GRAY: "#D8D8D8",
   ERROR_RED: "#F2524A",
+
+  navIcon: {
+    BG: "#EAEAEA",
+    COLOR: "#444444",
+    BG_ACTIVE: "#555D65",
+    COLOR_ACTIVE: "#FFFFFF",
+  }
 };
 
 export const Wrapper = styled.div`
