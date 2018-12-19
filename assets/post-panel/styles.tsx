@@ -11,7 +11,7 @@ export const colors = {
     COLOR: "#444444",
     BG_ACTIVE: "#555D65",
     COLOR_ACTIVE: "#FFFFFF",
-  }
+  },
 };
 
 export const Wrapper = styled.div`

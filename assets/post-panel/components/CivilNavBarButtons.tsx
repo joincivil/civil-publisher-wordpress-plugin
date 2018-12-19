@@ -64,24 +64,38 @@ export class CivilNavBarButtons extends React.Component<CivilNavBarButtonsProps>
           <CivilLogo />
         </CivilButton>
         <IconSection>
-          <ToolTip explainerText="Sign" positionBottom={true} verticalOffset={10} width={50}>
-            <PanelButtonSign
-              open={this.props.isOpen! && this.props.openTab === 0}
-              onClick={ev => this.onClickIcon(ev, 0)}
-            >
-              <ArticleSignIcon color={this.props.isOpen! && this.props.openTab === 0 ? colors.navIcon.COLOR_ACTIVE : colors.navIcon.COLOR} />
+          <ToolTip
+            explainerText="Sign"
+            positionBottom={true}
+            verticalOffset={10}
+            width={50}
+            onClick={ev => this.onClickIcon(ev, 0)}
+          >
+            <PanelButtonSign open={this.props.isOpen! && this.props.openTab === 0}>
+              <ArticleSignIcon
+                color={
+                  this.props.isOpen! && this.props.openTab === 0 ? colors.navIcon.COLOR_ACTIVE : colors.navIcon.COLOR
+                }
+              />
               <CircleIndicator
                 border={!this.props.isOpen! || this.props.openTab !== 0}
                 indicatorColor={this.signIndicatorColor()}
               />
             </PanelButtonSign>
           </ToolTip>
-          <ToolTip explainerText="Publish" positionBottom={true} verticalOffset={10} width={50}>
-            <PanelButtonPublish
-              open={this.props.isOpen! && this.props.openTab === 1}
-              onClick={ev => this.onClickIcon(ev, 1)}
-            >
-              <ArticleIndexIcon color={this.props.isOpen! && this.props.openTab === 1 ? colors.navIcon.COLOR_ACTIVE : colors.navIcon.COLOR} />
+          <ToolTip
+            explainerText="Publish"
+            positionBottom={true}
+            verticalOffset={10}
+            width={50}
+            onClick={ev => this.onClickIcon(ev, 1)}
+          >
+            <PanelButtonPublish open={this.props.isOpen! && this.props.openTab === 1}>
+              <ArticleIndexIcon
+                color={
+                  this.props.isOpen! && this.props.openTab === 1 ? colors.navIcon.COLOR_ACTIVE : colors.navIcon.COLOR
+                }
+              />
               <CircleIndicator
                 border={!this.props.isOpen! || this.props.openTab !== 1}
                 indicatorColor={this.indexIndicatorColor()}
