@@ -152,7 +152,7 @@ add_action( 'admin_print_scripts-civil_page_' . CONTENT_VIEWER, __NAMESPACE__ . 
  * Alert user that Gutenberg plugin is needed if they don't have it activated.
  */
 function gutenberg_nag() {
-	if ( is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
+	if ( is_plugin_active( 'gutenberg/gutenberg.php' ) || version_compare( get_bloginfo( 'version' ), '5.0', '>=' ) ) {
 		return;
 	}
 
