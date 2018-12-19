@@ -5,7 +5,7 @@ import { IpfsObject } from "@joincivil/newsroom-manager";
 const { select, dispatch } = window.wp.data;
 const { getPostEdits } = select("core/editor");
 const { editPost } = dispatch("core/editor");
-const { dateI18n, getSettings } = window.wp.date;
+const { dateI18n, getSettings, __experimentalGetSettings } = window.wp.date;
 
 import { Civil, ApprovedRevision } from "@joincivil/core";
 import { Newsroom } from "@joincivil/core/build/src/contracts/newsroom";
@@ -60,7 +60,7 @@ export function hasInjectedProvider(): boolean {
   return typeof window !== "undefined" && (window as any).web3 !== undefined;
 }
 
-const dateSettings = getSettings();
+const dateSettings = getSettings ? getSettings() : __experimentalGetSettings();
 /* Formats given Date object or UTC string in the timezone specified in CMS settings, in the given foramt or default format specified in constants. */
 export function siteTimezoneFormat(utcTimestamp: string | Date, format: string = timestampFormat): string {
   const timezoned = moment.utc(utcTimestamp).utcOffset(dateSettings.timezone.offset * 60);

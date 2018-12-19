@@ -197,9 +197,9 @@ const CivilSidebar = () => {
 };
 
 const CivilSidebarToggle = (
-  <>
+  <ThemeProvider theme={theme}>
     <CivilSidebarWithComposed />
-  </>
+  </ThemeProvider>
 );
 
 registerPlugin("civil-sidebar", {
