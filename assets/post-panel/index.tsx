@@ -7,7 +7,7 @@ const { compose } = window.wp.compose;
 import * as React from "react";
 import { Civil, EthAddress } from "@joincivil/core";
 import { colors, IconWrap, Wrapper, Body, BodySection } from "./styles";
-import { Tabs, Tab, TabComponentProps, Button, buttonSizes, CivilLogo, NorthEastArrow } from "@joincivil/components";
+import { Tabs, Tab, TabComponentProps, Button, buttonSizes, CivilLogo, NorthEastArrow, ArticleIndexIcon, ArticleSignIcon } from "@joincivil/components";
 import { theme, urls } from "../constants";
 import { getCivil } from "../util";
 import { ErrorBoundary } from "../shared/components/ErrorBoundary";
@@ -46,6 +46,15 @@ const LinkButton = styled(Button)`
   width: 100%;
   text-align: center;
   margin-top: 15px;
+`;
+
+const TabLabel = styled.span`
+  display: flex;
+  align-items: flex-end;
+`;
+
+const TabLabelText = styled.span`
+  margin-left: 4px;
 `;
 
 const NavHelp = styled.a`
@@ -117,10 +126,10 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
         TabsNavBefore={navLogo}
         TabsNavAfter={navHelp}
       >
-        <Tab title="Sign">
+        <Tab title={<TabLabel><ArticleSignIcon size={17}/><TabLabelText>Sign</TabLabelText></TabLabel>}>
           <BlockchainSignPanel />
         </Tab>
-        <Tab title="Publish">
+        <Tab title={<TabLabel><ArticleIndexIcon size={17}/><TabLabelText>Publish</TabLabelText></TabLabel>}>
           <BlockchainPublishPanel />
         </Tab>
       </Tabs>
