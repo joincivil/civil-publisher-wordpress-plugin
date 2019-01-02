@@ -48,6 +48,15 @@ const LinkButton = styled(Button)`
   margin-top: 15px;
 `;
 
+const TabLabel = styled.span`
+  display: flex;
+  align-items: flex-end;
+`;
+
+const TabLabelText = styled.span`
+  margin-left: 4px;
+`;
+
 const NavHelp = styled.a`
   && {
     color: ${colors.DARK_GRAY};
@@ -117,10 +126,10 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
         TabsNavBefore={navLogo}
         TabsNavAfter={navHelp}
       >
-        <Tab title="Sign">
+        <Tab title={<TabLabel><ArticleSignIcon size={17}/><TabLabelText>Sign</TabLabelText></TabLabel>}>
           <BlockchainSignPanel />
         </Tab>
-        <Tab title="Publish">
+        <Tab title={<TabLabel><ArticleIndexIcon size={17}/><TabLabelText>Publish</TabLabelText></TabLabel>}>
           <BlockchainPublishPanel />
         </Tab>
       </Tabs>
