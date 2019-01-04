@@ -35,14 +35,12 @@ export const RevisionLinks = (props: RevisionLinksProps): JSX.Element => {
   let archiveSection;
 
   if (props.lastArchivedRevision) {
-    const transactionArchive = (
-      <Link
-        href={`https://${urls.ETHERSCAN_DOMAIN}/tx/${props.lastArchivedRevision.txHash}`}
-        disabled={!props.lastArchivedRevision.archive.transaction}
-        target="_blank"
-      >
-        {props.lastArchivedRevision.archive.transaction ? "View on Ethereum" : "Not Archived to Ethereum"}{" "}
+    const transactionArchive = props.lastArchivedRevision.archive.transaction ? (
+      <Link href={`https://${urls.ETHERSCAN_DOMAIN}/tx/${props.lastArchivedRevision.txHash}`} target="_blank">
+        View on Ethereum
       </Link>
+    ) : (
+      <Link disabled>Not Archived to Ethereum</Link>
     );
 
     archiveSection = (
