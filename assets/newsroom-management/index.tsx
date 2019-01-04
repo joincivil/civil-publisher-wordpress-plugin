@@ -5,9 +5,7 @@ import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { Map } from "immutable";
 import { ErrorBoundary } from "../shared/components/ErrorBoundary";
-import { setMetaMaskEnabled } from "../shared/actions";
 import reducers from "../shared/reducer";
-import { getMetaMaskEnabled } from "../util";
 import App from "./App";
 
 async function init(): Promise<void> {
@@ -19,8 +17,6 @@ async function init(): Promise<void> {
     },
     applyMiddleware(thunk),
   );
-  const metaMaskEnabled = await getMetaMaskEnabled();
-  store.dispatch(setMetaMaskEnabled(metaMaskEnabled));
 
   ReactDOM.render(
     <ErrorBoundary section="newsroom-manager">
