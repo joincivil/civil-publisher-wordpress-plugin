@@ -29,6 +29,7 @@ const IconSection = styled.span`
   align-items: center;
   background-color: "transparent";
   border-radius: 0 4px 4px 0;
+  cursor: pointer;
 `;
 
 const PanelButtonSign = styled<{ open: boolean }, "span">("span")`

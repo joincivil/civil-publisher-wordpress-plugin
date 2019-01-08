@@ -7,7 +7,7 @@ import { ManagerState } from "../shared/reducer";
 import { addAddress, addTxHash, setMetaMaskEnabled } from "../shared/actions";
 import { saveAddressToProfile } from "../api-helpers";
 import { apiNamespace, siteOptionKeys, userMetaKeys, NETWORK_NAME, NETWORK_NICE_NAME, theme, urls } from "../constants";
-import { getCivil, getIPFS } from "../util";
+import { getCivil, getIPFS, getMetaMaskEnabled } from "../util";
 import { Modal, buttonSizes, Button } from "@joincivil/components";
 import { SearchUsers } from "./SearchUsers";
 
@@ -60,6 +60,9 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     } catch (err) {
       console.error("Failed to fetch user info for profile wallet address:", err);
     }
+
+    const metaMaskEnabled = await getMetaMaskEnabled();
+    this.props.dispatch(setMetaMaskEnabled(metaMaskEnabled));
   }
 
   public async componentWillUnmount(): Promise<void> {

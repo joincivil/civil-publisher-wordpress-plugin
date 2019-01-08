@@ -7,7 +7,17 @@ const { compose } = window.wp.compose;
 import * as React from "react";
 import { Civil, EthAddress } from "@joincivil/core";
 import { colors, IconWrap, Wrapper, Body, BodySection } from "./styles";
-import { Tabs, Tab, TabComponentProps, Button, buttonSizes, CivilLogo, NorthEastArrow, ArticleIndexIcon, ArticleSignIcon } from "@joincivil/components";
+import {
+  Tabs,
+  Tab,
+  TabComponentProps,
+  Button,
+  buttonSizes,
+  CivilLogo,
+  NorthEastArrow,
+  ArticleIndexIcon,
+  ArticleSignIcon,
+} from "@joincivil/components";
 import { theme, urls } from "../constants";
 import { getCivil } from "../util";
 import { ErrorBoundary } from "../shared/components/ErrorBoundary";
@@ -126,10 +136,24 @@ class BlockchainPluginInnerComponent extends React.Component<BlockchainPluginPro
         TabsNavBefore={navLogo}
         TabsNavAfter={navHelp}
       >
-        <Tab title={<TabLabel><ArticleSignIcon size={17}/><TabLabelText>Sign</TabLabelText></TabLabel>}>
+        <Tab
+          title={
+            <TabLabel>
+              <ArticleSignIcon size={17} />
+              <TabLabelText>Sign</TabLabelText>
+            </TabLabel>
+          }
+        >
           <BlockchainSignPanel />
         </Tab>
-        <Tab title={<TabLabel><ArticleIndexIcon size={17}/><TabLabelText>Publish</TabLabelText></TabLabel>}>
+        <Tab
+          title={
+            <TabLabel>
+              <ArticleIndexIcon size={17} />
+              <TabLabelText>Publish</TabLabelText>
+            </TabLabel>
+          }
+        >
           <BlockchainPublishPanel />
         </Tab>
       </Tabs>
