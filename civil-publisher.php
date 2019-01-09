@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Civil Publisher
  * Description: Manage your newsroom smart contract, apply to the Civil token-curated registry of ethical newsrooms, and use the Civil protocol to publish and archive content on the Ethereum blockchain.
- * Version: 0.3.2
+ * Version: 0.3.2.1
  * Author: Civil
  * Author URI: https://civil.co
  *
