@@ -255,7 +255,23 @@ class Post_Hashing {
 
 		// Get the image binary.
 		if ( ! empty( $image_src[0] ) ) {
-			$image_contents = wpcom_vip_file_get_contents( $image_src[0] );
+			if ( function_exists( 'wpcom_vip_file_get_contents ' ) ) {
+				// This function is cached by VIP.
+				$image_contents = wpcom_vip_file_get_contents( $image_src[0] );
+			} else {
+				// Use transients API for caching instead.
+				// Image src may be longer than max 172 characters allowed for transient cache key name, so hash it.
+				$cache_key = $this->hash( $image_src[0] );
+				$cached_hash = get_transient( $cache_key );
+				if ( false !== $cached_hash ) {
+					return $cached_hash;
+				}
+
+				$image_contents = file_get_contents( $image_src[0] );
+				$hash = $this->hash( $image_contents );
+				set_transient( $cache_key, $hash, HOUR_IN_SECONDS );
+				return $hash;
+			}
 		}
 
 		return $this->hash( $image_contents );
