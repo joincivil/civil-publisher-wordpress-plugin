@@ -89,6 +89,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
           onContractDeployStarted={this.onContractDeployStarted}
           requiredNetwork={NETWORK_NAME}
           requiredNetworkNiceName={NETWORK_NICE_NAME}
+          allSteps={NETWORK_NAME !== "main"}
           currentNetwork={this.state.currentNetwork}
           metamaskEnabled={this.props.metamaskEnabled}
           renderUserSearch={this.renderUserSearch}
