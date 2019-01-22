@@ -207,7 +207,7 @@ class Credibility_Indicators {
 				<input
 					type="checkbox"
 					id="<?php echo esc_attr( $key ); ?>"
-					name="indicators[<?php echo esc_attr( $key ); ?>]"
+					name="civil_credibility_indicators[<?php echo esc_attr( $key ); ?>]"
 					value="<?php echo esc_attr( $key ); ?>"
 					<?php checked( $checked ); ?>
 				>
@@ -245,12 +245,12 @@ class Credibility_Indicators {
 			return;
 		}
 
-		if ( ! isset( $_POST['indicators'] ) ) {
+		if ( ! isset( $_POST['civil_credibility_indicators'] ) ) {
 			update_post_meta( $post_id, 'civil_credibility_indicators', [] );
 			return;
 		}
 
-		$indicators = array_map( 'sanitize_text_field', wp_unslash( $_POST['indicators'] ) );
+		$indicators = array_map( 'sanitize_text_field', wp_unslash( $_POST['civil_credibility_indicators'] ) );
 
 		update_post_meta( $post_id, 'civil_credibility_indicators', array_keys( $indicators ) );
 	}
