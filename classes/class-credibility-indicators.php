@@ -246,6 +246,7 @@ class Credibility_Indicators {
 		}
 
 		if ( ! isset( $_POST['indicators'] ) ) {
+			update_post_meta( $post_id, 'civil_credibility_indicators', [] );
 			return;
 		}
 
