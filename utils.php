@@ -141,3 +141,31 @@ function constants_script( $script_name ) {
 
 	wp_add_inline_script( $script_name, "window.civilNamespace = $constants_json;" . PHP_EOL, 'before' );
 }
+
+/**
+ * Checks if Gutenberg editor is enabled, either by plugin on old WP or by virtue of new WP.
+ *
+ * @return boolean Whether it's enabled.
+ */
+function is_gutenberg_enabled() {
+	if ( is_gutenberg_disabled_by_classic_editor() ) {
+		return false;
+	}
+
+	return is_plugin_active( 'gutenberg/gutenberg.php' ) || version_compare( get_bloginfo( 'version' ), '5.0', '>=' );
+}
+
+/**
+ * Checks if Gutenberg editor is disabled by the standard Classic Editor plugin.
+ *
+ * @return boolean Whether it's disabled.
+ */
+function is_gutenberg_disabled_by_classic_editor() {
+	if ( is_plugin_active( 'classic-editor/classic-editor.php' ) ) {
+		if ( 'block' !== get_option( 'classic-editor-replace' ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
