@@ -6,7 +6,7 @@ This plugin lets you create a newsroom smart contract; apply to the Civil networ
 
 # Requirements
 
-Latest version of WordPress, with Gutenberg.
+PHP v7.0+, latest version of WordPress, with Gutenberg.
 
 # Installation
 
