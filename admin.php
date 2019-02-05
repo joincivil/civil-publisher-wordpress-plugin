@@ -149,22 +149,22 @@ function content_viewer_script() {
 add_action( 'admin_print_scripts-civil_page_' . CONTENT_VIEWER, __NAMESPACE__ . '\content_viewer_script' );
 
 /**
- * Alert user that Gutenberg plugin is needed if they don't have it activated.
+ * Alert user that Gutenberg plugin is needed if they don't have it activated. Only show on Manager page though so we don't drive them crazy if they mostly use the classic editor.
  */
 function gutenberg_nag() {
-	if ( is_plugin_active( 'gutenberg/gutenberg.php' ) || version_compare( get_bloginfo( 'version' ), '5.0', '>=' ) ) {
+	$page_id = get_current_screen()->id ?? '';
+	if ( 'civil_page_' . MANAGEMENT_PAGE !== $page_id
+		|| is_gutenberg_enabled()
+	) {
 		return;
 	}
 
-	civil_notice_open();
-	?>
-	<h3><?php esc_html_e( 'Gutenberg plugin missing', 'civil' ); ?></h3>
-	<p>
-	<?php
-		echo sprintf(
+	if ( is_gutenberg_disabled_by_classic_editor() ) {
+		$title = __( 'Gutenberg plugin disabled', 'civil' );
+		$body = sprintf(
 			wp_kses(
-				/* translators: 1: Install Guteenberg plugin URL */
-				__( 'The Civil Publisher requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg plugin</a> to be installed and activated.', 'civil' ),
+				/* translators: 1: Gutenberg plugin demo URL, 2: Classic Editor settings URL */
+				__( 'The Civil Publisher requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg editor</a> to be active. You currently have Gutenberg disabled via the Classic Editor plugin. Please <a href="%2$s">visit Classic Editor settings</a> and set the default editor to the "Block Editor" in order to continue.', 'civil' ),
 				[
 					'a' => [
 						'href' => [],
@@ -172,10 +172,31 @@ function gutenberg_nag() {
 					],
 				]
 			),
+			esc_url( 'https://wordpress.org/gutenberg/' ),
+			esc_url( admin_url( '/options-writing.php#classic-editor-options' ) )
+		);
+	} else {
+		$title = __( 'Gutenberg plugin missing', 'civil' );
+		$body = sprintf(
+			wp_kses(
+				/* translators: 1: Gutenberg plugin demo URL, 2: Install Gutenberg plugin URL */
+				__( 'The Civil Publisher requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg editor</a> to be installed and activated. Please either <a target="_blank" href="%2$s">install the Gutenberg plugin</a> or upgrade WordPress to the latest version, which includes Gutenberg by default.', 'civil' ),
+				[
+					'a' => [
+						'href' => [],
+						'target' => [],
+					],
+				]
+			),
+			esc_url( 'https://wordpress.org/gutenberg/' ),
 			esc_url( admin_url( '/plugin-install.php?tab=plugin-information&plugin=gutenberg' ) )
 		);
+	}
+
+	civil_notice_open();
 	?>
-	</p>
+	<h3><?php echo esc_html( $title ); ?></h3>
+	<p><?php echo esc_html( $body ); ?></p>
 	<?php
 	civil_notice_close();
 }
@@ -185,11 +206,9 @@ add_action( 'admin_notices', __NAMESPACE__ . '\gutenberg_nag' );
  * If necessary, alert user that they need to set up newsroom to use plugin.
  */
 function newsroom_setup_nag() {
-	// Don't show on newsroom manager page or if missing Gutenberg.
+	// Don't show on newsroom manager page.
 	$page_id = get_current_screen()->id ?? '';
-	if ( 'civil_page_' . MANAGEMENT_PAGE === $page_id
-		|| ! is_plugin_active( 'gutenberg/gutenberg.php' )
-	) {
+	if ( 'civil_page_' . MANAGEMENT_PAGE === $page_id ) {
 		return;
 	}
 
@@ -224,11 +243,10 @@ add_action( 'admin_notices', __NAMESPACE__ . '\newsroom_setup_nag' );
  * If necessary, alert user that they need to fill in their ETH wallet address.
  */
 function wallet_address_nag() {
-	// Don't show on newsroom manager page, or newsroom setup nag is showing, or if missing Gutenberg.
+	// Don't show on newsroom manager page, or if newsroom setup nag is showing.
 	$page_id = get_current_screen()->id ?? '';
 	if ( 'civil_page_' . MANAGEMENT_PAGE === $page_id
 		|| ( current_user_can( 'manage_options' ) && empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) ) )
-		|| ! is_plugin_active( 'gutenberg/gutenberg.php' )
 	) {
 		return;
 	}
@@ -292,7 +310,7 @@ function civil_notice_open() {
 			margin-left: 8px;
 		}
 	</style>
-	<div class="notice notice-error civil-notice">
+	<div class="notice notice-error civil-notice is-dismissible">
 		<div class="civil-logo-wrap">
 			<div class="civil-logo-wrap-inner">
 				<img src="<?php echo esc_url( plugins_url( 'images/civil-logo.svg', __FILE__ ) ); ?>" />

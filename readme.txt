@@ -2,8 +2,8 @@
 Contributors: joincivil
 Tags: civil, journalism, news, blockchain, ethereum, decentralization, permament, archive, archiving, permanence, ipfs, sign
 Requires at least: 4.6
-Tested up to: 4.9.8
-Requires PHP: 5.6
+Tested up to: 5.0.3
+Requires PHP: 7.0
 Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -20,7 +20,7 @@ Manage your newsroom smart contract; apply to the Civil token-curated registry o
 
 == Requirements ==
 
-This plugin requires Gutenberg v4.1 or later. We recommend the latest version of WordPress.
+This plugin requires PHP version 7.0 or later, and requires that you use the Gutenberg editor. We recommend the latest version of WordPress, which includes Gutenberg by default, but if running an older version of WordPress, we recommend using the Gutenberg plugin v4.1 or later.
 
 == Installation ==
 
