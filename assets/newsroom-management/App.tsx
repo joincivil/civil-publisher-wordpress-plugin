@@ -78,6 +78,7 @@ class App extends React.Component<AppProps & DispatchProp<any>, AppState> {
     return (
       <>
         <Newsroom
+          allSteps={true}
           disabled={this.state.account !== this.state.profileWalletAddress}
           civil={this.civil}
           ipfs={this.ipfs}
