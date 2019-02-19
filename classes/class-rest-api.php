@@ -264,12 +264,17 @@ class REST_API {
 			);
 		}
 
+		$display_name = $users[0]->data->display_name;
 		$avatar_url = get_avatar_url( $users[0]->data->ID );
 		$bio = get_user_meta( $users[0]->data->ID, 'description', true );
 
 		global $coauthors_plus;
 		if ( isset( $coauthors_plus ) ) {
 			$coauthor = $coauthors_plus->get_coauthor_by( 'id', $users[0]->data->ID );
+
+			if ( $coauthor->display_name ) {
+				$display_name = $coauthor->display_name;
+			}
 
 			$avatar_attachment_id = get_post_thumbnail_id( $coauthor->ID );
 			if ( $avatar_attachment_id ) {
@@ -286,7 +291,7 @@ class REST_API {
 			[
 				'ID' => $users[0]->data->ID,
 				'user_login' => $users[0]->data->user_login,
-				'display_name' => $users[0]->data->display_name,
+				'display_name' => $display_name,
 				'avatar_url' => $avatar_url,
 				'bio' => strip_tags( $bio ),
 			]
