@@ -2,7 +2,7 @@ This plugin lets you create a newsroom smart contract; apply to the Civil networ
 
 [Learn more about Civil](https://civil.co)
 
-[Read the plugin FAQ](https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists)
+[Read the plugin FAQ](https://cvlconsensys.zendesk.com/hc/en-us/categories/360001540371-Publisher)
 
 # Requirements
 

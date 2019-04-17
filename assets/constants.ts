@@ -5,7 +5,7 @@ export const urls = {
   LOGO: window.civilNamespace.logoUrl,
   PROFILE: `${window.civilNamespace.wpAdminUrl}profile.php`,
   HELP_BASE: "https://cvlconsensys.zendesk.com/hc/en-us/",
-  FAQ_HOME: "https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists",
+  FAQ_HOME: "https://cvlconsensys.zendesk.com/hc/en-us/categories/360001540371-Publisher",
   NEWSROOM_MANAGER: `${window.civilNamespace.wpAdminUrl}admin.php?page=civil-publisher-newsroom-management`,
   ETHERSCAN_DOMAIN: "etherscan.io",
 };
