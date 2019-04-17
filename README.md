@@ -1,4 +1,6 @@
-This plugin lets you create a newsroom smart contract; apply to the Civil network; and sign, publish, and archive your WordPress content using the Civil protocol.
+This plugin lets you create a newsroom smart contract; apply to the Civil Registry; and sign, publish, and archive your WordPress content using the Civil protocol.
+
+**Note that this plugin is an unreleased beta and some features are no longer current. Application to the Civil Registry should now be done [directly on the registry](https://registry.civil.co/apply-to-registry). Publishing and archiving features do work, but we currently recommend this plugin only for tech-savvy users, and you must follow setup directions below to connect to your newsroom application. The Civil Media Company can't provide support for this plugin until it is released; use this plugin at your own risk.**
 
 [Learn more about Civil](https://civil.co)
 
@@ -6,11 +8,23 @@ This plugin lets you create a newsroom smart contract; apply to the Civil networ
 
 # Requirements
 
-PHP v7.0+, latest version of WordPress, with Gutenberg.
+- PHP v7.0+
+- Latest version of WordPress recommended
+- WordPress's new Gutenberg post editor
+    - Note that if you are using the [Classic Editor plugin](https://wordpress.org/plugins/classic-editor/) you can continue to use the classic WordPress editor to edit and publish on your site, but when you wish to publish to Civil, you can open a particular post using the Gutenberg editor and access the Civil Publisher tools from there, and then afterwards return to using the classic editor.
+- WordPress post revisions must be enabled
+    - Revisions are enabled by default on stock WordPress. However, some hosting providers disable them, but will enable them on request.
 
-# Installation
+# Installation, setup, and usage
 
-Copy, checkout, or submodule this repo into `wp-content/plugins`, then enable the plugin from the Plugins screen in the WordPress admin dashboard and you're ready to go.
+- Install the plugin:
+    - [Download the zip](https://github.com/joincivil/civil-publisher-wordpress-plugin/archive/master.zip) and upload that zip to the plugins page in WP dashboard, or
+    - Copy, checkout, or submodule this repo into `wp-content/plugins`
+- Enable the plugin from the Plugins dashboard
+- **Do not use the newsroom contract creation and application feature in this plugin.** To use this plugin you must first create your newsroom and apply to the registry [here](https://registry.civil.co/apply-to-registry).
+- Once you have done that, copy your newsroom contract address from the Smart Contract tab on your [registry application page](https://registry.civil.co/apply-to-registry/), then navigate to Settings > General in your WordPress dashboard and paste it in the "newsroom address" field, then save
+- Edit your user profile in your WordPress dashboard and add your personal Ethereum address from MetaMask to the "your wallet address" field and save
+- You will now find a "Civil" tab in the top right toolbar when editing a post using the Gutenberg editor: from this tab you can sign, index, and archive your posts on the blockchain
 
 # Development
 
