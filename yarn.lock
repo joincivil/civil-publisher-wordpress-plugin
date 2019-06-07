@@ -27,9 +27,10 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@joincivil/artifacts@link:packages/artifacts":
-  version "0.0.0"
-  uid ""
+"@joincivil/artifacts@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@joincivil/artifacts/-/artifacts-1.0.1.tgz#22210021204eea83393527428d1cf51f7106b811"
+  integrity sha512-R9ssZzJ3Dhv67QWvsE077L4KVxtNkyE5fw/34/VlUkSCt6HWGXfcd9NZ5kFcND7MlZZUU6i7ort1C/fKN8Qy5w==
 
 "@joincivil/components@^1.7.5":
   version "1.7.5"
@@ -56,7 +57,7 @@
   version "4.7.5"
   resolved "https://registry.yarnpkg.com/@joincivil/core/-/core-4.7.5.tgz#022a7bda7a7fb093e4117db2e2cafbe34882fb75"
   dependencies:
-    "@joincivil/artifacts" "link:../../../../../../../../Library/Caches/Yarn/v1/npm-@joincivil/artifacts"
+    "@joincivil/artifacts" "link:../../../../../../../../.cache/yarn/v4/npm-@joincivil-core-4.7.5-022a7bda7a7fb093e4117db2e2cafbe34882fb75/node_modules/@joincivil/artifacts"
     "@joincivil/ethapi" "^0.3.4"
     "@joincivil/utils" "^1.8.3"
     bignumber.js "~5.0.0"
@@ -5620,16 +5621,6 @@ web3-typescript-typings@^0.10.2:
   resolved "https://registry.yarnpkg.com/web3-typescript-typings/-/web3-typescript-typings-0.10.2.tgz#a9903815d2a8a0dbd73fd5db374070de0bd30497"
   dependencies:
     bignumber.js "~4.1.0"
-
-web3@0.20.3:
-  version "0.20.3"
-  resolved "https://registry.yarnpkg.com/web3/-/web3-0.20.3.tgz#caa44373dc8815ac8767bddb6ba73073964caa8b"
-  dependencies:
-    bignumber.js "git+https://github.com/frozeman/bignumber.js-nolookahead.git"
-    crypto-js "^3.1.4"
-    utf8 "^2.1.1"
-    xhr2 "*"
-    xmlhttprequest "*"
 
 web3@^0.20.3:
   version "0.20.6"
