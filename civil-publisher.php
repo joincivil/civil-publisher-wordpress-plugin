@@ -26,6 +26,7 @@ define( __NAMESPACE__ . '\IPFS_META_KEY', 'civil_publisher_publish_ipfs' );
 define( __NAMESPACE__ . '\ARCHIVE_STATUS_META_KEY', 'civil_publisher_publish_archive_status' );
 define( __NAMESPACE__ . '\CONTENT_ID_META_KEY', 'civil_publisher_content_id' );
 define( __NAMESPACE__ . '\POST_AUTHORS_META_KEY', 'civil_publisher_post_authors' );
+define( __NAMESPACE__ . '\SHOW_STORY_BOOST_META_KEY', 'civil_publisher_show_story_boost' );
 
 // User meta.
 define( __NAMESPACE__ . '\USER_ETH_ADDRESS_META_KEY', 'civil_publisher_eth_wallet_address' );
@@ -52,6 +53,7 @@ require_once dirname( __FILE__ ) . '/traits/trait-singleton.php';
 require_once dirname( __FILE__ ) . '/custom-meta.php';
 require_once dirname( __FILE__ ) . '/admin.php';
 require_once dirname( __FILE__ ) . '/users-page.php';
+require_once dirname( __FILE__ ) . '/story-boosts.php';
 
 require_once dirname( __FILE__ ) . '/classes/class-post-hashing.php';
 require_once dirname( __FILE__ ) . '/classes/class-rest-api.php';
