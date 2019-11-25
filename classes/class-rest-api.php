@@ -17,7 +17,7 @@ class REST_API {
 	 * Setup the class.
 	 */
 	public function setup() {
-		add_action( 'rest_api_init', [ $this, 'register_endpoint' ] );
+		add_action( 'rest_api_init', array( $this, 'register_endpoint' ) );
 	}
 
 	/**
@@ -28,47 +28,47 @@ class REST_API {
 		register_rest_route(
 			REST_API_NAMESPACE,
 			'/revisions/(?P<revisionID>\d+)',
-			[
+			array(
 				'methods'  => 'GET',
-				'callback' => [ $this, 'get_revision_payload' ],
-			]
+				'callback' => array( $this, 'get_revision_payload' ),
+			)
 		);
 
 		// Endpoint for returning latest revision ID for a post. This is needed because our disabling of `wp_save_post_revision_check_for_changes` throws off how Gutenberg detects latest revision.
 		register_rest_route(
-			REST_API_NAMESPACE, '/posts/(?P<postID>\d+)/last-revision-id', [
+			REST_API_NAMESPACE, '/posts/(?P<postID>\d+)/last-revision-id', array(
 				'methods'  => 'GET',
-				'callback' => [ $this, 'get_last_revision_id' ],
-			]
+				'callback' => array( $this, 'get_last_revision_id' ),
+			)
 		);
 
 		// Endpoint for returning revision content based on hash value.
 		register_rest_route(
 			REST_API_NAMESPACE,
 			'/revisions-content/(?P<hash>\w+)',
-			[
+			array(
 				'methods'  => 'GET',
-				'callback' => [ $this, 'get_revision_content_from_hash' ],
-			]
+				'callback' => array( $this, 'get_revision_content_from_hash' ),
+			)
 		);
 
 		// Endpoint for fetching user by given ETH address.
 		register_rest_route(
 			REST_API_NAMESPACE,
 			'/user-by-eth-address/(?P<address>\w+)',
-			[
+			array(
 				'methods'  => 'GET',
-				'callback' => [ $this, 'get_user_by_eth_address' ],
-			]
+				'callback' => array( $this, 'get_user_by_eth_address' ),
+			)
 		);
 
 		// Endpoint for setting custom user meta.
 		register_rest_route(
-			REST_API_NAMESPACE, '/users/(?P<user_id>\w+)', [
+			REST_API_NAMESPACE, '/users/(?P<user_id>\w+)', array(
 				'methods'  => 'POST',
-				'callback' => [ $this, 'set_custom_user_meta' ],
-				'permission_callback' => [ $this, 'set_custom_user_meta_check' ],
-			]
+				'callback' => array( $this, 'set_custom_user_meta' ),
+				'permission_callback' => array( $this, 'set_custom_user_meta_check' ),
+			)
 		);
 	}
 
@@ -90,9 +90,9 @@ class REST_API {
 			return new \WP_Error(
 				'no-revision-id-found',
 				esc_html__( 'No revision ID provided.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -104,9 +104,9 @@ class REST_API {
 			return new \WP_Error(
 				'no-post-found',
 				esc_html__( 'No post found matching the provided revision ID.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -115,9 +115,9 @@ class REST_API {
 			return new \WP_Error(
 				'post-not-published',
 				esc_html__( 'This post revision is not publiushed.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -142,9 +142,9 @@ class REST_API {
 			return new \WP_Error(
 				'no-post-id-found',
 				esc_html__( 'No post ID provided.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -163,9 +163,9 @@ class REST_API {
 			return new \WP_Error(
 				'no-revision-found',
 				esc_html__( 'No revision found for the provided post ID.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -190,27 +190,27 @@ class REST_API {
 			return new \WP_Error(
 				'no-hash-found',
 				esc_html__( 'No hash provided.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
 		// Get a the post with the hash.
 		$posts = new \WP_Query(
-			[
-				'post_type'        => [ 'revision' ],
+			array(
+				'post_type'        => array( 'revision' ),
 				'post_status'      => 'closed',
 				'posts_per_page'   => 1,
 				'ignore_sticky'    => true,
 				'suppress_filters' => false,
-				'meta_query'       => [ // WPCS: slow query ok.
-					[
+				'meta_query'       => array( // WPCS: slow query ok.
+					array(
 						'key'   => REVISION_HASH_META_KEY,
 						'value' => $hash,
-					],
-				],
-			]
+					),
+				),
+			)
 		);
 
 		// No post found.
@@ -218,9 +218,9 @@ class REST_API {
 			return new \WP_Error(
 				'no-post-found',
 				esc_html__( 'No post found matching the provided hash.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -241,26 +241,26 @@ class REST_API {
 			return new \WP_Error(
 				'no-address-found',
 				esc_html__( 'No ETH address provided.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
 		$users = get_users(
-			[
+			array(
 				'meta_key' => USER_ETH_ADDRESS_META_KEY,
 				'meta_value' => $address,
-			]
+			)
 		);
 
 		if ( empty( $users[0] ) || ! ( $users[0] instanceof \WP_User ) ) {
 			return new \WP_Error(
 				'no-user-found',
 				esc_html__( 'No user found with given address.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -288,13 +288,13 @@ class REST_API {
 		}
 
 		return rest_ensure_response(
-			[
+			array(
 				'ID' => $users[0]->data->ID,
 				'user_login' => $users[0]->data->user_login,
 				'display_name' => $display_name,
 				'avatar_url' => $avatar_url,
 				'bio' => strip_tags( $bio ),
-			]
+			)
 		);
 	}
 
@@ -316,9 +316,9 @@ class REST_API {
 			return new \WP_Error(
 				'rest-forbidden',
 				esc_html__( 'Insufficient permissions.' ),
-				[
+				array(
 					'status' => 401,
-				]
+				)
 			);
 		}
 
@@ -342,9 +342,9 @@ class REST_API {
 			return new \WP_Error(
 				'no-id-found',
 				esc_html__( 'No user ID provided.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -356,9 +356,9 @@ class REST_API {
 				return new \WP_Error(
 					'no-user-found',
 					esc_html__( 'No user found with given id.' ),
-					[
+					array(
 						'status' => 400,
-					]
+					)
 				);
 			}
 		}
@@ -367,9 +367,9 @@ class REST_API {
 			return new \WP_Error(
 				'no-meta-found',
 				esc_html__( 'No meta provided.' ),
-				[
+				array(
 					'status' => 400,
-				]
+				)
 			);
 		}
 
@@ -380,9 +380,9 @@ class REST_API {
 				return new \WP_Error(
 					'invalid-eth-address',
 					esc_html__( 'Invalid ETH address provided.' ),
-					[
+					array(
 						'status' => 400,
-					]
+					)
 				);
 			}
 
@@ -408,7 +408,7 @@ class REST_API {
 
 		// No post found.
 		if ( ! ( $post instanceof \WP_Post ) ) {
-			return [];
+			return array();
 		}
 
 		// Get the parent post.
@@ -416,7 +416,7 @@ class REST_API {
 
 		// No parent post found.
 		if ( ! ( $parent_post instanceof \WP_Post ) ) {
-			return [];
+			return array();
 		}
 
 		// Get the JSON payload data.
@@ -424,23 +424,23 @@ class REST_API {
 		$revision_hash     = get_post_meta( $post->ID, REVISION_HASH_META_KEY, true );
 
 		// Format the revision data.
-		return [
+		return array(
 			'title'                 => $post->post_title,
 			'revisionContentHash'   => $revision_hash,
 			'revisionContentUrl'    => home_url( '/wp-json/' . REST_API_NAMESPACE . '/revisions-content/' . $revision_hash . '/' ),
 			'canonicalUrl'          => get_permalink( $parent_post->ID ),
 			'slug'                  => $parent_post->post_name,
 			'description'           => $post->post_excerpt,
-			'contributors'          => $json_payload_data['contributors'] ?? [],
-			'images'                => $json_payload_data['images'] ?? [],
-			'tags'                  => $json_payload_data['tags'] ?? [],
+			'contributors'          => $json_payload_data['contributors'] ?? array(),
+			'images'                => $json_payload_data['images'] ?? array(),
+			'tags'                  => $json_payload_data['tags'] ?? array(),
 			'primaryTag'            => $json_payload_data['primaryTag'] ?? '',
 			'revisionDate'          => $post->post_date_gmt,
 			'originalPublishDate'   => $parent_post->post_date_gmt,
-			'credibilityIndicators' => $json_payload_data['credibilityIndicators'] ?? [],
+			'credibilityIndicators' => $json_payload_data['credibilityIndicators'] ?? array(),
 			'opinion'               => false,
 			'civilSchemaVersion'    => SCHEMA_VERSION,
-		];
+		);
 	}
 }
 
