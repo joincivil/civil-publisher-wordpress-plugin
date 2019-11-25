@@ -8,6 +8,16 @@
 namespace Civil_Publisher;
 
 /**
+ * Check if old manager + post-panel functionality should be enabled.
+ *
+ * @return bool Whether or not it's enabled.
+ */
+function is_manager_enabled() {
+	// Essentially disable for anyone who doesn't already have it set up.
+	return ! empty( get_option( NEWSROOM_ADDRESS_OPTION_KEY ) );
+}
+
+/**
  * Gets the post types for which to support publishing on Civil.
  *
  * @return array The supported post types.

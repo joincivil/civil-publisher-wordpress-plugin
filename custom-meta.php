@@ -53,8 +53,10 @@ function show_wallet_profile_field( $user ) {
 	</table>
 	<?php
 }
-add_action( 'show_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
-add_action( 'edit_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
+if ( is_manager_enabled() ) {
+	add_action( 'show_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
+	add_action( 'edit_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
+}
 
 /**
  * Print any errors from updating user profile.
@@ -161,7 +163,9 @@ function newsroom_address_init() {
 		);
 	}
 }
-add_action( 'admin_init', __NAMESPACE__ . '\newsroom_address_init' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_init', __NAMESPACE__ . '\newsroom_address_init' );
+}
 
 /**
  * Register newsroom address setting.
@@ -287,7 +291,9 @@ function network_name_init() {
 		);
 	}
 }
-add_action( 'admin_init', __NAMESPACE__ . '\network_name_init' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_init', __NAMESPACE__ . '\network_name_init' );
+}
 
 /**
  * Register network name setting.
@@ -369,7 +375,9 @@ function save_post_author_data( $post_id ) {
 	$json = html_entity_decode( str_replace( "\u0022", '\\\\\"', json_encode( $author_data, JSON_NUMERIC_CHECK | JSON_HEX_QUOT ) ) );
 	update_metadata( 'post', $post_id, POST_AUTHORS_META_KEY, $json );
 }
-add_action( 'save_post', __NAMESPACE__ . '\save_post_author_data', 200 );
+if ( is_manager_enabled() ) {
+	add_action( 'save_post', __NAMESPACE__ . '\save_post_author_data', 200 );
+}
 
 /**
  * Ensure custom post meta visible/editable in REST API and Gutenberg.
