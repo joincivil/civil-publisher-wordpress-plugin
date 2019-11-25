@@ -165,12 +165,12 @@ function gutenberg_nag() {
 			wp_kses(
 				/* translators: 1: Gutenberg plugin demo URL, 2: Classic Editor settings URL */
 				__( 'The Civil Publisher requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg editor</a> to be active. You currently have Gutenberg disabled via the Classic Editor plugin. Please <a href="%2$s">visit Classic Editor settings</a> and set the default editor to the "Block Editor" in order to continue.', 'civil' ),
-				[
-					'a' => [
-						'href' => [],
-						'target' => [],
-					],
-				]
+				array(
+					'a' => array(
+						'href' => array(),
+						'target' => array(),
+					),
+				)
 			),
 			esc_url( 'https://wordpress.org/gutenberg/' ),
 			esc_url( admin_url( '/options-writing.php#classic-editor-options' ) )
@@ -181,12 +181,12 @@ function gutenberg_nag() {
 			wp_kses(
 				/* translators: 1: Gutenberg plugin demo URL, 2: Install Gutenberg plugin URL */
 				__( 'The Civil Publisher requires WordPress\'s official <a target="_blank" href="%1$s">Gutenberg editor</a> to be installed and activated. Please either <a target="_blank" href="%2$s">install the Gutenberg plugin</a> or upgrade WordPress to the latest version, which includes Gutenberg by default.', 'civil' ),
-				[
-					'a' => [
-						'href' => [],
-						'target' => [],
-					],
-				]
+				array(
+					'a' => array(
+						'href' => array(),
+						'target' => array(),
+					),
+				)
 			),
 			esc_url( 'https://wordpress.org/gutenberg/' ),
 			esc_url( admin_url( '/plugin-install.php?tab=plugin-information&plugin=gutenberg' ) )
@@ -223,7 +223,7 @@ function newsroom_setup_nag() {
 				wp_kses(
 					/* translators: 1: Management page URL */
 					__( 'Please take a few minutes to <a href="%1$s">set up your Civil newsroom</a> to start signing and publishing your posts.', 'civil' ),
-					[ 'a' => [ 'href' => [] ] ]
+					array( 'a' => array( 'href' => array() ) )
 				),
 				esc_url( $management_page_url )
 			);
@@ -262,7 +262,7 @@ function wallet_address_nag() {
 				wp_kses(
 					/* translators: 1: Edit profile URL */
 					__( 'You need to <a href="%1$s">add your wallet address to your profile</a> before you can use your newsroom contract features.', 'civil' ),
-					[ 'a' => [ 'href' => [] ] ]
+					array( 'a' => array( 'href' => array() ) )
 				),
 				esc_url( $edit_profile_url )
 			);

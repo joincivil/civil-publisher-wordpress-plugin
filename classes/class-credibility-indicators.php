@@ -18,14 +18,14 @@ class Credibility_Indicators {
 	 *
 	 * @var array
 	 */
-	private $post_types = [ 'post', 'landing-page' ];
+	private $post_types = array( 'post', 'landing-page' );
 
 	/**
 	 * Credibility indicator values.
 	 *
 	 * @var array
 	 */
-	private $indicators = [];
+	private $indicators = array();
 
 	/**
 	 * Credibility indicator learn more button text.
@@ -48,10 +48,10 @@ class Credibility_Indicators {
 
 		$this->setup_defaults();
 
-		add_action( 'admin_init', [ $this, 'register_settings' ] );
-		add_action( 'the_content', [ $this, 'append_indicators' ] );
-		add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
-		add_action( 'save_post', [ $this, 'save_post' ], 10, 2 );
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'the_content', array( $this, 'append_indicators' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 	}
 
 	/**
@@ -63,24 +63,24 @@ class Credibility_Indicators {
 		$this->post_types = apply_filters( 'civil_credibility_indicator_post_types', $this->post_types );
 
 		// Add defaults for indicators.
-		$indicators = [
-			'original_reporting' => [
+		$indicators = array(
+			'original_reporting' => array(
 				'label'         => __( 'Original Reporting', 'civil' ),
 				'default_value' => __( 'This article contains new, firsthand information uncovered by its reporter(s). This includes directly interviewing sources and research / analysis of primary source documents.', 'civil' ),
-			],
-			'on_the_ground'      => [
+			),
+			'on_the_ground'      => array(
 				'label'         => __( 'On the Ground', 'civil' ),
 				'default_value' => __( 'Indicates that a Newsmaker/Newsmakers was/were physically present to report the article from some/all of the location(s) it concerns.', 'civil' ),
-			],
-			'sources_cited'      => [
+			),
+			'sources_cited'      => array(
 				'label'         => __( 'Sources Cited', 'civil' ),
 				'default_value' => __( 'As a news piece, this article cites verifiable, third-party sources which have all been thoroughly fact-checked and deemed credible by the Newsroom in accordance with the Civil Constitution.', 'civil' ),
-			],
-			'subject_specialist' => [
+			),
+			'subject_specialist' => array(
 				'label'         => __( 'Subject Specialist', 'civil' ),
 				'default_value' => __( 'This Newsmaker has been deemed by this Newsroom as having a specialized knowledge of the subject covered in this article.', 'civil' ),
-			],
-		];
+			),
+		);
 
 		// Filter default credibility indicators.
 		$this->indicators = apply_filters( 'civil_default_credibility_indicators', $indicators );
@@ -160,7 +160,7 @@ class Credibility_Indicators {
 		add_meta_box(
 			'civil-credibility-indicators',
 			__( 'Credibility Indicators', 'civil' ),
-			[ $this, 'meta_box_callback' ],
+			array( $this, 'meta_box_callback' ),
 			$this->post_types,
 			'side',
 			'high'
@@ -246,7 +246,7 @@ class Credibility_Indicators {
 		}
 
 		if ( ! isset( $_POST['civil_credibility_indicators'] ) ) {
-			update_post_meta( $post_id, 'civil_credibility_indicators', [] );
+			update_post_meta( $post_id, 'civil_credibility_indicators', array() );
 			return;
 		}
 
@@ -261,48 +261,48 @@ class Credibility_Indicators {
 	public function register_settings() {
 
 		// Prep sections and field building.
-		$sections = [];
-		$fields   = [];
+		$sections = array();
+		$fields   = array();
 
 		// Build fields.
 		foreach ( $this->indicators as $key => $indicator ) {
-			$fields[] = [
+			$fields[] = array(
 				'field'   => 'textarea',
 				'label'   => $indicator['label'],
 				'slug'    => "civl_ci_{$key}",
 				'default' => $indicator['default_value'],
-			];
+			);
 		}
 
-		$fields[] = [
+		$fields[] = array(
 			'label'   => __( 'Learn More Label', 'civil' ),
 			'slug'    => 'civl_ci_learn_more_label',
 			'default' => $this->learn_more_text,
-		];
+		);
 
-		$fields[] = [
+		$fields[] = array(
 			'label'   => __( 'Learn More Link', 'civil' ),
 			'slug'    => 'civl_ci_learn_more_link',
 			'default' => $this->learn_more_link,
-		];
+		);
 
-		$sections[] = [
+		$sections[] = array(
 			'label'  => __( 'Settings', 'civil' ),
 			'slug'   => 'civl_ci_indicators-section',
 			'page'   => 'credibility-indicators',
 			'fields' => $fields,
-		];
+		);
 
 		// Parse sections.
 		foreach ( $sections as $section ) {
 			$section = wp_parse_args(
 				$section,
-				[
+				array(
 					'label'  => __( 'Settings', 'civil' ),
 					'slug'   => 'settings-section',
 					'page'   => 'credibility-indicators',
-					'fields' => [],
-				]
+					'fields' => array(),
+				)
 			);
 
 			add_settings_section(
@@ -318,24 +318,24 @@ class Credibility_Indicators {
 				// Setup defaults.
 				$field = wp_parse_args(
 					$field,
-					[
+					array(
 						'default' => '',
 						'field'   => 'textfield',
 						'label'   => __( 'Field Label', 'civil' ),
 						'slug'    => 'field',
-					]
+					)
 				);
 
 				add_settings_field(
 					$field['slug'],
 					$field['label'],
-					[ $this, $field['field'] ],
+					array( $this, $field['field'] ),
 					$section['page'],
 					$section['slug'],
-					[
+					array(
 						'key'     => $field['slug'],
 						'default' => $field['default'],
-					]
+					)
 				);
 
 				register_setting(
