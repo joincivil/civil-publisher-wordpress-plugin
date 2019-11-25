@@ -38,7 +38,7 @@ define( __NAMESPACE__ . '\NEWSROOM_TXHASH_OPTION_KEY', 'civil_publisher_newsroom
 define( __NAMESPACE__ . '\NEWSROOM_CHARTER_OPTION_KEY', 'civil_publisher_newsroom_charter' );
 define( __NAMESPACE__ . '\NETWORK_NAME_OPTION_KEY', 'civil_publisher_network_name' );
 
-define( __NAMESPACE__ . '\FAQ_HOME', 'https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists' );
+define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 
 // Menus.
 define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-publisher-menu' );

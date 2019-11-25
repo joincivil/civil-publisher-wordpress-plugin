@@ -73,9 +73,9 @@ add_action( 'admin_menu', __NAMESPACE__ . '\add_menus' );
  * Add FAQ link to plugin menu.
  */
 function add_faq_link() {
-	// phpcs:disable WordPress.WP.GlobalVariablesOverride.OverrideProhibited -- can't find any other way to get external link submenu except redirect headers or crazy url filter shit
+	// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited -- can't find any other way to get external link submenu except redirect headers or crazy url filter shit
 	global $submenu;
-	$submenu[ TOP_LEVEL_MENU ][] = array( 'Help 🡭', 'edit_posts', 'https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists' );
+	$submenu[ TOP_LEVEL_MENU ][] = array( 'Manager Help 🡭', 'edit_posts', FAQ_HOME );
 	// phpcs:enable
 }
 if ( is_manager_enabled() ) {
@@ -348,7 +348,7 @@ function civil_notice_close() {
 function help_menu_new_tab() {
 	?>
 	<script>
-		var submenu = document.querySelector(".toplevel_page_<?php echo esc_attr( 'TOP_LEVEL_MENU' ); ?> .wp-submenu a[href*=zendesk]");
+		var submenu = document.querySelector(".toplevel_page_<?php echo esc_attr( TOP_LEVEL_MENU ); ?> .wp-submenu a[href*='help.civil.co']");
 		submenu && submenu.setAttribute("target", "_blank");
 	</script>
 	<?php
