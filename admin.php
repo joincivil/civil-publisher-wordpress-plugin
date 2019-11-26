@@ -25,7 +25,9 @@ function enqueue_post_panel() {
 
 	common_scripts( 'civil-publisher-post-panel' );
 }
-add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
+if ( is_manager_enabled() ) {
+	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_post_panel' );
+}
 
 /**
  * Add Civil admin menu and sub-menu items.
@@ -40,14 +42,16 @@ function add_menus() {
 		'data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjIwIiB2aWV3Qm94PSIwIDAgMjAgMjAiIHdpZHRoPSIyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGRlZnM+PHBhdGggaWQ9ImEiIGQ9Im02LjEwMjIxNjMyIDIuMjI4NTcxNDNoNy43OTU1NjczOGMxLjQyNjQzIDAgMS45NDM2ODc5LjE0ODUyMDk4IDIuNDY1MTY5NC40Mjc0MTIzMi41MjE0ODE1LjI3ODg5MTM1LjkzMDc0MzIuNjg4MTUzMDcgMS4yMDk2MzQ2IDEuMjA5NjM0NTUuMjc4ODkxMy41MjE0ODE0OC40Mjc0MTIzIDEuMDM4NzM5NDYuNDI3NDEyMyAyLjQ2NTE2OTQ1djcuNzk1NTY3MzVjMCAxLjQyNjQzLS4xNDg1MjEgMS45NDM2ODgtLjQyNzQxMjMgMi40NjUxNjk1LS4yNzg4OTE0LjUyMTQ4MTQtLjY4ODE1MzEuOTMwNzQzMi0xLjIwOTYzNDYgMS4yMDk2MzQ1LS41MjE0ODE1LjI3ODg5MTQtMS4wMzg3Mzk0LjQyNzQxMjMtMi40NjUxNjk0LjQyNzQxMjNoLTcuNzk1NTY3MzhjLTEuNDI2NDI5OTggMC0xLjk0MzY4Nzk2LS4xNDg1MjA5LTIuNDY1MTY5NDUtLjQyNzQxMjMtLjUyMTQ4MTQ4LS4yNzg4OTEzLS45MzA3NDMyLS42ODgxNTMxLTEuMjA5NjM0NTQtMS4yMDk2MzQ1LS4yNzg4OTEzNS0uNTIxNDgxNS0uNDI3NDEyMzMtMS4wMzg3Mzk1LS40Mjc0MTIzMy0yLjQ2NTE2OTV2LTcuNzk1NTY3MzVjMC0xLjQyNjQyOTk5LjE0ODUyMDk4LTEuOTQzNjg3OTcuNDI3NDEyMzMtMi40NjUxNjk0NS4yNzg4OTEzNC0uNTIxNDgxNDguNjg4MTUzMDYtLjkzMDc0MzIgMS4yMDk2MzQ1NC0xLjIwOTYzNDU1LjUyMTQ4MTQ5LS4yNzg4OTEzNCAxLjAzODczOTQ3LS40Mjc0MTIzMiAyLjQ2NTE2OTQ1LS40Mjc0MTIzMnptLS42ODY4MjAyNSA3Ljk5OTk5OTk3YzAgMi43NTU1NzYgMi4wNTM3MzA0NiA0Ljg0NTcxNDMgNC43MTE4NDc5MyA0Ljg0NTcxNDMgMS43NTYzNDM5IDAgMy4wMDgxMzE1LS42MTYzNDA0IDMuOTc0MDczMS0xLjkzMDg2NzFsLjE2NjM1ODctLjIyNjM5MzYtMS41MDc1NTAxLTEuMDUzMDU5NS0uMTU5NjU0MS4yMDgxNDA1Yy0uNjE2MTkwMS44MDMzMjQ4LTEuMzkwMTE5MyAxLjE4NTA5NjctMi40MjYwMTk1IDEuMTg1MDk2Ny0xLjYyNTQ4NTQ5IDAtMi43OTQyNDEzMy0xLjI0OTE2MTctMi43OTQyNDEzMy0zLjAyODYzMTMgMC0xLjc1MTI5NTQ3IDEuMTYzNzk5NzctMy4wMjg2MzEyNCAyLjc0NzAzMzIzLTMuMDI4NjMxMjQgMS4wMzY5NzYxIDAgMS43MDkwMTQyLjM0MzIwNTYzIDIuMjgyMjk4NSAxLjExMDUyNDU3bC4xNjE0MDkyLjIxNjA0MDAyIDEuNTAwNTA2OC0xLjA4MTk1MDQ4LS4xNTU0MzYyLS4yMjE2MzkxOGMtLjg0NDc1NjYtMS4yMDQ1NTM1Mi0yLjA5MTkwMzYtMS44NDAwNTc5NS0zLjc0MTU3MDItMS44NDAwNTc5NS0yLjY4MjI5NDkzIDAtNC43NTkwNTYwMyAyLjA5MDQzNTg2LTQuNzU5MDU2MDMgNC44NDU3MTQyNnoiLz48bWFzayBpZD0iYiIgZmlsbD0iI2ZmZiI+PHVzZSBmaWxsPSJub25lIiB4bGluazpocmVmPSIjYSIvPjwvbWFzaz48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48dXNlIGZpbGw9IiNkOGQ4ZDgiIHhsaW5rOmhyZWY9IiNhIi8+PGcgbWFzaz0idXJsKCNiKSI+PHBhdGggZD0ibTAgMGgyMXYyMWgtMjF6IiBmaWxsPSIjNDQ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtLjUzMiAtLjM2NykiLz48L2c+PC9nPjwvc3ZnPg=='
 	);
 
-	add_submenu_page(
-		TOP_LEVEL_MENU,
-		__( 'Newsroom Manager', 'civil' ),
-		__( 'Newsroom Manager', 'civil' ),
-		'manage_options',
-		MANAGEMENT_PAGE,
-		__NAMESPACE__ . '\newsroom_manager_content'
-	);
+	if ( is_manager_enabled() ) {
+		add_submenu_page(
+			TOP_LEVEL_MENU,
+			__( 'Newsroom Manager', 'civil' ),
+			__( 'Newsroom Manager', 'civil' ),
+			'manage_options',
+			MANAGEMENT_PAGE,
+			__NAMESPACE__ . '\newsroom_manager_content'
+		);
+	}
 
 	if ( apply_filters( 'civil_enable_credibility_indicators', true ) ) {
 		add_submenu_page(
@@ -69,12 +73,14 @@ add_action( 'admin_menu', __NAMESPACE__ . '\add_menus' );
  * Add FAQ link to plugin menu.
  */
 function add_faq_link() {
-	// phpcs:disable WordPress.WP.GlobalVariablesOverride.OverrideProhibited -- can't find any other way to get external link submenu except redirect headers or crazy url filter shit
+	// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited -- can't find any other way to get external link submenu except redirect headers or crazy url filter shit
 	global $submenu;
-	$submenu[ TOP_LEVEL_MENU ][] = array( 'Help 🡭', 'edit_posts', 'https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists' );
+	$submenu[ TOP_LEVEL_MENU ][] = array( 'Manager Help 🡭', 'edit_posts', FAQ_HOME );
 	// phpcs:enable
 }
-add_action( 'admin_menu', __NAMESPACE__ . '\add_faq_link' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_menu', __NAMESPACE__ . '\add_faq_link' );
+}
 
 /**
  * Civil Newsroom Manager page content.
@@ -200,7 +206,9 @@ function gutenberg_nag() {
 	<?php
 	civil_notice_close();
 }
-add_action( 'admin_notices', __NAMESPACE__ . '\gutenberg_nag' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_notices', __NAMESPACE__ . '\gutenberg_nag' );
+}
 
 /**
  * If necessary, alert user that they need to set up newsroom to use plugin.
@@ -237,7 +245,9 @@ function newsroom_setup_nag() {
 		civil_notice_close();
 	}
 }
-add_action( 'admin_notices', __NAMESPACE__ . '\newsroom_setup_nag' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_notices', __NAMESPACE__ . '\newsroom_setup_nag' );
+}
 
 /**
  * If necessary, alert user that they need to fill in their ETH wallet address.
@@ -276,7 +286,9 @@ function wallet_address_nag() {
 		civil_notice_close();
 	}
 }
-add_action( 'admin_notices', __NAMESPACE__ . '\wallet_address_nag' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_notices', __NAMESPACE__ . '\wallet_address_nag' );
+}
 
 /**
  * Output opening HTML for Civil admin notice.
@@ -336,7 +348,7 @@ function civil_notice_close() {
 function help_menu_new_tab() {
 	?>
 	<script>
-		var submenu = document.querySelector(".toplevel_page_<?php echo esc_attr( 'TOP_LEVEL_MENU' ); ?> .wp-submenu a[href*=zendesk]");
+		var submenu = document.querySelector(".toplevel_page_<?php echo esc_attr( TOP_LEVEL_MENU ); ?> .wp-submenu a[href*='help.civil.co']");
 		submenu && submenu.setAttribute("target", "_blank");
 	</script>
 	<?php

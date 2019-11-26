@@ -31,4 +31,4 @@ This plugin requires PHP version 7.0 or later, and requires that you use the Gut
 
 == Frequently Asked Questions ==
 
-[Read the plugin FAQ](https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists)
+[Read the plugin FAQ](https://help.civil.co/hc/en-us/categories/360001540371-Publisher)
