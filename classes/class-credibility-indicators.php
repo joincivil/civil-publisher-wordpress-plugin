@@ -128,7 +128,7 @@ class Credibility_Indicators {
 		ob_start();
 		?>
 			<section>
-				<h3><?php esc_html_e( 'Credibility Indicators', 'civil' ); ?></h3>
+				<h3><?php esc_html_e( 'Civil: Credibility Indicators', 'civil' ); ?></h3>
 				<?php
 				foreach ( $indicator_statuses as $status ) :
 
