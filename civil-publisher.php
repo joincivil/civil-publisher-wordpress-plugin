@@ -46,6 +46,9 @@ define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-publisher-newsroom-management
 define( __NAMESPACE__ . '\CONTENT_VIEWER', 'civil-publisher-content' );
 define( __NAMESPACE__ . '\CREDIBILITY_INDICATORS', 'civil-publisher-credibiity-indicators' );
 
+define( __NAMESPACE__ . '\STORY_BOOST_SRC_STAGING', 'https://staging.civil.app/loader/boost.js' );
+define( __NAMESPACE__ . '\STORY_BOOST_SRC_PROD', 'https://registry.civil.co/loader/boost.js' );
+
 require_once dirname( __FILE__ ) . '/utils.php';
 
 require_once dirname( __FILE__ ) . '/traits/trait-singleton.php';

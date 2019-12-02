@@ -94,11 +94,11 @@ function story_boost_loop_end() {
 function story_boost_the_content( $content ) {
 	$show_story_boost = get_post_meta( get_the_ID(), SHOW_STORY_BOOST_META_KEY, true );
 	if ( $show_story_boost ) {
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			$content .= '<script src="http://staging.civil.app/loader/boost.js"></script>';
-		} else {
-			$content .= '<script src="http://registry.civil.co/loader/boost.js"></script>';
+		$script_src = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? STORY_BOOST_SRC_STAGING : STORY_BOOST_SRC_PROD;
+		if ( current_user_can( 'edit_posts' ) ) {
+			$script_src .= '?debug';
 		}
+		$content .= '<script src="' . $script_src . '"></script>';
 	}
 	return $content;
 }
