@@ -1,8 +1,9 @@
 <?php
 /**
  * Plugin Name: Civil Publisher
- * Description: Manage your newsroom smart contract, apply to the Civil token-curated registry of ethical newsrooms, and use the Civil protocol to publish and archive content on the Ethereum blockchain.
- * Version: 0.5.2
+ * Plugin URI: https://github.com/joincivil/civil-publisher-wordpress-plugin
+ * Description: Use Civil's growing suite of publisher tools, including: Boosts, to let readers easily support to your newsroom from any article; Credibility Indicators, to educate readers about what work goes into good journalism, and our smart contract tools (experimental) to publish and archive content on the Ethereum blockchain.
+ * Version: 0.7.0
  * Author: Civil
  * Author URI: https://civil.co
  *
