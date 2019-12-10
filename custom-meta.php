@@ -41,7 +41,7 @@ function show_wallet_profile_field( $user ) {
 							wp_kses(
 								/* translators: 1: FAQ page URL */
 								__( 'This wallet address will be used to determine and grant you access to your newsroom smart contract. If you later change to a new wallet you will lose that access unless your new wallet has been added to the contract. If you lose access to this wallet, you or your team may lose access to your newsroom smart contract. <a href="%1$s">Learn more</a>', 'civil' ),
-								[ 'a' => [ 'href' => [] ] ]
+								array( 'a' => array( 'href' => array() ) )
 							),
 							esc_url( FAQ_HOME )
 						);
@@ -53,8 +53,10 @@ function show_wallet_profile_field( $user ) {
 	</table>
 	<?php
 }
-add_action( 'show_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
-add_action( 'edit_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
+if ( is_manager_enabled() ) {
+	add_action( 'show_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
+	add_action( 'edit_user_profile', __NAMESPACE__ . '\show_wallet_profile_field' );
+}
 
 /**
  * Print any errors from updating user profile.
@@ -161,7 +163,9 @@ function newsroom_address_init() {
 		);
 	}
 }
-add_action( 'admin_init', __NAMESPACE__ . '\newsroom_address_init' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_init', __NAMESPACE__ . '\newsroom_address_init' );
+}
 
 /**
  * Register newsroom address setting.
@@ -287,7 +291,9 @@ function network_name_init() {
 		);
 	}
 }
-add_action( 'admin_init', __NAMESPACE__ . '\network_name_init' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_init', __NAMESPACE__ . '\network_name_init' );
+}
 
 /**
  * Register network name setting.
@@ -369,7 +375,9 @@ function save_post_author_data( $post_id ) {
 	$json = html_entity_decode( str_replace( "\u0022", '\\\\\"', json_encode( $author_data, JSON_NUMERIC_CHECK | JSON_HEX_QUOT ) ) );
 	update_metadata( 'post', $post_id, POST_AUTHORS_META_KEY, $json );
 }
-add_action( 'save_post', __NAMESPACE__ . '\save_post_author_data', 200 );
+if ( is_manager_enabled() ) {
+	add_action( 'save_post', __NAMESPACE__ . '\save_post_author_data', 200 );
+}
 
 /**
  * Ensure custom post meta visible/editable in REST API and Gutenberg.
@@ -378,65 +386,65 @@ function expose_article_meta() {
 	register_meta(
 		'post',
 		SIGNATURES_META_KEY,
-		[
+		array(
 			'show_in_rest' => true,
 			'single'       => true,
 			'type'         => 'string', // Actually will be stringified JSON.
-		]
+		)
 	);
 	register_meta(
 		'post',
 		REVISIONS_META_KEY,
-		[
+		array(
 			'show_in_rest' => true,
 			'single'       => true,
 			'type'         => 'string', // Actually will be stringified JSON.
-		]
+		)
 	);
 	register_meta(
 		'post',
 		POST_AUTHORS_META_KEY,
-		[
+		array(
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string', // Actually will be stringified JSON.
-		]
+		)
 	);
 	register_meta(
 		'post',
 		CONTENT_ID_META_KEY,
-		[
+		array(
 			'show_in_rest' => true,
 			'single'       => true,
 			'type'         => 'string',
-		]
+		)
 	);
 	register_meta(
 		'post',
 		TXHASH_META_KEY,
-		[
+		array(
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		]
+		)
 	);
 	register_meta(
 		'post',
 		IPFS_META_KEY,
-		[
+		array(
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		]
+		)
 	);
 	register_meta(
 		'post',
 		ARCHIVE_STATUS_META_KEY,
-		[
+		array(
 			'show_in_rest' => true,
 			'single' => true,
 			'type' => 'string',
-		]
+		)
 	);
 }
 add_action( 'admin_init', __NAMESPACE__ . '\expose_article_meta' );

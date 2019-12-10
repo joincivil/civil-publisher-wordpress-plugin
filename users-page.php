@@ -24,7 +24,9 @@ function users_page_script() {
 	);
 	common_scripts( 'civil-publisher-users-page-script' );
 }
-add_action( 'admin_print_scripts', __NAMESPACE__ . '\users_page_script' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_print_scripts', __NAMESPACE__ . '\users_page_script' );
+}
 
 /**
  * Add inline style to Users page.
@@ -49,7 +51,9 @@ function users_page_styles() {
 	</style>
 	<?php
 }
-add_action( 'admin_head-users.php', __NAMESPACE__ . '\users_page_styles' );
+if ( is_manager_enabled() ) {
+	add_action( 'admin_head-users.php', __NAMESPACE__ . '\users_page_styles' );
+}
 
 /**
  * Set up custom user columns.
@@ -64,7 +68,9 @@ function user_columns( $columns ) {
 	$columns[ USER_ETH_ADDRESS_META_KEY ] = esc_html( 'Wallet Address', 'civil' );
 	return $columns;
 }
-add_filter( 'manage_users_columns', __NAMESPACE__ . '\user_columns' );
+if ( is_manager_enabled() ) {
+	add_filter( 'manage_users_columns', __NAMESPACE__ . '\user_columns' );
+}
 
 /**
  * Retrieve output for custom user columns.
@@ -101,4 +107,6 @@ function user_cells( $output, $column_name, $user_id ) {
 	}
 	return $output;
 }
-add_filter( 'manage_users_custom_column', __NAMESPACE__ . '\user_cells', 10, 3 );
+if ( is_manager_enabled() ) {
+	add_filter( 'manage_users_custom_column', __NAMESPACE__ . '\user_cells', 10, 3 );
+}
