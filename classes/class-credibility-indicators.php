@@ -159,11 +159,10 @@ class Credibility_Indicators {
 	public function add_meta_box() {
 		add_meta_box(
 			'civil-credibility-indicators',
-			__( 'Credibility Indicators', 'civil' ),
+			__( 'Civil - Credibility Indicators', 'civil' ),
 			array( $this, 'meta_box_callback' ),
 			$this->post_types,
-			'side',
-			'high'
+			'side'
 		);
 	}
 

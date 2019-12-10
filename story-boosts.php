@@ -13,7 +13,7 @@ namespace Civil_Publisher;
 function story_boost_meta_box() {
 	add_meta_box(
 		'civil-story-boost',
-		__( 'Civil: Story Boost', 'civil' ),
+		__( 'Civil - Story Boost', 'civil' ),
 		__NAMESPACE__ . '\story_boost_meta_box_callback',
 		null,
 		'side'
@@ -40,7 +40,7 @@ function story_boost_meta_box_callback( $post ) {
 		/>
 		<?php _e( 'Enable Story Boost', 'civil' ); ?>
 	</label>
-	<p style="margin-top: 10px">Embed a small widget to the end of this post that allows readers to support your newsroom with direct payments. This post will also be submitted to the Civil story feed where other readers can find it and similarly contribute. <a href="#@TODO/toby" target="_blank">More information</a>.</p>
+	<p style="margin-top: 10px">Embed a small widget to the end of this post that allows readers to support your newsroom with direct payments. This post will also be submitted to the Civil story feed where other readers can find it and similarly contribute.<!--  <a href="#@TODO/toby" target="_blank">More information</a>.--></p>
 	<?php
 }
 
