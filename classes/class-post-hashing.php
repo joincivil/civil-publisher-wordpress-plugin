@@ -17,13 +17,13 @@ class Post_Hashing {
 	 * Setup the class.
 	 */
 	public function setup() {
-		add_action( '_wp_put_post_revision', [ $this, 'hash_post_content' ] );
+		add_action( '_wp_put_post_revision', array( $this, 'hash_post_content' ) );
 
 		// Force WordPress to save a new revision for meta data updates.
 		add_filter( 'wp_save_post_revision_check_for_changes', '__return_false' );
 
 		// Clean up revisions when a post is published.
-		add_action( 'transition_post_status', [ $this, 'purge_revisions' ], 10, 3 );
+		add_action( 'transition_post_status', array( $this, 'purge_revisions' ), 10, 3 );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Post_Hashing {
 		update_metadata( 'post', $post_id, REVISION_HASH_META_KEY, $this->revision_hash );
 
 		// Add images.
-		$images       = [];
+		$images       = array();
 		$thumbnail_id = get_post_thumbnail_id( $post->post_parent );
 
 		if ( ! empty( $thumbnail_id ) ) {
@@ -93,12 +93,12 @@ class Post_Hashing {
 
 			// Ensure we have a proper image.
 			if ( ! empty( $image_src ) && is_array( $image_src ) ) {
-				$images[] = [
+				$images[] = array(
 					'url'  => $image_src[0],
 					'hash' => $this->hash_image( $thumbnail_id ),
 					'h'    => $image_src[1],
 					'w'    => $image_src[2],
-				];
+				);
 			}
 		}
 
@@ -115,13 +115,13 @@ class Post_Hashing {
 		}
 
 		// Create revision JSON payload data.
-		$json_payload_data = [
+		$json_payload_data = array(
 			'contributors'          => $this->get_contributor_data( $post ),
 			'images'                => $images,
-			'tags'                  => wp_get_post_tags( $post->post_parent, [ 'fields' => 'slugs' ] ),
+			'tags'                  => wp_get_post_tags( $post->post_parent, array( 'fields' => 'slugs' ) ),
 			'primaryTag'            => $primary_category,
 			'credibilityIndicators' => get_post_meta( $post->post_parent, 'credibility_indicators', true ),
-		];
+		);
 
 		// Save revision JSON payload data.
 		update_metadata( 'post', $post_id, REVISION_DATA_META_KEY, $json_payload_data );
@@ -134,7 +134,7 @@ class Post_Hashing {
 	 * @return array List of data for each contributor on post.
 	 */
 	public function get_contributor_data( $post ) {
-		$contributors = [];
+		$contributors = array();
 
 		$authors = get_post_authors_data( $post->post_parent );
 
@@ -144,10 +144,10 @@ class Post_Hashing {
 
 		if ( ! empty( $authors ) ) {
 			foreach ( $authors as $author ) {
-				$author_data = [
+				$author_data = array(
 					'role' => 'author',
 					'name' => $author['display_name'],
-				];
+				);
 
 				if ( ! empty( $signatures[ $author['ID'] ] ) ) {
 					$sig_data = $signatures[ $author['ID'] ];
@@ -182,10 +182,10 @@ class Post_Hashing {
 					$signer_display_name = $signer->display_name;
 				}
 
-				$signer_data = [
+				$signer_data = array(
 					'role' => 'editor',
 					'name' => $signer_display_name,
-				];
+				);
 
 				if ( $this->sig_valid_for_post( $sig_data ) ) {
 					$signer_data['address'] = $sig_data['author'];
@@ -204,7 +204,7 @@ class Post_Hashing {
 					continue;
 				}
 
-				$secondary_contributor = [ 'role' => $byline['role'] ];
+				$secondary_contributor = array( 'role' => $byline['role'] );
 
 				if ( ! empty( $byline['id'] ) ) {
 					$user = get_user_by( 'id', $byline['id'] );

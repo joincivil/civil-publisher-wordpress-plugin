@@ -1,18 +1,18 @@
 === Civil Publisher ===
 Contributors: joincivil
-Tags: civil, journalism, news, blockchain, ethereum, decentralization, permament, archive, archiving, permanence, ipfs, sign
+Tags: civil, journalism, news, blockchain, ethereum, decentralization, permanent, archive, archiving, permanence, ipfs, sign, fundraising, payments
 Requires at least: 4.6
-Tested up to: 5.0.3
+Tested up to: 5.3
 Requires PHP: 7.0
-Stable tag: trunk
+Stable tag: 0.7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Manage your newsroom smart contract; apply to the Civil token-curated registry of ethical newsrooms; and sign, publish, and archive your WordPress content onto the Ethereum blockchain using the Civil protocol.
+Use Civil's growing suite of publisher tools, including: Boosts, to let readers easily support to your newsroom from any article; Credibility Indicators, to educate readers about what work goes into good journalism, and our smart contract tools (experimental) to publish and archive content on the Ethereum blockchain.
 
 == Description ==
 
-Manage your newsroom smart contract; apply to the Civil token-curated registry of ethical newsrooms; and sign, publish, and archive your WordPress content onto the Ethereum blockchain using the Civil protocol.
+Use Civil's growing suite of publisher tools, including: Boosts, to let readers easily support to your newsroom from any article; Credibility Indicators, to educate readers about what work goes into good journalism, and our smart contract tools (experimental) to publish and archive content on the Ethereum blockchain.
 
 [View the code on GitHub](https://github.com/joincivil/civil-publisher-wordpress-plugin/)
 
@@ -20,15 +20,16 @@ Manage your newsroom smart contract; apply to the Civil token-curated registry o
 
 == Requirements ==
 
-This plugin requires PHP version 7.0 or later, and requires that you use the Gutenberg editor. We recommend the latest version of WordPress, which includes Gutenberg by default, but if running an older version of WordPress, we recommend using the Gutenberg plugin v4.1 or later.
+This plugin requires PHP version 7.0 or later. We recommend the latest version of WordPress.
 
 == Installation ==
 
 1. Install the plugin through the WordPress 'Plugins' screen directly, or upload the plugin files to the `/wp-content/plugins/civil-publisher` directory
 1. Activate the plugin through the 'Plugins' screen in WordPress
-1. In the new Civil menu in your admin dashboard you will find Newsroom Manager, which will walk you through what's needed to set up your newsroom smart contract
-1. Once your newsroom smart contract is set up, you will find the Civil publishing tools on the post edit page for all your posts
+1. From the Edit Post page you will now see Civil tools in the sidebar
 
-== Frequently Asked Questions ==
+== Screenshots ==
 
-[Read the plugin FAQ](https://cvlconsensys.zendesk.com/hc/en-us/categories/360001000232-Journalists)
+1. Story Boost mobile flow - 1
+2. Story Boost mobile flow - 2
+3. Story Boost mobile flow - 3

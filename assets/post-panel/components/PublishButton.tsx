@@ -193,7 +193,7 @@ export class PublishButton extends React.Component<PublishButtonProps, PublishBu
           {"https://ethgasstation.info"}
         </a>
         . More information about gas prices and the blockchain can be found{" "}
-        <a href={`${urls.HELP_BASE}sections/360002451451-Funding-and-ETH`} target="_blank">
+        <a href={`${urls.HELP_BASE}sections/360003849751-Funding-ETH-and-Gas`} target="_blank">
           here
         </a>
         .
