@@ -40,7 +40,7 @@ function story_boost_meta_box_callback( $post ) {
 		/>
 		<?php _e( 'Enable Story Boost', 'civil' ); ?>
 	</label>
-	<p style="margin-top: 10px">Embed a small widget to the end of this post that allows readers to support your newsroom with direct payments. If enabled, this post will also be submitted to the <a href="https://registry.civil.co/storyfeed" target="_blank">Civil story feed</a>.<!--  <a href="#@TODO/toby" target="_blank">More information</a>.--></p>
+	<p style="margin-top: 10px">Embed a small widget to the end of this post that allows readers to support your newsroom with direct payments. If enabled, this post will also be submitted to the <a href="https://registry.civil.co/storyfeed" target="_blank">Civil story feed &#129125;</a>.<!--  <a href="#@TODO/toby" target="_blank">More information</a>.--></p>
 	<?php
 }
 

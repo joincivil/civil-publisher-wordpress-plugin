@@ -174,7 +174,7 @@ class Credibility_Indicators {
 		wp_nonce_field( 'civil_credibility_indicators', 'civil_credibility_indicators_nonce' );
 		?>
 		<div
-			style="display: flex; flex-direction: column;"
+			style="display: flex; flex-direction: column; margin-bottom: 10px;"
 		>
 			<?php
 			// Output each indicator as a checkbox toggle.
@@ -187,6 +187,7 @@ class Credibility_Indicators {
 			}
 			?>
 		</div>
+		<p><a href="<?php echo esc_url( menu_page_url( CREDIBILITY_INDICATORS, false ) ); ?>" target="_blank">Settings and more info &#129125;</a></p>
 		<?php
 	}
 
