@@ -58,7 +58,7 @@ function add_menus() {
 			TOP_LEVEL_MENU,
 			__( 'Credibility Indicators', 'civil' ),
 			__( 'Credibility Indicators', 'civil' ),
-			'manage_options',
+			'edit_posts',
 			CREDIBILITY_INDICATORS,
 			__NAMESPACE__ . '\credibililty_indicators_content'
 		);
@@ -116,9 +116,6 @@ function help_menu_content() {
  * Credibiity Indicators content.
  */
 function credibililty_indicators_content() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
-	}
 	require_once dirname( __FILE__ ) . '/credibililty-indicators.php';
 }
 

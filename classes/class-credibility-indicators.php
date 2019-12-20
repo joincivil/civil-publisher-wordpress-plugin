@@ -187,7 +187,7 @@ class Credibility_Indicators {
 			}
 			?>
 		</div>
-		<p><a href="<?php echo esc_url( menu_page_url( CREDIBILITY_INDICATORS, false ) ); ?>" target="_blank">Settings and more info &#129125;</a></p>
+		<p><a href="<?php echo esc_url( menu_page_url( CREDIBILITY_INDICATORS, false ) ); ?>" target="_blank">Settings and more info</a></p>
 		<?php
 	}
 
