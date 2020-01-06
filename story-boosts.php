@@ -40,7 +40,8 @@ function story_boost_meta_box_callback( $post ) {
 		/>
 		<?php _e( 'Enable Story Boost', 'civil' ); ?>
 	</label>
-	<p style="margin-top: 10px">Embed a small widget to the end of this post that allows readers to support your newsroom with direct payments. If enabled, this post will also be submitted to the <a href="https://registry.civil.co/storyfeed" target="_blank">Civil story feed</a>.<!--  <a href="#@TODO/toby" target="_blank">More information</a>.--></p>
+	<p style="margin-top: 10px">Embed a small widget to the end of this post that allows readers to support your newsroom with direct payments. If enabled, this post will also be submitted to the <a href="https://registry.civil.co/storyfeed" target="_blank">Civil story feed &#129125;</a>.<!--  <a href="#@TODO/toby" target="_blank">More information</a>.--></p>
+	<p><a href="<?php echo esc_url( menu_page_url( STORY_BOOSTS_SETTINGS, false ) ); ?>" target="_blank">Edit settings</a></p>
 	<?php
 }
 
@@ -72,7 +73,8 @@ add_action( 'save_post', __NAMESPACE__ . '\story_boost_meta_save' );
  */
 function story_boost_loop_start( $query ) {
 	if ( $query->is_main_query() ) {
-		add_action( 'the_content', __NAMESPACE__ . '\story_boost_the_content', 1000 );
+		$priority = intval( get_option( STORY_BOOSTS_PRIORITY, STORY_BOOSTS_PRIORITY_DEFAULT ) );
+		add_action( 'the_content', __NAMESPACE__ . '\story_boost_the_content', $priority );
 		add_action( 'loop_end', __NAMESPACE__ . '\story_boost_loop_end' );
 	}
 }
@@ -82,7 +84,8 @@ add_action( 'loop_start', __NAMESPACE__ . '\story_boost_loop_start' );
  * Clean up Story Boost hooks.
  */
 function story_boost_loop_end() {
-	remove_action( 'the_content', __NAMESPACE__ . '\story_boost_the_content', 1000 );
+	$priority = intval( get_option( STORY_BOOSTS_PRIORITY, STORY_BOOSTS_PRIORITY_DEFAULT ) );
+	remove_action( 'the_content', __NAMESPACE__ . '\story_boost_the_content', $priority );
 }
 
 /**
@@ -102,3 +105,33 @@ function story_boost_the_content( $content ) {
 	}
 	return $content;
 }
+
+/**
+ * Add settings fields to control Story Boosts.
+ */
+function add_settings() {
+	add_settings_section( 'civil_story_boosts', __( 'Settings', 'civil' ), null, 'story-boosts' );
+
+	add_settings_field( STORY_BOOSTS_PRIORITY, __( 'Post Placement Order', 'civil' ), __NAMESPACE__ . '\display_priority_input', 'story-boosts', 'civil_story_boosts' );
+	register_setting( 'civil_story_boosts', STORY_BOOSTS_PRIORITY );
+}
+add_action( 'admin_init', __NAMESPACE__ . '\add_settings' );
+
+/**
+ * Output the priority input.
+ */
+function display_priority_input() {
+	$priority = intval( get_option( STORY_BOOSTS_PRIORITY, STORY_BOOSTS_PRIORITY_DEFAULT ) );
+	?>
+		<div style="max-width: 600px">
+			<input
+				type="number"
+				name="<?php echo esc_attr( STORY_BOOSTS_PRIORITY ); ?>"
+				id="<?php echo esc_attr( STORY_BOOSTS_PRIORITY ); ?>"
+				value="<?php echo esc_attr( $priority ); ?>"
+			/>
+			<p><?php _e( 'Specifies the order in which a Story Boost widget is output at the end of a post, relative to other theme or plugin features which also output things at the end of a post. The lower the number (including negative numbers) the earlier the widget will appear. WordPress default: 10.' ); ?></p>
+		</div>
+	<?php
+}
+

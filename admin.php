@@ -53,12 +53,21 @@ function add_menus() {
 		);
 	}
 
+	add_submenu_page(
+		TOP_LEVEL_MENU,
+		__( 'Story Boosts', 'civil' ),
+		__( 'Story Boosts', 'civil' ),
+		'edit_posts',
+		STORY_BOOSTS_SETTINGS,
+		__NAMESPACE__ . '\story_boosts_settings_content'
+	);
+
 	if ( apply_filters( 'civil_enable_credibility_indicators', true ) ) {
 		add_submenu_page(
 			TOP_LEVEL_MENU,
 			__( 'Credibility Indicators', 'civil' ),
 			__( 'Credibility Indicators', 'civil' ),
-			'manage_options',
+			'edit_posts',
 			CREDIBILITY_INDICATORS,
 			__NAMESPACE__ . '\credibililty_indicators_content'
 		);
@@ -113,12 +122,16 @@ function help_menu_content() {
 }
 
 /**
+ * Story Boosts Settings content.
+ */
+function story_boosts_settings_content() {
+	require_once dirname( __FILE__ ) . '/story-boosts-settings.php';
+}
+
+/**
  * Credibiity Indicators content.
  */
 function credibililty_indicators_content() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'civil' ) );
-	}
 	require_once dirname( __FILE__ ) . '/credibililty-indicators.php';
 }
 
