@@ -29,8 +29,8 @@ add_action( 'add_meta_boxes', __NAMESPACE__ . '\story_boost_meta_box' );
  */
 function story_boost_meta_box_callback( $post ) {
 	$screen = get_current_screen();
-	if ( 'add' == $screen->action ) { // a new post as opposed to editing an existing post.
-		$show_story_boost = get_option( STORY_BOOSTS_ENABLE_BY_DEFAULT ) && get_post_type() == 'post';
+	if ( 'add' === $screen->action ) { // a new post as opposed to editing an existing post.
+		$show_story_boost = get_option( STORY_BOOSTS_ENABLE_BY_DEFAULT ) && get_post_type() === 'post';
 	} else {
 		$show_story_boost = get_post_meta( $post->ID, SHOW_STORY_BOOST_META_KEY, true );
 	}
@@ -101,13 +101,16 @@ function story_boost_loop_end() {
  * @return string Modified post content.
  */
 function story_boost_the_content( $content ) {
+	$debug = isset( $_GET[ STORY_BOOSTS_DEBUG_QS_FLAG ] );
 	$show_story_boost = get_post_meta( get_the_ID(), SHOW_STORY_BOOST_META_KEY, true );
 	if ( $show_story_boost ) {
 		$script_src = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? STORY_BOOST_SRC_STAGING : STORY_BOOST_SRC_PROD;
-		if ( current_user_can( 'edit_posts' ) ) {
+		if ( current_user_can( 'edit_posts' ) || $debug ) {
 			$script_src .= '?debug';
 		}
 		$content .= '<script src="' . $script_src . '"></script>';
+	} else if ( $debug ) {
+		$content .= '<pre style="padding: 25px; background: coral; text-align: center;">civil story boost debug placeholder</pre>';
 	}
 	return $content;
 }

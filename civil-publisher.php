@@ -44,6 +44,7 @@ define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT', 'civil_publisher_stor
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT', false );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
+define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug' );
 
 // Menus.
 define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-publisher-menu' );
