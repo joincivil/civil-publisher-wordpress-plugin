@@ -8,7 +8,7 @@
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'Story Boosts', 'civil' ); ?></h1>
-	<p>Story boosts are small widgets added to the end of a post that allow readers to support your newsroom with direct payments. Enabled posts will also be submitted to the <a href="https://registry.civil.co/storyfeed" target="_blank">Civil story feed &#129125;</a>.</p>
+	<p>Story Boosts allows readers to support your newsroom with small, incremental amounts of money. It is a widget that appears at the end of your posts. Posts that use Story Boosts will also appear on the <a href="https://registry.civil.co/storyfeed" target="_blank">Civil story feed &#129125;</a>.</p>
 	<p>Please contact <a href="mailto:support@civil.co">support@civil.co</a> with any questions or issues.</p>
 
 	<?php if ( current_user_can( 'manage_options' ) ) { ?>

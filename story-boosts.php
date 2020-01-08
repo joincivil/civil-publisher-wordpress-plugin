@@ -159,7 +159,8 @@ function display_priority_input() {
 				id="<?php echo esc_attr( STORY_BOOSTS_PRIORITY ); ?>"
 				value="<?php echo esc_attr( $priority ); ?>"
 			/>
-			<p><?php _e( 'Specifies the order in which a Story Boost widget is output at the end of a post, relative to other theme or plugin features which also output things at the end of a post. The lower the number (including negative numbers) the earlier the widget will appear. WordPress default: 10.' ); ?></p>
+			<p><?php _e( 'This number specifies the order in which the Story Boost widget will be placed at the end of a post. The order is determined by this value relative to the values set by any other plugin or theme features that output content at the end of a post.' ); ?></p>
+			<p><?php _e( 'The lower the number, the sooner the widget will appear. “0" will likely ensure the widget displays immediately after the last paragraph of the post, though negative numbers are valid too and will come first. WordPress default: 10.' ); ?></p>
 		</div>
 	<?php
 }
