@@ -28,8 +28,14 @@ add_action( 'add_meta_boxes', __NAMESPACE__ . '\story_boost_meta_box' );
  * @param WP_Post $post Post object.
  */
 function story_boost_meta_box_callback( $post ) {
+	$screen = get_current_screen();
+	if ( 'add' == $screen->action ) { // a new post as opposed to editing an existing post.
+		$show_story_boost = get_option( STORY_BOOSTS_ENABLE_BY_DEFAULT ) && get_post_type() == 'post';
+	} else {
+		$show_story_boost = get_post_meta( $post->ID, SHOW_STORY_BOOST_META_KEY, true );
+	}
+
 	wp_nonce_field( 'civil_story_boost_action', 'civil_story_boost_nonce' );
-	$show_story_boost = get_post_meta( $post->ID, SHOW_STORY_BOOST_META_KEY, true );
 	?>
 	<label>
 		<input type="checkbox"
@@ -112,10 +118,33 @@ function story_boost_the_content( $content ) {
 function add_settings() {
 	add_settings_section( 'civil_story_boosts', __( 'Settings', 'civil' ), null, 'story-boosts' );
 
+	add_settings_field( STORY_BOOSTS_ENABLE_BY_DEFAULT, __( 'Enable by Default', 'civil' ), __NAMESPACE__ . '\display_enable_by_default_input', 'story-boosts', 'civil_story_boosts' );
 	add_settings_field( STORY_BOOSTS_PRIORITY, __( 'Post Placement Order', 'civil' ), __NAMESPACE__ . '\display_priority_input', 'story-boosts', 'civil_story_boosts' );
+	register_setting( 'civil_story_boosts', STORY_BOOSTS_ENABLE_BY_DEFAULT );
 	register_setting( 'civil_story_boosts', STORY_BOOSTS_PRIORITY );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\add_settings' );
+
+/**
+ * Output the enable by default input.
+ */
+function display_enable_by_default_input() {
+	$enable = boolval( get_option( STORY_BOOSTS_ENABLE_BY_DEFAULT, STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT ) );
+	?>
+		<div style="max-width: 600px">
+			<label>
+				<input
+					type="checkbox"
+					name="<?php echo esc_attr( STORY_BOOSTS_ENABLE_BY_DEFAULT ); ?>"
+					id="<?php echo esc_attr( STORY_BOOSTS_ENABLE_BY_DEFAULT ); ?>"
+					<?php checked( $enable, true ); ?>
+				/>
+				<?php _e( 'Enable Story Boosts by default on all new posts.' ); ?>
+				<p><?php _e( 'Note that this only applies to <b>new</b> posts, and only applies to posts of type <b>post</b> (e.g. not pages or custom post types). For existing posts or pages/posts of other post types you will need to edit the post manually to enable Story Boosts.' ); ?></p>
+			</label>
+		</div>
+	<?php
+}
 
 /**
  * Output the priority input.

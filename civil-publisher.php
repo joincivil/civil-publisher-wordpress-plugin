@@ -40,6 +40,8 @@ define( __NAMESPACE__ . '\NEWSROOM_CHARTER_OPTION_KEY', 'civil_publisher_newsroo
 define( __NAMESPACE__ . '\NETWORK_NAME_OPTION_KEY', 'civil_publisher_network_name' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY', 'civil_publisher_story_boosts_priority' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY_DEFAULT', 5 );
+define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT', 'civil_publisher_story_boosts_enable_by_default' );
+define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT', false );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 
