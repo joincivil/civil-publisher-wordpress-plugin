@@ -28,8 +28,14 @@ add_action( 'add_meta_boxes', __NAMESPACE__ . '\story_boost_meta_box' );
  * @param WP_Post $post Post object.
  */
 function story_boost_meta_box_callback( $post ) {
+	$screen = get_current_screen();
+	if ( 'add' === $screen->action ) { // a new post as opposed to editing an existing post.
+		$show_story_boost = get_option( STORY_BOOSTS_ENABLE_BY_DEFAULT ) && get_post_type() === 'post';
+	} else {
+		$show_story_boost = get_post_meta( $post->ID, SHOW_STORY_BOOST_META_KEY, true );
+	}
+
 	wp_nonce_field( 'civil_story_boost_action', 'civil_story_boost_nonce' );
-	$show_story_boost = get_post_meta( $post->ID, SHOW_STORY_BOOST_META_KEY, true );
 	?>
 	<label>
 		<input type="checkbox"
@@ -95,13 +101,16 @@ function story_boost_loop_end() {
  * @return string Modified post content.
  */
 function story_boost_the_content( $content ) {
+	$debug = isset( $_GET[ STORY_BOOSTS_DEBUG_QS_FLAG ] );
 	$show_story_boost = get_post_meta( get_the_ID(), SHOW_STORY_BOOST_META_KEY, true );
 	if ( $show_story_boost ) {
 		$script_src = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ? STORY_BOOST_SRC_STAGING : STORY_BOOST_SRC_PROD;
-		if ( current_user_can( 'edit_posts' ) ) {
+		if ( current_user_can( 'edit_posts' ) || $debug ) {
 			$script_src .= '?debug';
 		}
 		$content .= '<script src="' . $script_src . '"></script>';
+	} else if ( $debug ) {
+		$content .= '<pre style="padding: 25px; background: coral; text-align: center;">civil story boost debug placeholder</pre>';
 	}
 	return $content;
 }
@@ -126,10 +135,33 @@ add_action( 'wp_head', __NAMESPACE__ . '\story_boost_timestamp_metadata' );
 function add_settings() {
 	add_settings_section( 'civil_story_boosts', __( 'Settings', 'civil' ), null, 'story-boosts' );
 
+	add_settings_field( STORY_BOOSTS_ENABLE_BY_DEFAULT, __( 'Enable by Default', 'civil' ), __NAMESPACE__ . '\display_enable_by_default_input', 'story-boosts', 'civil_story_boosts' );
 	add_settings_field( STORY_BOOSTS_PRIORITY, __( 'Post Placement Order', 'civil' ), __NAMESPACE__ . '\display_priority_input', 'story-boosts', 'civil_story_boosts' );
+	register_setting( 'civil_story_boosts', STORY_BOOSTS_ENABLE_BY_DEFAULT );
 	register_setting( 'civil_story_boosts', STORY_BOOSTS_PRIORITY );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\add_settings' );
+
+/**
+ * Output the enable by default input.
+ */
+function display_enable_by_default_input() {
+	$enable = boolval( get_option( STORY_BOOSTS_ENABLE_BY_DEFAULT, STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT ) );
+	?>
+		<div style="max-width: 600px">
+			<label>
+				<input
+					type="checkbox"
+					name="<?php echo esc_attr( STORY_BOOSTS_ENABLE_BY_DEFAULT ); ?>"
+					id="<?php echo esc_attr( STORY_BOOSTS_ENABLE_BY_DEFAULT ); ?>"
+					<?php checked( $enable, true ); ?>
+				/>
+				<?php _e( 'Enable Story Boosts by default on all new posts.' ); ?>
+				<p><?php _e( 'Note that this only applies to <b>new</b> posts, and only applies to posts of type <b>post</b> (e.g. not pages or custom post types). For existing posts or pages/posts of other post types you will need to edit the post manually to enable Story Boosts.' ); ?></p>
+			</label>
+		</div>
+	<?php
+}
 
 /**
  * Output the priority input.
@@ -144,7 +176,8 @@ function display_priority_input() {
 				id="<?php echo esc_attr( STORY_BOOSTS_PRIORITY ); ?>"
 				value="<?php echo esc_attr( $priority ); ?>"
 			/>
-			<p><?php _e( 'Specifies the order in which a Story Boost widget is output at the end of a post, relative to other theme or plugin features which also output things at the end of a post. The lower the number (including negative numbers) the earlier the widget will appear. WordPress default: 10.' ); ?></p>
+			<p><?php _e( 'This number specifies the order in which the Story Boost widget will be placed at the end of a post. The order is determined by this value relative to the values set by any other plugin or theme features that output content at the end of a post.' ); ?></p>
+			<p><?php _e( 'The lower the number, the sooner the widget will appear. “0" will likely ensure the widget displays immediately after the last paragraph of the post, though negative numbers are valid too and will come first. WordPress default: 10.' ); ?></p>
 		</div>
 	<?php
 }

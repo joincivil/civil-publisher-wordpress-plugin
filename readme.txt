@@ -1,4 +1,4 @@
-=== Civil Publisher ===
+=== Civil Publisher Tools ===
 Contributors: joincivil
 Tags: civil, journalism, news, blockchain, ethereum, decentralization, permanent, archive, archiving, permanence, ipfs, sign, fundraising, payments
 Requires at least: 4.6
