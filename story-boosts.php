@@ -107,6 +107,20 @@ function story_boost_the_content( $content ) {
 }
 
 /**
+ * Output civil-namespaced opengraph-esque timestamp meta tags in the head.
+ */
+function story_boost_timestamp_metadata() {
+	if ( ! get_post_meta( get_the_ID(), SHOW_STORY_BOOST_META_KEY, true ) ) {
+		return;
+	}
+	?>
+		<meta property="civil:published_time" content="<?php echo esc_attr( get_post_time( \DateTime::ISO8601, true ) ); ?>" />
+		<meta property="civil:modified_time" content="<?php echo esc_attr( get_post_modified_time( \DateTime::ISO8601, true ) ); ?>" />
+	<?php
+}
+add_action( 'wp_head', __NAMESPACE__ . '\story_boost_timestamp_metadata' );
+
+/**
  * Add settings fields to control Story Boosts.
  */
 function add_settings() {
