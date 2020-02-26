@@ -13,6 +13,7 @@
 namespace Civil_Publisher;
 
 define( __NAMESPACE__ . '\PATH', dirname( __FILE__ ) );
+define( __NAMESPACE__ . '\PLUGIN_FILE', __FILE__ );
 define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil-publisher/v1' );
 define( __NAMESPACE__ . '\SCHEMA_VERSION', '0.0.1' );
 define( __NAMESPACE__ . '\ASSETS_VERSION', '1.5.2' );
@@ -64,6 +65,7 @@ require_once dirname( __FILE__ ) . '/custom-meta.php';
 require_once dirname( __FILE__ ) . '/admin.php';
 require_once dirname( __FILE__ ) . '/users-page.php';
 require_once dirname( __FILE__ ) . '/story-boosts.php';
+require_once dirname( __FILE__ ) . '/did-vc.php';
 
 if ( is_manager_enabled() ) {
 	require_once dirname( __FILE__ ) . '/classes/class-post-hashing.php';
