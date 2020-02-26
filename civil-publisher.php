@@ -43,6 +43,9 @@ define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY', 'civil_publisher_story_boosts_
 define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY_DEFAULT', 5 );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT', 'civil_publisher_story_boosts_enable_by_default' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT', false );
+define( __NAMESPACE__ . '\DID_RSA_PUBLIC_KEY', 'civil_publisher_did_public_key' );
+define( __NAMESPACE__ . '\DID_RSA_PRIVATE_KEY', 'civil_publisher_did_private_key' );
+define( __NAMESPACE__ . '\DID_RSA_KEY_ERROR', 'civil_publisher_did_key_error' );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug' );

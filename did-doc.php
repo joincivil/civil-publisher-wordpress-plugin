@@ -16,14 +16,14 @@ echo json_encode(
 		'publicKey' => array(
 			array(
 				'id' => "did:web:$domain#owner",
-				'type' => 'Secp256k1VerificationKey2018',
+				'type' => 'RsaVerificationKey2018',
 				'owner' => "did:web:$domain",
-				'publicKeyHex' => '@TODO/tobek get actual pub key',
+				'publicKeyPem' => get_option( DID_RSA_PUBLIC_KEY ),
 			),
 		),
 		'authentication' => array(
 			array(
-				'type' => 'Secp256k1SignatureAuthentication2018',
+				'type' => 'RsaSignatureAuthentication2018',
 				'publicKey' => "did:web:$domain#owner",
 			),
 		),
