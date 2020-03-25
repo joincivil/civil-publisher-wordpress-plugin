@@ -34,7 +34,7 @@ function get_civil_post_types() {
 /**
  * Checks if the currently-logged-in-user can sign posts with the plugin.
  *
- * @return bool Whether or not tthey can sign.
+ * @return bool Whether or not they can sign.
  */
 function current_user_can_sign_posts() {
 	// If user can't edit published posts, then they can't sign any updates to their posts, so rather than let them sign drafts and have invalid (and removed) signature on anly published updates, don't let them sign at all (until we have some way to add signatures outside of the edit post context).

@@ -114,7 +114,7 @@ class REST_API {
 		if ( ! Post_Hashing::instance()->can_save_hash( $revision->post_parent ) ) {
 			return new \WP_Error(
 				'post-not-published',
-				esc_html__( 'This post revision is not publiushed.' ),
+				esc_html__( 'This post revision is not published.' ),
 				array(
 					'status' => 400,
 				)

@@ -13,6 +13,7 @@
 namespace Civil_Publisher;
 
 define( __NAMESPACE__ . '\PATH', dirname( __FILE__ ) );
+define( __NAMESPACE__ . '\PLUGIN_FILE', __FILE__ );
 define( __NAMESPACE__ . '\REST_API_NAMESPACE', 'civil-publisher/v1' );
 define( __NAMESPACE__ . '\SCHEMA_VERSION', '0.0.1' );
 define( __NAMESPACE__ . '\ASSETS_VERSION', '1.5.2' );
@@ -42,6 +43,9 @@ define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY', 'civil_publisher_story_boosts_
 define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY_DEFAULT', 5 );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT', 'civil_publisher_story_boosts_enable_by_default' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT', false );
+define( __NAMESPACE__ . '\DID_RSA_PUBLIC_KEY', 'civil_publisher_did_public_key' );
+define( __NAMESPACE__ . '\DID_RSA_PRIVATE_KEY', 'civil_publisher_did_private_key' );
+define( __NAMESPACE__ . '\DID_RSA_KEY_ERROR', 'civil_publisher_did_key_error' );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug' );
@@ -64,6 +68,7 @@ require_once dirname( __FILE__ ) . '/custom-meta.php';
 require_once dirname( __FILE__ ) . '/admin.php';
 require_once dirname( __FILE__ ) . '/users-page.php';
 require_once dirname( __FILE__ ) . '/story-boosts.php';
+require_once dirname( __FILE__ ) . '/did-vc.php';
 
 if ( is_manager_enabled() ) {
 	require_once dirname( __FILE__ ) . '/classes/class-post-hashing.php';
