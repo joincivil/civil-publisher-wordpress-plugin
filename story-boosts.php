@@ -47,7 +47,7 @@ function story_boost_meta_box_callback( $post ) {
 		<?php _e( 'Enable Story Boost', 'civil' ); ?>
 	</label>
 	<p style="margin-top: 10px">Embed a small widget to the end of this post that allows readers to support your newsroom with direct payments. If enabled, this post will also be submitted to the <a href="https://registry.civil.co/storyfeed" target="_blank">Civil story feed &#129125;</a>.<!--  <a href="#@TODO/toby" target="_blank">More information</a>.--></p>
-	<p><a href="<?php echo esc_url( menu_page_url( STORY_BOOSTS_SETTINGS, false ) ); ?>" target="_blank">Edit settings</a></p>
+	<p><a href="<?php echo esc_url( menu_page_url( STORY_BOOSTS_SETTINGS_PAGE, false ) ); ?>" target="_blank">Edit settings</a></p>
 	<?php
 }
 
@@ -132,7 +132,7 @@ add_action( 'wp_head', __NAMESPACE__ . '\story_boost_timestamp_metadata' );
 /**
  * Add settings fields to control Story Boosts.
  */
-function add_settings() {
+function add_story_boost_settings() {
 	add_settings_section( 'civil_story_boosts', __( 'Settings', 'civil' ), null, 'story-boosts' );
 
 	add_settings_field( STORY_BOOSTS_ENABLE_BY_DEFAULT, __( 'Enable by Default', 'civil' ), __NAMESPACE__ . '\display_enable_by_default_input', 'story-boosts', 'civil_story_boosts' );
@@ -140,7 +140,7 @@ function add_settings() {
 	register_setting( 'civil_story_boosts', STORY_BOOSTS_ENABLE_BY_DEFAULT );
 	register_setting( 'civil_story_boosts', STORY_BOOSTS_PRIORITY );
 }
-add_action( 'admin_init', __NAMESPACE__ . '\add_settings' );
+add_action( 'admin_init', __NAMESPACE__ . '\add_story_boost_settings' );
 
 /**
  * Output the enable by default input.

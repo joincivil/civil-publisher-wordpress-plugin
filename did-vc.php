@@ -11,15 +11,19 @@ namespace Civil_Publisher;
  * Init DID logic.
  */
 function init() {
+	if ( ! get_option( OPTION_DID_IS_ENABLED ) ) {
+		return;
+	}
+
 	add_filter( 'template_include', __NAMESPACE__ . '\include_template' );
 	add_filter( 'init', __NAMESPACE__ . '\rewrite_rules' );
 
-	if ( current_user_can( 'manage_options' ) && empty( get_option( DID_RSA_PRIVATE_KEY ) ) ) {
+	if ( current_user_can( 'manage_options' ) && empty( get_option( OPTION_DID_RSA_PRIVATE_KEY ) ) ) {
 		try {
 			init_key_pair();
 		} catch ( Exception $e ) {
 			// @TODO/tobek Surface this error in admin. If missing openssl configs are a problem in the wild, consider using phpseclib instead.
-			update_option( DID_RSA_KEY_ERROR, 'Failed to generate openssl key pair: ' . $e->getMessage() );
+			update_option( OPTION_DID_RSA_KEY_ERROR, 'Failed to generate openssl key pair: ' . $e->getMessage() );
 		}
 	}
 }
@@ -44,11 +48,11 @@ function init_key_pair() {
 	$public_key = $public_key['key'];
 
 	if ( $private_key && $public_key ) {
-		delete_option( DID_RSA_KEY_ERROR );
-		update_option( DID_RSA_PRIVATE_KEY, $private_key );
-		update_option( DID_RSA_PUBLIC_KEY, $public_key );
+		delete_option( OPTION_DID_RSA_KEY_ERROR );
+		update_option( OPTION_DID_RSA_PRIVATE_KEY, $private_key );
+		update_option( OPTION_DID_RSA_PUBLIC_KEY, $public_key );
 	} else {
-		update_option( DID_RSA_KEY_ERROR, 'Failed to generate openssl key pair: generated keys are falsey.' );
+		update_option( OPTION_DID_RSA_KEY_ERROR, 'Failed to generate openssl key pair: generated keys are falsey.' );
 	}
 }
 
@@ -86,3 +90,34 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
 // On plugin activation flush rewrite rules.
 register_activation_hook( PLUGIN_FILE, __NAMESPACE__ . '\flush_rules' );
 
+/**
+ * Add settings fields to control DID features.
+ */
+function add_did_settings() {
+	add_settings_section( 'civil_did', __( 'Settings', 'civil' ), null, 'did' );
+
+	add_settings_field( OPTION_DID_IS_ENABLED, __( 'Enable DID features', 'civil' ), __NAMESPACE__ . '\display_did_is_enabled_input', 'did', 'civil_did' );
+	register_setting( 'civil_did', OPTION_DID_IS_ENABLED );
+}
+add_action( 'admin_init', __NAMESPACE__ . '\add_did_settings' );
+
+/**
+ * Output the DID enabled input.
+ */
+function display_did_is_enabled_input() {
+	$enable = boolval( get_option( OPTION_DID_IS_ENABLED, DID_IS_ENABLED_DEFAULT ) );
+	?>
+		<div style="max-width: 600px">
+			<label>
+				<input
+					type="checkbox"
+					name="<?php echo esc_attr( OPTION_DID_IS_ENABLED ); ?>"
+					id="<?php echo esc_attr( OPTION_DID_IS_ENABLED ); ?>"
+					<?php checked( $enable, true ); ?>
+				/>
+				<?php _e( 'Enable DID features.' ); ?>
+			</label>
+			<p><?php _e( '@TODO copy with more details TBD' ); ?></p>
+		</div>
+	<?php
+}
