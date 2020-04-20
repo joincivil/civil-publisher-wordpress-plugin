@@ -47,8 +47,17 @@ function add_menus() {
 		__( 'Story Boosts', 'civil' ),
 		__( 'Story Boosts', 'civil' ),
 		'edit_posts',
-		STORY_BOOSTS_SETTINGS,
+		STORY_BOOSTS_SETTINGS_PAGE,
 		__NAMESPACE__ . '\story_boosts_settings_content'
+	);
+
+	add_submenu_page(
+		TOP_LEVEL_MENU,
+		__( 'Decentralized Identity Tools', 'civil' ),
+		__( 'Decentralized Identity Tools', 'civil' ),
+		'manage_options',
+		DID_SETTINGS_PAGE,
+		__NAMESPACE__ . '\did_settings_content'
 	);
 
 	if ( apply_filters( 'civil_enable_credibility_indicators', true ) ) {
@@ -126,6 +135,13 @@ function help_menu_content() {
  */
 function story_boosts_settings_content() {
 	require_once dirname( __FILE__ ) . '/story-boosts-settings.php';
+}
+
+/**
+ * DID Settings content.
+ */
+function did_settings_content() {
+	require_once dirname( __FILE__ ) . '/did-settings.php';
 }
 
 /**

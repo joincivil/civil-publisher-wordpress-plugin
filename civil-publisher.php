@@ -43,9 +43,11 @@ define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY', 'civil_publisher_story_boosts_
 define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY_DEFAULT', 5 );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT', 'civil_publisher_story_boosts_enable_by_default' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT', false );
-define( __NAMESPACE__ . '\DID_RSA_PUBLIC_KEY', 'civil_publisher_did_public_key' );
-define( __NAMESPACE__ . '\DID_RSA_PRIVATE_KEY', 'civil_publisher_did_private_key' );
-define( __NAMESPACE__ . '\DID_RSA_KEY_ERROR', 'civil_publisher_did_key_error' );
+define( __NAMESPACE__ . '\OPTION_DID_IS_ENABLED', 'civil_publisher_did_is_enabled' );
+define( __NAMESPACE__ . '\DID_IS_ENABLED_DEFAULT', true );
+define( __NAMESPACE__ . '\OPTION_DID_RSA_PUBLIC_KEY', 'civil_publisher_did_public_key' );
+define( __NAMESPACE__ . '\OPTION_DID_RSA_PRIVATE_KEY', 'civil_publisher_did_private_key' );
+define( __NAMESPACE__ . '\OPTION_DID_RSA_KEY_ERROR', 'civil_publisher_did_key_error' );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug' );
@@ -54,7 +56,8 @@ define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug'
 define( __NAMESPACE__ . '\TOP_LEVEL_MENU', 'civil-publisher-menu' );
 define( __NAMESPACE__ . '\MANAGEMENT_PAGE', 'civil-publisher-newsroom-management' );
 define( __NAMESPACE__ . '\CONTENT_VIEWER', 'civil-publisher-content' );
-define( __NAMESPACE__ . '\STORY_BOOSTS_SETTINGS', 'civil-publisher-story-boosts-settings' );
+define( __NAMESPACE__ . '\STORY_BOOSTS_SETTINGS_PAGE', 'civil-publisher-story-boosts-settings' );
+define( __NAMESPACE__ . '\DID_SETTINGS_PAGE', 'civil-publisher-did-settings' );
 define( __NAMESPACE__ . '\CREDIBILITY_INDICATORS', 'civil-publisher-credibiity-indicators' );
 
 define( __NAMESPACE__ . '\STORY_BOOST_SRC_STAGING', 'https://staging.civil.app/loader/boost.js' );
