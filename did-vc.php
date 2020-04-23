@@ -18,11 +18,11 @@ function init() {
 	add_filter( 'template_include', __NAMESPACE__ . '\include_template' );
 	add_filter( 'init', __NAMESPACE__ . '\rewrite_rules' );
 
-	if ( current_user_can( 'manage_options' ) ) {
+	if ( current_user_can( 'manage_options' ) && empty( get_option( OPTION_ASSIGNED_DID ) ) ) {
 		try {
 			init_did();
 		} catch ( Exception $e ) {
-			// @TODO/tobek Surface this error in admin
+			// @TODO/tobek Surface these errors as WP notice
 			update_option( OPTION_DID_ERROR, 'Failed to generate openssl key pair: ' . $e->getMessage() );
 		}
 	}
@@ -32,7 +32,22 @@ function init() {
  * Init DID.
  */
 function init_did() {
-	// @TODO/tobek
+	$res = wp_remote_get( DID_AGENT_BASE_URL . '/init' );
+	if ( is_wp_error( $res ) ) {
+		update_option( OPTION_DID_ERROR, 'error making DID init request: ' . json_encode( $res ) );
+		return;
+	} else if ( 200 != $res['response']['code'] ) {
+		update_option( OPTION_DID_ERROR, 'error response from DID init request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
+		return;
+	}
+
+	$body = json_decode( $res['body'] );
+	if ( $body && $body->issuer ) {
+		update_option( OPTION_ASSIGNED_DID, $body->issuer );
+		delete_option( OPTION_DID_ERROR );
+	} else {
+		update_option( OPTION_DID_ERROR, 'invalid response body from DID init request: ' . $res['body'] );
+	}
 }
 
 /**

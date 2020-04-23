@@ -46,6 +46,7 @@ define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT', false );
 define( __NAMESPACE__ . '\OPTION_DID_IS_ENABLED', 'civil_publisher_did_is_enabled' );
 define( __NAMESPACE__ . '\DID_IS_ENABLED_DEFAULT', true );
 define( __NAMESPACE__ . '\OPTION_DID_ERROR', 'civil_publisher_did_error' );
+define( __NAMESPACE__ . '\OPTION_ASSIGNED_DID', 'civil_publisher_assigned_did' );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug' );
@@ -60,6 +61,8 @@ define( __NAMESPACE__ . '\CREDIBILITY_INDICATORS', 'civil-publisher-credibiity-i
 
 define( __NAMESPACE__ . '\STORY_BOOST_SRC_STAGING', 'https://staging.civil.app/loader/boost.js' );
 define( __NAMESPACE__ . '\STORY_BOOST_SRC_PROD', 'https://registry.civil.co/loader/boost.js' );
+
+define( __NAMESPACE__ . '\DID_AGENT_BASE_URL', 'http://10.0.2.2:3000' );
 
 require_once dirname( __FILE__ ) . '/utils.php';
 

@@ -18,7 +18,7 @@ echo json_encode(
 				'id' => "did:web:$domain#owner",
 				'type' => 'RsaVerificationKey2018',
 				'owner' => "did:web:$domain",
-				'publicKeyPem' => "@TODO",
+				'publicKeyPem' => '@TODO',
 			),
 		),
 		'authentication' => array(
