@@ -3,7 +3,7 @@
  * Plugin Name: Civil Publisher Tools
  * Plugin URI: https://github.com/joincivil/civil-publisher-wordpress-plugin
  * Description: Use Civil's growing suite of publisher tools, including: Boosts, to let readers easily support to your newsroom from any article; Credibility Indicators, to educate readers about what work goes into good journalism, and our smart contract tools (experimental) to publish and archive content on the Ethereum blockchain.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Civil
  * Author URI: https://civil.co
  *
@@ -43,11 +43,14 @@ define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY', 'civil_publisher_story_boosts_
 define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY_DEFAULT', 5 );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT', 'civil_publisher_story_boosts_enable_by_default' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT', false );
+
 define( __NAMESPACE__ . '\DID_IS_ENABLED_OPTION_KEY', 'civil_publisher_did_is_enabled' );
 define( __NAMESPACE__ . '\DID_IS_ENABLED_DEFAULT', true );
 define( __NAMESPACE__ . '\DID_ERROR_OPTION_KEY', 'civil_publisher_did_error' );
 define( __NAMESPACE__ . '\ASSIGNED_DID_OPTION_KEY', 'civil_publisher_assigned_did' );
 define( __NAMESPACE__ . '\VC_LOG_OPTION_KEY', 'civil_publisher_vc_log' );
+define( __NAMESPACE__ . '\DID_AGENT_BASE_URL_OPTION_KEY', 'civil_publisher_did_agent_base_url' );
+define( __NAMESPACE__ . '\DID_AGENT_BASE_URL_DEFAULT', 'http://10.0.2.2:3000' );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug' );
@@ -62,8 +65,6 @@ define( __NAMESPACE__ . '\CREDIBILITY_INDICATORS', 'civil-publisher-credibiity-i
 
 define( __NAMESPACE__ . '\STORY_BOOST_SRC_STAGING', 'https://staging.civil.app/loader/boost.js' );
 define( __NAMESPACE__ . '\STORY_BOOST_SRC_PROD', 'https://registry.civil.co/loader/boost.js' );
-
-define( __NAMESPACE__ . '\DID_AGENT_BASE_URL', 'http://10.0.2.2:3000' );
 
 require_once dirname( __FILE__ ) . '/utils.php';
 

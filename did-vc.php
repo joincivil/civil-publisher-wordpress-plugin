@@ -32,7 +32,7 @@ function init() {
  * Init DID.
  */
 function init_did() {
-	$res = wp_remote_get( DID_AGENT_BASE_URL . '/init' );
+	$res = wp_remote_get( get_option( DID_AGENT_BASE_URL_OPTION_KEY, DID_AGENT_BASE_URL_DEFAULT ) . '/init' );
 	if ( is_wp_error( $res ) ) {
 		update_option( DID_ERROR_OPTION_KEY, 'error making DID init request: ' . json_encode( $res ) );
 		return;
@@ -92,6 +92,8 @@ function add_did_settings() {
 
 	add_settings_field( DID_IS_ENABLED_OPTION_KEY, __( 'Enable DID features', 'civil' ), __NAMESPACE__ . '\display_did_is_enabled_input', 'did', 'civil_did' );
 	register_setting( 'civil_did', DID_IS_ENABLED_OPTION_KEY );
+	add_settings_field( DID_AGENT_BASE_URL_OPTION_KEY, __( 'DID agent URL', 'civil' ), __NAMESPACE__ . '\display_did_agent_url', 'did', 'civil_did' );
+	register_setting( 'civil_did', DID_AGENT_BASE_URL_OPTION_KEY );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\add_did_settings' );
 
@@ -109,9 +111,29 @@ function display_did_is_enabled_input() {
 					id="<?php echo esc_attr( DID_IS_ENABLED_OPTION_KEY ); ?>"
 					<?php checked( $enable, true ); ?>
 				/>
-				<?php _e( 'Enable DID features.' ); ?>
+				<?php _e( 'Enable DID features' ); ?>
 			</label>
-			<p><?php _e( '@TODO copy with more details TBD' ); ?></p>
+			<!-- <p><?php _e( '@TODO copy with more details TBD' ); ?></p> -->
+		</div>
+	<?php
+}
+
+/**
+ * Output the DID agent URL input.
+ */
+function display_did_agent_url() {
+	$url = strval( get_option( DID_AGENT_BASE_URL_OPTION_KEY, DID_AGENT_BASE_URL_DEFAULT ) );
+	?>
+		<div style="max-width: 600px">
+			<label>
+				<input
+					type="text"
+					style="width: 400px"
+					name="<?php echo esc_attr( DID_AGENT_BASE_URL_OPTION_KEY ); ?>"
+					id="<?php echo esc_attr( DID_AGENT_BASE_URL_OPTION_KEY ); ?>"
+					value="<?php echo esc_attr( $url ); ?>"
+				/>
+			</label>
 		</div>
 	<?php
 }

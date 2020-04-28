@@ -88,7 +88,7 @@ class Post_VC_Gen {
 			$jwt = $this->remote_sign_vc( $vc_data );
 			$vc_log .= "\nJWT: $jwt\n\n";
 		} catch ( \Exception $e ) {
-			$vc_log .= "\nfailed: " . $e->getMessage() . "\n\n";
+			$vc_log .= "\nFAILED: " . $e->getMessage() . "\n\n";
 		}
 
 		update_option( VC_LOG_OPTION_KEY, $vc_log );
@@ -161,7 +161,7 @@ class Post_VC_Gen {
 			'headers' => 'Content-Type: application/json',
 			'body' => json_encode( $data ),
 		);
-		$res = wp_remote_post( DID_AGENT_BASE_URL . '/sign-vc', $args );
+		$res = wp_remote_post( get_option( DID_AGENT_BASE_URL_OPTION_KEY, DID_AGENT_BASE_URL_DEFAULT ) . '/sign-vc', $args );
 
 		if ( is_wp_error( $res ) ) {
 			throw new \Exception( 'error making sign VC request: ' . json_encode( $res ) );
