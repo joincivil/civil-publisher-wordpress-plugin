@@ -178,4 +178,6 @@ class Post_VC_Gen {
 	}
 }
 
-Post_VC_Gen::instance();
+if ( get_option( DID_IS_ENABLED_OPTION_KEY ) ) {
+	Post_VC_Gen::instance();
+}

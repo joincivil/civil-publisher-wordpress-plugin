@@ -67,7 +67,7 @@ function include_template( $template ) {
  * Flush rewrite rules.
  */
 function flush_rules() {
-	$this->rewrite_rules();
+	rewrite_rules();
 	flush_rewrite_rules();
 }
 
