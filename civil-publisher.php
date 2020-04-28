@@ -47,6 +47,7 @@ define( __NAMESPACE__ . '\DID_IS_ENABLED_OPTION_KEY', 'civil_publisher_did_is_en
 define( __NAMESPACE__ . '\DID_IS_ENABLED_DEFAULT', true );
 define( __NAMESPACE__ . '\DID_ERROR_OPTION_KEY', 'civil_publisher_did_error' );
 define( __NAMESPACE__ . '\ASSIGNED_DID_OPTION_KEY', 'civil_publisher_assigned_did' );
+define( __NAMESPACE__ . '\VC_LOG_OPTION_KEY', 'civil_publisher_vc_log' );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug' );
@@ -73,6 +74,7 @@ require_once dirname( __FILE__ ) . '/admin.php';
 require_once dirname( __FILE__ ) . '/users-page.php';
 require_once dirname( __FILE__ ) . '/story-boosts.php';
 require_once dirname( __FILE__ ) . '/did-vc.php';
+require_once dirname( __FILE__ ) . '/classes/class-post-vc-gen.php';
 
 if ( is_manager_enabled() ) {
 	require_once dirname( __FILE__ ) . '/classes/class-post-hashing.php';

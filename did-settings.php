@@ -38,6 +38,12 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 					<th scope="row">DID doc</th>
 					<td><a href="<?php echo esc_url( $did_doc_url ); ?>" target="_blank"><?php echo esc_url( $did_doc_url ); ?></a></td>
 				</tr>
+				<tr>
+					<th scope="row">VC log</th>
+					<td>
+						<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( VC_LOG_OPTION_KEY ) ); ?></pre>
+					</td>
+				</tr>
 				<?php if ( get_option( DID_ERROR_OPTION_KEY ) ) { ?>
 					<tr>
 						<th scope="row">error</th>
