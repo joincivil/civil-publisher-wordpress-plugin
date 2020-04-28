@@ -81,7 +81,17 @@ class Post_VC_Gen {
 			),
 		);
 
-		$jwt = $this->remote_sign_vc( $vc_data );
+		$vc_log = get_option( VC_LOG_OPTION_KEY, '' );
+		$vc_log .= "generating VC for post $post->ID\ndata: " . json_encode( $vc_data, JSON_UNESCAPED_SLASHES );
+
+		try {
+			$jwt = $this->remote_sign_vc( $vc_data );
+			$vc_log .= "\nJWT: $jwt\n\n";
+		} catch ( \Exception $e ) {
+			$vc_log .= "\nfailed: " . $e->getMessage() . "\n\n";
+		}
+
+		update_option( VC_LOG_OPTION_KEY, $vc_log );
 	}
 
 	/**
@@ -143,6 +153,7 @@ class Post_VC_Gen {
 	 * Send metadata to remote service to sign VC.
 	 *
 	 * @param array $data Associative array of metadata to put in VC body.
+	 * @throws \Exception Error messages from sign VC request.
 	 * @return string The encoded JWT.
 	 */
 	public function remote_sign_vc( $data ) {
@@ -151,9 +162,18 @@ class Post_VC_Gen {
 			'body' => json_encode( $data ),
 		);
 		$res = wp_remote_post( DID_AGENT_BASE_URL . '/sign-vc', $args );
+
+		if ( is_wp_error( $res ) ) {
+			throw new \Exception( 'error making sign VC request: ' . json_encode( $res ) );
+		} else if ( 200 != $res['response']['code'] ) {
+			throw new \Exception( 'error response from sign VC request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
+		}
+
 		$body = json_decode( $res['body'] );
 		if ( $body && $body->data ) {
 			return $body->data;
+		} else {
+			throw new \Exception( 'invalid response body from sign VC request: ' . $res['body'] );
 		}
 	}
 }

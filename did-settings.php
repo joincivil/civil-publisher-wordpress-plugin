@@ -41,14 +41,14 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 				<tr>
 					<th scope="row">VC log</th>
 					<td>
-						<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( VC_LOG_OPTION_KEY ) ); ?></pre>
+						<pre style="max-width: 600px; overflow-x: auto; margin: 0; padding: 5px; background: #FBFBFB;"><?php echo esc_html( get_option( VC_LOG_OPTION_KEY ) ); ?></pre>
 					</td>
 				</tr>
 				<?php if ( get_option( DID_ERROR_OPTION_KEY ) ) { ?>
 					<tr>
 						<th scope="row">error</th>
 						<td>
-							<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( DID_ERROR_OPTION_KEY ) ); ?></pre>
+							<pre style="max-width: 600px; white-space: pre-wrap; margin: 0; padding: 5px; background: #FBFBFB;"><?php echo esc_html( get_option( DID_ERROR_OPTION_KEY ) ); ?></pre>
 						</td>
 					</tr>
 				<?php } ?>
