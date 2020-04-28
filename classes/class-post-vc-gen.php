@@ -72,13 +72,16 @@ class Post_VC_Gen {
 			}
 		}
 
-		$json_payload_data = array(
-			'contributors'          => $this->get_contributor_data( $post ),
-			'tags'                  => wp_get_post_tags( $post->ID, array( 'fields' => 'slugs' ) ),
-			'primaryTag'            => $primary_category,
+		$vc_data = array(
+			'publishedContent' => array(
+				'url'           => get_permalink( $post ),
+				'contributors'  => $this->get_contributor_data( $post ),
+				'tags'          => wp_get_post_tags( $post->ID, array( 'fields' => 'slugs' ) ),
+				'primaryTag'    => $primary_category,
+			),
 		);
 
-		// @TODO/tobek Now generate VC.
+		$jwt = $this->remote_sign_vc( $vc_data );
 	}
 
 	/**
@@ -134,6 +137,24 @@ class Post_VC_Gen {
 		}
 
 		return $contributors;
+	}
+
+	/**
+	 * Send metadata to remote service to sign VC.
+	 *
+	 * @param array $data Associative array of metadata to put in VC body.
+	 * @return string The encoded JWT.
+	 */
+	public function remote_sign_vc( $data ) {
+		$args = array(
+			'headers' => 'Content-Type: application/json',
+			'body' => json_encode( $data ),
+		);
+		$res = wp_remote_post( DID_AGENT_BASE_URL . '/sign-vc', $args );
+		$body = json_decode( $res['body'] );
+		if ( $body && $body->data ) {
+			return $body->data;
+		}
 	}
 }
 
