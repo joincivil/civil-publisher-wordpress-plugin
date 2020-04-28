@@ -11,19 +11,19 @@ namespace Civil_Publisher;
  * Init DID logic.
  */
 function init() {
-	if ( ! get_option( OPTION_DID_IS_ENABLED ) ) {
+	if ( ! get_option( DID_IS_ENABLED_OPTION_KEY ) ) {
 		return;
 	}
 
 	add_filter( 'template_include', __NAMESPACE__ . '\include_template' );
 	add_filter( 'init', __NAMESPACE__ . '\rewrite_rules' );
 
-	if ( current_user_can( 'manage_options' ) && empty( get_option( OPTION_ASSIGNED_DID ) ) ) {
+	if ( current_user_can( 'manage_options' ) && empty( get_option( ASSIGNED_DID_OPTION_KEY ) ) ) {
 		try {
 			init_did();
 		} catch ( Exception $e ) {
 			// @TODO/tobek Surface these errors as WP notice
-			update_option( OPTION_DID_ERROR, 'Failed to generate openssl key pair: ' . $e->getMessage() );
+			update_option( DID_ERROR_OPTION_KEY, 'Failed to generate openssl key pair: ' . $e->getMessage() );
 		}
 	}
 }
@@ -34,19 +34,19 @@ function init() {
 function init_did() {
 	$res = wp_remote_get( DID_AGENT_BASE_URL . '/init' );
 	if ( is_wp_error( $res ) ) {
-		update_option( OPTION_DID_ERROR, 'error making DID init request: ' . json_encode( $res ) );
+		update_option( DID_ERROR_OPTION_KEY, 'error making DID init request: ' . json_encode( $res ) );
 		return;
 	} else if ( 200 != $res['response']['code'] ) {
-		update_option( OPTION_DID_ERROR, 'error response from DID init request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
+		update_option( DID_ERROR_OPTION_KEY, 'error response from DID init request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
 		return;
 	}
 
 	$body = json_decode( $res['body'] );
 	if ( $body && $body->issuer ) {
-		update_option( OPTION_ASSIGNED_DID, $body->issuer );
-		delete_option( OPTION_DID_ERROR );
+		update_option( ASSIGNED_DID_OPTION_KEY, $body->issuer );
+		delete_option( DID_ERROR_OPTION_KEY );
 	} else {
-		update_option( OPTION_DID_ERROR, 'invalid response body from DID init request: ' . $res['body'] );
+		update_option( DID_ERROR_OPTION_KEY, 'invalid response body from DID init request: ' . $res['body'] );
 	}
 }
 
@@ -90,8 +90,8 @@ register_activation_hook( PLUGIN_FILE, __NAMESPACE__ . '\flush_rules' );
 function add_did_settings() {
 	add_settings_section( 'civil_did', __( 'Settings', 'civil' ), null, 'did' );
 
-	add_settings_field( OPTION_DID_IS_ENABLED, __( 'Enable DID features', 'civil' ), __NAMESPACE__ . '\display_did_is_enabled_input', 'did', 'civil_did' );
-	register_setting( 'civil_did', OPTION_DID_IS_ENABLED );
+	add_settings_field( DID_IS_ENABLED_OPTION_KEY, __( 'Enable DID features', 'civil' ), __NAMESPACE__ . '\display_did_is_enabled_input', 'did', 'civil_did' );
+	register_setting( 'civil_did', DID_IS_ENABLED_OPTION_KEY );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\add_did_settings' );
 
@@ -99,14 +99,14 @@ add_action( 'admin_init', __NAMESPACE__ . '\add_did_settings' );
  * Output the DID enabled input.
  */
 function display_did_is_enabled_input() {
-	$enable = boolval( get_option( OPTION_DID_IS_ENABLED, DID_IS_ENABLED_DEFAULT ) );
+	$enable = boolval( get_option( DID_IS_ENABLED_OPTION_KEY, DID_IS_ENABLED_DEFAULT ) );
 	?>
 		<div style="max-width: 600px">
 			<label>
 				<input
 					type="checkbox"
-					name="<?php echo esc_attr( OPTION_DID_IS_ENABLED ); ?>"
-					id="<?php echo esc_attr( OPTION_DID_IS_ENABLED ); ?>"
+					name="<?php echo esc_attr( DID_IS_ENABLED_OPTION_KEY ); ?>"
+					id="<?php echo esc_attr( DID_IS_ENABLED_OPTION_KEY ); ?>"
 					<?php checked( $enable, true ); ?>
 				/>
 				<?php _e( 'Enable DID features.' ); ?>

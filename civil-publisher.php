@@ -43,10 +43,10 @@ define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY', 'civil_publisher_story_boosts_
 define( __NAMESPACE__ . '\STORY_BOOSTS_PRIORITY_DEFAULT', 5 );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT', 'civil_publisher_story_boosts_enable_by_default' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_ENABLE_BY_DEFAULT_DEFAULT', false );
-define( __NAMESPACE__ . '\OPTION_DID_IS_ENABLED', 'civil_publisher_did_is_enabled' );
+define( __NAMESPACE__ . '\DID_IS_ENABLED_OPTION_KEY', 'civil_publisher_did_is_enabled' );
 define( __NAMESPACE__ . '\DID_IS_ENABLED_DEFAULT', true );
-define( __NAMESPACE__ . '\OPTION_DID_ERROR', 'civil_publisher_did_error' );
-define( __NAMESPACE__ . '\OPTION_ASSIGNED_DID', 'civil_publisher_assigned_did' );
+define( __NAMESPACE__ . '\DID_ERROR_OPTION_KEY', 'civil_publisher_did_error' );
+define( __NAMESPACE__ . '\ASSIGNED_DID_OPTION_KEY', 'civil_publisher_assigned_did' );
 
 define( __NAMESPACE__ . '\FAQ_HOME', 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher' );
 define( __NAMESPACE__ . '\STORY_BOOSTS_DEBUG_QS_FLAG', 'civil_story_boost_debug' );

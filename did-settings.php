@@ -31,18 +31,18 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 				<tr>
 					<th scope="row">TrustAgent DID</th>
 					<td>
-						<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( OPTION_ASSIGNED_DID, '[not set]' ) ); ?></pre>
+						<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( ASSIGNED_DID_OPTION_KEY, '[not set]' ) ); ?></pre>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">DID doc</th>
 					<td><a href="<?php echo esc_url( $did_doc_url ); ?>" target="_blank"><?php echo esc_url( $did_doc_url ); ?></a></td>
 				</tr>
-				<?php if ( get_option( OPTION_DID_ERROR ) ) { ?>
+				<?php if ( get_option( DID_ERROR_OPTION_KEY ) ) { ?>
 					<tr>
 						<th scope="row">error</th>
 						<td>
-							<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( OPTION_DID_ERROR ) ); ?></pre>
+							<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( DID_ERROR_OPTION_KEY ) ); ?></pre>
 						</td>
 					</tr>
 				<?php } ?>
