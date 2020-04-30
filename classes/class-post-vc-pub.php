@@ -1,6 +1,6 @@
 <?php
 /**
- * Hanldes all logic related to generating and publishing VCs for posts.
+ * Handles all logic related to generating and publishing VCs for posts.
  *
  * @package Civil_Publisher
  */
@@ -28,6 +28,11 @@ class Post_VC_Pub {
 	 * @return bool Whether or not to publish a VC.
 	 */
 	public function should_pub_vc( $post_id ) : bool {
+		// Not initialized yet.
+		if ( ! get_option( ASSIGNED_DID_OPTION_KEY ) ) {
+			return false;
+		}
+
 		$should_gen = true;
 
 		// Only publish VCs for supported post types.
@@ -217,24 +222,29 @@ class Post_VC_Pub {
 			}
 		}
 
-		wp_nonce_field( 'civil_pub_vc_action', 'civil_pub_vc_nonce' );
-		?>
-		<label>
-			<input type="checkbox"
-				id="<?php echo esc_attr( PUB_VC_POST_KEY ); ?>"
-				name="<?php echo esc_attr( PUB_VC_POST_KEY ); ?>"
-				value="1"
-				<?php checked( $pub_vc, '1' ); ?>
-			/>
-			<?php
-			if ( $is_new_post ) {
-				_e( 'Publish VC', 'civil' );
-			} else {
-				// @TODO/tobek Once we're storing info about published VC, check it, and if none, change to "Publish"
-				_e( 'Update VC', 'civil' );
-			}
+		if ( ! get_option( ASSIGNED_DID_OPTION_KEY ) ) {
+			_e( 'Cannot publish VC: DID not initialized' );
+		} else {
+			wp_nonce_field( 'civil_pub_vc_action', 'civil_pub_vc_nonce' );
 			?>
-		</label>
+			<label>
+				<input type="checkbox"
+					id="<?php echo esc_attr( PUB_VC_POST_KEY ); ?>"
+					name="<?php echo esc_attr( PUB_VC_POST_KEY ); ?>"
+					value="true"
+					<?php checked( $pub_vc, true ); ?>
+				/>
+				<?php
+				if ( $is_new_post ) {
+					_e( 'Publish VC', 'civil' );
+				} else {
+					// @TODO/tobek Once we're storing info about published VC, check it, and if none, change to "Publish"
+					_e( 'Update VC', 'civil' );
+				}
+				?>
+			</label>
+		<?php } ?>
+
 		<p><br /><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>" target="_blank">Edit settings</a></p>
 		<?php
 	}

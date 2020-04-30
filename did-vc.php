@@ -21,9 +21,9 @@ function init() {
 	if ( current_user_can( 'manage_options' ) && empty( get_option( ASSIGNED_DID_OPTION_KEY ) ) ) {
 		try {
 			init_did();
-		} catch ( Exception $e ) {
+		} catch ( \Error $e ) {
 			// @TODO/tobek Surface these errors as WP notice
-			update_option( DID_ERROR_OPTION_KEY, 'Failed to generate openssl key pair: ' . $e->getMessage() );
+			update_option( DID_ERROR_OPTION_KEY, 'Failed to initialize DID: ' . $e->getMessage() );
 		}
 	}
 }
@@ -34,10 +34,10 @@ function init() {
 function init_did() {
 	$res = wp_remote_get( get_option( DID_AGENT_BASE_URL_OPTION_KEY, DID_AGENT_BASE_URL_DEFAULT ) . '/init' );
 	if ( is_wp_error( $res ) ) {
-		update_option( DID_ERROR_OPTION_KEY, 'error making DID init request: ' . json_encode( $res ) );
+		update_option( DID_ERROR_OPTION_KEY, 'Error making DID init request: ' . json_encode( $res ) );
 		return;
 	} else if ( 200 != $res['response']['code'] ) {
-		update_option( DID_ERROR_OPTION_KEY, 'error response from DID init request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
+		update_option( DID_ERROR_OPTION_KEY, 'Error response from DID init request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
 		return;
 	}
 
@@ -46,7 +46,7 @@ function init_did() {
 		update_option( ASSIGNED_DID_OPTION_KEY, $body->issuer );
 		delete_option( DID_ERROR_OPTION_KEY );
 	} else {
-		update_option( DID_ERROR_OPTION_KEY, 'invalid response body from DID init request: ' . $res['body'] );
+		update_option( DID_ERROR_OPTION_KEY, 'Invalid response body from DID init request: ' . $res['body'] );
 	}
 }
 
