@@ -211,9 +211,9 @@ class Post_VC_Pub {
 			$screen = get_current_screen();
 			$is_new_post = 'add' === $screen->action;
 			if ( $is_new_post ) { // a new post as opposed to editing an existing post.
-				$pub_vc = get_option( PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY, PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT );
+				$pub_vc = boolval( get_option( PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY, PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT ) );
 			} else {
-				$pub_vc = get_option( PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY, PUB_VC_BY_DEFAULT_ON_UPDATE_DEFAULT );
+				$pub_vc = boolval( get_option( PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY, PUB_VC_BY_DEFAULT_ON_UPDATE_DEFAULT ) );
 			}
 		}
 

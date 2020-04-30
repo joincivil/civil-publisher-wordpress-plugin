@@ -90,30 +90,76 @@ register_activation_hook( PLUGIN_FILE, __NAMESPACE__ . '\flush_rules' );
 function add_did_settings() {
 	add_settings_section( 'civil_did', __( 'Settings', 'civil' ), null, 'did' );
 
-	add_settings_field( DID_IS_ENABLED_OPTION_KEY, __( 'Enable DID features', 'civil' ), __NAMESPACE__ . '\display_did_is_enabled_input', 'did', 'civil_did' );
+	add_settings_field(
+		DID_IS_ENABLED_OPTION_KEY,
+		__( 'Enable DID features', 'civil' ),
+		__NAMESPACE__ . '\display_boolean_setting_input',
+		'did',
+		'civil_did',
+		array(
+			'option_key' => DID_IS_ENABLED_OPTION_KEY,
+			'default' => DID_IS_ENABLED_DEFAULT,
+		)
+	);
+	add_settings_field(
+		PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY,
+		__( 'Publish VC by default on new posts', 'civil' ),
+		__NAMESPACE__ . '\display_boolean_setting_input',
+		'did',
+		'civil_did',
+		array(
+			'option_key' => PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY,
+			'default' => PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT,
+			'description' => 'This can be overriden on a per-post basis.',
+		)
+	);
+	add_settings_field(
+		PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY,
+		__( 'Publish updates to VC by default when updating existing posts', 'civil' ),
+		__NAMESPACE__ . '\display_boolean_setting_input',
+		'did',
+		'civil_did',
+		array(
+			'option_key' => PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY,
+			'default' => PUB_VC_BY_DEFAULT_ON_UPDATE_DEFAULT,
+			'description' => 'This can be overriden on a per-post basis.',
+		)
+	);
+	add_settings_field(
+		DID_AGENT_BASE_URL_OPTION_KEY,
+		__( 'DID agent URL', 'civil' ),
+		__NAMESPACE__ . '\display_did_agent_url',
+		'did',
+		'civil_did'
+	);
+
 	register_setting( 'civil_did', DID_IS_ENABLED_OPTION_KEY );
-	add_settings_field( DID_AGENT_BASE_URL_OPTION_KEY, __( 'DID agent URL', 'civil' ), __NAMESPACE__ . '\display_did_agent_url', 'did', 'civil_did' );
+	register_setting( 'civil_did', PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY );
+	register_setting( 'civil_did', PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY );
 	register_setting( 'civil_did', DID_AGENT_BASE_URL_OPTION_KEY );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\add_did_settings' );
 
 /**
- * Output the DID enabled input.
+ * Output checkbox input for boolean settings.
+ *
+ * @param array $args Arguments sent by add_settings_field(): option_key, default, description (optional).
  */
-function display_did_is_enabled_input() {
-	$enable = boolval( get_option( DID_IS_ENABLED_OPTION_KEY, DID_IS_ENABLED_DEFAULT ) );
+function display_boolean_setting_input( $args ) {
+	$enable = boolval( get_option( $args['option_key'], $args['default'] ) );
 	?>
 		<div style="max-width: 600px">
 			<label>
 				<input
 					type="checkbox"
-					name="<?php echo esc_attr( DID_IS_ENABLED_OPTION_KEY ); ?>"
-					id="<?php echo esc_attr( DID_IS_ENABLED_OPTION_KEY ); ?>"
+					name="<?php echo esc_attr( $args['option_key'] ); ?>"
+					id="<?php echo esc_attr( $args['option_key'] ); ?>"
 					<?php checked( $enable, true ); ?>
 				/>
-				<?php _e( 'Enable DID features' ); ?>
 			</label>
-			<!-- <p><?php _e( '@TODO copy with more details TBD' ); ?></p> -->
+			<?php if ( isset( $args['description'] ) ) { ?>
+				<p><?php esc_html_e( $args['description'] ); ?></p>
+			<?php } ?>
 		</div>
 	<?php
 }
