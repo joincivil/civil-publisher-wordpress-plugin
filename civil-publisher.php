@@ -51,6 +51,11 @@ const ASSIGNED_DID_OPTION_KEY = 'civil_publisher_assigned_did';
 const VC_LOG_OPTION_KEY = 'civil_publisher_vc_log';
 const DID_AGENT_BASE_URL_OPTION_KEY = 'civil_publisher_did_agent_base_url';
 const DID_AGENT_BASE_URL_DEFAULT = 'http://10.0.2.2:3000';
+const PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY = 'civil_publisher_pub_vc_by_default_on_new';
+const PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT = true;
+const PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY = 'civil_publisher_pub_vc_by_default_on_update';
+const PUB_VC_BY_DEFAULT_ON_UPDATE_DEFAULT = false;
+const PUB_VC_POST_KEY = 'civil_publisher_pub_vc';
 
 const FAQ_HOME = 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher';
 const STORY_BOOSTS_DEBUG_QS_FLAG = 'civil_story_boost_debug';
@@ -73,9 +78,9 @@ require_once dirname( __FILE__ ) . '/traits/trait-singleton.php';
 require_once dirname( __FILE__ ) . '/custom-meta.php';
 require_once dirname( __FILE__ ) . '/admin.php';
 require_once dirname( __FILE__ ) . '/users-page.php';
-require_once dirname( __FILE__ ) . '/story-boosts.php';
 require_once dirname( __FILE__ ) . '/did-vc.php';
-require_once dirname( __FILE__ ) . '/classes/class-post-vc-gen.php';
+require_once dirname( __FILE__ ) . '/classes/class-post-vc-pub.php';
+require_once dirname( __FILE__ ) . '/story-boosts.php';
 
 if ( is_manager_enabled() ) {
 	require_once dirname( __FILE__ ) . '/classes/class-post-hashing.php';

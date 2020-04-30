@@ -1,6 +1,6 @@
 <?php
 /**
- * Hanldes all logic related to generating VCs for posts.
+ * Hanldes all logic related to generating and publishing VCs for posts.
  *
  * @package Civil_Publisher
  */
@@ -8,47 +8,48 @@
 namespace Civil_Publisher;
 
 /**
- * The Post_VC_Gen class.
+ * The Post_VC_Pub class.
  */
-class Post_VC_Gen {
+class Post_VC_Pub {
 	use Singleton;
 
 	/**
 	 * Setup the class.
 	 */
 	public function setup() {
-		add_action( 'save_post', array( $this, 'generate_vc' ) );
+		add_action( 'save_post', array( $this, 'publish_vc' ), 11 );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 	}
 
 	/**
-	 * Checks if we should generate a VC for this post
+	 * Checks if we should publish a VC for this post
 	 *
 	 * @param int $post_id The post ID.
-	 * @return bool Whether or not to generate a VC.
+	 * @return bool Whether or not to publish a VC.
 	 */
-	public function should_gen_vc( $post_id ) : bool {
+	public function should_pub_vc( $post_id ) : bool {
 		$should_gen = true;
 
-		// Only generate VCs for supported post types.
+		// Only publish VCs for supported post types.
 		if ( ! in_array( get_post_type( $post_id ), get_civil_post_types(), true ) ) {
 			$should_gen = false;
 		}
 
 		/**
-		 * Filters whether or not to generate a VC.
+		 * Filters whether or not to publish a VC.
 		 *
-		 * @param bool $should_gen Should we generate VC?
+		 * @param bool $should_gen Should we publish VC?
 		 * @param int  $post_id  The post ID.
 		 */
-		return apply_filters( 'civil_publisher_should_gen_vc', $should_gen, $post_id );
+		return apply_filters( 'civil_publisher_should_pub_vc', $should_gen, $post_id );
 	}
 
 	/**
-	 * Generate a VC for this post.
+	 * Publish a VC for this post.
 	 *
 	 * @param int $post_id The post ID.
 	 */
-	public function generate_vc( $post_id ) {
+	public function publish_vc( $post_id ) {
 		$post = get_post( $post_id );
 
 		if ( ! ( $post instanceof \WP_Post ) ) {
@@ -57,7 +58,12 @@ class Post_VC_Gen {
 			return;
 		} else if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
 			return;
-		} else if ( ! $this->should_gen_vc( $post->ID ) ) {
+		} else if ( ! $this->should_pub_vc( $post->ID ) ) {
+			return;
+		}
+
+		$is_valid_nonce = isset( $_POST['civil_pub_vc_nonce'] ) && wp_verify_nonce( $_POST['civil_pub_vc_nonce'], 'civil_pub_vc_action' );
+		if ( ! $is_valid_nonce || ! isset( $_POST[ PUB_VC_POST_KEY ] ) ) {
 			return;
 		}
 
@@ -92,6 +98,8 @@ class Post_VC_Gen {
 		}
 
 		update_option( VC_LOG_OPTION_KEY, $vc_log );
+
+		// @TODO/tobek Now actually publish the VC JWT somewhere
 	}
 
 	/**
@@ -176,8 +184,62 @@ class Post_VC_Gen {
 			throw new \Exception( 'invalid response body from sign VC request: ' . $res['body'] );
 		}
 	}
+
+	/**
+	 * Set up meta box.
+	 */
+	public function add_meta_box() {
+		add_meta_box(
+			'civil-pub-vc',
+			__( 'VC Publishing', 'civil' ),
+			array( $this, 'meta_box_callback' ),
+			null,
+			'side'
+		);
+	}
+
+	/**
+	 * Output meta box.
+	 *
+	 * @param WP_Post $post Post object.
+	 */
+	public function meta_box_callback( $post ) {
+		if ( ! $this->should_pub_vc( $post->ID ) ) {
+			// Default to not publish VC but user can still manually enable.
+			$pub_vc = false;
+		} else {
+			$screen = get_current_screen();
+			$is_new_post = 'add' === $screen->action;
+			if ( $is_new_post ) { // a new post as opposed to editing an existing post.
+				$pub_vc = get_option( PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY, PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT );
+			} else {
+				$pub_vc = get_option( PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY, PUB_VC_BY_DEFAULT_ON_UPDATE_DEFAULT );
+			}
+		}
+
+		wp_nonce_field( 'civil_pub_vc_action', 'civil_pub_vc_nonce' );
+		?>
+		<label>
+			<input type="checkbox"
+				id="<?php echo esc_attr( PUB_VC_POST_KEY ); ?>"
+				name="<?php echo esc_attr( PUB_VC_POST_KEY ); ?>"
+				value="1"
+				<?php checked( $pub_vc, '1' ); ?>
+			/>
+			<?php
+			if ( $is_new_post ) {
+				_e( 'Publish VC', 'civil' );
+			} else {
+				// @TODO/tobek Once we're storing info about published VC, check it, and if none, change to "Publish"
+				_e( 'Update VC', 'civil' );
+			}
+			?>
+		</label>
+		<p><br /><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>" target="_blank">Edit settings</a></p>
+		<?php
+	}
 }
 
 if ( get_option( DID_IS_ENABLED_OPTION_KEY ) ) {
-	Post_VC_Gen::instance();
+	Post_VC_Pub::instance();
 }
