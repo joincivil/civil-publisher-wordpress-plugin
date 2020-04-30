@@ -57,7 +57,7 @@ function init_did() {
  */
 function include_template( $template ) {
 	if ( get_query_var( 'civil_publisher_did' ) ) {
-		return PATH . '/did-doc.php';
+		return dirname( PLUGIN_FILE ) . '/did-doc.php';
 	}
 
 	return $template;
