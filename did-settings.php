@@ -7,16 +7,24 @@
 
 namespace Civil_Publisher;
 
-$did_doc_url = site_url( '/.well-known/did.json' );
-
 if ( current_user_can( 'manage_options' ) && isset( $_GET['clear-vc-log'] ) ) {
-	update_option( VC_LOG_OPTION_KEY, '' );
+	delete_option( VC_LOG_OPTION_KEY );
 	?>
 		<p>VC log cleared.</p>
 		<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>">&laquo; Return to settings</a></p>
 	<?php
 	exit;
+} else if ( current_user_can( 'manage_options' ) && isset( $_GET['reset-did'] ) ) {
+	delete_option( ASSIGNED_DID_OPTION_KEY );
+	?>
+		<p>DID reset.</p>
+		<p>DID initialization process will be run on next admin page load.</p>
+		<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>">&laquo; Return to settings</a></p>
+	<?php
+	exit;
 }
+
+$did_doc_url = site_url( '/.well-known/did.json' );
 
 ?>
 
@@ -34,13 +42,17 @@ if ( current_user_can( 'manage_options' ) && isset( $_GET['clear-vc-log'] ) ) {
 			?>
 		</form>
 
-		<h2><em><?php esc_html_e( 'Debug Info', 'civil' ); ?></em></h2>
+		<h2><em><?php esc_html_e( 'Debug', 'civil' ); ?></em></h2>
 		<table class="form-table">
 			<tbody>
 				<tr>
 					<th scope="row">TrustAgent DID</th>
 					<td>
 						<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( ASSIGNED_DID_OPTION_KEY, '[not set]' ) ); ?></pre>
+						<?php if ( get_option( ASSIGNED_DID_OPTION_KEY ) ) { ?>
+							<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) . '&reset-did' ); ?>"><button>Reset DID</button></a></p>
+							<p>(Note that the DID initialization process will be run on next admin page load.)</p>
+						<?php } ?>
 					</td>
 				</tr>
 				<tr>
