@@ -9,6 +9,15 @@ namespace Civil_Publisher;
 
 $did_doc_url = site_url( '/.well-known/did.json' );
 
+if ( current_user_can( 'manage_options' ) && isset( $_GET['clear-vc-log'] ) ) {
+	update_option( VC_LOG_OPTION_KEY, '' );
+	?>
+		<p>VC log cleared.</p>
+		<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>">&laquo; Return to settings</a></p>
+	<?php
+	exit;
+}
+
 ?>
 
 <div class="wrap">
@@ -41,7 +50,10 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 				<tr>
 					<th scope="row">VC log</th>
 					<td>
-						<pre style="max-width: 600px; overflow-x: auto; margin: 0; padding: 5px; background: #FBFBFB;"><?php echo esc_html( get_option( VC_LOG_OPTION_KEY ) ); ?></pre>
+						<pre style="max-width: 800px; overflow-x: auto; margin: 0; padding: 5px; background: #FBFBFB;"><?php echo esc_html( get_option( VC_LOG_OPTION_KEY ) ); ?></pre>
+						<?php if ( get_option( VC_LOG_OPTION_KEY ) ) { ?>
+							<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) . '&clear-vc-log' ); ?>"><button>Clear log</button></a></p>
+						<?php } ?>
 					</td>
 				</tr>
 				<?php if ( get_option( DID_ERROR_OPTION_KEY ) ) { ?>
