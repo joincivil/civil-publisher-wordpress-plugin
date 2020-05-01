@@ -72,25 +72,7 @@ class Post_VC_Pub {
 			return;
 		}
 
-		$primary_category    = '';
-		$primary_category_id = get_post_meta( $post->ID, 'primary_category_id', true );
-
-		if ( ! empty( $primary_category_id ) ) {
-			$primary_category_term = get_term_by( 'id', $primary_category_id, 'category' );
-
-			if ( $primary_category_term instanceof \WP_Term ) {
-				$primary_category = $primary_category_term->slug;
-			}
-		}
-
-		$vc_data = array(
-			'publishedContent' => array(
-				'url'           => get_permalink( $post ),
-				'contributors'  => $this->get_contributor_data( $post ),
-				'tags'          => wp_get_post_tags( $post->ID, array( 'fields' => 'slugs' ) ),
-				'primaryTag'    => $primary_category,
-			),
-		);
+		$vc_data = $this->generate_vc_metadata( $post );
 
 		$vc_log = get_option( VC_LOG_OPTION_KEY, '' );
 		$vc_log .= "generating VC for post $post->ID\ndata: " . json_encode( $vc_data, JSON_UNESCAPED_SLASHES );
@@ -105,6 +87,44 @@ class Post_VC_Pub {
 		update_option( VC_LOG_OPTION_KEY, $vc_log );
 
 		// @TODO/tobek Now actually publish the VC JWT somewhere
+	}
+
+	/**
+	 * Generate post metadata to go inside VC
+	 *
+	 * @param \WP_Post|int $post The post object.
+	 * @return array Associative array of metadata.
+	 */
+	public function generate_vc_metadata( $post ) {
+		$post = get_post( $post );
+
+		$primary_category    = '';
+		$primary_category_id = get_post_meta( $post->ID, 'primary_category_id', true );
+
+		if ( ! empty( $primary_category_id ) ) {
+			$primary_category_term = get_term_by( 'id', $primary_category_id, 'category' );
+
+			if ( $primary_category_term instanceof \WP_Term ) {
+				$primary_category = $primary_category_term->slug;
+			}
+		}
+
+		$revision_content_hash = $this->hash( $post->post_content );
+
+		return array(
+			'publishedContent' => array(
+				'title'               => $post->post_title,
+				'canonicalUrl'        => get_permalink( $parent_post->ID ),
+				'slug'                => $post->post_name,
+				'description'         => $post->post_excerpt,
+				'contributors'        => $this->get_contributor_data( $post ),
+				'tags'                => wp_get_post_tags( $post->ID, array( 'fields' => 'slugs' ) ),
+				'primaryTag'          => $primary_category,
+				'revisionDate'        => $post->post_modified_gmt,
+				'originalPublishDate' => $post->post_date_gmt,
+				'revisionContentHash' => $revision_content_hash,
+			),
+		);
 	}
 
 	/**
@@ -160,6 +180,19 @@ class Post_VC_Pub {
 		}
 
 		return $contributors;
+	}
+
+	/**
+	 * Hash a string based on the `Keccak-256` hashing algorithm.
+	 *
+	 * @param  string $content The content to hash.
+	 * @return string          The hashed content.
+	 */
+	public function hash( string $content ) {
+		// Include the hashing library.
+		require_once dirname( PLUGIN_FILE ) . '/lib/php-keccak/Keccak.php';
+
+		return '0x' . \kornrunner\Keccak::hash( $content, '256' );
 	}
 
 	/**
