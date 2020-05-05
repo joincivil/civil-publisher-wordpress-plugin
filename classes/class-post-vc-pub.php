@@ -144,10 +144,10 @@ class Post_VC_Pub {
 	}
 
 	/**
-	 * Get contributor (authors, editors, others in the future) data for given post
+	 * Get contributor names for given post. Supports Coauthors Plus plugin.
 	 *
 	 * @param object $post A WP_Post object.
-	 * @return array List of data for each contributor on post.
+	 * @return array List of display names for each contributor on post.
 	 */
 	public function get_contributor_data( $post ) {
 		$contributors = array();
@@ -156,42 +156,7 @@ class Post_VC_Pub {
 
 		if ( ! empty( $authors ) ) {
 			foreach ( $authors as $author ) {
-				$author_data = array(
-					'role' => 'author',
-					'name' => $author['display_name'],
-				);
-
-				$contributors[] = $author_data;
-			}
-		}
-
-		$secondary_bylines = get_post_meta( $post->ID, 'secondary_bylines', true );
-		if ( ! empty( $secondary_bylines ) ) {
-			foreach ( $secondary_bylines as $byline ) {
-				if ( empty( $byline['role'] ) || ( empty( $byline['custom_name'] ) && empty( $byline['id'] ) ) ) {
-					continue;
-				}
-
-				$secondary_contributor = array( 'role' => $byline['role'] );
-
-				if ( ! empty( $byline['id'] ) ) {
-					$user = get_user_by( 'id', $byline['id'] );
-					if ( $user instanceof \WP_User ) {
-						$secondary_contributor['name'] = $user->display_name;
-					} else if ( function_exists( 'get_coauthors' ) ) {
-						$name = (string) get_post_meta( $byline['id'], 'cap-display_name', true );
-						if ( empty( $name ) ) {
-							continue;
-						}
-						$secondary_contributor['name'] = $name;
-					} else {
-						continue;
-					}
-				} else {
-					$secondary_contributor['name'] = $byline['custom_name'];
-				}
-
-				$contributors[] = $secondary_contributor;
+				$contributors[] = $author['display_name'];
 			}
 		}
 

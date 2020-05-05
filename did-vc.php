@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles DID and VC logic for ID Hub integration.
+ * Handles DID and VC initialization, settings, and misc logic.
  *
  * @package Civil_Publisher
  */
