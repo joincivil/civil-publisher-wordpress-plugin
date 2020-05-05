@@ -181,3 +181,28 @@ function is_gutenberg_disabled_by_classic_editor() {
 
 	return false;
 }
+
+/**
+ * Generates a UUID v4 value. Code via https://stackoverflow.com/a/15875555/458614.
+ *
+ * @throws \Exception If no suitable random bytes generator is available (pre-PHPv7 with neither openssl nor mcrypt).
+ * @return string The UUID.
+ */
+function generate_uuid_v4() {
+	if ( function_exists( 'random_bytes' ) ) {
+		// PHP v7.
+		$data = random_bytes( 16 );
+	} else if ( function_exists( 'mcrypt_create_iv' ) ) {
+		$data = mcrypt_create_iv( 16, MCRYPT_DEV_URANDOM );
+	} else if ( function_exists( 'openssl_random_pseudo_bytes' ) ) {
+		$data = openssl_random_pseudo_bytes( 16 );
+	} else {
+		// Extremely unlikely to have neither openssl or mcrypt enabled but theoretically possible.
+		throw new \Exception( 'No suitable method for generating random bytes for UUID' );
+	}
+
+	$data[6] = chr( ord( $data[6] ) & 0x0f | 0x40 ); // set version to 0100.
+	$data[8] = chr( ord( $data[8] ) & 0x3f | 0x80 ); // set bits 6-7 to 10.
+
+	return vsprintf( '%s%s-%s-%s-%s-%s%s%s', str_split( bin2hex( $data ), 4 ) );
+}

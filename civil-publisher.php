@@ -29,6 +29,7 @@ const ARCHIVE_STATUS_META_KEY = 'civil_publisher_publish_archive_status';
 const CONTENT_ID_META_KEY = 'civil_publisher_content_id';
 const POST_AUTHORS_META_KEY = 'civil_publisher_post_authors';
 const SHOW_STORY_BOOST_META_KEY = 'civil_publisher_show_story_boost';
+const POST_UUID_META_KEY = 'civil_publisher_post_uuid';
 
 // User meta.
 const USER_ETH_ADDRESS_META_KEY = 'civil_publisher_eth_wallet_address';
@@ -55,10 +56,10 @@ const PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY = 'civil_publisher_pub_vc_by_default_o
 const PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT = true;
 const PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY = 'civil_publisher_pub_vc_by_default_on_update';
 const PUB_VC_BY_DEFAULT_ON_UPDATE_DEFAULT = false;
-const PUB_VC_POST_KEY = 'civil_publisher_pub_vc';
 
-const FAQ_HOME = 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher';
 const STORY_BOOSTS_DEBUG_QS_FLAG = 'civil_story_boost_debug';
+const PUB_VC_POST_FLAG = 'civil_publisher_pub_vc';
+const UUID_PERMALINK_QUERY = 'civil_publisher_uuid';
 
 // Menus.
 const TOP_LEVEL_MENU = 'civil-publisher-menu';
@@ -68,6 +69,7 @@ const STORY_BOOSTS_SETTINGS_PAGE = 'civil-publisher-story-boosts-settings';
 const DID_SETTINGS_PAGE = 'civil-publisher-did-settings';
 const CREDIBILITY_INDICATORS = 'civil-publisher-credibiity-indicators';
 
+const FAQ_HOME = 'https://help.civil.co/hc/en-us/categories/360001540371-Publisher';
 const STORY_BOOST_SRC_STAGING = 'https://staging.civil.app/loader/boost.js';
 const STORY_BOOST_SRC_PROD = 'https://registry.civil.co/loader/boost.js';
 

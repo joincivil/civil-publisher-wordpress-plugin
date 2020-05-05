@@ -196,7 +196,7 @@ class REST_API {
 			);
 		}
 
-		// Get a the post with the hash.
+		// Get the post with the hash.
 		$posts = new \WP_Query(
 			array(
 				'post_type'        => array( 'revision' ),

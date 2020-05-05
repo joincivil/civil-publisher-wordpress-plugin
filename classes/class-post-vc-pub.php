@@ -17,8 +17,9 @@ class Post_VC_Pub {
 	 * Setup the class.
 	 */
 	public function setup() {
-		add_action( 'save_post', array( $this, 'publish_vc' ), 11 );
+		add_action( 'save_post', array( $this, 'publish_vc' ), 100 );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+		add_action( 'template_redirect', array( $this, 'post_uuid_redirect' ) );
 	}
 
 	/**
@@ -68,8 +69,12 @@ class Post_VC_Pub {
 		}
 
 		$is_valid_nonce = isset( $_POST['civil_pub_vc_nonce'] ) && wp_verify_nonce( $_POST['civil_pub_vc_nonce'], 'civil_pub_vc_action' );
-		if ( ! $is_valid_nonce || ! isset( $_POST[ PUB_VC_POST_KEY ] ) ) {
+		if ( ! $is_valid_nonce || ! isset( $_POST[ PUB_VC_POST_FLAG ] ) ) {
 			return;
+		}
+
+		if ( ! get_post_meta( $post_id, POST_UUID_META_KEY, true ) ) {
+			add_post_meta( $post_id, POST_UUID_META_KEY, generate_uuid_v4() );
 		}
 
 		$vc_data = $this->generate_vc_metadata( $post );
@@ -111,6 +116,14 @@ class Post_VC_Pub {
 
 		$revision_content_hash = $this->hash( $post->post_content );
 
+		$post_uuid = get_post_meta( $post->ID, POST_UUID_META_KEY, true );
+		$site_url = site_url();
+		if ( false === strpos( $site_url, '?' ) ) {
+			$uuid_url = "$site_url?" . UUID_PERMALINK_QUERY . "=$post_uuid";
+		} else {
+			$uuid_url = "$site_url&" . UUID_PERMALINK_QUERY . "=$post_uuid";
+		}
+
 		return array(
 			'publishedContent' => array(
 				'title'               => $post->post_title,
@@ -123,6 +136,9 @@ class Post_VC_Pub {
 				'revisionDate'        => $post->post_modified_gmt,
 				'originalPublishDate' => $post->post_date_gmt,
 				'revisionContentHash' => $revision_content_hash,
+				'uuidUrl'             => $uuid_url,
+				'postUuid'            => $post_uuid,
+				'revisionUuid'        => generate_uuid_v4(),
 			),
 		);
 	}
@@ -262,8 +278,8 @@ class Post_VC_Pub {
 			?>
 			<label>
 				<input type="checkbox"
-					id="<?php echo esc_attr( PUB_VC_POST_KEY ); ?>"
-					name="<?php echo esc_attr( PUB_VC_POST_KEY ); ?>"
+					id="<?php echo esc_attr( PUB_VC_POST_FLAG ); ?>"
+					name="<?php echo esc_attr( PUB_VC_POST_FLAG ); ?>"
 					value="true"
 					<?php checked( $pub_vc, true ); ?>
 				/>
@@ -280,6 +296,38 @@ class Post_VC_Pub {
 
 		<p><br /><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>" target="_blank">Edit settings</a></p>
 		<?php
+	}
+
+	/**
+	 * Redirect to the post given a UUID.
+	 */
+	public function post_uuid_redirect() {
+		if ( ! empty( $_GET[ UUID_PERMALINK_QUERY ] ) ) {
+			$uuid = $_GET[ UUID_PERMALINK_QUERY ];
+
+			$posts = new \WP_Query(
+				array(
+					'posts_per_page'   => 1,
+					'suppress_filters' => false,
+					'meta_query'       => array( // WPCS: slow query ok.
+						array(
+							'key'   => POST_UUID_META_KEY,
+							'value' => $uuid,
+						),
+					),
+				)
+			);
+
+			if ( empty( $posts->posts[0] ) || ! ( $posts->posts[0] instanceof \WP_Post ) ) {
+				status_header( 404 );
+				// Most WP installs limit the number of revisions stored so storing revision UUID as post revision meta would be brittle. Other option would be to store an array of revision IDs as meta on the post itself, but that would be an awkward and slow post query to lookup. Unless this feature is needed, will leave unimplemented for now.
+				echo esc_html( "No post found with UUID $uuid. Note that retrieval of posts by revision UUID is not currently supported: please use post UUID." );
+				exit();
+			}
+
+			wp_redirect( get_permalink( $posts->posts[0] ), 302 );
+			exit();
+		}
 	}
 }
 
