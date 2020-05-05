@@ -85,6 +85,7 @@ class Post_VC_Pub {
 		try {
 			$jwt = $this->remote_sign_vc( $vc_data );
 			$vc_log .= "\nJWT: $jwt\n\n";
+			update_post_meta( $post_id, LAST_VC_PUB_DATE_META_KEY, $post->post_modified_gmt );
 		} catch ( \Exception $e ) {
 			$vc_log .= "\nFAILED: " . $e->getMessage() . "\n\n";
 		}
@@ -236,30 +237,49 @@ class Post_VC_Pub {
 			}
 		}
 
+		$last_pub_date = get_post_meta( $post->ID, LAST_VC_PUB_DATE_META_KEY, true );
+
 		if ( ! get_option( ASSIGNED_DID_OPTION_KEY ) ) {
 			_e( 'Cannot publish VC: DID not initialized' );
 		} else {
 			wp_nonce_field( 'civil_pub_vc_action', 'civil_pub_vc_nonce' );
 			?>
-			<label>
-				<input type="checkbox"
-					id="<?php echo esc_attr( PUB_VC_POST_FLAG ); ?>"
-					name="<?php echo esc_attr( PUB_VC_POST_FLAG ); ?>"
-					value="true"
-					<?php checked( $pub_vc, true ); ?>
-				/>
-				<?php
-				if ( $is_new_post ) {
-					_e( 'Publish VC', 'civil' );
-				} else {
-					// @TODO/tobek Once we're storing info about published VC, check it, and if none, change to "Publish"
-					_e( 'Update VC', 'civil' );
-				}
-				?>
-			</label>
+			<p>
+				<label>
+					<input type="checkbox"
+						id="<?php echo esc_attr( PUB_VC_POST_FLAG ); ?>"
+						name="<?php echo esc_attr( PUB_VC_POST_FLAG ); ?>"
+						value="true"
+						<?php checked( $pub_vc, true ); ?>
+					/>
+					<?php
+					if ( $is_new_post || ! $last_pub_date ) {
+						_e( 'Publish VC', 'civil' );
+					} else {
+						_e( 'Update VC', 'civil' );
+					}
+					?>
+				</label>
+			</p>
+			<?php
+		}
+
+		if ( $last_pub_date === $post->post_modified_gmt ) {
+			?>
+			<p>A VC has been published for the latest revision of this post.</p>
+			<?php
+		} else if ( $last_pub_date ) {
+			$datetime = new \DateTime( $last_pub_date, new \DateTimeZone( 'UTC' ) );
+			$datetime->setTimezone( get_site_timezone() );
+			$time_string = $datetime->format( 'F j, Y g:ia T' );
+			?>
+			<p>A VC has not been published for the latest revision of this post. VC last published <?php echo esc_html( $time_string ); ?>.</p>
+		<?php } else { ?>
+			<p>No VC has been published for this post yet.</p>
 		<?php } ?>
 
-		<p><br /><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>" target="_blank">Edit settings</a></p>
+
+		<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>" target="_blank">Edit settings</a></p>
 		<?php
 	}
 

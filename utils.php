@@ -206,3 +206,32 @@ function generate_uuid_v4() {
 
 	return vsprintf( '%s%s-%s-%s-%s-%s%s%s', str_split( bin2hex( $data ), 4 ) );
 }
+
+/**
+ * Retrieves the timezone from site settings as a `DateTimeZone` object.
+ *
+ * @return DateTimeZone Timezone object.
+ */
+function get_site_timezone() {
+	if ( function_exists( 'wp_timezone' ) ) {
+		// WordPress v5.3.0 or later.
+		return wp_timezone();
+	}
+
+	// For older versions that don't have them, copy-pasting code from `wp_timezone` and `wp_timezone_string`.
+
+	$timezone_string = get_option( 'timezone_string' );
+
+	if ( ! $timezone_string ) {
+		$offset  = (float) get_option( 'gmt_offset' );
+		$hours   = (int) $offset;
+		$minutes = ( $offset - $hours );
+
+		$sign      = ( $offset < 0 ) ? '-' : '+';
+		$abs_hour  = abs( $hours );
+		$abs_mins  = abs( $minutes * 60 );
+		$timezone_string = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+	}
+
+	return new \DateTimeZone( $timezone_string );
+}

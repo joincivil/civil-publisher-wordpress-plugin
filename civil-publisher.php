@@ -30,6 +30,7 @@ const CONTENT_ID_META_KEY = 'civil_publisher_content_id';
 const POST_AUTHORS_META_KEY = 'civil_publisher_post_authors';
 const SHOW_STORY_BOOST_META_KEY = 'civil_publisher_show_story_boost';
 const POST_UUID_META_KEY = 'civil_publisher_post_uuid';
+const LAST_VC_PUB_DATE_META_KEY = 'civil_publisher_last_vc_pub_date';
 
 // User meta.
 const USER_ETH_ADDRESS_META_KEY = 'civil_publisher_eth_wallet_address';
