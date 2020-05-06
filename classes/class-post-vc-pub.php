@@ -19,7 +19,7 @@ class Post_VC_Pub {
 	public function setup() {
 		add_action( 'save_post', array( $this, 'publish_vc' ), 100 );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
-		add_action( 'template_redirect', array( $this, 'post_uuid_redirect' ) );
+		add_action( 'template_redirect', array( $this, 'post_by_uuid' ) );
 	}
 
 	/**
@@ -117,8 +117,17 @@ class Post_VC_Pub {
 			}
 		}
 
+		$revisions = wp_get_post_revisions( $post->ID );
+		if ( ! empty( $revisions ) ) {
+			$latest_revision = current( $revisions );
+			$revision_post_id = $latest_revision->ID;
 		}
+		if ( ! $revision_post_id ) {
+			$revision_post_id = $post->ID;
+		}
+		// Depending on settings for this WP install, and depending on what post fields were changed on the save, this might not be a new revision ID. However, if it is a pre-existing post, `add_post_meta` works here just fine to add an additional UUID to associate with this revision that we can use later to retrieve data about it.
 		$revision_uuid = generate_uuid_v4();
+		add_metadata( 'post', $revision_post_id, POST_UUID_META_KEY, $revision_uuid );
 
 		return array(
 			'publishedContent' => array(
@@ -134,6 +143,7 @@ class Post_VC_Pub {
 				'keywords'          => $keywords,
 				'image'             => $image_src,
 				'rawContentHash'    => $this->hash( $post->post_content ),
+				'rawContentURL'     => site_url() . '?' . UUID_PERMALINK_QUERY . "=$revision_uuid&" . RAW_CONTENT_QUERY . '=true',
 			),
 		);
 	}
@@ -285,15 +295,17 @@ class Post_VC_Pub {
 	}
 
 	/**
-	 * Redirect to the post given a UUID.
+	 * URL hook to redirect to (or get the content of) a post by UUID.
 	 */
-	public function post_uuid_redirect() {
+	public function post_by_uuid() {
 		if ( ! empty( $_GET[ UUID_PERMALINK_QUERY ] ) ) {
 			$uuid = $_GET[ UUID_PERMALINK_QUERY ];
 
 			$posts = new \WP_Query(
 				array(
+					'post_type'        => array_merge( get_civil_post_types(), array( 'revision' ) ),
 					'posts_per_page'   => 1,
+					'post_status'      => array( 'closed', 'published' ), // 'closed' in order to include revisions.
 					'suppress_filters' => false,
 					'meta_query'       => array( // WPCS: slow query ok.
 						array(
@@ -306,13 +318,19 @@ class Post_VC_Pub {
 
 			if ( empty( $posts->posts[0] ) || ! ( $posts->posts[0] instanceof \WP_Post ) ) {
 				status_header( 404 );
-				// Most WP installs limit the number of revisions stored so storing revision UUID as post revision meta would be brittle. Other option would be to store an array of revision IDs as meta on the post itself, but that would be an awkward and slow post query to lookup. Unless this feature is needed, will leave unimplemented for now.
-				echo esc_html( "No post found with UUID $uuid. Note that retrieval of posts by revision UUID is not currently supported: please use post UUID." );
+				echo esc_html( "No post or post version found with UUID $uuid. Note that, if this is a version UUID, this site may not be configured to store old revisions of posts." );
 				exit();
 			}
 
-			wp_redirect( get_permalink( $posts->posts[0] ), 302 );
-			exit();
+			$post = $posts->posts[0];
+			if ( ! empty( $_GET[ RAW_CONTENT_QUERY ] ) && $_GET[ RAW_CONTENT_QUERY ] ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $post->post_content;
+				exit();
+			} else {
+				wp_redirect( get_permalink( wp_is_post_revision( $post->ID ) ? $post->post_parent : $post ), 302 );
+				exit();
+			}
 		}
 	}
 }
