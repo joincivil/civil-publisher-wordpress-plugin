@@ -104,64 +104,65 @@ class Post_VC_Pub {
 	public function generate_vc_metadata( $post ) {
 		$post = get_post( $post );
 
-		$primary_category    = '';
-		$primary_category_id = get_post_meta( $post->ID, 'primary_category_id', true );
+		$categories = wp_get_post_categories( $post->ID, array( 'fields' => 'slugs' ) );
+		$tags = wp_get_post_tags( $post->ID, array( 'fields' => 'slugs' ) );
+		$keywords = array_merge( $categories, $tags );
 
-		if ( ! empty( $primary_category_id ) ) {
-			$primary_category_term = get_term_by( 'id', $primary_category_id, 'category' );
-
-			if ( $primary_category_term instanceof \WP_Term ) {
-				$primary_category = $primary_category_term->slug;
+		$image_src = null;
+		$thumbnail_id = get_post_thumbnail_id( $post->ID );
+		if ( ! empty( $thumbnail_id ) ) {
+			$image_src = wp_get_attachment_image_src( $thumbnail_id, 'full' );
+			if ( is_array( $image_src ) ) {
+				$image_src = $image_src[0];
 			}
 		}
 
-		$revision_content_hash = $this->hash( $post->post_content );
-
-		$post_uuid = get_post_meta( $post->ID, POST_UUID_META_KEY, true );
-		$site_url = site_url();
-		if ( false === strpos( $site_url, '?' ) ) {
-			$uuid_url = "$site_url?" . UUID_PERMALINK_QUERY . "=$post_uuid";
-		} else {
-			$uuid_url = "$site_url&" . UUID_PERMALINK_QUERY . "=$post_uuid";
 		}
+		$revision_uuid = generate_uuid_v4();
 
 		return array(
 			'publishedContent' => array(
-				'title'               => $post->post_title,
-				'canonicalUrl'        => get_permalink( $parent_post->ID ),
-				'slug'                => $post->post_name,
-				'description'         => $post->post_excerpt,
-				'contributors'        => $this->get_contributor_data( $post ),
-				'tags'                => wp_get_post_tags( $post->ID, array( 'fields' => 'slugs' ) ),
-				'primaryTag'          => $primary_category,
-				'revisionDate'        => $post->post_modified_gmt,
-				'originalPublishDate' => $post->post_date_gmt,
-				'revisionContentHash' => $revision_content_hash,
-				'uuidUrl'             => $uuid_url,
-				'postUuid'            => $post_uuid,
-				'revisionUuid'        => generate_uuid_v4(),
+				'identifier'        => get_post_meta( $post->ID, POST_UUID_META_KEY, true ),
+				'versionIdentifier' => $revision_uuid,
+				'headline'          => $post->post_title,
+				'description'       => $post->post_excerpt,
+				'url'               => get_permalink( $parent_post->ID ),
+				'dateModified'      => $post->post_modified_gmt,
+				'datePublished'     => $post->post_date_gmt,
+				'publisher'         => $this->get_publisher_data(),
+				'author'            => $this->get_author_data( $post ),
+				'keywords'          => $keywords,
+				'image'             => $image_src,
+				'rawContentHash'    => $this->hash( $post->post_content ),
 			),
 		);
 	}
 
 	/**
-	 * Get contributor names for given post. Supports Coauthors Plus plugin.
+	 * Get data about this site in schema.org Organization format.
+	 *
+	 * @return array Publisher data.
+	 */
+	public function get_publisher_data() {
+		return array(
+			'identifier' => get_option( ASSIGNED_DID_OPTION_KEY ),
+			'name'       => get_bloginfo( 'name' ),
+			'url'        => site_url(),
+		);
+	}
+
+	/**
+	 * Get author data for post in schema.org Person format.
 	 *
 	 * @param object $post A WP_Post object.
-	 * @return array List of display names for each contributor on post.
+	 * @return array Author data.
 	 */
-	public function get_contributor_data( $post ) {
-		$contributors = array();
-
-		$authors = get_post_authors_data( $post->ID );
-
-		if ( ! empty( $authors ) ) {
-			foreach ( $authors as $author ) {
-				$contributors[] = $author['display_name'];
-			}
-		}
-
-		return $contributors;
+	public function get_author_data( $post ) {
+		$author_id = $post->post_author;
+		return array(
+			'identifier' => get_option( ASSIGNED_DID_OPTION_KEY ) . "#user-$author_id",
+			'name'       => get_the_author_meta( 'display_name', $author_id ),
+		);
 	}
 
 	/**
