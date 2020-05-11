@@ -34,7 +34,7 @@ class Post_Hashing {
 	 */
 	public function hash( string $content ) : string {
 		// Include the hashing library.
-		require_once PATH . '/lib/php-keccak/Keccak.php';
+		require_once dirname( PLUGIN_FILE ) . '/lib/php-keccak/Keccak.php';
 
 		return '0x' . \kornrunner\Keccak::hash( $content, '256' );
 	}

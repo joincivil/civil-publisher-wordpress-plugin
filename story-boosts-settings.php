@@ -4,6 +4,9 @@
  *
  * @package Civil_Publisher
  */
+
+namespace Civil_Publisher;
+
 ?>
 
 <div class="wrap">
