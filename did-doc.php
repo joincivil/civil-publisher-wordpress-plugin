@@ -2,10 +2,10 @@
 /**
  * Output DID document.
  *
- * @package Civil_Publisher
+ * @package ConsenSys_VC_Publisher
  */
 
-namespace Civil_Publisher;
+namespace ConsenSys_VC_Publisher;
 
 $domain = preg_replace( '/^https?:\/\//', '', get_option( 'siteurl' ) );
 

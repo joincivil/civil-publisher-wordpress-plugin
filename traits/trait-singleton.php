@@ -2,10 +2,10 @@
 /**
  * Trait file for Singletons.
  *
- * @package Civil_Publisher
+ * @package ConsenSys_VC_Publisher
  */
 
-namespace Civil_Publisher;
+namespace ConsenSys_VC_Publisher;
 
 /**
  * Make a class into a singleton.

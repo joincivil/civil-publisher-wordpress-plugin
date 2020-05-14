@@ -2,10 +2,10 @@
 /**
  * Handles all logic related to generating and publishing VCs for posts.
  *
- * @package Civil_Publisher
+ * @package ConsenSys_VC_Publisher
  */
 
-namespace Civil_Publisher;
+namespace ConsenSys_VC_Publisher;
 
 /**
  * The Post_VC_Pub class.
@@ -37,7 +37,7 @@ class Post_VC_Pub {
 		$should_gen = true;
 
 		// Only publish VCs for supported post types.
-		if ( ! in_array( get_post_type( $post_id ), get_civil_post_types(), true ) ) {
+		if ( ! in_array( get_post_type( $post_id ), get_plugin_post_types(), true ) ) {
 			$should_gen = false;
 		}
 
@@ -47,7 +47,7 @@ class Post_VC_Pub {
 		 * @param bool $should_gen Should we publish VC?
 		 * @param int  $post_id  The post ID.
 		 */
-		return apply_filters( 'civil_publisher_should_pub_vc', $should_gen, $post_id );
+		return apply_filters( 'consensys_vc_publisher_should_pub_vc', $should_gen, $post_id );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Post_VC_Pub {
 			return;
 		}
 
-		$is_valid_nonce = isset( $_POST['civil_pub_vc_nonce'] ) && wp_verify_nonce( $_POST['civil_pub_vc_nonce'], 'civil_pub_vc_action' );
+		$is_valid_nonce = isset( $_POST['consensys_pub_vc_nonce'] ) && wp_verify_nonce( $_POST['consensys_pub_vc_nonce'], 'consensys_pub_vc_action' );
 		if ( ! $is_valid_nonce || ! isset( $_POST[ PUB_VC_POST_FLAG ] ) ) {
 			return;
 		}
@@ -221,8 +221,8 @@ class Post_VC_Pub {
 	 */
 	public function add_meta_box() {
 		add_meta_box(
-			'civil-pub-vc',
-			__( 'VC Publishing', 'civil' ),
+			'consensys-pub-vc',
+			__( 'ConsenSys VC Publishing', 'consensys' ),
 			array( $this, 'meta_box_callback' ),
 			null,
 			'side'
@@ -253,7 +253,7 @@ class Post_VC_Pub {
 		if ( ! get_option( ASSIGNED_DID_OPTION_KEY ) ) {
 			_e( 'Cannot publish VC: DID not initialized' );
 		} else {
-			wp_nonce_field( 'civil_pub_vc_action', 'civil_pub_vc_nonce' );
+			wp_nonce_field( 'consensys_pub_vc_action', 'consensys_pub_vc_nonce' );
 			?>
 			<p>
 				<label>
@@ -265,9 +265,9 @@ class Post_VC_Pub {
 					/>
 					<?php
 					if ( $is_new_post || ! $last_pub_date ) {
-						_e( 'Publish VC', 'civil' );
+						_e( 'Publish VC', 'consensys' );
 					} else {
-						_e( 'Update VC', 'civil' );
+						_e( 'Update VC', 'consensys' );
 					}
 					?>
 				</label>
@@ -303,7 +303,7 @@ class Post_VC_Pub {
 
 			$posts = new \WP_Query(
 				array(
-					'post_type'        => array_merge( get_civil_post_types(), array( 'revision' ) ),
+					'post_type'        => array_merge( get_plugin_post_types(), array( 'revision' ) ),
 					'posts_per_page'   => 1,
 					'post_status'      => array( 'closed', 'published' ), // 'closed' in order to include revisions.
 					'suppress_filters' => false,
