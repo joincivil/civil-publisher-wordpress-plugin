@@ -335,6 +335,6 @@ class Post_VC_Pub {
 	}
 }
 
-if ( get_option( DID_IS_ENABLED_OPTION_KEY ) ) {
+if ( get_option( DID_IS_ENABLED_OPTION_KEY, DID_IS_ENABLED_DEFAULT ) ) {
 	Post_VC_Pub::instance();
 }
