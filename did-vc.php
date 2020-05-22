@@ -11,7 +11,7 @@ namespace ConsenSys_VC_Publisher;
  * Init DID logic.
  */
 function init() {
-	if ( ! get_option( DID_IS_ENABLED_OPTION_KEY ) ) {
+	if ( ! get_option( DID_IS_ENABLED_OPTION_KEY, DID_IS_ENABLED_DEFAULT ) ) {
 		return;
 	}
 
@@ -22,7 +22,6 @@ function init() {
 		try {
 			init_did();
 		} catch ( \Error $e ) {
-			// @TODO/tobek Surface these errors as WP notice
 			update_option( DID_ERROR_OPTION_KEY, 'Failed to initialize DID: ' . $e->getMessage() );
 		}
 	}

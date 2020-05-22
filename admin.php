@@ -89,6 +89,55 @@ function onboarding_notice() {
 add_action( 'admin_notices', __NAMESPACE__ . '\onboarding_notice' );
 
 /**
+ * Error notice.
+ */
+function error_notice() {
+	if ( current_user_can( 'manage_options' ) && ! empty( get_option( DID_ERROR_OPTION_KEY ) ) ) {
+		$page_id = get_current_screen()->id ?? '';
+		$is_settings_page = 'consensys_page_' . DID_SETTINGS_PAGE === $page_id;
+
+		$settings_page_url = menu_page_url( DID_SETTINGS_PAGE, false );
+		notice_open( 'error' );
+		?>
+		<h3>
+			<?php
+				if ( $is_settings_page ) {
+					esc_html_e( 'Error', 'consensys' );
+				} else {
+					esc_html_e( 'ConsenSys VC Publisher Error', 'consensys' );
+				}
+			?>
+		</h3>
+		<p>
+			<pre style="white-space: pre-wrap; margin: 0; padding: 5px; background: #FBFBFB;"><?php echo esc_html( get_option( DID_ERROR_OPTION_KEY ) ); ?></pre>
+		</p>
+		<p>
+		<?php
+			if (! $is_settings_page) {
+				echo sprintf(
+					wp_kses(
+						/* translators: 1: Settings page URL */
+						__( 'Please visit the <a href="%1$s">settings page</a> for more options and debug info.', 'consensys' ),
+						array( 'a' => array( 'href' => array() ) )
+					),
+					esc_url( $settings_page_url )
+				);
+			}
+		?>
+		</p>
+		<p class="consensys-buttons-wrap">
+			<?php if (! $is_settings_page) { ?>
+				<a href="<?php echo esc_url( $settings_page_url ); ?>" class="button button-primary"><?php esc_html_e( 'Settings', 'consensys' ); ?></a>
+			<?php } ?>
+			<a href="<?php echo esc_url( FAQ_HOME ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'consensys' ); ?></a>
+		</p>
+		<?php
+		notice_close();
+	}
+}
+add_action( 'admin_notices', __NAMESPACE__ . '\error_notice' );
+
+/**
  * Output opening HTML for admin notice.
  *
  * @param string $type Classname picked up by WordPress. Options include 'info' (default), 'warning', and 'error'.
