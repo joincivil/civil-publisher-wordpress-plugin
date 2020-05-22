@@ -2,10 +2,10 @@
 /**
  * DID settings page.
  *
- * @package Civil_Publisher
+ * @package ConsenSys_VC_Publisher
  */
 
-namespace Civil_Publisher;
+namespace ConsenSys_VC_Publisher;
 
 if ( current_user_can( 'manage_options' ) && isset( $_GET['clear-vc-log'] ) ) {
 	delete_option( VC_LOG_OPTION_KEY );
@@ -29,20 +29,19 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 ?>
 
 <div class="wrap">
-	<h1><?php esc_html_e( 'Decentralized Identity Tools', 'civil' ); ?></h1>
+	<h1><?php esc_html_e( 'ConsenSys VC Publisher Settings', 'consensys' ); ?></h1>
 	<p>@TODO copy TBD</p>
-	<p>Please contact <a href="mailto:support@civil.co">support@civil.co</a> with any questions or issues.</p>
 
 	<?php if ( current_user_can( 'manage_options' ) ) { ?>
 		<form action="options.php" method="post">
 			<?php
-				settings_fields( 'civil_did' );
+				settings_fields( 'consensys_did' );
 				do_settings_sections( 'did' );
-				submit_button( __( 'Save', 'civil' ) );
+				submit_button( __( 'Save', 'consensys' ) );
 			?>
 		</form>
 
-		<h2><em><?php esc_html_e( 'Debug', 'civil' ); ?></em></h2>
+		<h2><em><?php esc_html_e( 'Debug', 'consensys' ); ?></em></h2>
 		<table class="form-table">
 			<tbody>
 				<tr>
@@ -79,7 +78,7 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 			</tbody>
 		</table>
 	<?php } else { ?>
-		<h2><?php esc_html_e( 'Settings', 'civil' ); ?></h2>
-		<p><i><?php esc_html_e( 'You must be an admin in order to edit these settings.', 'civil' ); ?></i></p>
+		<h2><?php esc_html_e( 'Settings', 'consensys' ); ?></h2>
+		<p><i><?php esc_html_e( 'You must be an admin in order to edit these settings.', 'consensys' ); ?></i></p>
 	<?php } ?>
 </div>

@@ -2,10 +2,10 @@
 /**
  * Handles DID and VC initialization, settings, and misc logic.
  *
- * @package Civil_Publisher
+ * @package ConsenSys_VC_Publisher
  */
 
-namespace Civil_Publisher;
+namespace ConsenSys_VC_Publisher;
 
 /**
  * Init DID logic.
@@ -56,7 +56,7 @@ function init_did() {
  * @param string $template Path of template.
  */
 function include_template( $template ) {
-	if ( get_query_var( 'civil_publisher_did' ) ) {
+	if ( get_query_var( 'consensys_vc_publisher_did_doc' ) ) {
 		return dirname( PLUGIN_FILE ) . '/did-doc.php';
 	}
 
@@ -75,8 +75,9 @@ function flush_rules() {
  * Set up rewrite rules for DID doc.
  */
 function rewrite_rules() {
-	add_rewrite_rule( '^\.well-known/did\.json$', 'index.php?civil_publisher_did=true', 'top' );
-	add_rewrite_tag( '%civil_publisher_did%', '*' );
+	add_rewrite_rule( '^.well-known/did\.json$', 'index.php?consensys_vc_publisher_did_doc=true', 'top' );
+	// @TODO/tobek prevent trailing slash 301
+	add_rewrite_tag( '%consensys_vc_publisher_did_doc%', '*' );
 }
 
 add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
@@ -88,14 +89,14 @@ register_activation_hook( PLUGIN_FILE, __NAMESPACE__ . '\flush_rules' );
  * Add settings fields to control DID features.
  */
 function add_did_settings() {
-	add_settings_section( 'civil_did', __( 'Settings', 'civil' ), null, 'did' );
+	add_settings_section( 'consensys_did', __( 'Settings', 'consensys' ), null, 'did' );
 
 	add_settings_field(
 		DID_IS_ENABLED_OPTION_KEY,
-		__( 'Enable DID features', 'civil' ),
+		__( 'Enable DID features', 'consensys' ),
 		__NAMESPACE__ . '\display_boolean_setting_input',
 		'did',
-		'civil_did',
+		'consensys_did',
 		array(
 			'option_key' => DID_IS_ENABLED_OPTION_KEY,
 			'default' => DID_IS_ENABLED_DEFAULT,
@@ -103,10 +104,10 @@ function add_did_settings() {
 	);
 	add_settings_field(
 		PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY,
-		__( 'Publish VC by default on new posts', 'civil' ),
+		__( 'Publish VC by default on new posts', 'consensys' ),
 		__NAMESPACE__ . '\display_boolean_setting_input',
 		'did',
-		'civil_did',
+		'consensys_did',
 		array(
 			'option_key' => PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY,
 			'default' => PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT,
@@ -115,10 +116,10 @@ function add_did_settings() {
 	);
 	add_settings_field(
 		PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY,
-		__( 'Publish updates to VC by default when updating existing posts', 'civil' ),
+		__( 'Publish updates to VC by default when updating existing posts', 'consensys' ),
 		__NAMESPACE__ . '\display_boolean_setting_input',
 		'did',
-		'civil_did',
+		'consensys_did',
 		array(
 			'option_key' => PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY,
 			'default' => PUB_VC_BY_DEFAULT_ON_UPDATE_DEFAULT,
@@ -127,16 +128,16 @@ function add_did_settings() {
 	);
 	add_settings_field(
 		DID_AGENT_BASE_URL_OPTION_KEY,
-		__( 'DID agent URL', 'civil' ),
+		__( 'DID agent URL', 'consensys' ),
 		__NAMESPACE__ . '\display_did_agent_url',
 		'did',
-		'civil_did'
+		'consensys_did'
 	);
 
-	register_setting( 'civil_did', DID_IS_ENABLED_OPTION_KEY );
-	register_setting( 'civil_did', PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY );
-	register_setting( 'civil_did', PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY );
-	register_setting( 'civil_did', DID_AGENT_BASE_URL_OPTION_KEY );
+	register_setting( 'consensys_did', DID_IS_ENABLED_OPTION_KEY );
+	register_setting( 'consensys_did', PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY );
+	register_setting( 'consensys_did', PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY );
+	register_setting( 'consensys_did', DID_AGENT_BASE_URL_OPTION_KEY );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\add_did_settings' );
 
