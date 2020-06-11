@@ -18,7 +18,7 @@ if ( current_user_can( 'manage_options' ) && isset( $_GET['clear-vc-log'] ) ) {
 	delete_option( ASSIGNED_DID_OPTION_KEY );
 	?>
 		<p>DID reset.</p>
-		<p>DID initialization process will be run on next admin page load.</p>
+		<p>If tenant ID and API key are set, DID initialization process will be run on next admin page load.</p>
 		<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>">&laquo; Return to settings</a></p>
 	<?php
 	exit;
@@ -30,7 +30,6 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'ConsenSys VC Publisher Settings', 'consensys' ); ?></h1>
-	<p>@TODO copy TBD</p>
 
 	<?php if ( current_user_can( 'manage_options' ) ) { ?>
 		<form action="options.php" method="post">
@@ -49,8 +48,8 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 					<td>
 						<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( ASSIGNED_DID_OPTION_KEY, '[not set]' ) ); ?></pre>
 						<?php if ( get_option( ASSIGNED_DID_OPTION_KEY ) ) { ?>
-							<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) . '&reset-did' ); ?>"><button>Reset DID</button></a></p>
-							<p>(Note that the DID initialization process will be run on next admin page load.)</p>
+							<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) . '&reset-did' ); ?>"><br><button>Reset DID</button></a></p>
+							<p>(Note that if tenant ID and API key are set, the DID initialization process will be run on next admin page load.)</p>
 						<?php } ?>
 					</td>
 				</tr>

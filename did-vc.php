@@ -18,7 +18,7 @@ function init() {
 	add_filter( 'template_include', __NAMESPACE__ . '\include_template' );
 	add_filter( 'init', __NAMESPACE__ . '\rewrite_rules' );
 
-	if ( current_user_can( 'manage_options' ) && empty( get_option( ASSIGNED_DID_OPTION_KEY ) ) ) {
+	if ( current_user_can( 'manage_options' ) && empty( get_option( ASSIGNED_DID_OPTION_KEY ) ) && ! empty( get_option( TRUST_AGENT_ID_OPTION_KEY ) ) && ! empty( get_option( TRUST_AGENT_API_KEY_OPTION_KEY ) ) ) {
 		try {
 			init_did();
 		} catch ( \Error $e ) {
@@ -31,21 +31,30 @@ function init() {
  * Init DID.
  */
 function init_did() {
-	$res = wp_remote_get( get_option( DID_AGENT_BASE_URL_OPTION_KEY, DID_AGENT_BASE_URL_DEFAULT ) . '/init' );
+	$res = wp_remote_get(
+		get_option( TRUST_AGENT_BASE_URL_OPTION_KEY, TRUST_AGENT_BASE_URL_DEFAULT ) . '/v1/tenant/identifiers',
+		array(
+			'headers' => array(
+				'authorization' => 'Bearer ' . get_option( TRUST_AGENT_API_KEY_OPTION_KEY ),
+				'tenant' => get_option( TRUST_AGENT_ID_OPTION_KEY ),
+			),
+		)
+	);
 	if ( is_wp_error( $res ) ) {
 		update_option( DID_ERROR_OPTION_KEY, 'Error making DID init request: ' . json_encode( $res ) );
 		return;
 	} else if ( 200 != $res['response']['code'] ) {
-		update_option( DID_ERROR_OPTION_KEY, 'Error response from DID init request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
+		update_option( DID_ERROR_OPTION_KEY, 'Error response from DID init request: ' . $res['response']['code'] . ': ' . $res['response']['message'] . ( isset( $res['body'] ) ? ( ' (' . $res['body'] . ')' ) : '' ) );
 		return;
 	}
 
-	$body = json_decode( $res['body'] );
-	if ( $body && $body->issuer ) {
-		update_option( ASSIGNED_DID_OPTION_KEY, $body->issuer );
+	$dids = json_decode( $res['body'] );
+	if ( $dids && count( $dids ) > 0 ) {
+		update_option( ASSIGNED_DID_OPTION_KEY, $dids[0] );
 		delete_option( DID_ERROR_OPTION_KEY );
 	} else {
-		update_option( DID_ERROR_OPTION_KEY, 'Invalid response body from DID init request: ' . $res['body'] );
+		// @TODO/tobek Automatically create a DID if none exists yet.
+		update_option( DID_ERROR_OPTION_KEY, 'You have not yet created an identifier. Please navigate to the tenant dashboard and create an identifer.' );
 	}
 }
 
@@ -126,17 +135,43 @@ function add_did_settings() {
 		)
 	);
 	add_settings_field(
-		DID_AGENT_BASE_URL_OPTION_KEY,
-		__( 'DID agent URL', 'consensys' ),
-		__NAMESPACE__ . '\display_did_agent_url',
+		TRUST_AGENT_BASE_URL_OPTION_KEY,
+		__( 'Trust Agent URL', 'consensys' ),
+		__NAMESPACE__ . '\display_string_setting_input',
 		'did',
-		'consensys_did'
+		'consensys_did',
+		array(
+			'option_key' => TRUST_AGENT_BASE_URL_OPTION_KEY,
+			'default' => TRUST_AGENT_BASE_URL_DEFAULT,
+		)
+	);
+	add_settings_field(
+		TRUST_AGENT_ID_OPTION_KEY,
+		__( 'Trust Agent tenant ID', 'consensys' ),
+		__NAMESPACE__ . '\display_string_setting_input',
+		'did',
+		'consensys_did',
+		array(
+			'option_key' => TRUST_AGENT_ID_OPTION_KEY,
+		)
+	);
+	add_settings_field(
+		TRUST_AGENT_API_KEY_OPTION_KEY,
+		__( 'Trust Agent API key', 'consensys' ),
+		__NAMESPACE__ . '\display_string_setting_input',
+		'did',
+		'consensys_did',
+		array(
+			'option_key' => TRUST_AGENT_API_KEY_OPTION_KEY,
+		)
 	);
 
 	register_setting( 'consensys_did', DID_IS_ENABLED_OPTION_KEY );
 	register_setting( 'consensys_did', PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY );
 	register_setting( 'consensys_did', PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY );
-	register_setting( 'consensys_did', DID_AGENT_BASE_URL_OPTION_KEY );
+	register_setting( 'consensys_did', TRUST_AGENT_BASE_URL_OPTION_KEY );
+	register_setting( 'consensys_did', TRUST_AGENT_ID_OPTION_KEY );
+	register_setting( 'consensys_did', TRUST_AGENT_API_KEY_OPTION_KEY );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\add_did_settings' );
 
@@ -165,21 +200,25 @@ function display_boolean_setting_input( $args ) {
 }
 
 /**
- * Output the DID agent URL input.
+ * Output text input for string settings.
+ *
+ * @param array $args Arguments sent by add_settings_field(): option_key, default, description (optional).
  */
-function display_did_agent_url() {
-	$url = strval( get_option( DID_AGENT_BASE_URL_OPTION_KEY, DID_AGENT_BASE_URL_DEFAULT ) );
+function display_string_setting_input( $args ) {
+	$default = isset( $args['default'] ) ? $args['default'] : '';
+	$value = strval( get_option( $args['option_key'], $default ) );
 	?>
 		<div style="max-width: 600px">
-			<label>
-				<input
-					type="text"
-					style="width: 400px"
-					name="<?php echo esc_attr( DID_AGENT_BASE_URL_OPTION_KEY ); ?>"
-					id="<?php echo esc_attr( DID_AGENT_BASE_URL_OPTION_KEY ); ?>"
-					value="<?php echo esc_attr( $url ); ?>"
-				/>
-			</label>
+			<input
+				style="width: 400px"
+				type="text"
+				name="<?php echo esc_attr( $args['option_key'] ); ?>"
+				id="<?php echo esc_attr( $args['option_key'] ); ?>"
+				value="<?php echo esc_attr( $value ); ?>"
+			/>
+			<?php if ( isset( $args['description'] ) ) { ?>
+				<p><?php esc_html_e( $args['description'] ); ?></p>
+			<?php } ?>
 		</div>
 	<?php
 }

@@ -3,7 +3,7 @@
  * Plugin Name: ConsenSys VC Publisher
  * Plugin URI: https://github.com/joincivil/civil-publisher-wordpress-plugin
  * Description: Self-sovereign identity tools for WordPress
- * Version: 0.1
+ * Version: 0.2
  * Author: ConsenSys
  * Author URI: https://consensys.net/
  *
@@ -25,8 +25,10 @@ const DID_IS_ENABLED_DEFAULT = true;
 const DID_ERROR_OPTION_KEY = 'consensys_vc_publisher_did_error';
 const ASSIGNED_DID_OPTION_KEY = 'consensys_vc_publisher_assigned_did';
 const VC_LOG_OPTION_KEY = 'consensys_vc_publisher_vc_log';
-const DID_AGENT_BASE_URL_OPTION_KEY = 'consensys_vc_publisher_did_agent_base_url';
-const DID_AGENT_BASE_URL_DEFAULT = 'http://10.0.2.2:3000';
+const TRUST_AGENT_BASE_URL_OPTION_KEY = 'consensys_vc_publisher_trust_agent_base_url';
+const TRUST_AGENT_BASE_URL_DEFAULT = 'https://alpha.trustagent.civil.co';
+const TRUST_AGENT_ID_OPTION_KEY = 'consensys_vc_publisher_trust_agent_id';
+const TRUST_AGENT_API_KEY_OPTION_KEY = 'consensys_vc_publisher_trust_agent_api_key';
 const PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY = 'consensys_vc_publisher_pub_vc_by_default_on_new';
 const PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT = true;
 const PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY = 'consensys_vc_publisher_pub_vc_by_default_on_update';
