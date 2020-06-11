@@ -101,11 +101,11 @@ function error_notice() {
 		?>
 		<h3>
 			<?php
-				if ( $is_settings_page ) {
-					esc_html_e( 'Error', 'consensys' );
-				} else {
-					esc_html_e( 'ConsenSys VC Publisher Error', 'consensys' );
-				}
+			if ( $is_settings_page ) {
+				esc_html_e( 'Error', 'consensys' );
+			} else {
+				esc_html_e( 'ConsenSys VC Publisher Error', 'consensys' );
+			}
 			?>
 		</h3>
 		<p>
@@ -113,20 +113,20 @@ function error_notice() {
 		</p>
 		<p>
 		<?php
-			if (! $is_settings_page) {
-				echo sprintf(
-					wp_kses(
-						/* translators: 1: Settings page URL */
-						__( 'Please visit the <a href="%1$s">settings page</a> for more options and debug info.', 'consensys' ),
-						array( 'a' => array( 'href' => array() ) )
-					),
-					esc_url( $settings_page_url )
-				);
-			}
+		if ( ! $is_settings_page ) {
+			echo sprintf(
+				wp_kses(
+					/* translators: 1: Settings page URL */
+					__( 'Please visit the <a href="%1$s">settings page</a> for more options and debug info.', 'consensys' ),
+					array( 'a' => array( 'href' => array() ) )
+				),
+				esc_url( $settings_page_url )
+			);
+		}
 		?>
 		</p>
 		<p class="consensys-buttons-wrap">
-			<?php if (! $is_settings_page) { ?>
+			<?php if ( ! $is_settings_page ) { ?>
 				<a href="<?php echo esc_url( $settings_page_url ); ?>" class="button button-primary"><?php esc_html_e( 'Settings', 'consensys' ); ?></a>
 			<?php } ?>
 			<a href="<?php echo esc_url( FAQ_HOME ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'consensys' ); ?></a>
