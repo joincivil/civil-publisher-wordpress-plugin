@@ -68,10 +68,11 @@ function onboarding_notice() {
 		<h3><?php esc_html_e( 'ConsenSys VC Publisher Installed!', 'consensys' ); ?></h3>
 		<p>
 		<?php
+			// @TODO copy TBD
 			echo sprintf(
 				wp_kses(
 					/* translators: 1: Settings page URL */
-					__( '@TODO copy TBD. Please take a few minutes to <a href="%1$s">set things up</a> to start doing stuff.', 'consensys' ),
+					__( 'Please enter your Trust Agent ID and API key in <a href="%1$s">settings</a> in order to start publishing verified credentials.', 'consensys' ),
 					array( 'a' => array( 'href' => array() ) )
 				),
 				esc_url( $settings_page_url )
@@ -79,7 +80,7 @@ function onboarding_notice() {
 		?>
 		</p>
 		<p class="consensys-buttons-wrap">
-			<a href="<?php echo esc_url( $settings_page_url ); ?>" class="button button-primary"><?php esc_html_e( 'Set Up Stuff', 'consensys' ); ?></a>
+			<a href="<?php echo esc_url( $settings_page_url ); ?>" class="button button-primary"><?php esc_html_e( 'Settings', 'consensys' ); ?></a>
 			<a href="<?php echo esc_url( FAQ_HOME ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'consensys' ); ?></a>
 		</p>
 		<?php
@@ -101,11 +102,11 @@ function error_notice() {
 		?>
 		<h3>
 			<?php
-				if ( $is_settings_page ) {
-					esc_html_e( 'Error', 'consensys' );
-				} else {
-					esc_html_e( 'ConsenSys VC Publisher Error', 'consensys' );
-				}
+			if ( $is_settings_page ) {
+				esc_html_e( 'Error', 'consensys' );
+			} else {
+				esc_html_e( 'ConsenSys VC Publisher Error', 'consensys' );
+			}
 			?>
 		</h3>
 		<p>
@@ -113,20 +114,20 @@ function error_notice() {
 		</p>
 		<p>
 		<?php
-			if (! $is_settings_page) {
-				echo sprintf(
-					wp_kses(
-						/* translators: 1: Settings page URL */
-						__( 'Please visit the <a href="%1$s">settings page</a> for more options and debug info.', 'consensys' ),
-						array( 'a' => array( 'href' => array() ) )
-					),
-					esc_url( $settings_page_url )
-				);
-			}
+		if ( ! $is_settings_page ) {
+			echo sprintf(
+				wp_kses(
+					/* translators: 1: Settings page URL */
+					__( 'Please visit the <a href="%1$s">settings page</a> for more options and debug info.', 'consensys' ),
+					array( 'a' => array( 'href' => array() ) )
+				),
+				esc_url( $settings_page_url )
+			);
+		}
 		?>
 		</p>
 		<p class="consensys-buttons-wrap">
-			<?php if (! $is_settings_page) { ?>
+			<?php if ( ! $is_settings_page ) { ?>
 				<a href="<?php echo esc_url( $settings_page_url ); ?>" class="button button-primary"><?php esc_html_e( 'Settings', 'consensys' ); ?></a>
 			<?php } ?>
 			<a href="<?php echo esc_url( FAQ_HOME ); ?>" class="button"><?php esc_html_e( 'FAQ and Help', 'consensys' ); ?></a>
@@ -176,7 +177,8 @@ function notice_open( $type = 'info' ) {
 	<div class="notice notice-<?php echo esc_attr( $type ); ?> consensys-notice is-dismissible">
 		<div class="consensys-logo-wrap">
 			<div class="consensys-logo-wrap-inner">
-				<img src="<?php echo esc_url( plugins_url( 'images/consensys-logo.svg', __FILE__ ) ); ?>" />
+				<!-- <img src="<?php echo esc_url( plugins_url( 'images/consensys-logo.svg', __FILE__ ) ); ?>" /> -->
+				<img src="https://via.placeholder.com/64x64/000000/FFFFFF?text=C" />
 			</div>
 		</div>
 		<div class="consensys-notice-body">

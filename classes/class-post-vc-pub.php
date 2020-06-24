@@ -77,13 +77,13 @@ class Post_VC_Pub {
 			add_post_meta( $post_id, POST_UUID_META_KEY, generate_uuid_v4() );
 		}
 
-		$vc_data = $this->generate_vc_metadata( $post );
+		$vc = $this->generate_vc( $post );
 
 		$vc_log = get_option( VC_LOG_OPTION_KEY, '' );
-		$vc_log .= "generating VC for post $post->ID\ndata: " . json_encode( $vc_data, JSON_UNESCAPED_SLASHES );
+		$vc_log .= "generating VC for post $post->ID\ndata: " . json_encode( $vc, JSON_UNESCAPED_SLASHES );
 
 		try {
-			$jwt = $this->remote_sign_vc( $vc_data );
+			$jwt = $this->remote_issue_vc( $vc );
 			$vc_log .= "\nJWT: $jwt\n\n";
 			update_post_meta( $post_id, LAST_VC_PUB_DATE_META_KEY, $post->post_modified_gmt );
 		} catch ( \Exception $e ) {
@@ -96,12 +96,32 @@ class Post_VC_Pub {
 	}
 
 	/**
-	 * Generate post metadata to go inside VC
+	 * Generate VC for a post.
 	 *
 	 * @param \WP_Post|int $post The post object.
 	 * @return array Associative array of metadata.
 	 */
-	public function generate_vc_metadata( $post ) {
+	public function generate_vc( $post ) {
+		return array(
+			'@context' => array(
+				'https://www.w3.org/2018/credentials/v1',
+				'https://example.com/@TODO/article-publish/v1',
+			),
+			// 'id' => generate_uuid_v4(), // @TODO Should the API generate this?
+			'type' => array( 'VerifiableCredential', 'ArticlePublishCredential' ), // @TODO
+			'issuer' => get_option( ASSIGNED_DID_OPTION_KEY ),
+			'issuanceDate' => time(), // @TODO VC spec expects RFC3339 (ISO 8601) format as produced by `date('c')`, but API throws TypeError `not a unix timestamp in seconds` so sending unix timestamp in seconds for now - check if API transforms date or what.
+			'credentialSubject' => $this->generate_vc_body( $post ),
+		);
+	}
+
+	/**
+	 * Generate post metadata to go inside VC body.
+	 *
+	 * @param \WP_Post|int $post The post object.
+	 * @return array Associative array of metadata.
+	 */
+	public function generate_vc_body( $post ) {
 		$post = get_post( $post );
 
 		$categories = wp_get_post_categories( $post->ID, array( 'fields' => 'slugs' ) );
@@ -130,6 +150,7 @@ class Post_VC_Pub {
 		add_metadata( 'post', $revision_post_id, POST_UUID_META_KEY, $revision_uuid );
 
 		return array(
+			'id' => get_option( ASSIGNED_DID_OPTION_KEY ),
 			'publishedContent' => array(
 				'identifier'        => get_post_meta( $post->ID, POST_UUID_META_KEY, true ),
 				'versionIdentifier' => $revision_uuid,
@@ -189,28 +210,38 @@ class Post_VC_Pub {
 	}
 
 	/**
-	 * Send metadata to remote service to sign VC.
+	 * Send credential to remote service to issue VC.
 	 *
-	 * @param array $data Associative array of metadata to put in VC body.
+	 * @param array $credential Associative array of VC data.
 	 * @throws \Exception Error messages from sign VC request.
 	 * @return string The encoded JWT.
 	 */
-	public function remote_sign_vc( $data ) {
-		$args = array(
-			'headers' => 'Content-Type: application/json',
-			'body' => json_encode( $data ),
+	public function remote_issue_vc( $credential ) {
+		$post_body = array(
+			'credential' => $credential,
+			'revocable' => true,
+			'keepCopy' => true,
+			'proofFormat' => 'jwt',
 		);
-		$res = wp_remote_post( get_option( DID_AGENT_BASE_URL_OPTION_KEY, DID_AGENT_BASE_URL_DEFAULT ) . '/sign-vc', $args );
+		$args = array(
+			'headers' => array(
+				'Content-Type' => 'application/json',
+				'authorization' => 'Bearer ' . get_option( TRUST_AGENT_API_KEY_OPTION_KEY ),
+				'tenant' => get_option( TRUST_AGENT_ID_OPTION_KEY ),
+			),
+			'body' => json_encode( $post_body ),
+		);
+		$res = wp_remote_post( get_option( TRUST_AGENT_BASE_URL_OPTION_KEY, TRUST_AGENT_BASE_URL_DEFAULT ) . '/v1/tenant/credentials/issue', $args );
 
 		if ( is_wp_error( $res ) ) {
 			throw new \Exception( 'error making sign VC request: ' . json_encode( $res ) );
-		} else if ( 200 != $res['response']['code'] ) {
+		} else if ( $res['response']['code'] < 200 || $res['response']['code'] >= 300 ) {
 			throw new \Exception( 'error response from sign VC request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
 		}
 
-		$body = json_decode( $res['body'] );
-		if ( $body && $body->data ) {
-			return $body->data;
+		$response_body = json_decode( $res['body'] );
+		if ( $response_body && $response_body->jwt ) {
+			return $response_body->jwt;
 		} else {
 			throw new \Exception( 'invalid response body from sign VC request: ' . $res['body'] );
 		}
