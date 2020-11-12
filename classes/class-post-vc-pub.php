@@ -80,7 +80,7 @@ class Post_VC_Pub {
 		$vc = $this->generate_vc( $post );
 
 		$vc_log = get_option( VC_LOG_OPTION_KEY, '' );
-		$vc_log .= "generating VC for post $post->ID\ndata: " . json_encode( $vc, JSON_UNESCAPED_SLASHES );
+		$vc_log .= "generating VC for post $post->ID\nvc: " . json_encode( $vc, JSON_UNESCAPED_SLASHES );
 
 		try {
 			$jwt = $this->remote_issue_vc( $vc );
@@ -109,8 +109,10 @@ class Post_VC_Pub {
 			),
 			// 'id' => generate_uuid_v4(), // @TODO Should the API generate this?
 			'type' => array( 'VerifiableCredential', 'ArticlePublishCredential' ), // @TODO
-			'issuer' => get_option( ASSIGNED_DID_OPTION_KEY ),
-			'issuanceDate' => time(), // @TODO VC spec expects RFC3339 (ISO 8601) format as produced by `date('c')`, but API throws TypeError `not a unix timestamp in seconds` so sending unix timestamp in seconds for now - check if API transforms date or what.
+			'issuer' => array(
+				'id' => get_option( ASSIGNED_DID_OPTION_KEY ),
+			),
+			'issuanceDate' => date('c'),
 			'credentialSubject' => $this->generate_vc_body( $post ),
 		);
 	}
@@ -221,18 +223,19 @@ class Post_VC_Pub {
 			'credential' => $credential,
 			'revocable' => true,
 			'keepCopy' => true,
+			'save' => true,
 			'proofFormat' => 'jwt',
 		);
 		$args = array(
 			'headers' => array(
 				'Content-Type' => 'application/json',
 				'authorization' => 'Bearer ' . get_option( TRUST_AGENT_API_KEY_OPTION_KEY ),
-				'tenant' => get_option( TRUST_AGENT_ID_OPTION_KEY ),
+				'tenantid' => get_option( TRUST_AGENT_ID_OPTION_KEY ),
 			),
 			'body' => json_encode( $post_body ),
 		);
-		$res = wp_remote_post( get_option( TRUST_AGENT_BASE_URL_OPTION_KEY, TRUST_AGENT_BASE_URL_DEFAULT ) . '/v1/tenant/credentials/issue', $args );
 
+		$res = wp_remote_post( get_option( TRUST_AGENT_BASE_URL_OPTION_KEY, TRUST_AGENT_BASE_URL_DEFAULT ) . '/v1/tenant/agent/createVerifiableCredential', $args );
 		if ( is_wp_error( $res ) ) {
 			throw new \Exception( 'error making sign VC request: ' . json_encode( $res ) );
 		} else if ( $res['response']['code'] < 200 || $res['response']['code'] >= 300 ) {
@@ -240,8 +243,8 @@ class Post_VC_Pub {
 		}
 
 		$response_body = json_decode( $res['body'] );
-		if ( $response_body && $response_body->jwt ) {
-			return $response_body->jwt;
+		if ( $response_body && $response_body->proof && $response_body->proof->jwt ) {
+			return $response_body->proof->jwt;
 		} else {
 			throw new \Exception( 'invalid response body from sign VC request: ' . $res['body'] );
 		}

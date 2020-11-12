@@ -31,12 +31,12 @@ function init() {
  * Init DID.
  */
 function init_did() {
-	$res = wp_remote_get(
-		get_option( TRUST_AGENT_BASE_URL_OPTION_KEY, TRUST_AGENT_BASE_URL_DEFAULT ) . '/v1/tenant/identifiers',
+	$res = wp_remote_post(
+		get_option( TRUST_AGENT_BASE_URL_OPTION_KEY, TRUST_AGENT_BASE_URL_DEFAULT ) . '/v1/tenant/agent/identityManagerGetIdentities',
 		array(
 			'headers' => array(
 				'authorization' => 'Bearer ' . get_option( TRUST_AGENT_API_KEY_OPTION_KEY ),
-				'tenant' => get_option( TRUST_AGENT_ID_OPTION_KEY ),
+				'tenantid' => get_option( TRUST_AGENT_ID_OPTION_KEY ),
 			),
 		)
 	);
@@ -50,7 +50,7 @@ function init_did() {
 
 	$dids = json_decode( $res['body'] );
 	if ( $dids && count( $dids ) > 0 ) {
-		update_option( ASSIGNED_DID_OPTION_KEY, $dids[0] );
+		update_option( ASSIGNED_DID_OPTION_KEY, $dids[0]->did );
 		delete_option( DID_ERROR_OPTION_KEY );
 	} else {
 		// @TODO/tobek Automatically create a DID if none exists yet.
@@ -147,7 +147,7 @@ function add_did_settings() {
 	);
 	add_settings_field(
 		TRUST_AGENT_ID_OPTION_KEY,
-		__( 'Trust Agent tenant ID', 'consensys' ),
+		__( 'Trust Agent organization ID', 'consensys' ),
 		__NAMESPACE__ . '\display_string_setting_input',
 		'did',
 		'consensys_did',
