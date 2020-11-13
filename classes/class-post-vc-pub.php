@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles all logic related to generating and publishing VCs for posts.
+ * Handles all logic related to generating and publishing VCs for posts controlled by post editor metabox.
  *
  * @package ConsenSys_VC_Publisher
  */
@@ -14,7 +14,7 @@ class Post_VC_Pub {
 	use Singleton;
 
 	/**
-	 * Setup the class.
+	 * Set up the class.
 	 */
 	public function setup() {
 		add_action( 'save_post', array( $this, 'publish_vc' ), 100 );
@@ -29,7 +29,7 @@ class Post_VC_Pub {
 	 * @return bool Whether or not to publish a VC.
 	 */
 	public function should_pub_vc( $post_id ) : bool {
-		// Not initialized yet.
+		// Plugin not initialized yet.
 		if ( ! get_option( ASSIGNED_DID_OPTION_KEY ) ) {
 			return false;
 		}
@@ -86,13 +86,12 @@ class Post_VC_Pub {
 			$jwt = $this->remote_issue_vc( $vc );
 			$vc_log .= "\nJWT: $jwt\n\n";
 			update_post_meta( $post_id, LAST_VC_PUB_DATE_META_KEY, $post->post_modified_gmt );
+			// @TODO/tobek Now actually do something with the VC or JWT
 		} catch ( \Exception $e ) {
 			$vc_log .= "\nFAILED: " . $e->getMessage() . "\n\n";
 		}
 
 		update_option( VC_LOG_OPTION_KEY, $vc_log );
-
-		// @TODO/tobek Now actually publish the VC JWT somewhere
 	}
 
 	/**
@@ -112,7 +111,7 @@ class Post_VC_Pub {
 			'issuer' => array(
 				'id' => get_option( ASSIGNED_DID_OPTION_KEY ),
 			),
-			'issuanceDate' => date('c'),
+			'issuanceDate' => date( 'c' ),
 			'credentialSubject' => $this->generate_vc_body( $post ),
 		);
 	}

@@ -14,7 +14,7 @@ namespace ConsenSys_VC_Publisher;
  */
 function get_plugin_post_types() {
 	/**
-	 * Filters the post types available for blockchain support
+	 * Filters the post types available for plugin support.
 	 *
 	 * @param $post_types The supported post types.
 	 */

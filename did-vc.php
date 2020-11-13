@@ -59,7 +59,7 @@ function init_did() {
 }
 
 /**
- * Override template file for DID doc.
+ * Override template file to redirect `consensys_vc_publisher_did_doc` to DID doc.
  *
  * @param string $template Path of template.
  */
@@ -80,11 +80,12 @@ function flush_rules() {
 }
 
 /**
- * Set up rewrite rules for DID doc.
+ * Set up rewrite rules for DID doc: add query variable on DID doc route so that DID doc gets rendered.
  */
 function rewrite_rules() {
+	// @TODO/tobek On my local nginx, paths starting with "." a blocked with a 403. For testing for now just change the path to remove the ".".
 	add_rewrite_rule( '^.well-known/did\.json$', 'index.php?consensys_vc_publisher_did_doc=true', 'top' );
-	// @TODO/tobek prevent trailing slash 301
+	// @TODO/tobek Prevent this 301 redirecting to path with trailing slash.
 	add_rewrite_tag( '%consensys_vc_publisher_did_doc%', '*' );
 }
 
@@ -92,6 +93,9 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
 
 // On plugin activation flush rewrite rules.
 register_activation_hook( PLUGIN_FILE, __NAMESPACE__ . '\flush_rules' );
+
+// @TODO/tobek `flush_rules` should get run on plugin upgrade too: https://stackoverflow.com/questions/24187990/plugin-update-hook https://pluginrepublic.com/wordpress-plugin-update-hook-upgrader_process_complete/. For now if DID doc route isn't working just uncomment following line and refresh any WP page to flush the rewrite rules and then comment it out again:
+// add_action( 'init', __NAMESPACE__ . '\flush_rules' ); // temp run flush rules on every page load
 
 /**
  * Add settings fields to control DID features.

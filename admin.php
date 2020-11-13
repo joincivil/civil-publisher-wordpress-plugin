@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles hooks and enqueueing for admin page and Gutenberg plugin scripts
+ * Handles hooks and enqueueing for admin dashboard, onboarding, error handling, etc.
  *
  * @package ConsenSys_VC_Publisher
  */
