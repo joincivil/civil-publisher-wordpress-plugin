@@ -112,7 +112,7 @@ class Post_VC_Pub {
 			'issuer' => array(
 				'id' => get_option( ASSIGNED_DID_OPTION_KEY ),
 			),
-			'issuanceDate' => date( 'c' ),
+			'issuanceDate' => gmdate( 'c' ),
 			'credentialSubject' => $this->generate_vc_body( $post ),
 		);
 	}
@@ -158,7 +158,7 @@ class Post_VC_Pub {
 				'versionIdentifier' => $revision_uuid,
 				'headline'          => $post->post_title,
 				'description'       => $post->post_excerpt,
-				'url'               => get_permalink( $parent_post->ID ),
+				'url'               => get_permalink( $post->ID ),
 				'dateModified'      => $post->post_modified_gmt,
 				'datePublished'     => $post->post_date_gmt,
 				'publisher'         => $this->get_publisher_data(),
