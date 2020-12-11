@@ -18,7 +18,7 @@ if ( current_user_can( 'manage_options' ) && isset( $_GET['clear-vc-log'] ) ) {
 	delete_option( ASSIGNED_DID_OPTION_KEY );
 	?>
 		<p>DID reset.</p>
-		<p>If organization ID and API key are set, DID initialization process will be run on next admin page load.</p>
+		<p>Note that if DAF Agent URL is set, DID initialization process will be run on next admin page load.</p>
 		<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>">&laquo; Return to settings</a></p>
 	<?php
 	exit;
@@ -44,12 +44,12 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 		<table class="form-table">
 			<tbody>
 				<tr>
-					<th scope="row">TrustAgent DID</th>
+					<th scope="row">Site DID</th>
 					<td>
 						<pre style="max-width: 600px; white-space: pre-wrap; margin: 0;"><?php echo esc_html( get_option( ASSIGNED_DID_OPTION_KEY, '[not set]' ) ); ?></pre>
 						<?php if ( get_option( ASSIGNED_DID_OPTION_KEY ) ) { ?>
 							<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) . '&reset-did' ); ?>"><br><button>Reset DID</button></a></p>
-							<p>(Note that if organization ID and API key are set, the DID initialization process will be run on next admin page load.)</p>
+							<p>(Note that if DAF Agent URL is set, the DID initialization process will be run on next admin page load.)</p>
 						<?php } ?>
 					</td>
 				</tr>
