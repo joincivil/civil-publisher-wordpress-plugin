@@ -83,10 +83,11 @@ class Post_VC_Pub {
 		$vc_log .= "generating VC for post $post->ID\nvc: " . json_encode( $vc, JSON_UNESCAPED_SLASHES );
 
 		try {
-			$jwt = $this->remote_issue_vc( $vc );
-			$vc_log .= "\nJWT: $jwt\n\n";
+			$vc_response = $this->remote_issue_vc( $vc );
+			$vc_json = json_encode( $vc_response, JSON_UNESCAPED_SLASHES );
+			$vc_log .= "\nresponse: $vc_json\n\n";
 			update_post_meta( $post_id, LAST_VC_PUB_DATE_META_KEY, $post->post_modified_gmt );
-			// @TODO/tobek Now actually do something with the VC or JWT
+			update_post_meta( $post_id, POST_VC_META_KEY, $vc_json );
 		} catch ( \Exception $e ) {
 			$vc_log .= "\nFAILED: " . $e->getMessage() . "\n\n";
 		}
@@ -111,7 +112,7 @@ class Post_VC_Pub {
 			'issuer' => array(
 				'id' => get_option( ASSIGNED_DID_OPTION_KEY ),
 			),
-			'issuanceDate' => date( 'c' ),
+			'issuanceDate' => gmdate( 'c' ),
 			'credentialSubject' => $this->generate_vc_body( $post ),
 		);
 	}
@@ -157,7 +158,7 @@ class Post_VC_Pub {
 				'versionIdentifier' => $revision_uuid,
 				'headline'          => $post->post_title,
 				'description'       => $post->post_excerpt,
-				'url'               => get_permalink( $parent_post->ID ),
+				'url'               => get_permalink( $post->ID ),
 				'dateModified'      => $post->post_modified_gmt,
 				'datePublished'     => $post->post_date_gmt,
 				'publisher'         => $this->get_publisher_data(),
@@ -215,38 +216,22 @@ class Post_VC_Pub {
 	 *
 	 * @param array $credential Associative array of VC data.
 	 * @throws \Exception Error messages from sign VC request.
-	 * @return string The encoded JWT.
+	 * @return string The issued VC.
 	 */
 	public function remote_issue_vc( $credential ) {
-		$post_body = array(
+		$body = array(
 			'credential' => $credential,
 			'revocable' => true,
 			'keepCopy' => true,
 			'save' => true,
 			'proofFormat' => 'jwt',
 		);
-		$args = array(
-			'headers' => array(
-				'Content-Type' => 'application/json',
-				'authorization' => 'Bearer ' . get_option( TRUST_AGENT_API_KEY_OPTION_KEY ),
-				'tenantid' => get_option( TRUST_AGENT_ID_OPTION_KEY ),
-			),
-			'body' => json_encode( $post_body ),
-		);
 
-		$res = wp_remote_post( get_option( TRUST_AGENT_BASE_URL_OPTION_KEY, TRUST_AGENT_BASE_URL_DEFAULT ) . '/v1/tenant/agent/createVerifiableCredential', $args );
-		if ( is_wp_error( $res ) ) {
-			throw new \Exception( 'error making sign VC request: ' . json_encode( $res ) );
-		} else if ( $res['response']['code'] < 200 || $res['response']['code'] >= 300 ) {
-			throw new \Exception( 'error response from sign VC request: ' . $res['response']['code'] . ': ' . $res['response']['message'] );
-		}
 
-		$response_body = json_decode( $res['body'] );
-		if ( $response_body && $response_body->proof && $response_body->proof->jwt ) {
-			return $response_body->proof->jwt;
-		} else {
-			throw new \Exception( 'invalid response body from sign VC request: ' . $res['body'] );
-		}
+		// @TODO/tobek Errors here fail silently, need to surface in post editor.
+		$response = Daf_Service::instance()->create_verifiable_credential( $body );
+
+		return $response;
 	}
 
 	/**
@@ -282,6 +267,7 @@ class Post_VC_Pub {
 		}
 
 		$last_pub_date = get_post_meta( $post->ID, LAST_VC_PUB_DATE_META_KEY, true );
+		$vc = get_vc_for_post_id( $post->ID );
 
 		if ( ! get_option( ASSIGNED_DID_OPTION_KEY ) ) {
 			_e( 'Cannot publish VC: DID not initialized' );
@@ -320,8 +306,14 @@ class Post_VC_Pub {
 			<p>A VC has not been published for the latest revision of this post. VC last published <?php echo esc_html( $time_string ); ?>.</p>
 		<?php } else { ?>
 			<p>No VC has been published for this post yet.</p>
-		<?php } ?>
+			<?php
+		}
 
+		if ( ! empty( $vc ) ) {
+			?>
+			<p>VC JSON:</p>
+			<pre style="overflow-x: scroll; white-space: pre-wrap;"><?php echo esc_html( $vc ); ?></pre>
+		<?php } ?>
 
 		<p><a href="<?php echo esc_url( menu_page_url( DID_SETTINGS_PAGE, false ) ); ?>" target="_blank">Edit settings</a></p>
 		<?php

@@ -18,6 +18,7 @@ const SCHEMA_VERSION = '0.0.1';
 // Post meta.
 const POST_UUID_META_KEY = 'consensys_vc_publisher_post_uuid';
 const LAST_VC_PUB_DATE_META_KEY = 'consensys_vc_publisher_last_vc_pub_date';
+const POST_VC_META_KEY = 'consensys_vc_publisher_post_vc';
 
 // Site options.
 const DID_IS_ENABLED_OPTION_KEY = 'consensys_vc_publisher_did_is_enabled';
@@ -25,11 +26,7 @@ const DID_IS_ENABLED_DEFAULT = true;
 const DID_ERROR_OPTION_KEY = 'consensys_vc_publisher_did_error';
 const ASSIGNED_DID_OPTION_KEY = 'consensys_vc_publisher_assigned_did';
 const VC_LOG_OPTION_KEY = 'consensys_vc_publisher_vc_log';
-const TRUST_AGENT_BASE_URL_OPTION_KEY = 'consensys_vc_publisher_trust_agent_base_url';
-const TRUST_AGENT_BASE_URL_DEFAULT = 'https://alpha.consensysidentity.com';
-// const TRUST_AGENT_BASE_URL_DEFAULT = 'http://10.0.2.2:8000'; // 10.0.2.2 routes from VM guest to localhost on VM host.
-const TRUST_AGENT_ID_OPTION_KEY = 'consensys_vc_publisher_trust_agent_id';
-const TRUST_AGENT_API_KEY_OPTION_KEY = 'consensys_vc_publisher_trust_agent_api_key';
+const DAF_BASE_URL_OPTION_KEY = 'consensys_vc_publisher_daf_base_url';
 const PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY = 'consensys_vc_publisher_pub_vc_by_default_on_new';
 const PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT = true;
 const PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY = 'consensys_vc_publisher_pub_vc_by_default_on_update';
@@ -51,4 +48,5 @@ require_once dirname( __FILE__ ) . '/traits/trait-singleton.php';
 
 require_once dirname( __FILE__ ) . '/admin.php';
 require_once dirname( __FILE__ ) . '/did-vc.php';
+require_once dirname( __FILE__ ) . '/classes/class-daf-service.php';
 require_once dirname( __FILE__ ) . '/classes/class-post-vc-pub.php';
