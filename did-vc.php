@@ -176,11 +176,23 @@ function add_did_settings() {
 			'option_key' => DAF_BASE_URL_OPTION_KEY,
 		)
 	);
+	add_settings_field(
+		DAF_API_KEY_OPTION_KEY,
+		__( 'Veramo agent API key', 'consensys' ),
+		__NAMESPACE__ . '\display_string_setting_input',
+		'did',
+		'consensys_did',
+		array(
+			'option_key' => DAF_API_KEY_OPTION_KEY,
+			'description' => 'Only required if your agent is secured by API key.',
+		)
+	);
 
 	register_setting( 'consensys_did', DID_IS_ENABLED_OPTION_KEY );
 	register_setting( 'consensys_did', PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY );
 	register_setting( 'consensys_did', PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY );
 	register_setting( 'consensys_did', DAF_BASE_URL_OPTION_KEY );
+	register_setting( 'consensys_did', DAF_API_KEY_OPTION_KEY );
 }
 add_action( 'admin_init', __NAMESPACE__ . '\add_did_settings' );
 

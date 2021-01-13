@@ -60,14 +60,18 @@ class Daf_Service {
 	 * @return array Response body.
 	 */
 	public function request( $path, $body = null ) {
-		$args = null;
+		$args = array(
+			'headers' => array(),
+		);
+
 		if ( $body ) {
-			$args = array(
-				'headers' => array(
-					'Content-Type' => 'application/json',
-				),
-				'body' => json_encode( $body ),
-			);
+			$args['headers']['Content-Type'] = 'application/json';
+			$args['body'] = json_encode( $body );
+		}
+
+		$api_key = get_option( DAF_API_KEY_OPTION_KEY );
+		if ( ! empty( $api_key ) ) {
+			$args['headers']['Authorization'] = "Bearer $api_key";
 		}
 
 		$url = get_option( DAF_BASE_URL_OPTION_KEY ) . $path;

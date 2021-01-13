@@ -28,6 +28,7 @@ const ASSIGNED_DID_OPTION_KEY = 'consensys_vc_publisher_assigned_did';
 const DID_CONFIG_OPTION_KEY = 'consensys_vc_publisher_did_config';
 const VC_LOG_OPTION_KEY = 'consensys_vc_publisher_vc_log';
 const DAF_BASE_URL_OPTION_KEY = 'consensys_vc_publisher_daf_base_url';
+const DAF_API_KEY_OPTION_KEY = 'consensys_vc_publisher_daf_api_key';
 const PUB_VC_BY_DEFAULT_ON_NEW_OPTION_KEY = 'consensys_vc_publisher_pub_vc_by_default_on_new';
 const PUB_VC_BY_DEFAULT_ON_NEW_DEFAULT = true;
 const PUB_VC_BY_DEFAULT_ON_UPDATE_OPTION_KEY = 'consensys_vc_publisher_pub_vc_by_default_on_update';
