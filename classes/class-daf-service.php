@@ -28,6 +28,16 @@ class Daf_Service {
 	 */
 	public function identity_manager_get_or_create_identity( $body ) {
 		return $this->request( '/identityManagerGetOrCreateIdentity', $body );
+
+	/**
+	 * Call generateDidConfiguration endpoint.
+	 *
+	 * @param array $body Request body.
+	 * @throws \Exception Errors from API request.
+	 * @return array Response body.
+	 */
+	public function generate_did_configuration( $body ) {
+		return $this->request( '/generateDidConfiguration', $body );
 	}
 
 	/**

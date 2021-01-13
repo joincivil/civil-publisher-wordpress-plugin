@@ -18,11 +18,12 @@ function init() {
 	add_filter( 'template_include', __NAMESPACE__ . '\include_template' );
 	add_filter( 'init', __NAMESPACE__ . '\rewrite_rules' );
 
-	if ( current_user_can( 'manage_options' ) && empty( get_option( ASSIGNED_DID_OPTION_KEY ) ) && ! empty( get_option( DAF_BASE_URL_OPTION_KEY ) ) ) {
-		try {
+	if ( current_user_can( 'manage_options' ) && ! empty( get_option( DAF_BASE_URL_OPTION_KEY ) ) ) {
+		if ( empty( get_option( ASSIGNED_DID_OPTION_KEY ) ) ) {
 			init_did();
-		} catch ( \Error $e ) {
-			update_option( DID_ERROR_OPTION_KEY, 'Failed to initialize DID: ' . $e->getMessage() );
+		}
+		if ( empty( get_option( DID_CONFIG_OPTION_KEY ) ) ) {
+			init_did_config();
 		}
 	}
 }
@@ -50,19 +51,47 @@ function init_did() {
 		update_option( ASSIGNED_DID_OPTION_KEY, $response->did );
 		delete_option( DID_ERROR_OPTION_KEY );
 	} catch ( \Exception $e ) {
-		update_option( DID_ERROR_OPTION_KEY, 'Error making DID init request: ' . $e->getMessage() );
+		update_option( DID_ERROR_OPTION_KEY, 'Failed to initialize DID: ' . $e->getMessage() );
 		return;
 	}
 }
 
 /**
- * Override template file to redirect `consensys_vc_publisher_did_doc` to DID doc.
+ * Init DID Configuration.
+ */
+function init_did_config() {
+	$did = get_option( ASSIGNED_DID_OPTION_KEY );
+	if ( empty( $did ) ) {
+		error_log( 'DID was not initialized - skipping DID Configuration initialization.' );
+		return;
+	}
+
+	try {
+		$domain = preg_replace( '/^https?:\/\//', '', get_option( 'siteurl' ) );
+		$response = Daf_Service::instance()->generate_did_configuration(
+			array(
+				'dids' => array( $did ),
+				'domain' => $domain,
+			)
+		);
+		update_option( DID_CONFIG_OPTION_KEY, json_encode( $response ) );
+		delete_option( DID_ERROR_OPTION_KEY );
+	} catch ( \Exception $e ) {
+		update_option( DID_ERROR_OPTION_KEY, "Failed to initialize DID Configuration. Please ensure that your Veramo agent is using the \"daf-plugin-did-config\" plugin. Error:\n\n" . $e->getMessage() );
+	}
+}
+
+/**
+ * Override template file to redirect DID_DOC_QUERY and DID_CONFIG_QUERY to their destinations.
  *
  * @param string $template Path of template.
  */
 function include_template( $template ) {
-	if ( get_query_var( 'consensys_vc_publisher_did_doc' ) ) {
+	if ( get_query_var( DID_DOC_QUERY ) ) {
 		return dirname( PLUGIN_FILE ) . '/did-doc.php';
+	}
+	if ( get_query_var( DID_CONFIG_QUERY ) ) {
+		return dirname( PLUGIN_FILE ) . '/did-config.php';
 	}
 
 	return $template;
@@ -77,13 +106,15 @@ function flush_rules() {
 }
 
 /**
- * Set up rewrite rules for DID doc: add query variable on DID doc route so that DID doc gets rendered.
+ * Set up rewrite rules for DID doc and DID config: add query variable on route so that desired file gets rendered.
  */
 function rewrite_rules() {
 	// @TODO/tobek On my local nginx, paths starting with "." a blocked with a 403. For testing for now just change the path to remove the ".".
-	add_rewrite_rule( '^.well-known/did\.json$', 'index.php?consensys_vc_publisher_did_doc=true', 'top' );
+	add_rewrite_rule( '^.well-known/did\.json$', 'index.php?' . DID_DOC_QUERY . '=true', 'top' );
+	add_rewrite_rule( '^.well-known/did-configuration\.json$', 'index.php?' . DID_CONFIG_QUERY . '=true', 'top' );
 	// @TODO/tobek Prevent this 301 redirecting to path with trailing slash.
-	add_rewrite_tag( '%consensys_vc_publisher_did_doc%', '*' );
+	add_rewrite_tag( '%' . DID_DOC_QUERY . '%', '*' );
+	add_rewrite_tag( '%' . DID_CONFIG_QUERY . '%', '*' );
 }
 
 add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );

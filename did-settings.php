@@ -16,6 +16,7 @@ if ( current_user_can( 'manage_options' ) && isset( $_GET['clear-vc-log'] ) ) {
 	exit;
 } else if ( current_user_can( 'manage_options' ) && isset( $_GET['reset-did'] ) ) {
 	delete_option( ASSIGNED_DID_OPTION_KEY );
+	delete_option( DID_CONFIG_OPTION_KEY );
 	?>
 		<p>DID reset.</p>
 		<p>Note that if DAF Agent URL is set, DID initialization process will be run on next admin page load.</p>
@@ -25,6 +26,7 @@ if ( current_user_can( 'manage_options' ) && isset( $_GET['clear-vc-log'] ) ) {
 }
 
 $did_doc_url = site_url( '/.well-known/did.json' );
+$did_config_url = site_url( '/.well-known/did-configuration.json' );
 
 ?>
 
@@ -52,6 +54,10 @@ $did_doc_url = site_url( '/.well-known/did.json' );
 							<p>(Note that if DAF Agent URL is set, the DID initialization process will be run on next admin page load.)</p>
 						<?php } ?>
 					</td>
+				</tr>
+				<tr>
+					<th scope="row">Well Known DID Configuration</th>
+					<td><a href="<?php echo esc_url( $did_config_url ); ?>" target="_blank"><?php echo esc_url( $did_config_url ); ?></a></td>
 				</tr>
 				<tr>
 					<th scope="row">DID doc</th>
